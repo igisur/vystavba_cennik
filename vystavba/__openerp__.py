@@ -22,7 +22,8 @@
         'views/osoba_view.xml',
         'workflows/cp_workflow.xml',
         'views/templates.xml',
-        'report/report.xml'
+        'report/report.xml',
+        'views/oddiel_view.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
