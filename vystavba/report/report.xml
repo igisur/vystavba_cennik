@@ -13,6 +13,5 @@
         string="Cenova ponuka PDF"
         name="vystavba.report_cenova_ponuka_pdf"
         report_type="qweb-pdf" />
-
     </data>
 </openerp>

@@ -39,6 +39,7 @@ class VystavbaCenovaPonuka(models.Model):
     name = fields.Char(required=True, string="Názov", size=50, copy=False)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);
     financny_kod = fields.Char(string="Finančný kód", required=True, copy=False)
+    skratka = fields.Char(string="Skratka", required=False, copy=False)
     datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today());
     datum_koniec = fields.Date(string="Dátum ukončenia");
     poznamka = fields.Text(string="Poznámka", copy=False)
@@ -61,11 +62,14 @@ class VystavbaCenovaPonuka(models.Model):
        ('cancel', 'Zrušená')],
        string='Stav', readonly=True, copy=False, default='draft', track_visibility='onchange')
 
-    # approved_cp_ids = fields.One2many('vystavba.cenova_ponuka','Title', selection=_sel_func),
-
     sap_file = base64.encodestring('ABCDEFGH')
     sap_export = fields.Binary(string='Export pre SAP', default=sap_file)
+
+    # approved_cp_ids = fields.One2many('vystavba.cenova_ponuka','Title', selection=_sel_func),
     # source_approved_cp = fields.Reference(('vystavba.cenova_ponuka', 'CP'), 'Zdrojova cenova ponuka')
+
+    cp_polozka_ids = fields.One2many('vystavba.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=True)
+    # polozka_id = fields.Many2one('vystavba.polozka', related='cp_polozka_ids.polozka_id', string='Polozka')
 
     # def _standardize(self, args):
     #     if 'osoba_priradena_id' in args:
@@ -241,8 +245,17 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     _name = 'vystavba.cenova_ponuka.polozka'
     _description = "Vystavba - polozka cenovej ponuky"
 
-    name = fields.Char(required=True, string="Kod", size=30, help="Kod cennika konkretneho partnera")
-    # cena = fields.Monetary(string='Cena', store=True)
-    cena = fields.Float(string='Cena', digits=(6,2), required=True)
+    cena = fields.Float(required=True, digits=(10, 2))
     mnozstvo = fields.Float(string='Mnozstvo', digits=(5,2), required=True)
-    cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='ref Cenova ponuka', required=True, ondelete='cascade')
+
+    # sluzi pre atyp
+    #name = fields.Char(required=False, string="Kod", size=30, help="Kod cennika konkretneho partnera")
+    #is_atyp = fields.Boolean(string="Atyp polozka", default=False)
+    #oddiel_id = fields.Char(required=False, string="Oddiel", size=10, help="kod oddielu pre SAP")
+
+    cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', required=True, ondelete='cascade')
+    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Polozka cennika', required=True)
+    #polozka_id = fields.Many2one('vystavba.polozka', string='Polozka', required=False)
+
+
+

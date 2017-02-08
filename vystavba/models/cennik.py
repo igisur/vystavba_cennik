@@ -15,7 +15,7 @@ class VystavbaCennik(models.Model):
     cennik_currency_id = fields.Many2one('res.currency', string="Mena", required=True)
 
     cennik_polozka_ids = fields.One2many('vystavba.cennik.polozka', 'cennik_id', string='Polozky', copy=True)
-    polozka_id = fields.Many2one('vystavba.polozka', related='cennik_polozka_ids.polozka_id', string='Polozka')
+    #polozka_id = fields.Many2one('vystavba.polozka', related='cennik_polozka_ids.polozka_id', string='Polozka')
 
 
 class VystavbaCennikPolozka(models.Model):
@@ -25,3 +25,10 @@ class VystavbaCennikPolozka(models.Model):
     cennik_id = fields.Many2one('vystavba.cennik', string='Odkaz na cennik', required=True, ondelete='cascade')
     polozka_id = fields.Many2one('vystavba.polozka', string='Polozka', required=True)
     cena = fields.Float(required=True, digits=(10, 2))
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for po in self:
+            result.append((po.polozka_id.id, po.polozka_id.name))
+        return result

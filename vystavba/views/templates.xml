@@ -32,13 +32,54 @@
         </t>
     </template>
 
+            <!--name = fields.Char(required=True, string="Názov", size=50, copy=False)-->
+    <!--cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);-->
+    <!--financny_kod = fields.Char(string="Finančný kód", required=True, copy=False)-->
+    <!--datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today());-->
+    <!--datum_koniec = fields.Date(string="Dátum ukončenia");-->
+    <!--poznamka = fields.Text(string="Poznámka", copy=False)-->
+    <!--celkova_cena = fields.Float(string='Celkova cena', digits=(10,2), copy=False)-->
+
+
     <template id="vystavba.report_cenova_ponuka_pdf">
         <t t-call="report.html_container">
             <t t-foreach="docs" t-as="doc">
                 <t t-call="report.external_layout">
+                    <div class="header">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 45px;"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        <div class="row">Vytlacil: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
+                    </div>
                     <div class="page">
-                        <h2>Report title</h2>
-                        <p>This object's name is <span t-field="doc.name"/></p>
+                        <h2>Cenova ponuka <span t-field="doc.name"/></h2>
+                        <div>
+                            <div>stav: <span t-field="doc.state"/></div>
+                            <div>Celkova cena: <span t-field="doc.celkova_cena"/></div>
+                        </div>
+                        <p>
+                            <div>Cislo: <span t-field="doc.cislo"/></div>
+                            <div>Financny kod: <span t-field="doc.financny_kod"/></div>
+                            <div>Skratka: <span t-field="doc.skratka"/></div>
+                            <div>Zahajenie: <span t-field="doc.datum_zaciatok"/></div>
+                            <div>Ukoncenie: <span t-field="doc.datum_koniec"/></div>
+                        </p>
+                        <p>
+                            <div>Dodávateľ: <span t-field="doc.dodavatel_id.name"/></div>
+                            <div>PC: <span t-field="doc.pc_id.name"/></div>
+                            <div>PM: <span t-field="doc.pm_id.name"/></div>
+                            <div>Manager: <span t-field="doc.manager_id.name"/></div>
+                        </p>
+                        <p>
+                        <t t-foreach="doc.cp_polozka_ids" t-as="cennik_polozka">
+                            <div><span t-field="cennik_polozka.cennik_polozka_id.polozka_id.name"/> - <span t-field="cennik_polozka.mnozstvo"/> - <span t-field="cennik_polozka.cena"/></div>
+                        </t>
+                        </p>
                     </div>
                 </t>
             </t>

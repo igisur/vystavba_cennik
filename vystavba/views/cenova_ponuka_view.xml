@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-<!--
-partner: akcia : stav
-PC  : vytvorit novy navrh CP : navrh
-PC  : priradi navrh CP niektoremu dodavatelovy : priradene
-DOD : prida polozky cennika : rozpracovene
-DOD : odosle na schvalenie : caka na schvalenie
-PC  : opravi a vrati na DOD : rozpracovanie
-PC  : schvali a postupi dalej na schvalenie : caka na schvalenie
-PM: : schvali a postupi dalej na schvalenie : caka na schvalenie
-Manager : schvali: schvalene
-
--->
-
         <!-- VIEWS -->
         <record model="ir.ui.view" id="vystavba.view_form_cenova_ponuka">
             <field name="name">cenova ponuka</field>
@@ -25,11 +12,11 @@ Manager : schvali: schvalene
                 <form>
                     <header>
                         <!-- use class="oe_highlight" to suggest WF action -->
-                        <button name="assign" type="workflow" states="draft" string="Priradiť"/>
-                        <button name="in_progress" type="workflow" states="assigned" string="Rozpracovať"/>
+                        <button name="assign" type="workflow" states="draft" string="Priradiť" class="oe_highlight"/>
+                        <button name="in_progress" type="workflow" states="assigned" string="Rozpracovať" class="oe_highlight"/>
                         <button name="wf_not_complete" type="object" states="to_approve" string="Vratiť na opravu"/>
-                        <button name="to_approve" type="workflow" states="in_progress" string="Odoslať na schválenie"/>
-                        <button name="approve" type="workflow" states="to_approve" string="Schváliť"/>
+                        <button name="to_approve" type="workflow" states="in_progress" string="Odoslať na schválenie" class="oe_highlight"/>
+                        <button name="approve" type="workflow" states="to_approve" string="Schváliť" class="oe_highlight"/>
                         <button name="cancel" type="workflow" states="to_approve" string="Zrušiť"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,assigned,in_progress,to_approve,approved" readonly="1"/>
                     </header>
@@ -60,32 +47,14 @@ Manager : schvali: schvalene
 
                         <notebook>
                             <page string="Položky">
-                                <!--<field name="polozka_id">-->
-                                    <!--<tree string="Polozky cennika" editable="bottom">-->
-                                        <!--<field name="product_id" context="{'partner_id': parent.partner_id}"/>-->
-                                        <!--<field name="name"/>-->
-                                        <!--<field name="date_planned"/>-->
-                                        <!--<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>-->
-                                        <!--<field name="account_analytic_id" context="{'default_partner_id':parent.partner_id}" groups="purchase.group_analytic_accounting"/>-->
-                                        <!--<field name="product_qty"/>-->
-                                        <!--<field name="qty_received" invisible="not context.get('show_purchase', False)"/>-->
-                                        <!--<field name="qty_invoiced" invisible="not context.get('show_purchase', False)"/>-->
-                                        <!--<field name="product_uom" groups="product.group_uom"/>-->
-                                        <!--<field name="price_unit"/>-->
-                                        <!--<field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}"/>-->
-                                        <!--<field name="price_subtotal" widget="monetary"/>-->
-                                    <!--</tree>-->
-                                <!--</field>-->
-                                <group class="oe_subtotal_footer oe_right">
-                                    <div class="oe_subtotal_footer_separator oe_inline">
-                                        <label for="celkova_cena"/>
-                                    </div>
-                                    <!--
-                                    <field name="celkova_cena" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                    -->
-                                    <field name="celkova_cena" nolabel="1" class="oe_subtotal_footer_separator" readonly="True"/>
-                                </group>
-                                <div class="oe_clear"/>
+                                <field name="cp_polozka_ids">
+                                    <tree string="Polozky cennika" editable="bottom">
+                                        <!--<field name="polozka_id" context="{'partner_id': parent.partner_id}"/>-->
+                                        <field name="cennik_polozka_id" context="{'dodavatel_id':parent.dodavatel_id}" />
+                                        <field name="mnozstvo" />
+                                        <field name="cena"/>
+                                    </tree>
+                                </field>
                             </page>
                             <page string="Atypické položky">
                             </page>
