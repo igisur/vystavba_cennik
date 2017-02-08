@@ -1,0 +1,46 @@
+<openerp>
+    <data noupdate="0">
+        <record id="partner_company_1" model="res.partner">
+            <field name="name">O2</field>
+            <field name="is_company">1</field>
+        </record>
+
+        <record id="company_o2" model="res.company">
+            <field name="name">O2</field>
+            <field name="email">o2.vystavba@o2.sk</field>
+            <field name="partner_id" ref="partner_company_1"/>
+        </record>
+
+        <record id="partner_user_1" model="res.partner">
+            <field name="name">Fraňo</field>
+            <field name="is_company">0</field>
+        </record>
+
+        <record id="user_1" model="res.users">
+            <field name="name">Fraňo</field>
+            <field name="email">frano.vystavba@o2.sk</field>
+            <field name="login">o2.frano</field>
+            <field name="password">123</field>
+            <field name="group_id" eval="[(6,0,[ref('vystavba.group_vystavba_supplier')])]"/>
+            <field name="partner_id" ref="partner_user_1"/>
+            <field name="company_id" ref="company_o2"/>
+        </record>
+<!--
+Dian
+Dlugoš
+Černý
+Fraňo
+Hellebrandt
+Vertáľ (prevádzka)
+Kinik (prevádzka)
+Feben (prevádzka)
+Makovinský (prevádzka)
+
+Hellebrandt
+Vertáľ (prevádzka)
+Kinik (prevádzka)
+Feben (prevádzka)
+Makovinský (prevádzka)
+-->
+    </data>
+</openerp>

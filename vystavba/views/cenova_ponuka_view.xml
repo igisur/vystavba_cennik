@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+<!--
+partner: akcia : stav
+PC  : vytvorit novy navrh CP : navrh
+PC  : priradi navrh CP niektoremu dodavatelovy : priradene
+DOD : prida polozky cennika : rozpracovene
+DOD : odosle na schvalenie : caka na schvalenie
+PC  : opravi a vrati na DOD : rozpracovanie
+PC  : schvali a postupi dalej na schvalenie : caka na schvalenie
+PM: : schvali a postupi dalej na schvalenie : caka na schvalenie
+Manager : schvali: schvalene
+
+-->
+
+        <!-- VIEWS -->
+        <record model="ir.ui.view" id="vystavba.view_form_cenova_ponuka">
+            <field name="name">cenova ponuka</field>
+            <field name="model">vystavba.cenova_ponuka</field>
+            <field name="priority" eval="5"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+
+                <form>
+                    <header>
+                        <!-- use class="oe_highlight" to suggest WF action -->
+                        <button name="assign" type="workflow" states="draft" string="Priradiť"/>
+                        <button name="in_progress" type="workflow" states="assigned" string="Rozpracovať"/>
+                        <button name="wf_not_complete" type="object" states="to_approve" string="Vratiť na opravu"/>
+                        <button name="to_approve" type="workflow" states="in_progress" string="Odoslať na schválenie"/>
+                        <button name="approve" type="workflow" states="to_approve" string="Schváliť"/>
+                        <button name="cancel" type="workflow" states="to_approve" string="Zrušiť"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,assigned,in_progress,to_approve,approved" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <label string="Cenová ponuka"/>
+                                <field name="id" invisible="True"/>
+                                <field name="name" attrs="{'readonly':[('state','in',['approved'])]}"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="cislo" reuired="True"  attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                                <field name="financny_kod"  attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                                <field name="datum_zaciatok"  attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
+                                <field name="datum_koniec" attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
+                                <field name="sap_export" attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
+                            </group>
+                            <group>
+                                <field name="dodavatel_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+                                <field name="pc_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+                                <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+                                <field name="manager_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+                                <field name="osoba_priradena_id" readonly="True"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Položky">
+                                <!--<field name="polozka_id">-->
+                                    <!--<tree string="Polozky cennika" editable="bottom">-->
+                                        <!--<field name="product_id" context="{'partner_id': parent.partner_id}"/>-->
+                                        <!--<field name="name"/>-->
+                                        <!--<field name="date_planned"/>-->
+                                        <!--<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>-->
+                                        <!--<field name="account_analytic_id" context="{'default_partner_id':parent.partner_id}" groups="purchase.group_analytic_accounting"/>-->
+                                        <!--<field name="product_qty"/>-->
+                                        <!--<field name="qty_received" invisible="not context.get('show_purchase', False)"/>-->
+                                        <!--<field name="qty_invoiced" invisible="not context.get('show_purchase', False)"/>-->
+                                        <!--<field name="product_uom" groups="product.group_uom"/>-->
+                                        <!--<field name="price_unit"/>-->
+                                        <!--<field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}"/>-->
+                                        <!--<field name="price_subtotal" widget="monetary"/>-->
+                                    <!--</tree>-->
+                                <!--</field>-->
+                                <group class="oe_subtotal_footer oe_right">
+                                    <div class="oe_subtotal_footer_separator oe_inline">
+                                        <label for="celkova_cena"/>
+                                    </div>
+                                    <!--
+                                    <field name="celkova_cena" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    -->
+                                    <field name="celkova_cena" nolabel="1" class="oe_subtotal_footer_separator" readonly="True"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </page>
+                            <page string="Atypické položky">
+                            </page>
+                            <page string="Schválené CP">
+                            </page>
+                        </notebook>
+
+                        <group class="oe_subtotal_footer oe_right">
+                            <div class="oe_subtotal_footer_separator oe_inline">
+                                <label for="celkova_cena"/>
+                            </div>
+                            <!--
+                            <field name="celkova_cena" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            -->
+                            <field name="celkova_cena" nolabel="1" class="oe_subtotal_footer_separator" readonly="True"/>
+                        </group>
+                        <div class="oe_clear"/>
+
+                        <!-- class="oe_inline" -->
+                        <label for="poznamka"/>
+                        <field name="poznamka" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- zobrazenie pre vsetky stavy okrem 'draft'
+        -->
+        <record model="ir.ui.view" id="vystavba.view_tree_cenova_ponuka">
+            <field name="name">cenova ponuka</field>
+            <field name="model">vystavba.cenova_ponuka</field>
+            <field name="priority" eval="5"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+
+                <tree string="Cenova ponuka" edit="false" create="false" delete="false">
+                    <field name="state"/>
+                    <field name="name"/>
+                    <field name="cislo"/>
+                    <field name="financny_kod"/>
+                    <field name="datum_zaciatok"/>
+                    <field name="datum_koniec"/>
+                    <field name="celkova_cena"/>
+                    <field name="dodavatel_id"/>
+                    <field name="osoba_priradena_id" string="Schvaľovateľ"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- zobrazenie pre vsetky cenove ponuky v stave 'draft'
+            nepotrebujeme: priradenu osobu, celkovu cenu
+        -->
+        <record model="ir.ui.view" id="vystavba.view_tree_cenova_ponuka_draft">
+            <field name="name">cenova ponuka</field>
+            <field name="model">vystavba.cenova_ponuka</field>
+            <field name="priority" eval="5"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree colors="red:dodavatel_id==False" edit="true" create="true" delete="false">
+                  <field name="name"/>
+                  <field name="cislo"/>
+                  <field name="financny_kod"/>
+                  <field name="datum_zaciatok"/>
+                  <field name="datum_koniec"/>
+                  <field name="dodavatel_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- zobrazenie pre vsetky cenove ponuky podla stavu -->
+        <record model="ir.ui.view" id="vystavba.view_tree_cenova_ponuka_preview">
+            <field name="name">cenova ponuka</field>
+            <field name="model">vystavba.cenova_ponuka</field>
+            <field name="priority" eval="6"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree colors="blue:state == 'draft';green:state == 'assigned';orange:state == 'in_progress';red:state == 'to_approve';gray:state in ('cancel','approved');"
+                        edit="false" create="false" delete="false">
+                    <field name="state"/>
+                    <field name="name"/>
+                    <field name="cislo"/>
+                    <field name="financny_kod"/>
+                    <field name="datum_zaciatok" string="Začaté"/>
+                    <field name="datum_koniec" string="Ukončené"/>
+                    <field name="celkova_cena"  string="Cena"/>
+                    <field name="dodavatel_id"/>
+                    <field name="pc_id"/>
+                    <field name="pm_id"/>
+                    <field name="manager_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ACTIONS -->
+       <!-- PC: vytvorenie a zoznam vytvorenych navrhov CP -->
+        <record model="ir.actions.act_window" id="vystavba.action_window_cp_draft">
+            <field name="name">Návrh cenovej ponuky</field>
+            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka_draft"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"> [('state','=','draft')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to register a receipt for this product.
+                </p><p>
+                Here you will find the history of all receipts related to
+                this product, as well as all future receipts you are waiting
+                from your suppliers.
+                </p>
+            </field>
+        </record>
+
+        <!-- Dodavatel: zoznam priradenych navrhov CP. to-do pool navrhov CP, ktoré su priradene dodavatelovy. ak ich zedituje stavaju sa "rozpracované" -->
+        <record model="ir.actions.act_window" id="vystavba.action_window_cp_assigned">
+            <field name="name">Priradené cenové ponuky</field>
+            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"> [('state','=','assigned')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to register a receipt for this product.
+                </p><p>
+                Here you will find the history of all receipts related to
+                this product, as well as all future receipts you are waiting
+                from your suppliers.
+                </p>
+            </field>
+        </record>
+
+        <!-- Dodavatel: zoznam rozpracovanych CP. to-do pool navrhov CP, ktoré treba dospecifikovat a posunut ich na schvalenie -->
+        <record model="ir.actions.act_window" id="vystavba.action_window_cp_in_progress">
+            <field name="name">Rozpracované cenové ponuky</field>
+            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"> [('state','=','in_progress')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to register a receipt for this product.
+                </p><p>
+                Here you will find the history of all receipts related to
+                this product, as well as all future receipts you are waiting
+                from your suppliers.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="vystavba.action_window_cp_to_approve">
+            <field name="name">Cenové ponuky čakajúce na schválenie</field>
+            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"> [('state','=','to_approve')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to register a receipt for this product.
+                </p><p>
+                Here you will find the history of all receipts related to
+                this product, as well as all future receipts you are waiting
+                from your suppliers.
+                </p>
+            </field>
+        </record>
+
+        <!-- Dodavatel / PC / PM / Manager: zoznam schvalenych CP (v podstate historia CP) READ ONLY -->
+        <record model="ir.actions.act_window" id="vystavba.action_window_cp_approved">
+            <field name="name">Schválené cenové ponuky</field>
+            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"> [('state','=','approved')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to register a receipt for this product.
+                </p><p>
+                Here you will find the history of all receipts related to
+                this product, as well as all future receipts you are waiting
+                from your suppliers.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="vystavba.action_window_cp_cancel">
+            <field name="name">Zrušené cenové ponuky</field>
+            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"> [('state','=','cancel')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to register a receipt for this product.
+                </p><p>
+                Here you will find the history of all receipts related to
+                this product, as well as all future receipts you are waiting
+                from your suppliers.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="vystavba.action_window_cp_preview">
+            <field name="name">Prehľad cenových ponúk</field>
+            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka_preview"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Click to register a receipt for this product.
+                </p><p>
+                Here you will find the history of all receipts related to
+                this product, as well as all future receipts you are waiting
+                from your suppliers.
+                </p>
+            </field>
+        </record>
+
+        <!-- MENU -->
+        <menuitem id="vystavba.menu_cenova_ponuka_root"
+                  name="Cenová ponuka"
+                  sequence="10"
+                  parent="vystavba.menu_root"/>
+
+        <menuitem id="vystavba.menu_cenova_ponuka_draft"
+                  name="Návrh"
+                  sequence="11"
+                  parent="vystavba.menu_cenova_ponuka_root"
+                  action="vystavba.action_window_cp_draft"/>
+
+        <menuitem id="vystavba.menu_cenova_ponuka_assigned"
+                  name="Priradené"
+                  sequence="12"
+                  parent="vystavba.menu_cenova_ponuka_root"
+                  action="vystavba.action_window_cp_assigned"/>
+
+        <menuitem id="vystavba.menu_cenova_ponuka_in_progress"
+                  name="Rozpracované"
+                  sequence="13"
+                  parent="vystavba.menu_cenova_ponuka_root"
+                  action="vystavba.action_window_cp_in_progress"/>
+
+        <menuitem id="vystavba.menu_cenova_ponuka_to_approve"
+                  name="Na schválenie"
+                  sequence="14"
+                  parent="vystavba.menu_cenova_ponuka_root"
+                  action="vystavba.action_window_cp_to_approve"/>
+
+        <menuitem id="vystavba.menu_cenova_ponuka_approved"
+                  name="Schválené"
+                  sequence="15"
+                  parent="vystavba.menu_cenova_ponuka_root"
+                  action="vystavba.action_window_cp_approved"/>
+
+        <menuitem id="vystavba.menu_cenova_ponuka_cancel"
+                  name="Zrušené"
+                  sequence="16"
+                  parent="vystavba.menu_cenova_ponuka_root"
+                  action="vystavba.action_window_cp_cancel"/>
+
+        <menuitem id="vystavba.menu_cenova_ponuka_preview"
+                  name="Prehľad"
+                  sequence="17"
+                  parent="vystavba.menu_cenova_ponuka_root"
+                  action="vystavba.action_window_cp_preview"/>
+
+    </data>
+</openerp>

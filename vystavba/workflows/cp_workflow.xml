@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="cp_workflow" model="workflow">
+            <field name="name">vystavba.cenova_ponuka_workflow</field>
+            <field name="osv">vystavba.cenova_ponuka</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <!-- Activities -->
+
+        <record id="draft" model="workflow.activity">
+            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">wf_draft()</field>
+        </record>
+
+        <record id="assigned" model="workflow.activity">
+            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="name">assigned</field>
+            <field name="kind">function</field>
+            <field name="action">wf_assign()</field>
+        </record>
+
+        <record id="in_progress" model="workflow.activity">
+            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="name">in_progress</field>
+            <field name="kind">function</field>
+            <field name="action">wf_in_progress()</field>
+        </record>
+
+        <record id="to_approve" model="workflow.activity">
+            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="name">to_approve</field>
+            <field name="kind">function</field>
+            <field name="action">wf_approve()</field>
+        </record>
+
+        <record id="approved" model="workflow.activity">
+            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="flow_stop">True</field>
+            <field name="name">approved</field>
+            <field name="kind">dummy</field>
+            <field name="action"></field>
+        </record>
+
+        <record id="cancel" model="workflow.activity">
+            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="flow_stop">True</field>
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">wf_cancel()</field>
+        </record>
+<!--
+partner: akcia : stav
+PC  : vytvorit novy navrh CP : navrh
+PC  : priradi navrh CP niektoremu dodavatelovi : priradene
+DOD : prida polozky cennika : rozpracovene
+DOD : odosle na schvalenie : caka na schvalenie
+PC  : opravi a vrati na DOD : rozpracovanie
+PC  : schvali a postupi dalej na schvalenie : caka na schvalenie
+PM: : schvali a postupi dalej na schvalenie : caka na schvalenie
+Manager : schvali: schvalene
+
+-->
+
+        <!-- Transitions -->
+        <record model="workflow.transition" id="cp_draft_to_assigned">
+            <field name="act_from" ref="draft"/>
+            <field name="act_to" ref="assigned"/>
+            <field name="signal">assign</field>
+            <field name="condition">wf_assign_check()</field>
+        </record>
+
+        <record model="workflow.transition" id="cp_assigned_in_progress">
+            <field name="act_from" ref="assigned"/>
+            <field name="act_to" ref="in_progress"/>
+            <field name="signal">in_progress</field>
+        </record>
+
+        <record model="workflow.transition" id="cp_in_progress_to_to_approve">
+            <field name="act_from" ref="in_progress"/>
+            <field name="act_to" ref="to_approve"/>
+            <field name="signal">to_approve</field>
+        </record>
+
+        <record model="workflow.transition" id="cp_to_approve_to_approve">
+            <field name="act_from" ref="to_approve"/>
+            <field name="act_to" ref="to_approve"/>
+            <field name="signal">approve</field>
+        </record>
+
+        <record model="workflow.transition" id="cp_to_approve_to_approved">
+            <field name="act_from" ref="to_approve"/>
+            <field name="act_to" ref="approved"/>
+            <field name="signal">approved</field>
+        </record>
+
+        <record model="workflow.transition" id="cp_to_approve_to_cancel">
+            <field name="act_from" ref="to_approve"/>
+            <field name="act_to" ref="cancel"/>
+            <field name="signal">cancel</field>
+        </record>
+
+        <record model="workflow.transition" id="cp_to_approve_to_in_progress">
+            <field name="act_from" ref="to_approve"/>
+            <field name="act_to" ref="in_progress"/>
+            <field name="signal">not_complete</field>
+        </record>
+
+    </data>
+</openerp>

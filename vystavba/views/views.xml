@@ -1,0 +1,14 @@
+<openerp>
+  <data>
+
+    <!-- Top menu item -->
+    <menuitem id="vystavba.menu_root"
+              name="Výstavba" />
+
+    <menuitem id="vystavba.menu_cennik_root"
+                name="Cenník"
+                sequence="30"
+                parent="vystavba.menu_root"/>
+
+  </data>
+</openerp>
