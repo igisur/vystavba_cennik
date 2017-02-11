@@ -41,7 +41,7 @@
                             </group>
                             <group>
 
-                                <field name="dod_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+                                <field name="dod_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" context = "{'group_name': ''}"/>
                                 <field name="dodavatel_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                                 <field name="pc_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                                 <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>

@@ -42,7 +42,7 @@ class VystavbaCenovaPonuka(models.Model):
     def _dodavatel_selection(self):
         group = self.env.ref('vystavba.group_vystavba_supplier')
         _logger.info("vystavba.group_vystavba_supplier " + group.name)
-        _logger.info("vystavba.group_vystavba_supplier name: " + self.context.__getitem__("group_name"))
+        #_logger.info("vystavba.group_vystavba_supplier name: " + self.context.__getitem__("group_name"))
         partner_ids = []
         partners = []
         #context = "{'partner_id': partner_id}"
