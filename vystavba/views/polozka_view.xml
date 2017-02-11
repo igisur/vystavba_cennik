@@ -17,6 +17,7 @@
                             </h1>
                         </div>
                         <group>
+                            <field name="oddiel_id"/>
                             <field name="kod"/>
                             <field name="intern_kod"/>
                             <field name="intern_id"/>

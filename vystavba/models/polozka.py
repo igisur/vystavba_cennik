@@ -9,7 +9,9 @@ class VystavbaPolozka(models.Model):
 
     name = fields.Char(required=True, string="Názov", size=100)
     description = fields.Text(string="Popis")
-    kod = fields.Char(required=True, string="Kód", size=20)
+    # Many2one display "name" field value or _rec_name = "field_name"
+    # oddiel_id = fields.Many2One('vystavba.oddiel', required=True, string="Oddiel", help="kod oddielu pre SAP")
+    oddiel_id = fields.Char(size=10, required=True, string="Oddiel", help="kod oddielu pre SAP")
     mj = fields.Selection([
         ('_', 'neurčená MJ'),
         ('kg', 'Kilogram'),
@@ -23,9 +25,10 @@ class VystavbaPolozka(models.Model):
         ('vl.', 'vl'),
     ], string="Merná jednotka", default="_")
     is_balicek = fields.Boolean("Balíček", default=False)
+
     intern_id = fields.Char(string="Intern ID")
     intern_kod = fields.Char(string="Intern kód")
-    active = fields.Boolean(default=True)
+    kod = fields.Char(required=True, string="Kód", size=20)
 
 
     # vyhladavame iba podla mena polozky. kod sluzi pre SAP

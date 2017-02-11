@@ -11,6 +11,7 @@ import logging
 import base64
 import xmlrpclib
 import urlparse
+from openerp.addons.base.res.res_users import res_groups, res_users
 
 # https://www.odoo.com/forum/help-1/question/how-to-display-dialog-box-16506
 
@@ -22,11 +23,12 @@ class VystavbaCenovaPonuka(models.Model):
     _description = "Vystavbovy cennik - cenova ponuka"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
-    # @api.one
-    # def _exportSAP(self):
-    # return xmlrpclib.response.make_response(filecontent,
-    #                      headers=[('Content-Type', 'application/octet-stream'),
-    #                               ('Content-Disposition', content_disposition(filename, req))],
+    @api.one
+    def action_exportSAP(self):
+        filecontent = "pokus"
+        # return xmlrpclib.response.make_response(filecontent,
+        #                   headers=[('Content-Type', 'application/octet-stream'),
+        #                            ('Content-Disposition', content_disposition(filename, req))]
 
     @api.model
     def _sel_func(self):
@@ -35,6 +37,27 @@ class VystavbaCenovaPonuka(models.Model):
         res = obj.read(['name', 'id'], ids, self.context)
         res = [(r['id'], r['name']) for r in res]
         return res
+
+    @api.model
+    def _dodavatel_selection(self):
+        group = self.env.ref('vystavba.group_vystavba_supplier')
+        _logger.info("vystavba.group_vystavba_supplier " + group.name)
+        _logger.info("vystavba.group_vystavba_supplier name: " + self.context.__getitem__("group_name"))
+        partner_ids = []
+        partners = []
+        #context = "{'partner_id': partner_id}"
+        for user in group.users:
+            _logger.info("user " + user.name + " /partner " + user.partner_id.name)
+            partner_ids.append((user.partner_id.id, user.partner_id.name))
+        return partners
+        # return {'domain': {'amenity': [('id', 'in', partner_ids)]}}
+
+        # obj = self.pool.get('res.users');
+        # res = [];
+        # ids = obj.search(self, [('groups_id')]);
+        # for user in obj.browse(self, ids):
+        #     res.append((user.partner.id, user.partner.name))
+        # return res;
 
     name = fields.Char(required=True, string="Názov", size=50, copy=False)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);
@@ -48,6 +71,7 @@ class VystavbaCenovaPonuka(models.Model):
     # related field to vystavba.cennik.dodavatel_id
     # cennik_id = fields.related(related='vystavba.cennik.id', store=True)
 
+    dod_id = fields.Selection(_dodavatel_selection, string='Dodávateľ')
     dodavatel_id = fields.Many2one('res.partner', string='Dodávateľ')
     pc_id = fields.Many2one('res.partner', string='PC')
     pm_id = fields.Many2one('res.partner', string='PM')
@@ -65,10 +89,11 @@ class VystavbaCenovaPonuka(models.Model):
     sap_file = base64.encodestring('ABCDEFGH')
     sap_export = fields.Binary(string='Export pre SAP', default=sap_file)
 
-    # approved_cp_ids = fields.One2many('vystavba.cenova_ponuka','Title', selection=_sel_func),
+    # approved_cp_ids = fields.Selection(_sel_func, string='Schvalene CP'),
     # source_approved_cp = fields.Reference(('vystavba.cenova_ponuka', 'CP'), 'Zdrojova cenova ponuka')
 
     cp_polozka_ids = fields.One2many('vystavba.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=True)
+    cp_polozka_atyp_ids = fields.One2many('vystavba.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp polozky', copy=False)
     # polozka_id = fields.Many2one('vystavba.polozka', related='cp_polozka_ids.polozka_id', string='Polozka')
 
     # def _standardize(self, args):
@@ -247,15 +272,24 @@ class VystavbaCenovaPonukaPolozka(models.Model):
 
     cena = fields.Float(required=True, digits=(10, 2))
     mnozstvo = fields.Float(string='Mnozstvo', digits=(5,2), required=True)
-
-    # sluzi pre atyp
-    #name = fields.Char(required=False, string="Kod", size=30, help="Kod cennika konkretneho partnera")
-    #is_atyp = fields.Boolean(string="Atyp polozka", default=False)
-    #oddiel_id = fields.Char(required=False, string="Oddiel", size=10, help="kod oddielu pre SAP")
-
     cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', required=True, ondelete='cascade')
+
     cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Polozka cennika', required=True)
     #polozka_id = fields.Many2one('vystavba.polozka', string='Polozka', required=False)
+
+
+class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
+    _name = 'vystavba.cenova_ponuka.polozka_atyp'
+    _description = "Vystavba - polozka cenovej ponuky"
+
+    name = fields.Char(required=True, string="Nazov", size=30, help="Kod polozky")
+    oddiel_id = fields.Many2one('vystavba.oddiel', required=True, string="Oddiel")
+
+    cena = fields.Float(required=True, digits=(10, 2))
+    mnozstvo = fields.Float(string='Mnozstvo', digits=(5,2), required=True)
+
+    cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', required=True, ondelete='cascade')
+
 
 
 
