@@ -24,6 +24,7 @@ class VystavbaCennikPolozka(models.Model):
 
     cennik_id = fields.Many2one('vystavba.cennik', string='Odkaz na cennik', required=True, ondelete='cascade')
     polozka_id = fields.Many2one('vystavba.polozka', string='Polozka', required=True)
+    polozka_mj = fields.Selection(related='polozka_id.mj', string='Merná jednotka')
     cena = fields.Float(required=True, digits=(10, 2))
 
     @api.multi
