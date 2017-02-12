@@ -35,15 +35,14 @@
                             <group>
                                 <field name="cislo" reuired="True"  attrs="{'readonly':[('state','not in',['draft'])]}"/>
                                 <field name="financny_kod"  attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                                <field name="skratka"  attrs="{'readonly':[('state','not in',['draft'])]}"/>
                                 <field name="datum_zaciatok"  attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
                                 <field name="datum_koniec" attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
-                                <field name="sap_export" attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
+                                <!--<field name="sap_export" attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>-->
                             </group>
                             <group>
-
-                                <field name="dod_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" context = "{'group_name': ''}"/>
                                 <field name="dodavatel_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
-                                <field name="pc_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+                                <field name="pc_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
                                 <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                                 <field name="manager_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                                 <field name="osoba_priradena_id" readonly="True"/>
@@ -73,7 +72,17 @@
                                 </field>
                             </page>
                             <page string="Schválené CP">
-                                <!--<field name="approved_cp_ids"/>-->
+                                <field name="approved_cp_ids">
+                                    <tree create="false" delete="false">
+                                        <field name="name"/>
+                                        <field name="cislo" string="PSID"/>
+                                        <field name="financny_kod" string="Fin.kód"/>
+                                        <field name="datum_zaciatok" string="Začaté"/>
+                                        <field name="datum_koniec" string="Ukončené"/>
+                                        <field name="celkova_cena"  string="Cena"/>
+                                        <button name="vystavba.copy_polozky" type="object" string="Copy"/>
+                                    </tree>
+                                </field>
                             </page>
                         </notebook>
 

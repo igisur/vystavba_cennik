@@ -18,19 +18,19 @@
 
         <record id="group_vystavba_pc" model="res.groups">
             <field name="name">Projekt koordinátor (PC)</field>
-            <field name="implied_ids" eval="[(4, ref('vystavba.group_vystavba_supplier'))]"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
             <field name="category_id" ref="vystavba.module_category_vystavba"/>
         </record>
 
         <record id="group_vystavba_pm" model="res.groups">
             <field name="name">Projekt manager (PM)</field>
-            <field name="implied_ids" eval="[(4, ref('vystavba.group_vystavba_pc'))]"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
             <field name="category_id" ref="vystavba.module_category_vystavba"/>
         </record>
 
         <record id="group_vystavba_manager" model="res.groups">
             <field name="name">Manager</field>
-            <field name="implied_ids" eval="[(4, ref('vystavba.group_vystavba_pm'))]"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
             <field name="category_id" ref="vystavba.module_category_vystavba"/>
         </record>
 

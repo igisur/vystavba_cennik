@@ -10,9 +10,9 @@
                 <!-- potrebujeme odkaz na User-a -->
                 <!-- pridaj fields z vystavby -->
                 <field name="mobile" position="after">
-                    <field name="cp_celkova_cena_limit"/>
                     <field name="kod"/>
-                    <field name="group_id" widget="selection" options="{'no_create': True}"/>
+                    <field name="cp_celkova_cena_limit"/>
+                    <field name="reminder_interval"/>
                 </field>
             </field>
         </record>

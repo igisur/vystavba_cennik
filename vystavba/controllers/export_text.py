@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from openerp import http
 
-class VystavbaExportSAP(http.Controller):
+class export_text(http.Controller):
      @http.route('/vystavba/exportSAP/', auth='public', type='http')
      def index(self, **kw):
          return "Hello, world"
