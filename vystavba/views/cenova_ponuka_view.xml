@@ -55,8 +55,10 @@
                                     <tree string="Polozky cennika" editable="bottom">
                                         <!--<field name="polozka_id" context="{'partner_id': parent.partner_id}"/>-->
                                         <field name="cennik_polozka_id" context="{'dodavatel_id':parent.dodavatel_id}" />
+                                        <field name="polozka_mj" readonly="1"/>
                                         <field name="mnozstvo" />
-                                        <field name="cena"/>
+                                        <field name="cena_jednotkova"/>
+                                        <field name="cena_celkom"/>
                                     </tree>
                                 </field>
                             </page>
@@ -66,7 +68,6 @@
                                         <!--<field name="polozka_id" context="{'partner_id': parent.partner_id}"/>-->
                                         <field name="oddiel_id"/>
                                         <field name="name"/>
-                                        <field name="mnozstvo" />
                                         <field name="cena"/>
                                     </tree>
                                 </field>

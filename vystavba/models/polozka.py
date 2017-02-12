@@ -11,7 +11,8 @@ class VystavbaPolozka(models.Model):
     description = fields.Text(string="Popis")
     # Many2one display "name" field value or _rec_name = "field_name"
     # oddiel_id = fields.Many2One('vystavba.oddiel', required=True, string="Oddiel", help="kod oddielu pre SAP")
-    oddiel_id = fields.Char(size=10, required=True, string="Oddiel", help="kod oddielu pre SAP")
+    # oddiel_id = fields.Char(size=10, required=True, string="Oddiel", help="kod oddielu pre SAP")
+    oddiel_id = fields.Many2one('vystavba.oddiel', string='Oddiel', required=True)
     mj = fields.Selection([
         ('_', 'neurčená MJ'),
         ('kg', 'Kilogram'),

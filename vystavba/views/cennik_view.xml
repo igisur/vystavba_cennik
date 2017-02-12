@@ -30,6 +30,7 @@
                                     <tree string="Polozky cennika" editable="bottom">
                                         <field name="polozka_id" />
                                         <field name="cena" />
+                                        <field name="polozka_mj"/>
                                     </tree>
                                 </field>
                             </page>
