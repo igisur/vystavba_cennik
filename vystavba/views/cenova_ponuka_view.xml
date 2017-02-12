@@ -69,8 +69,6 @@
                                         <!--<field name="polozka_id" context="{'partner_id': parent.partner_id}"/>-->
                                         <field name="oddiel_id"/>
                                         <field name="name"/>
-                                        <field name="mnozstvo" />
-                                        <!--<field name="mj" />-->
                                         <field name="cena"/>
                                     </tree>
                                 </field>

@@ -59,6 +59,20 @@ class VystavbaCenovaPonuka(models.Model):
         #     res.append((user.partner.id, user.partner.name))
         # return res;
 
+    @api.depends('cp_polozka_ids.cena_celkom','cp_polozka_atyp_ids.cena')
+    def _amount_all(self):
+        for cp in self:
+            cp_celkova_cena = 0.0
+            for line in cp.cp_polozka_ids:
+                cp_celkova_cena += line.cena_celkom
+
+            for lineAtyp in cp.cp_polozka_atyp_ids:
+                cp_celkova_cena += lineAtyp.cena
+
+            cp.update({
+                'celkova_cena': cp_celkova_cena
+            })
+
     name = fields.Char(required=True, string="Názov", size=50, copy=False)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);
     financny_kod = fields.Char(string="Finančný kód", required=True, copy=False)
@@ -66,7 +80,8 @@ class VystavbaCenovaPonuka(models.Model):
     datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today());
     datum_koniec = fields.Date(string="Dátum ukončenia");
     poznamka = fields.Text(string="Poznámka", copy=False)
-    celkova_cena = fields.Float(string='Celkova cena', digits=(10,2), copy=False)
+    #celkova_cena = fields.Float(string='Celkova cena', digits=(10,2), copy=False)
+    celkova_cena = fields.Float(compute='_amount_all', string='Celková cena', store=True, digits=(10,2))
 
     # related field to vystavba.cennik.dodavatel_id
     # cennik_id = fields.related(related='vystavba.cennik.id', store=True)
@@ -271,14 +286,19 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     _description = "Vystavba - polozka cenovej ponuky"
 
     @api.depends('cena_jednotkova', 'mnozstvo')
-    def _compute_amount(self):
+    def _compute_cena_celkom(self):
         for line in self:
             total = line.cena_jednotkova * line.mnozstvo
             line.cena_celkom = total
 
+    @api.depends('cennik_polozka_id')
+    def _compute_cena_jednotkova(self):
+        for line in self:
+            line.cena_jednotkova = line.cennik_polozka_id.cena
+
     # cena = fields.Float(required=True, digits=(10, 2))
-    cena_jednotkova = fields.Float(string='Jednotková cena', required=True, digits=(10,2))
-    cena_celkom = fields.Float(compute='_compute_amount', string='Cena celkom', store=True, digits=(10,2))
+    cena_jednotkova = fields.Float(compute='_compute_cena_jednotkova', string='Jednotková cena', required=True, digits=(10,2))
+    cena_celkom = fields.Float(compute='_compute_cena_celkom', string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
     cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', change_default=True, required=True, ondelete='cascade')
     cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka',change_default=True, required=True)
@@ -309,11 +329,13 @@ class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
 
     name = fields.Char(required=True, string="Nazov", size=30, help="Kod polozky")
     oddiel_id = fields.Many2one('vystavba.oddiel', required=True, string="Oddiel")
-
     cena = fields.Float(required=True, digits=(10, 2))
-    mnozstvo = fields.Float(string='Mnozstvo', digits=(5,2), required=True)
-    #mj = fields.Selection(related='cennik_polozka_id.polozka_mj', string='Merná jednotka')
     cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', required=True, ondelete='cascade')
+
+    # mnozstvo = fields.Float(string='Mnozstvo', digits=(5, 2), required=True) po dohode vyhodena, zosatane len celkova cena
+    #mj = fields.Selection(related='cennik_polozka_id.polozka_mj', string='Merná jednotka')
+
+
 
 
 
