@@ -81,7 +81,7 @@
                                         <field name="datum_zaciatok" string="Začaté"/>
                                         <field name="datum_koniec" string="Ukončené"/>
                                         <field name="celkova_cena"  string="Cena"/>
-                                        <button name="vystavba.copy_polozky" type="object" string="Copy"/>
+                                        <!--<button name="vystavba.copy_polozky" type="object" string="Copy"/>-->
                                     </tree>
                                 </field>
                             </page>
