@@ -6,6 +6,7 @@ from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from openerp.tools.translate import _
 from openerp.tools.float_utils import float_is_zero, float_compare
 from openerp.exceptions import UserError, AccessError, ValidationError
+from openerp import http
 import datetime
 import logging
 import base64
@@ -39,6 +40,11 @@ class VystavbaCenovaPonuka(models.Model):
         (CANCEL, 'Zrušená')
     )
 
+    GROUP_SUPPLIER = 'vystavba.group_vystavba_supplier'
+    GROUP_PC = 'vystavba.group_vystavba_pc'
+    GROUP_PM = 'vystavba.group_vystavba_pm'
+    GROUP_MANAGER = 'vystavba.group_vystavba_manager'
+
     @api.one
     def action_exportSAP(self):
         filecontent = "pokus"
@@ -48,28 +54,26 @@ class VystavbaCenovaPonuka(models.Model):
     @api.model
     def _partners_in_group(self, group_name):
         group = self.env.ref(group_name)
-        _logger.info("group name: " + group.name)
         partner_ids = []
         for user in group.users:
-            _logger.info("user " + user.name + " /partner " + user.partner_id.name)
             partner_ids.append(user.partner_id.id)
         return partner_ids
 
     @api.model
     def partners_in_group_supplier(self):
-        partner_ids = self._partners_in_group('vystavba.group_vystavba_supplier')
+        partner_ids = self._partners_in_group(self.GROUP_SUPPLIER)
         return [('id', 'in', partner_ids)]
 
     def partners_in_group_pc(self):
-        partner_ids = self._partners_in_group('vystavba.group_vystavba_pc')
+        partner_ids = self._partners_in_group(self.GROUP_PC)
         return [('id', 'in', partner_ids)]
 
     def partners_in_group_pm(self):
-        partner_ids = self._partners_in_group('vystavba.group_vystavba_pm')
+        partner_ids = self._partners_in_group(self.GROUP_PM)
         return [('id', 'in', partner_ids)]
 
     def partners_in_group_manager(self):
-        partner_ids = self._partners_in_group('vystavba.group_vystavba_manager')
+        partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         return [('id', 'in', partner_ids)]
 
     @api.depends('cp_polozka_ids.cena_celkom','cp_polozka_atyp_ids.cena')
@@ -93,11 +97,7 @@ class VystavbaCenovaPonuka(models.Model):
     datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today());
     datum_koniec = fields.Date(string="Dátum ukončenia");
     poznamka = fields.Text(string="Poznámka", copy=False)
-    #celkova_cena = fields.Float(string='Celkova cena', digits=(10,2), copy=False)
     celkova_cena = fields.Float(compute='_amount_all', string='Celková cena', store=True, digits=(10,2))
-
-    # related field to vystavba.cennik.dodavatel_id
-    # cennik_id = fields.related(related='vystavba.cennik.id', store=True)
 
     dodavatel_id = fields.Many2one('res.partner', string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier)
     pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc)
@@ -123,6 +123,25 @@ class VystavbaCenovaPonuka(models.Model):
             ]
         )
 
+    @api.onchange('osoba_priradena_id')
+    def _sent_notification(self):
+        # sent notification to assigned person
+        _logger.info("Page URL: " + http.request.httprequest.full_path)
+
+    @api.multi
+    def send_mail(self):
+        user_id = self.user_target.id
+        body = self.message_target
+
+        mail_details = {'subject': "Message subject",
+                        'body': body,
+                        #'partner_ids': [(user_target)]
+                        }
+
+        mail = self.env['mail.thread']
+        mail.message_post(type="notification", subtype="mt_comment", **mail_details)
+
+
     @api.one
     def copy_polozky(self):
         _logger.info("Copy polozky")
@@ -140,6 +159,17 @@ class VystavbaCenovaPonuka(models.Model):
             raise ValidationError("Cenová ponuka s rovnakým názvom už existuje. Prosím zvolte iný názov, ktorý bude unikátny.")
 
     # Workflow
+    # najdi partnera v skupine 'Manager', ktoreho field 'cena_na_schvalenie' je vacsia ako celkova cena CP
+    def _find_manager(self):
+        _logger.info("Looking for manager to approve order of price " + str(self.celkova_cena));
+        partner_ids = self._partners_in_group(self.GROUP_MANAGER)
+        manager_ids = self.env['res.partner'].search([('id', 'in', partner_ids),('cp_celkova_cena_limit', '<=', self.celkova_cena)], order = "cp_celkova_cena_limit desc", limit = 1)
+
+        for man in manager_ids:
+            _logger.info(man.name);
+
+        return manager_ids[0];
+
     @api.one
     def wf_draft(self):    # should be create but is set in field definition
         self.ensure_one()
@@ -173,16 +203,6 @@ class VystavbaCenovaPonuka(models.Model):
         self.write({'osoba_priradena_id': self.pc_id.id})
         return True
 
-
-    # najdi partnera v skupine 'Manager', ktoreho field 'cena_na_schvalenie' je vacsia ako celkova cena CP
-    def find_manager(self):
-        # !!!! self.env['res.users'].browse(self.env.uid).has_group('base.group_sale_manager') !!!
-        manager_id = self.manager_id.id
-        if self.celkova_cena > 3000:
-            manager_id = self.uid;
-
-        return manager_id;
-
     @api.one
     def wf_approve(self):
         self.ensure_one()
@@ -201,15 +221,15 @@ class VystavbaCenovaPonuka(models.Model):
 
         elif self.osoba_priradena_id.id == self.pm_id.id:
             #  PM poslal na schvalenie Managerovy
-            _logger.info("PM sent to approve by PM")
-            self.write({'osoba_priradena_id': self.manager_id.id})
+            _logger.info("PM sent to approve by Manager")
+            manager_id = self._find_manager()
+            self.write({'osoba_priradena_id': manager_id.id, 'manager_id': manager_id.id})
 
         elif self.osoba_priradena_id.id == self.manager_id.id:
             #  Manager schvalil -> CP je schvalena a koncime
-            _logger.info("PM sent to approve by Manager")
+            _logger.info("Manager approved")
             self.write({'osoba_priradena_id': '', 'state': 'approved'})
 
-        # self.signal_workflow('action_assign')
         return True
 
     @api.one
@@ -237,6 +257,7 @@ class VystavbaCenovaPonuka(models.Model):
         self.write({'state': self.CANCEL})
         self.write({'osoba_priradena_id': ''})
         return True
+
 
     @api.multi
     def action_invoice_sent(self):
@@ -283,15 +304,13 @@ class VystavbaCenovaPonukaPolozka(models.Model):
             line.cena_jednotkova = line.cennik_polozka_id.cena
 
     # cena = fields.Float(required=True, digits=(10, 2))
-    cena_jednotkova = fields.Float(compute='_compute_cena_jednotkova', string='Jednotková cena', required=True, digits=(10,2))
-    cena_celkom = fields.Float(compute='_compute_cena_celkom', string='Cena celkom', store=True, digits=(10,2))
+    cena_jednotkova = fields.Float(compute=_compute_cena_jednotkova, string='Jednotková cena', required=True, digits=(10,2))
+    cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
     cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', change_default=True, required=True, ondelete='cascade')
-    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka',change_default=True, required=True)
+    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka',change_default=True, required=True, domain="[('cennik_id.dodavatel_id', '=', [parent.dodavatel_id])]")
     polozka_mj = fields.Selection(related='cennik_polozka_id.polozka_mj', string='Merná jednotka')
     #mj = fields.Char(string='Merna jednotka', size=5, required=True, readonly=True)
-
-    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Polozka cennika', required=True)
 
     @api.onchange('cennik_polozka_id')
     def onchange_cennik_polozka_id(self):

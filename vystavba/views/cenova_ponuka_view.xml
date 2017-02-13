@@ -54,11 +54,11 @@
                                 <field name="cp_polozka_ids">
                                     <tree string="Polozky cennika" editable="bottom">
                                         <!--<field name="polozka_id" context="{'partner_id': parent.partner_id}"/>-->
-                                        <field name="cennik_polozka_id" context="{'dodavatel_id':parent.dodavatel_id}" />
-                                        <field name="polozka_mj" readonly="1"/>
-                                        <field name="mnozstvo" />
-                                        <field name="cena_jednotkova"/>
-                                        <field name="cena_celkom"/>
+                                        <field name="cennik_polozka_id" context="{'dodavatel_id':parent.dodavatel_id}" string="Položka"/>
+                                        <field name="polozka_mj" readonly="1" string="mj"/>
+                                        <field name="mnozstvo"  string="Počet"/>
+                                        <field name="cena_jednotkova" invisible="1"/>
+                                        <field name="cena_celkom" string="Cena"/>
                                     </tree>
                                 </field>
                             </page>
@@ -66,9 +66,9 @@
                                 <field name="cp_polozka_atyp_ids">
                                     <tree string="Polozky cennika" editable="bottom">
                                         <!--<field name="polozka_id" context="{'partner_id': parent.partner_id}"/>-->
-                                        <field name="oddiel_id"/>
-                                        <field name="name"/>
-                                        <field name="cena"/>
+                                        <field name="oddiel_id" string="Oddiel"/>
+                                        <field name="name"  string="Položka"/>
+                                        <field name="cena" string="Cena"/>
                                     </tree>
                                 </field>
                             </page>
