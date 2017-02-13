@@ -47,8 +47,17 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.one
     def action_exportSAP(self):
-        filecontent = "pokus"
-        return xmlrpclib.response.make_response(filecontent, headers=[('Content-Type', 'application/txt')])
+        # zavolat ako default pre self.sap_export_file_binary ak je CP v stave 'approved'
+        # field 'sap_export_file_binary' viditelny iba v stave 'approved'
+        export_file_name = 'sap_export_' + self.cislo + '_' + str(datetime.date.today()) + '.txt'
+        _logger.info('export file name: ' + export_file_name)
+        self.sap_export_file_name = export_file_name
+        self.sap_export_file_binary = base64.encodestring(self.sap_export_content)
+        self.message_post(body='Subor "' + export_file_name + '" pre SAP bol vygenerovany', message_type='email')
+
+    @api.model
+    def _get_default_osoba_priradena(self):
+        self.osoba_priradena_id = self.env.user
 
     # limit partners to specific group
     @api.model
@@ -96,21 +105,23 @@ class VystavbaCenovaPonuka(models.Model):
     skratka = fields.Char(string="Skratka", required=False, copy=False)
     datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today());
     datum_koniec = fields.Date(string="Dátum ukončenia");
-    poznamka = fields.Text(string="Poznámka", copy=False)
-    celkova_cena = fields.Float(compute='_amount_all', string='Celková cena', store=True, digits=(10,2))
+    poznamka = fields.Text(string="Poznámka", copy=False, track_visibility='onchange')
+    wf_dovod = fields.Text(string="Dôvod pre workflow", copy=False, help='Uvedte dôvod pre zmenu stavu workflow, najme pri akcii "Vratiť na opravu" a "Zrušiť"')
+    celkova_cena = fields.Float(compute='_amount_all', string='Celková cena', store=True, digits=(10,2), track_visibility='onchange')
 
     dodavatel_id = fields.Many2one('res.partner', string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier)
     pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc)
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm)
     manager_id = fields.Many2one('res.partner', string='Manager', copy=False, track_visibility='onchange',  domain=partners_in_group_manager)
-    osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange')
+    osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange', default= lambda self: self.env.user.partner_id.id)
     state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange')
 
     cp_polozka_ids = fields.One2many('vystavba.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=True, track_visibility='onchange')
     cp_polozka_atyp_ids = fields.One2many('vystavba.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp polozky', copy=False, track_visibility='onchange')
 
-    sap_file = base64.encodestring('ABCDEFGH')
-    sap_export = fields.Binary(string='Export pre SAP', default=sap_file)
+    sap_export_content = fields.Text(string="Export pre SAP", default='ABCDEFGH')
+    sap_export_file_name = fields.Char(string="Export file name")
+    sap_export_file_binary = fields.Binary(string='Export file')
 
     approved_cp_ids = fields.One2many('vystavba.cenova_ponuka', compute='_compute_approved_cp_ids', string='Schvalene CP')
 
@@ -127,20 +138,6 @@ class VystavbaCenovaPonuka(models.Model):
     def _sent_notification(self):
         # sent notification to assigned person
         _logger.info("Page URL: " + http.request.httprequest.full_path)
-
-    @api.multi
-    def send_mail(self):
-        user_id = self.user_target.id
-        body = self.message_target
-
-        mail_details = {'subject': "Message subject",
-                        'body': body,
-                        #'partner_ids': [(user_target)]
-                        }
-
-        mail = self.env['mail.thread']
-        mail.message_post(type="notification", subtype="mt_comment", **mail_details)
-
 
     @api.one
     def copy_polozky(self):
@@ -184,51 +181,54 @@ class VystavbaCenovaPonuka(models.Model):
     def wf_assign(self):
         _logger.info("workflow action to ASSIGN")
         self.ensure_one()
-        self.write({'state': self.ASSIGNED, 'osoba_priradena_id': self.dodavatel_id.id})
+        if self.wf_dovod:
+            self.message_post(body=self.wf_dovod)
+            self.wf_dovod = ''
+
+        self.write({'state': self.ASSIGNED, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': self.wf_dovod})
         return True
 
     @api.one
     def wf_in_progress(self):
         _logger.info("workflow action to IN_PROGRESS")
         self.ensure_one()
-        self.write({'state': self.IN_PROGRESS})
-        return True
+        if self.wf_dovod:
+            self.message_post(body=self.wf_dovod)
+            self.wf_dovod = ''
 
-    # Dodavatel odoslal vyplnenu CP na schvalenie. skonci na PC
-    @api.one
-    def wf_to_approve(self):
-        _logger.info("workflow action to TO_APPROVE")
-        self.ensure_one()
-        self.write({'state': self.TO_APPROVE})
-        self.write({'osoba_priradena_id': self.pc_id.id})
+        self.write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': self.wf_dovod})
         return True
 
     @api.one
     def wf_approve(self):
         self.ensure_one()
         _logger.info("workflow action to APPROVE")
-        self.write({'state': self.TO_APPROVE})
+        self.write({})
+
+        if self.wf_dovod:
+            self.message_post(body=self.wf_dovod)
+            self.wf_dovod = ''
 
         if self.osoba_priradena_id.id == self.dodavatel_id.id:
             #  Dodavatel poslal na schvalenie PC
             _logger.info("Supplier sent to approve by PC")
-            self.write({'osoba_priradena_id': self.pc_id.id})
+            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': self.wf_dovod})
 
         elif self.osoba_priradena_id.id == self.pc_id.id:
             #  PC poslal na schvalenie PM
             _logger.info("PC sent to approve by PM")
-            self.write({'osoba_priradena_id': self.pm_id.id})
+            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pm_id.id, 'wf_dovod': self.wf_dovod})
 
         elif self.osoba_priradena_id.id == self.pm_id.id:
             #  PM poslal na schvalenie Managerovy
             _logger.info("PM sent to approve by Manager")
             manager_id = self._find_manager()
-            self.write({'osoba_priradena_id': manager_id.id, 'manager_id': manager_id.id})
+            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': manager_id.id, 'manager_id': manager_id.id, 'wf_dovod': self.wf_dovod})
 
         elif self.osoba_priradena_id.id == self.manager_id.id:
             #  Manager schvalil -> CP je schvalena a koncime
             _logger.info("Manager approved")
-            self.write({'osoba_priradena_id': '', 'state': 'approved'})
+            self.write({'state': self.APPROVED, 'osoba_priradena_id': '', 'wf_dovod': self.wf_dovod})
 
         return True
 
@@ -236,17 +236,22 @@ class VystavbaCenovaPonuka(models.Model):
     def wf_not_complete(self):
         _logger.info("workflow action to NOT_COMPLETE")
         self.ensure_one()
+
+        if self.wf_dovod:
+            self.message_post(body=self.wf_dovod)
+            self.wf_dovod = ''
+
         # PC signals 'not complete' - CP should be 'in_progress' and assigned to Supplier
         if self.osoba_priradena_id.id == self.pc_id.id :
             _logger.info("workflow action to IN_PROGRESS")
-            self.write({'osoba_priradena_id': self.dodavatel_id.id, 'state': self.IN_PROGRESS})
+            self.write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': self.wf_dovod})
             self.signal_workflow('not_complete')
             # call WF: signal "not complete". som v stave "to_approve". potrebujem ist do in_progers
 
         # PM signals 'not complete' - CP should be 'to_approve' and assigned to PC
         elif self.osoba_priradena_id.id == self.pm_id.id :
             _logger.info("workflow action to TO_APPROVE")
-            self.write({'osoba_priradena_id': self.pc_id.id, 'state': self.TO_APPROVE})
+            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': self.wf_dovod})
 
         return True
 
@@ -254,8 +259,12 @@ class VystavbaCenovaPonuka(models.Model):
     def wf_cancel(self):
         _logger.info("workflow action to CANCEL")
         self.ensure_one()
-        self.write({'state': self.CANCEL})
-        self.write({'osoba_priradena_id': ''})
+
+        if self.wf_dovod:
+            self.message_post(body=self.wf_dovod)
+            self.wf_dovod = ''
+
+        self.write({'state': self.CANCEL, 'osoba_priradena_id': '', 'wf_dovod': self.wf_dovod})
         return True
 
 
@@ -287,10 +296,34 @@ class VystavbaCenovaPonuka(models.Model):
             'context': ctx,
         }
 
+    @api.multi
+    def send_mail(self):
+        user_id = self.user_target.id
+        body = self.message_target
+
+        mail_details = {'subject': "Message subject",
+                        'body': body
+                        #'partner_ids': [(user_target)]
+                        }
+
+        mail = self.env['mail.thread']
+        mail.message_post(type="notification", subtype="mt_comment", **mail_details)
+
 
 class VystavbaCenovaPonukaPolozka(models.Model):
     _name = 'vystavba.cenova_ponuka.polozka'
     _description = "Vystavba - polozka cenovej ponuky"
+
+    @api.depends('cennik_polozka_id', 'polozka_mj')
+    def _compute_cena_za_mj(self):
+        for line in self:
+            cena_za_mj = ''
+            if line.cennik_polozka_id.cena:
+                cena_za_mj = str(line.cennik_polozka_id.cena)
+                if not line.polozka_mj == '_':
+                    cena_za_mj = cena_za_mj + '/' + str(line.polozka_mj)
+
+            line.cena_za_mj = cena_za_mj
 
     @api.depends('cena_jednotkova', 'mnozstvo')
     def _compute_cena_celkom(self):
@@ -308,9 +341,10 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
     cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', change_default=True, required=True, ondelete='cascade')
-    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka',change_default=True, required=True, domain="[('cennik_id.dodavatel_id', '=', [parent.dodavatel_id])]")
+    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka',change_default=True, required=True, domain="[('cennik_id.dodavatel_id', '=', parent.dodavatel_id)]")
     polozka_mj = fields.Selection(related='cennik_polozka_id.polozka_mj', string='Merná jednotka')
     #mj = fields.Char(string='Merna jednotka', size=5, required=True, readonly=True)
+    cena_za_mj = fields.Char(compute=_compute_cena_za_mj, string='Cena za mj', store=False)
 
     @api.onchange('cennik_polozka_id')
     def onchange_cennik_polozka_id(self):

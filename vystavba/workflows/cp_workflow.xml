@@ -9,7 +9,6 @@
         </record>
 
         <!-- Activities -->
-
         <record id="draft" model="workflow.activity">
             <field name="wkf_id" ref="cp_workflow"/>
             <field name="flow_start">True</field>
@@ -54,18 +53,7 @@
             <field name="kind">function</field>
             <field name="action">wf_cancel()</field>
         </record>
-<!--
-partner: akcia : stav
-PC  : vytvorit novy navrh CP : navrh
-PC  : priradi navrh CP niektoremu dodavatelovi : priradene
-DOD : prida polozky cennika : rozpracovene
-DOD : odosle na schvalenie : caka na schvalenie
-PC  : opravi a vrati na DOD : rozpracovanie
-PC  : schvali a postupi dalej na schvalenie : caka na schvalenie
-PM: : schvali a postupi dalej na schvalenie : caka na schvalenie
-Manager : schvali: schvalene
 
--->
 
         <!-- Transitions -->
         <record model="workflow.transition" id="cp_draft_to_assigned">

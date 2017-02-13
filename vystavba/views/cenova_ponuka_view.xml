@@ -22,7 +22,7 @@
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button string="Export SAP" name="action_exportSAP" type="object"/>
+                            <button string="Export SAP" name="action_exportSAP" type="object" icon="fa-file-text-o"/>
                         </div>
                         <div class="oe_title">
                             <h1>
@@ -33,40 +33,41 @@
                         </div>
                         <group>
                             <group>
-                                <field name="cislo" reuired="True"  attrs="{'readonly':[('state','not in',['draft'])]}"/>
-                                <field name="financny_kod"  attrs="{'readonly':[('state','not in',['draft'])]}"/>
-                                <field name="skratka"  attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                                <field name="cislo" reuired="True"  attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
+                                <field name="financny_kod"  attrs="{'readonly':[('state','not in',['draft','in_progress'])]}"/>
+                                <field name="skratka"  attrs="{'readonly':[('state','not in',['draft','in_progress'])]}"/>
                                 <field name="datum_zaciatok"  attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
                                 <field name="datum_koniec" attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
-                                <!--<field name="sap_export" attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>-->
+                                <field name="sap_export_file_binary" filename="sap_export_file_name" readonly="True"/>
                             </group>
                             <group>
                                 <field name="dodavatel_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                                 <field name="pc_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
                                 <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
-                                <field name="manager_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+                                <field name="manager_id" readonly="True" options="{'no_create': True}"/>
                                 <field name="osoba_priradena_id" readonly="True"/>
                             </group>
                         </group>
 
                         <notebook>
                             <page string="Položky">
-                                <field name="cp_polozka_ids">
+                                <field name="cp_polozka_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Polozky cennika" editable="bottom">
                                         <!--<field name="polozka_id" context="{'partner_id': parent.partner_id}"/>-->
-                                        <field name="cennik_polozka_id" context="{'dodavatel_id':parent.dodavatel_id}" string="Položka"/>
-                                        <field name="polozka_mj" readonly="1" string="mj"/>
-                                        <field name="mnozstvo"  string="Počet"/>
+                                        <field name="cennik_polozka_id" context="{'dodavatel_id':parent.dodavatel_id}" string="Položka" options="{'no_create': True}"/>
+                                        <field name="cena_za_mj" readonly="True"/>
                                         <field name="cena_jednotkova" invisible="1"/>
+                                        <field name="polozka_mj" readonly="1" string="mj" invisible="1"/>
+                                        <field name="mnozstvo"  string="Počet"/>
                                         <field name="cena_celkom" string="Cena"/>
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Atypické položky">
+                            <page string="Atypické položky" attrs="{'readonly':[('state','in',['approved'])]}">
                                 <field name="cp_polozka_atyp_ids">
                                     <tree string="Polozky cennika" editable="bottom">
                                         <!--<field name="polozka_id" context="{'partner_id': parent.partner_id}"/>-->
-                                        <field name="oddiel_id" string="Oddiel"/>
+                                        <field name="oddiel_id" string="Oddiel" options="{'no_create': True}"/>
                                         <field name="name"  string="Položka"/>
                                         <field name="cena" string="Cena"/>
                                     </tree>
@@ -100,10 +101,13 @@
 
                         <!-- class="oe_inline" -->
                         <label for="poznamka"/>
-                        <field name="poznamka" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        <field name="poznamka" attrs="{'readonly':[('state','in',['approved'])]}"/>
+                        <label for="wf_dovod"/>
+                        <field name="wf_dovod" attrs="{'readonly':[('state','in',['approved'])]}"/>
+
                     </sheet>
                     <div class="oe_chatter">
-                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_follower_ids" widget="mail_followers" invisible="True"/>
                         <field name="message_ids" widget="mail_thread"/>
                     </div>
                 </form>
@@ -120,7 +124,6 @@
             <field name="arch" type="xml">
 
                 <tree string="Cenova ponuka" edit="false" create="false" delete="false">
-                    <field name="state"/>
                     <field name="name"/>
                     <field name="cislo"/>
                     <field name="financny_kod"/>
