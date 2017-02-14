@@ -52,9 +52,111 @@ class VystavbaCenovaPonuka(models.Model):
         export_file_name = 'sap_export_' + self.cislo + '_' + str(datetime.date.today()) + '.txt'
         _logger.info('export file name: ' + export_file_name)
         self.sap_export_file_name = export_file_name
+        self.sap_export_content = self._get_sap_export_content()
         self.sap_export_file_binary = base64.encodestring(self.sap_export_content)
-        self.write({'sap_export_content': self.sap_export_content})
         self.message_post(body='Subor "' + export_file_name + '" pre SAP bol vygenerovany', message_type='email')
+
+    @api.multi
+    def _get_sap_export_content(self):
+        data = []
+        data.append('[PSPID]'+chr(9)+self.cislo)
+        data.append('[WEMPF]'+chr(9)+'???')
+        data.append('[MSTRT]'+chr(9)+self.dodavatel_id.kod)
+        data.append('[MSCDT]'+chr(9)+str(self.datum_koniec))
+
+        query = """select
+        zdroj.druh, concat(zdroj.kod,
+                           CHR(9),
+                           'JV',
+                           CHR(9),
+                           zdroj.cislo,
+                           CHR(9),
+                           case
+        when
+        zdroj.druh = '1T'
+        then
+        concat(cp.cislo, '.', o.name)
+        when
+        zdroj.druh = '2A'
+        then
+        concat(cp.cislo, '.', o.name)
+        else
+        cp.cislo
+        end,
+        CHR(9),
+        to_char(cp.datum_koniec, 'DD.MM.YYYY')) as vystup
+        from
+        (
+            select
+        '1T' as druh, max(p.kod) as kod, sum(cena_celkom) as cislo, p.oddiel_id as oddiel_id, max(
+            cpp.cenova_ponuka_id) as cenova_ponuka_id
+        from vystavba_cenova_ponuka_polozka cpp
+        join
+        vystavba_cennik_polozka
+        cp
+        on
+        cpp.cennik_polozka_id = cp.id
+        join
+        vystavba_polozka
+        p
+        on
+        cp.polozka_id = p.id
+        where
+        cenova_ponuka_id = %s
+                           and p.is_balicek = false
+        group
+        by
+        p.oddiel_id
+        union
+        select
+        '3B', p.kod, cpp.mnozstvo, p.oddiel_id, cpp.cenova_ponuka_id
+        from vystavba_cenova_ponuka_polozka cpp
+        join
+        vystavba_cennik_polozka
+        cp
+        on
+        cpp.cennik_polozka_id = cp.id
+        join
+        vystavba_polozka
+        p
+        on
+        cp.polozka_id = p.id
+        where
+        cenova_ponuka_id = %s
+                           and p.is_balicek = true
+        union
+        select
+        '2A', atyp.name, cena, oddiel_id, cenova_ponuka_id
+        from vystavba_cenova_ponuka_polozka_atyp atyp
+        where
+        cenova_ponuka_id = %s
+        ) zdroj
+        join
+        vystavba_oddiel
+        o
+        on
+        zdroj.oddiel_id = o.id
+        join
+        vystavba_cenova_ponuka
+        cp
+        on
+        zdroj.cenova_ponuka_id = cp.id
+        order
+        by
+        zdroj.druh;"""
+
+        self.env.cr.execute(query, (self.id, self.id, self.id))
+        fetchrows = self.env.cr.dictfetchall()
+
+        for row in fetchrows:
+            data.append(row.get('vystup'))
+
+        ret = '\r\n'.join(data)
+        return ret
+
+    @api.model
+    def _get_default_osoba_priradena(self):
+        self.osoba_priradena_id = self.env.user
 
     # limit partners to specific group
     @api.model
@@ -143,9 +245,12 @@ class VystavbaCenovaPonuka(models.Model):
             self.cennik_id = cennik_ids[0];
             self.currency_id = self.cennik_id.cennik_currency_id
             # musime zapisat rucne, pretoze fields oznacene na view ako READONLY sa nezapisuju :(
-            self.write({'cennik_id': self.cennik_id, 'currency_id': self.currency_id});
-            result = {'cennik_id': self.cennik_id, 'currency_id': self.currency_id}
+        else:
+            self.cennik_id = '';
+            self.currency_id = ''
 
+        result = {'cennik_id': self.cennik_id, 'currency_id': self.currency_id}
+        self.write(result);
         return result
 
 
@@ -371,7 +476,7 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
     cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', change_default=True, required=True, ondelete='cascade')
-    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka',change_default=True, required=True, domain="[('cennik_id.dodavatel_id', '=', parent.dodavatel_id)]")
+    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka',change_default=True, required=True, domain="[('cennik_id', '=', parent.cennik_id)]")
     polozka_mj = fields.Selection(related='cennik_polozka_id.polozka_mj', string='Merná jednotka')
     #mj = fields.Char(string='Merna jednotka', size=5, required=True, readonly=True)
     cena_za_mj = fields.Char(compute=_compute_cena_za_mj, string='Cena za mj', store=False)
