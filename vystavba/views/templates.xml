@@ -19,20 +19,7 @@
         <!--   </dl> -->
         <!-- </template> -->
 
-    <template id="report_cenova_ponuka_sap">
-        <t t-call="report.html_container">
-            <t t-foreach="docs" t-as="doc">
-                <t t-call="report.external_layout">
-                    <div class="page">
-                        <h2>Report title</h2>
-                        <p>This object's name is <span t-field="doc.name"/></p>
-                    </div>
-                </t>
-            </t>
-        </t>
-    </template>
-
-            <!--name = fields.Char(required=True, string="Názov", size=50, copy=False)-->
+<!--name = fields.Char(required=True, string="Názov", size=50, copy=False)-->
     <!--cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);-->
     <!--financny_kod = fields.Char(string="Finančný kód", required=True, copy=False)-->
     <!--datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today());-->
@@ -70,10 +57,13 @@
                             <div>Ukoncenie: <span t-field="doc.datum_koniec"/></div>
                         </p>
                         <p>
-                            <div>Dodávateľ: <span t-field="doc.dodavatel_id.name"/></div>
+                            <div>Dodávateľ: <span t-field="doc.dodavatel_id.name"/> - Cenník: <span t-field="doc."/></div>
                             <div>PC: <span t-field="doc.pc_id.name"/></div>
                             <div>PM: <span t-field="doc.pm_id.name"/></div>
                             <div>Manager: <span t-field="doc.manager_id.name"/></div>
+                        </p>
+                        <p>
+                            <div>Poznámka: <span t-field="doc.poznamka"/></div>
                         </p>
                         <p>
                         <t t-foreach="doc.cp_polozka_ids" t-as="cennik_polozka">

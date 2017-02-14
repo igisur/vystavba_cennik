@@ -46,6 +46,8 @@
                                 <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                                 <field name="manager_id" readonly="True" options="{'no_create': True}"/>
                                 <field name="osoba_priradena_id" readonly="True"/>
+                                <field name="cennik_id"/>
+                                <field name="currency_id"/>
                             </group>
                         </group>
 

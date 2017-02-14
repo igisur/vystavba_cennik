@@ -1,11 +1,11 @@
 <openerp>
 <data>
-    <report
-        id="report_vystavba_cenova_ponuka_sap"
-        model="vystavba.cenova_ponuka"
-        string="Cenova ponuka SAP"
-        name="vystavba.report_cenova_ponuka_sap"
-        report_type="qweb-html" />
+    <!--<report-->
+        <!--id="report_vystavba_cenova_ponuka_sap"-->
+        <!--model="vystavba.cenova_ponuka"-->
+        <!--string="Cenova ponuka SAP"-->
+        <!--name="vystavba.report_cenova_ponuka_sap"-->
+        <!--report_type="qweb-html" />-->
 
     <report
         id="report_vystavba_cenova_ponuka_pdf"

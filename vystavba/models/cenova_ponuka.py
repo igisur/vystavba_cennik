@@ -53,11 +53,8 @@ class VystavbaCenovaPonuka(models.Model):
         _logger.info('export file name: ' + export_file_name)
         self.sap_export_file_name = export_file_name
         self.sap_export_file_binary = base64.encodestring(self.sap_export_content)
+        self.write({'sap_export_content': self.sap_export_content})
         self.message_post(body='Subor "' + export_file_name + '" pre SAP bol vygenerovany', message_type='email')
-
-    @api.model
-    def _get_default_osoba_priradena(self):
-        self.osoba_priradena_id = self.env.user
 
     # limit partners to specific group
     @api.model
@@ -95,9 +92,7 @@ class VystavbaCenovaPonuka(models.Model):
             for lineAtyp in cp.cp_polozka_atyp_ids:
                 cp_celkova_cena += lineAtyp.cena
 
-            cp.update({
-                'celkova_cena': cp_celkova_cena
-            })
+            cp.update({'celkova_cena': cp_celkova_cena})
 
     name = fields.Char(required=True, string="Názov", size=50, copy=False)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);
@@ -116,6 +111,9 @@ class VystavbaCenovaPonuka(models.Model):
     osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange', default= lambda self: self.env.user.partner_id.id)
     state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange')
 
+    cennik_id = fields.Many2one('vystavba.cennik', string='Cenník')
+    currency_id = fields.Many2one('res.currency', string="Mena")
+
     cp_polozka_ids = fields.One2many('vystavba.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=True, track_visibility='onchange')
     cp_polozka_atyp_ids = fields.One2many('vystavba.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp polozky', copy=False, track_visibility='onchange')
 
@@ -125,8 +123,38 @@ class VystavbaCenovaPonuka(models.Model):
 
     approved_cp_ids = fields.One2many('vystavba.cenova_ponuka', compute='_compute_approved_cp_ids', string='Schvalene CP')
 
+    @api.one
+    @api.onchange('dodavatel_id')
+    def _find_cennik(self):
+        result = {}
+        if not self.dodavatel_id:
+            return result
+
+        _logger.info("Looking supplier's valid pricelist " + str(self.dodavatel_id.name));
+        cennik_ids = self.env['vystavba.cennik'].search([('dodavatel_id', '=', self.dodavatel_id.id),
+                                                         ('platny_od', '<=', datetime.date.today()),
+                                                         ('platny_do', '>', datetime.date.today())], limit = 1)
+                                                         #('currency_id', '=', self.currency_id)],
+
+        for rec in cennik_ids:
+            _logger.info(rec.name);
+
+        if cennik_ids:
+            self.cennik_id = cennik_ids[0];
+            self.currency_id = self.cennik_id.cennik_currency_id
+            # musime zapisat rucne, pretoze fields oznacene na view ako READONLY sa nezapisuju :(
+            self.write({'cennik_id': self.cennik_id, 'currency_id': self.currency_id});
+            result = {'cennik_id': self.cennik_id, 'currency_id': self.currency_id}
+
+        return result
+
+
     @api.depends('dodavatel_id')
     def _compute_approved_cp_ids(self):
+        result = []
+        if not self.dodavatel_id:
+            return result
+
         self.approved_cp_ids = self.env['vystavba.cenova_ponuka'].search(
             [
                 ('state', '=', 'approved'),
@@ -316,6 +344,7 @@ class VystavbaCenovaPonukaPolozka(models.Model):
 
     @api.depends('cennik_polozka_id', 'polozka_mj')
     def _compute_cena_za_mj(self):
+        _logger.info("_compute_cena_za_mj: " + str(len(self)))
         for line in self:
             cena_za_mj = ''
             if line.cennik_polozka_id.cena:
@@ -333,6 +362,7 @@ class VystavbaCenovaPonukaPolozka(models.Model):
 
     @api.depends('cennik_polozka_id')
     def _compute_cena_jednotkova(self):
+        _logger.info("_compute_cena_jednotkova: " + str(len(self)))
         for line in self:
             line.cena_jednotkova = line.cennik_polozka_id.cena
 
