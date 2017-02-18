@@ -8,7 +8,7 @@ class VystavbaPolozka(models.Model):
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     name = fields.Char(required=True, string="Názov", size=100)
-    description = fields.Text(string="Popis")
+    description = fields.Text(string="Popis", size=1000, default="")
     # Many2one display "name" field value or _rec_name = "field_name"
     # oddiel_id = fields.Many2One('vystavba.oddiel', required=True, string="Oddiel", help="kod oddielu pre SAP")
     # oddiel_id = fields.Char(size=10, required=True, string="Oddiel", help="kod oddielu pre SAP")
