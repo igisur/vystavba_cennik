@@ -57,9 +57,8 @@
                                     <tree string="Polozky cennika" editable="bottom">
                                         <!--<field name="polozka_id" context="{'partner_id': parent.partner_id}"/>-->
                                         <field name="cennik_polozka_id" context="{'dodavatel_id':parent.dodavatel_id}" string="Položka" options="{'no_create': True}"/>
-                                        <field name="cena_za_mj" readonly="True"/>
-                                        <field name="cena_jednotkova" invisible="1"/>
-                                        <field name="polozka_mj" readonly="1" string="mj" invisible="1"/>
+                                        <field name="polozka_mj" readonly="1" string="mj" invisible="0"/>
+                                        <field name="cena_jednotkova" invisible="0"/>
                                         <field name="mnozstvo"  string="Počet"/>
                                         <field name="cena_celkom" string="Cena"/>
                                     </tree>
@@ -92,12 +91,12 @@
 
                         <group class="oe_subtotal_footer oe_right">
                             <div class="oe_subtotal_footer_separator oe_inline">
-                                <label for="celkova_cena"/>
+                                <label for="celkova_cena_mena"/>
                             </div>
                             <!--
                             <field name="celkova_cena" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                             -->
-                            <field name="celkova_cena" nolabel="1" class="oe_subtotal_footer_separator" readonly="True"/>
+                            <field name="celkova_cena_mena" nolabel="1" class="oe_subtotal_footer_separator" readonly="True"/>
                         </group>
                         <div class="oe_clear"/>
 
