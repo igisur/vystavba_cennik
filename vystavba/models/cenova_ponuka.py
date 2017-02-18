@@ -63,7 +63,7 @@ class VystavbaCenovaPonuka(models.Model):
         data.append('[PSPID]'+chr(9)+self.cislo)
         data.append('[WEMPF]'+chr(9)+'???')
         data.append('[MSTRT]'+chr(9)+self.dodavatel_id.kod)
-        data.append('[MSCDT]'+chr(9)+str(self.datum_koniec))
+        #data.append('[MSCDT]' + chr(9) + str(self.datum_koniec,''))
         data.append('[MSCDT]' + chr(9) + datetime.strptime(self.datum_koniec, '%Y-%m-%d %H:%M:%S.%f'))
 
         query = """select
