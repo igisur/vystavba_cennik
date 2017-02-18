@@ -54,6 +54,7 @@ class VystavbaCenovaPonuka(models.Model):
         self.sap_export_file_name = export_file_name
         self.sap_export_content = self._get_sap_export_content()
         self.sap_export_file_binary = base64.encodestring(self.sap_export_content)
+        #self.sap_export_file_binary = base64.encodestring(self._get_sap_export_content())
         self.message_post(body='Subor "' + export_file_name + '" pre SAP bol vygenerovany', message_type='email')
 
     @api.multi
@@ -63,6 +64,7 @@ class VystavbaCenovaPonuka(models.Model):
         data.append('[WEMPF]'+chr(9)+'???')
         data.append('[MSTRT]'+chr(9)+self.dodavatel_id.kod)
         data.append('[MSCDT]'+chr(9)+str(self.datum_koniec))
+        data.append('[MSCDT]' + chr(9) + datetime.strptime(self.datum_koniec, '%Y-%m-%d %H:%M:%S.%f'))
 
         query = """select
         zdroj.druh, concat(zdroj.kod,
@@ -151,6 +153,7 @@ class VystavbaCenovaPonuka(models.Model):
         for row in fetchrows:
             data.append(row.get('vystup'))
 
+
         ret = '\r\n'.join(data)
         return ret
 
@@ -194,7 +197,9 @@ class VystavbaCenovaPonuka(models.Model):
             for lineAtyp in cp.cp_polozka_atyp_ids:
                 cp_celkova_cena += lineAtyp.cena
 
-            cp.update({'celkova_cena': cp_celkova_cena})
+            cp.update({
+                'celkova_cena': cp_celkova_cena
+            })
 
     name = fields.Char(required=True, string="Názov", size=50, copy=False)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);
@@ -213,9 +218,6 @@ class VystavbaCenovaPonuka(models.Model):
     osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange', default= lambda self: self.env.user.partner_id.id)
     state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange')
 
-    cennik_id = fields.Many2one('vystavba.cennik', string='Cenník')
-    currency_id = fields.Many2one('res.currency', string="Mena")
-
     cp_polozka_ids = fields.One2many('vystavba.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=True, track_visibility='onchange')
     cp_polozka_atyp_ids = fields.One2many('vystavba.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp polozky', copy=False, track_visibility='onchange')
 
@@ -225,41 +227,8 @@ class VystavbaCenovaPonuka(models.Model):
 
     approved_cp_ids = fields.One2many('vystavba.cenova_ponuka', compute='_compute_approved_cp_ids', string='Schvalene CP')
 
-    @api.one
-    @api.onchange('dodavatel_id')
-    def _find_cennik(self):
-        result = {}
-        if not self.dodavatel_id:
-            return result
-
-        _logger.info("Looking supplier's valid pricelist " + str(self.dodavatel_id.name));
-        cennik_ids = self.env['vystavba.cennik'].search([('dodavatel_id', '=', self.dodavatel_id.id),
-                                                         ('platny_od', '<=', datetime.date.today()),
-                                                         ('platny_do', '>', datetime.date.today())], limit = 1)
-                                                         #('currency_id', '=', self.currency_id)],
-
-        for rec in cennik_ids:
-            _logger.info(rec.name);
-
-        if cennik_ids:
-            self.cennik_id = cennik_ids[0];
-            self.currency_id = self.cennik_id.cennik_currency_id
-            # musime zapisat rucne, pretoze fields oznacene na view ako READONLY sa nezapisuju :(
-        else:
-            self.cennik_id = '';
-            self.currency_id = ''
-
-        result = {'cennik_id': self.cennik_id, 'currency_id': self.currency_id}
-        self.write(result);
-        return result
-
-
     @api.depends('dodavatel_id')
     def _compute_approved_cp_ids(self):
-        result = []
-        if not self.dodavatel_id:
-            return result
-
         self.approved_cp_ids = self.env['vystavba.cenova_ponuka'].search(
             [
                 ('state', '=', 'approved'),
@@ -449,7 +418,6 @@ class VystavbaCenovaPonukaPolozka(models.Model):
 
     @api.depends('cennik_polozka_id', 'polozka_mj')
     def _compute_cena_za_mj(self):
-        _logger.info("_compute_cena_za_mj: " + str(len(self)))
         for line in self:
             cena_za_mj = ''
             if line.cennik_polozka_id.cena:
@@ -467,7 +435,6 @@ class VystavbaCenovaPonukaPolozka(models.Model):
 
     @api.depends('cennik_polozka_id')
     def _compute_cena_jednotkova(self):
-        _logger.info("_compute_cena_jednotkova: " + str(len(self)))
         for line in self:
             line.cena_jednotkova = line.cennik_polozka_id.cena
 
@@ -476,7 +443,7 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
     cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', change_default=True, required=True, ondelete='cascade')
-    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka',change_default=True, required=True, domain="[('cennik_id', '=', parent.cennik_id)]")
+    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka',change_default=True, required=True, domain="[('cennik_id.dodavatel_id', '=', parent.dodavatel_id)]")
     polozka_mj = fields.Selection(related='cennik_polozka_id.polozka_mj', string='Merná jednotka')
     #mj = fields.Char(string='Merna jednotka', size=5, required=True, readonly=True)
     cena_za_mj = fields.Char(compute=_compute_cena_za_mj, string='Cena za mj', store=False)
