@@ -29,6 +29,7 @@ class VystavbaCennikPolozka(models.Model):
     cennik_id = fields.Many2one('vystavba.cennik', string='Cenník', required=True, ondelete='cascade')
     polozka_id = fields.Many2one('vystavba.polozka', string='Položka', required=True)
     polozka_mj = fields.Selection(related='polozka_id.mj', string='Merná jednotka')
+    polozka_popis = fields.Text(related='polozka_id.description', string='Popis')
 
     @api.multi
     def name_get(self):

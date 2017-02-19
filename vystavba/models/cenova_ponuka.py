@@ -200,6 +200,21 @@ class VystavbaCenovaPonuka(models.Model):
             cp.update({
                 'celkova_cena': cp_celkova_cena
             })
+            cp.update({'celkova_cena': cp_celkova_cena})
+
+    @api.depends('celkova_cena')
+    def _compute_celkova_cena_mena(self):
+        _logger.info("_compute_celkova_cena_mena: " + str(len(self)))
+        for line in self:
+            celkova_cena_mena = ''
+            #if line.cennik_polozka_id.cena:
+            #    cena_za_mj = str(line.cennik_polozka_id.cena)
+            #    if not line.polozka_mj == '_':
+            #        cena_za_mj = cena_za_mj + '/' + str(line.polozka_mj)
+
+            celkova_cena_text = 'Celková cena: '
+            #line.celkova_cena_mena = celkova_cena_text.encode("utf-8") + str(line.celkova_cena) + ' ' + line.currency_id.symbol
+            line.celkova_cena_mena =  (line.celkova_cena)+ ' ' + line.currency_id.symbol
 
     name = fields.Char(required=True, string="Názov", size=50, copy=False)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);
@@ -218,6 +233,9 @@ class VystavbaCenovaPonuka(models.Model):
     osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange', default= lambda self: self.env.user.partner_id.id)
     state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange')
 
+    cennik_id = fields.Many2one('vystavba.cennik', string='Cenník')
+    currency_id = fields.Many2one('res.currency', string="Mena")
+
     cp_polozka_ids = fields.One2many('vystavba.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=True, track_visibility='onchange')
     cp_polozka_atyp_ids = fields.One2many('vystavba.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp polozky', copy=False, track_visibility='onchange')
 
@@ -226,6 +244,37 @@ class VystavbaCenovaPonuka(models.Model):
     sap_export_file_binary = fields.Binary(string='Export file')
 
     approved_cp_ids = fields.One2many('vystavba.cenova_ponuka', compute='_compute_approved_cp_ids', string='Schvalene CP')
+
+    celkova_cena_mena = fields.Text(compute=_compute_celkova_cena_mena, string='Celková cena', store=True)
+
+    @api.one
+    @api.onchange('dodavatel_id')
+    def _find_cennik(self):
+        result = {}
+        if not self.dodavatel_id:
+            return result
+
+        _logger.info("Looking supplier's valid pricelist " + str(self.dodavatel_id.name));
+        cennik_ids = self.env['vystavba.cennik'].search([('dodavatel_id', '=', self.dodavatel_id.id),
+                                                         ('platny_od', '<=', datetime.date.today()),
+                                                         ('platny_do', '>', datetime.date.today())], limit = 1)
+                                                         #('currency_id', '=', self.currency_id)],
+
+        for rec in cennik_ids:
+            _logger.info(rec.name);
+
+        if cennik_ids:
+            self.cennik_id = cennik_ids[0];
+            self.currency_id = self.cennik_id.cennik_currency_id
+            # musime zapisat rucne, pretoze fields oznacene na view ako READONLY sa nezapisuju :(
+        else:
+            self.cennik_id = '';
+            self.currency_id = ''
+
+        result = {'cennik_id': self.cennik_id, 'currency_id': self.currency_id}
+        self.write(result);
+        return result
+
 
     @api.depends('dodavatel_id')
     def _compute_approved_cp_ids(self):
@@ -435,6 +484,7 @@ class VystavbaCenovaPonukaPolozka(models.Model):
 
     @api.depends('cennik_polozka_id')
     def _compute_cena_jednotkova(self):
+        _logger.info("_compute_cena_jednotkova: " + str(len(self)))
         for line in self:
             line.cena_jednotkova = line.cennik_polozka_id.cena
 
@@ -447,6 +497,7 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     polozka_mj = fields.Selection(related='cennik_polozka_id.polozka_mj', string='Merná jednotka')
     #mj = fields.Char(string='Merna jednotka', size=5, required=True, readonly=True)
     cena_za_mj = fields.Char(compute=_compute_cena_za_mj, string='Cena za mj', store=False)
+    polozka_popis = fields.Text(related='cennik_polozka_id.polozka_popis', string='Položka popis')
 
     @api.onchange('cennik_polozka_id')
     def onchange_cennik_polozka_id(self):
