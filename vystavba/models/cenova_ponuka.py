@@ -213,7 +213,20 @@ class VystavbaCenovaPonuka(models.Model):
 
             celkova_cena_text = 'Celková cena: '
             #line.celkova_cena_mena = celkova_cena_text.encode("utf-8") + str(line.celkova_cena) + ' ' + line.currency_id.symbol
-            line.celkova_cena_mena =  (line.celkova_cena)+ ' ' + line.currency_id.symbol
+            line.celkova_cena_mena =  str(line.celkova_cena)+ ' ' + line.currency_id.symbol
+
+    @api.one
+    @api.depends('dodavatel_id','osoba_priradena_id')
+    def _compute_ro_datumoddo(self):
+        _logger.info("_compute_ro_datumoddo: " + str(len(self)))
+        if self.osoba_priradena_id.id:
+            if self.osoba_priradena_id.id == self.dodavatel_id.id:
+                self.ro_datumoddo = False
+            else:
+                self.ro_datumoddo = True
+        return {}
+
+    ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute="_compute_ro_datumoddo")
 
     name = fields.Char(required=True, string="Názov", size=50, copy=False)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);

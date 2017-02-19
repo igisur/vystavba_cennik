@@ -29,6 +29,7 @@
                                 <label string="Cenová ponuka"/>
                                 <field name="id" invisible="True"/>
                                 <field name="name" attrs="{'readonly':[('state','in',['approved'])]}"/>
+                                <field name="ro_datumoddo" invisible="True"/>
                             </h1>
                         </div>
                         <group>
@@ -36,8 +37,8 @@
                                 <field name="cislo" reuired="True"  attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
                                 <field name="financny_kod"  attrs="{'readonly':[('state','not in',['draft','in_progress'])]}"/>
                                 <field name="skratka"  attrs="{'readonly':[('state','not in',['draft','in_progress'])]}"/>
-                                <field name="datum_zaciatok"  attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
-                                <field name="datum_koniec" attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
+                                <field name="datum_zaciatok" attrs="{'readonly':[('ro_datumoddo','=',True)], 'required':[('ro_datumoddo','!=',True)]}"/>
+                                <field name="datum_koniec" attrs="{'readonly':[('ro_datumoddo','=',True)], 'required':[('ro_datumoddo','!=',True)]}"/>
                                 <field name="sap_export_file_binary" filename="sap_export_file_name" readonly="True"/>
                             </group>
                             <group>
@@ -46,8 +47,8 @@
                                 <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                                 <field name="manager_id" readonly="True" options="{'no_create': True}"/>
                                 <field name="osoba_priradena_id" readonly="True"/>
-                                <field name="cennik_id"/>
-                                <field name="currency_id"/>
+                                <field name="cennik_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+                                <field name="currency_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                             </group>
                         </group>
 
