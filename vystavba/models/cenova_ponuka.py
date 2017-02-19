@@ -62,7 +62,9 @@ class VystavbaCenovaPonuka(models.Model):
         data.append('[PSPID]'+chr(9)+self.cislo)
         data.append('[WEMPF]'+chr(9)+'???')
         data.append('[MSTRT]'+chr(9)+self.dodavatel_id.kod)
-        data.append('[MSCDT]'+chr(9)+str(self.datum_koniec))
+        data.append('[MSCDT]'+chr(9)+self.datum_koniec.str)
+
+        #datetime.strptime(self.datum_koniec, '%Y-%m-%d %H:%M:%S.%f'))
 
         query = """select
         zdroj.druh, concat(zdroj.kod,
@@ -488,7 +490,7 @@ class VystavbaCenovaPonukaPolozka(models.Model):
             return result
 
         # Reset date, price and quantity since _onchange_quantity will provide default values
-        # self.date_planned = datetime.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        #self.date_planned = datetime.date.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         if __name__ == '__main__':
             self.cena = self.cennik_polozka_id.get
         self.mj = 'ks'
