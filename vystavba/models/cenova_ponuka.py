@@ -152,8 +152,7 @@ class VystavbaCenovaPonuka(models.Model):
 
         for row in fetchrows:
             data.append(row.get('vystup'))
-
-
+        # rozparsujem pole do stringu a oddelim enterom
         ret = '\r\n'.join(data)
         return ret
 
@@ -219,14 +218,14 @@ class VystavbaCenovaPonuka(models.Model):
     name = fields.Char(required=True, string="Názov", size=50, copy=False)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);
     financny_kod = fields.Char(string="Finančný kód", required=True, copy=False)
-    skratka = fields.Char(string="Skratka", required=False, copy=False)
+    skratka = fields.Char(string="Skratka", required=True, copy=False)
     datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today());
     datum_koniec = fields.Date(string="Dátum ukončenia");
     poznamka = fields.Text(string="Poznámka", copy=False, track_visibility='onchange')
     wf_dovod = fields.Text(string="Dôvod pre workflow", copy=False, help='Uvedte dôvod pre zmenu stavu workflow, najme pri akcii "Vratiť na opravu" a "Zrušiť"')
     celkova_cena = fields.Float(compute='_amount_all', string='Celková cena', store=True, digits=(10,2), track_visibility='onchange')
 
-    dodavatel_id = fields.Many2one('res.partner', string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier)
+    dodavatel_id = fields.Many2one('res.partner', required=True, string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier)
     pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc)
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm)
     manager_id = fields.Many2one('res.partner', string='Manager', copy=False, track_visibility='onchange',  domain=partners_in_group_manager)
