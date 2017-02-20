@@ -368,7 +368,7 @@ class VystavbaCenovaPonuka(models.Model):
             _logger.info("PC sent to approve by PM")
             self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pm_id.id, 'wf_dovod': self.wf_dovod})
 
-        elif self.osoba_priradena_id.id == self.pm_id.id:
+        elif self.osoba_priradena_id.id == self.pm_id.id:   
             #  PM poslal na schvalenie Managerovy
             _logger.info("PM sent to approve by Manager")
             manager_id = self._find_manager()
