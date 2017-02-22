@@ -21,9 +21,9 @@
         'views/cennik_view.xml',
         'views/osoba_view.xml',
         'workflows/cp_workflow.xml',
-        'views/templates.xml',
         'report/report.xml',
         'views/oddiel_view.xml',
+        'views/templates.xml',
         'views/report_cenova_ponuka.xml'
     ],
     # only loaded in demonstration mode

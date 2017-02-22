@@ -7,10 +7,10 @@
     <!--poznamka = fields.Text(string="Poznámka", copy=False)-->
     <!--celkova_cena = fields.Float(string='Celkova cena', digits=(10,2), copy=False)-->
     <data>
-        <template id="report_cenova_ponuka">
+        <template id="vystavba.report_cenova_ponuka_pdf">
             <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="doc">
-                    <!--<t t-call="report.external_layout">
+                    <t t-call="report.external_layout">
                         <div class="header">
                             <div class="row">
                                 <div class="col-xs-3">
@@ -22,6 +22,7 @@
                         <div class="footer">
                             <div class="row">Vytlacil: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
                         </div>
+
                         <div class="page">
                             <h2>Cenova ponuka <span t-field="doc.name"/></h2>
                             <div>
@@ -36,7 +37,7 @@
                                 <div>Ukoncenie: <span t-field="doc.datum_koniec"/></div>
                             </p>
                             <p>
-                                <div>Dodávateľ: <span t-field="doc.dodavatel_id.name"/> - Cenník: <span t-field="doc."/></div>
+                                <div>Dodávateľ: <span t-field="doc.dodavatel_id.name"/> - Cenník: <span t-field="doc.cennik_id.name"/></div>
                                 <div>PC: <span t-field="doc.pc_id.name"/></div>
                                 <div>PM: <span t-field="doc.pm_id.name"/></div>
                                 <div>Manager: <span t-field="doc.manager_id.name"/></div>
@@ -46,11 +47,12 @@
                             </p>
                             <p>
                             <t t-foreach="doc.cp_polozka_ids" t-as="cennik_polozka">
-                                <div><span t-field="cennik_polozka.cennik_polozka_id.polozka_id.name"/> - <span t-field="cennik_polozka.mnozstvo"/> - <span t-field="cennik_polozka.cena"/></div>
+                                <div><span t-field="cennik_polozka.cennik_polozka_id.name"/> - <span t-field="cennik_polozka.mnozstvo"/> - <span t-field="cennik_polozka.cena_celkom"/></div>
                             </t>
                             </p>
                         </div>
-                    </t>-->
+
+                    </t>
                 </t>
             </t>
         </template>

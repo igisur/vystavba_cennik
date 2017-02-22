@@ -11,7 +11,7 @@
         id="report_cenova_ponuka"
         model="vystavba.cenova_ponuka"
         string="Cenova ponuka (PDF)"
-        name="vystavba.report_cenova_ponuka"
+        name="vystavba.report_cenova_ponuka_pdf"
         report_type="qweb-pdf" />
 
     </data>
