@@ -19,7 +19,7 @@ from openerp.addons.base.res.res_users import res_groups, res_users
 _logger = logging.getLogger(__name__)
 
 class VystavbaCenovaPonuka(models.Model):
-    _name = 'vystavba.cenova_ponuka'
+    _name = 'o2.vys.cenova_ponuka'
     # _description = "Výstavbový cenník - cenová ponuka"
     _description = "Vystavbovy cennik - cenova ponuka"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
@@ -62,7 +62,8 @@ class VystavbaCenovaPonuka(models.Model):
         data = []
         data.append('[PSPID]'+chr(9)+self.cislo)
         data.append('[WEMPF]'+chr(9)+'???')
-        data.append('[MSTRT]'+chr(9)+self.dodavatel_id.kod)
+        if self.dodavatel_id.kod:
+            data.append('[MSTRT]'+chr(9)+self.dodavatel_id.kod)
         data.append('[MSCDT]' + chr(9) + datetime.strptime(self.datum_koniec, '%Y-%m-%d %H:%M:%S.%f'))
 
         query = """select
@@ -202,7 +203,7 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.depends('dodavatel_id')
     def _compute_approved_cp_ids(self):
-        self.approved_cp_ids = self.env['vystavba.cenova_ponuka'].search(
+        self.approved_cp_ids = self.env['o2.vys.cenova_ponuka'].search(
             [
                 ('state', '=', 'approved'),
                 ('dodavatel_id.id', '=', self.dodavatel_id.id)
@@ -255,17 +256,17 @@ class VystavbaCenovaPonuka(models.Model):
     osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange', default= lambda self: self.env.user.partner_id.id)
     state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange')
 
-    cennik_id = fields.Many2one('vystavba.cennik', string='Cenník')
+    cennik_id = fields.Many2one('o2.vys.cennik', string='Cenník')
     currency_id = fields.Many2one('res.currency', string="Mena")
 
-    cp_polozka_ids = fields.One2many('vystavba.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=False, track_visibility='onchange')
-    cp_polozka_atyp_ids = fields.One2many('vystavba.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp polozky', copy=False, track_visibility='onchange')
+    cp_polozka_ids = fields.One2many('o2.vys.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=False, track_visibility='onchange')
+    cp_polozka_atyp_ids = fields.One2many('o2.vys.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp polozky', copy=False, track_visibility='onchange')
 
     sap_export_content = fields.Text(string="Export pre SAP", default='ABCDEFGH')
     sap_export_file_name = fields.Char(string="Export file name")
     sap_export_file_binary = fields.Binary(string='Export file')
 
-    approved_cp_ids = fields.One2many('vystavba.cenova_ponuka', compute=_compute_approved_cp_ids, string='Schvalene CP')
+    approved_cp_ids = fields.One2many('o2.vys.cenova_ponuka', compute=_compute_approved_cp_ids, string='Schvalene CP')
 
     celkova_cena_mena = fields.Text(compute=_compute_celkova_cena_mena, string='Celková cena', store=True)
 
@@ -277,7 +278,7 @@ class VystavbaCenovaPonuka(models.Model):
             return result
 
         _logger.info("Looking supplier's valid pricelist " + str(self.dodavatel_id.name));
-        cennik_ids = self.env['vystavba.cennik'].search([('dodavatel_id', '=', self.dodavatel_id.id),
+        cennik_ids = self.env['o2.vys.cennik'].search([('dodavatel_id', '=', self.dodavatel_id.id),
                                                          ('platny_od', '<=', datetime.date.today()),
                                                          ('platny_do', '>', datetime.date.today())], limit = 1)
                                                          #('currency_id', '=', self.currency_id)],
@@ -474,7 +475,7 @@ class VystavbaCenovaPonuka(models.Model):
 
 
 class VystavbaCenovaPonukaPolozka(models.Model):
-    _name = 'vystavba.cenova_ponuka.polozka'
+    _name = 'o2.vys.cenova_ponuka.polozka'
     _description = "Vystavba - polozka cenovej ponuky"
 
     @api.depends('cena_jednotkova', 'mnozstvo')
@@ -494,16 +495,16 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     cena_jednotkova = fields.Float(related = 'cennik_polozka_id.cena', string='Jednotková cena', required=True, digits=(10,2))
     cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
-    cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', change_default=True, required=True, ondelete='cascade')
-    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka', change_default=True, required=True, domain="[('cennik_id.dodavatel_id', '=', parent.dodavatel_id)]")
+    cenova_ponuka_id = fields.Many2one('o2.vys.cenova_ponuka', string='odkaz na cenovu ponuku', change_default=True, required=True, ondelete='cascade')
+    cennik_polozka_id = fields.Many2one('o2.vys.cennik.polozka', string='Položka cenníka', change_default=True, required=True, domain="[('cennik_id.dodavatel_id', '=', parent.dodavatel_id)]")
     polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Merná jednotka')
     polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Popis')
 
 class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
-    _name = 'vystavba.cenova_ponuka.polozka_atyp'
+    _name = 'o2.vys.cenova_ponuka.polozka_atyp'
     _description = "Vystavba - polozka cenovej ponuky"
 
     name = fields.Char(required=True, string="Nazov", size=30, help="Kod polozky")
-    oddiel_id = fields.Many2one('vystavba.oddiel', required=True, string="Oddiel")
+    oddiel_id = fields.Many2one('o2.vys.oddiel', required=True, string="Oddiel")
     cena = fields.Float(required=True, digits=(10, 2))
-    cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', required=True, ondelete='cascade')
+    cenova_ponuka_id = fields.Many2one('o2.vys.cenova_ponuka', string='odkaz na cenovu ponuku', required=True, ondelete='cascade')

@@ -4,7 +4,7 @@
         <!-- VIEWS -->
         <record model="ir.ui.view" id="vystavba.view_form_cenova_ponuka">
             <field name="name">cenova ponuka</field>
-            <field name="model">vystavba.cenova_ponuka</field>
+            <field name="model">o2.vys.cenova_ponuka</field>
             <field name="priority" eval="5"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -118,7 +118,7 @@
         -->
         <record model="ir.ui.view" id="vystavba.view_tree_cenova_ponuka">
             <field name="name">cenova ponuka</field>
-            <field name="model">vystavba.cenova_ponuka</field>
+            <field name="model">o2.vys.cenova_ponuka</field>
             <field name="priority" eval="5"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
@@ -141,7 +141,7 @@
         -->
         <record model="ir.ui.view" id="vystavba.view_tree_cenova_ponuka_draft">
             <field name="name">cenova ponuka</field>
-            <field name="model">vystavba.cenova_ponuka</field>
+            <field name="model">o2.vys.cenova_ponuka</field>
             <field name="priority" eval="5"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
@@ -159,7 +159,7 @@
         <!-- zobrazenie pre vsetky cenove ponuky podla stavu -->
         <record model="ir.ui.view" id="vystavba.view_tree_cenova_ponuka_preview">
             <field name="name">cenova ponuka</field>
-            <field name="model">vystavba.cenova_ponuka</field>
+            <field name="model">o2.vys.cenova_ponuka</field>
             <field name="priority" eval="6"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
@@ -184,7 +184,7 @@
        <!-- PC: vytvorenie a zoznam vytvorenych navrhov CP -->
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_draft">
             <field name="name">Návrh cenovej ponuky</field>
-            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="res_model">o2.vys.cenova_ponuka</field>
             <field name="view_id" ref="vystavba.view_tree_cenova_ponuka_draft"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
@@ -203,7 +203,7 @@
         <!-- Dodavatel: zoznam priradenych navrhov CP. to-do pool navrhov CP, ktoré su priradene dodavatelovy. ak ich zedituje stavaju sa "rozpracované" -->
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_assigned">
             <field name="name">Priradené cenové ponuky</field>
-            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="res_model">o2.vys.cenova_ponuka</field>
             <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
@@ -222,7 +222,7 @@
         <!-- Dodavatel: zoznam rozpracovanych CP. to-do pool navrhov CP, ktoré treba dospecifikovat a posunut ich na schvalenie -->
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_in_progress">
             <field name="name">Rozpracované cenové ponuky</field>
-            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="res_model">o2.vys.cenova_ponuka</field>
             <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
@@ -240,7 +240,7 @@
 
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_to_approve">
             <field name="name">Cenové ponuky čakajúce na schválenie</field>
-            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="res_model">o2.vys.cenova_ponuka</field>
             <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
@@ -259,7 +259,7 @@
         <!-- Dodavatel / PC / PM / Manager: zoznam schvalenych CP (v podstate historia CP) READ ONLY -->
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_approved">
             <field name="name">Schválené cenové ponuky</field>
-            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="res_model">o2.vys.cenova_ponuka</field>
             <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
@@ -277,7 +277,7 @@
 
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_cancel">
             <field name="name">Zrušené cenové ponuky</field>
-            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="res_model">o2.vys.cenova_ponuka</field>
             <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
@@ -295,7 +295,7 @@
 
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_preview">
             <field name="name">Prehľad cenových ponúk</field>
-            <field name="res_model">vystavba.cenova_ponuka</field>
+            <field name="res_model">o2.vys.cenova_ponuka</field>
             <field name="view_id" ref="vystavba.view_tree_cenova_ponuka_preview"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>

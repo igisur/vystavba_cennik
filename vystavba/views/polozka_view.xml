@@ -4,7 +4,7 @@
 
         <record model="ir.ui.view" id="vystavba.view_form_polozka">
             <field name="name">Položky</field>
-            <field name="model">vystavba.polozka</field>
+            <field name="model">o2.vys.polozka</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form>
@@ -39,7 +39,7 @@
 
        <record model="ir.ui.view" id="vystavba.view_tree_polozka">
             <field name="name">Položky</field>
-            <field name="model">vystavba.polozka</field>
+            <field name="model">o2.vys.polozka</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
             <tree string="Položka">
@@ -56,7 +56,7 @@
 
         <record model="ir.actions.act_window" id="vystavba.action_window_balicek">
             <field name="name">Balíčky</field>
-            <field name="res_model">vystavba.polozka</field>
+            <field name="res_model">o2.vys.polozka</field>
             <field name="view_id" ref="vystavba.view_tree_polozka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
@@ -65,7 +65,7 @@
 
         <record model="ir.actions.act_window" id="vystavba.action_window_polozka">
             <field name="name">Položky</field>
-            <field name="res_model">vystavba.polozka</field>
+            <field name="res_model">o2.vys.polozka</field>
             <field name="view_id" ref="vystavba.view_tree_polozka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>

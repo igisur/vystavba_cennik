@@ -3,7 +3,7 @@
 from openerp import models, fields, api
 
 class VystavbaCennik(models.Model):
-    _name = 'vystavba.cennik'
+    _name = 'o2.vys.cennik'
     _description = "Vystavbovy cennik"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
@@ -14,12 +14,10 @@ class VystavbaCennik(models.Model):
     dodavatel_id = fields.Many2one('res.partner', string='Dodávateľ', required=True)
     cennik_currency_id = fields.Many2one('res.currency', string="Mena", required=True)
 
-    cennik_polozka_ids = fields.One2many('vystavba.cennik.polozka', 'cennik_id', string='Polozky', copy=True)
-    #polozka_id = fields.Many2one('vystavba.polozka', related='cennik_polozka_ids.polozka_id', string='Polozka')
-
+    cennik_polozka_ids = fields.One2many('o2.vys.cennik.polozka', 'cennik_id', string='Polozky', copy=True)
 
 class VystavbaCennikPolozka(models.Model):
-    _name = 'vystavba.cennik.polozka'
+    _name = 'o2.vys.cennik.polozka'
     _description = "Vystavbovy cennik - cena polozky cennika pre konkretneho partnera"
 
     name = fields.Char(related='polozka_id.name', string='Názov')
@@ -27,8 +25,8 @@ class VystavbaCennikPolozka(models.Model):
     mj = fields.Selection(related='polozka_id.mj', string='Merná jednotka')
     popis = fields.Text(related='polozka_id.description', string='Popis')
     cena = fields.Float(required=True, digits=(10, 2))
-    cennik_id = fields.Many2one('vystavba.cennik', string='Cenník', required=True, ondelete='cascade')
-    polozka_id = fields.Many2one('vystavba.polozka', string='Položka', required=True)
+    cennik_id = fields.Many2one('o2.vys.cennik', string='Cenník', required=True, ondelete='cascade')
+    polozka_id = fields.Many2one('o2.vys.polozka', string='Položka', required=True)
 
     @api.multi
     def name_get(self):

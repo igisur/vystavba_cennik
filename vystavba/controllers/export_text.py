@@ -10,10 +10,10 @@ class export_text(http.Controller):
      def list(self, **kw):
          return http.request.render('vystavba.listing', {
              'root': '/vystavba/',
-             'objects': http.request.env['vystavba.cenova_ponuka'].search([]),
+             'objects': http.request.env['o2.vys.cenova_ponuka'].search([]),
          })
 
-     @http.route('/vystavba/objects/<model("vystavba.cenova_ponuka"):obj>/', auth='public', type='http')
+     @http.route('/vystavba/objects/<model("o2.vys.cenova_ponuka"):obj>/', auth='public', type='http')
      def object(self, obj, **kw):
          return http.request.render('vystavba.object', {
              'object': obj

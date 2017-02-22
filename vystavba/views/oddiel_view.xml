@@ -1,15 +1,9 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-    <!-- Action to open To-do Task list
-        <act_window id="vystavba.action_window_oddiel"
-            name="To-do Task"
-            res_model="vystavba.oddiel"
-            view_mode="tree,form" />-->
-
          <record model="ir.ui.view" id="vystavba.view_tree_oddiel">
             <field name="name">Oddiel</field>
-            <field name="model">vystavba.oddiel</field>
+            <field name="model">o2.vys.oddiel</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
             <tree>
@@ -19,10 +13,9 @@
             </field>
         </record>
 
-
         <record model="ir.actions.act_window" id="vystavba.action_window_oddiel">
             <field name="name">Oddiel</field>
-            <field name="res_model">vystavba.oddiel</field>
+            <field name="res_model">o2.vys.oddiel</field>
             <field name="view_id" ref="vystavba.view_tree_oddiel"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
