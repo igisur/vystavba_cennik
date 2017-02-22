@@ -26,7 +26,7 @@
     <!--datum_koniec = fields.Date(string="Dátum ukončenia");-->
     <!--poznamka = fields.Text(string="Poznámka", copy=False)-->
     <!--celkova_cena = fields.Float(string='Celkova cena', digits=(10,2), copy=False)-->
-
+<!--
 
     <template id="vystavba.report_cenova_ponuka_pdf">
         <t t-call="report.html_container">
@@ -75,6 +75,6 @@
             </t>
         </t>
     </template>
-
+-->
     </data>
 </openerp>
