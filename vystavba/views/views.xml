@@ -3,12 +3,8 @@
 
     <!-- Top menu item -->
     <menuitem id="vystavba.menu_root"
-              name="Výstavba" />
-
-    <menuitem id="vystavba.menu_cennik_root"
-                name="Cenník"
-                sequence="30"
-                parent="vystavba.menu_root"/>
+              name="Výstavba"
+              groups="group_vystavba_supplier,group_vystavba_pc,group_vystavba_pm,group_vystavba_manager"/>
 
   </data>
 </openerp>

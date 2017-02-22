@@ -11,7 +11,7 @@
         </record>
 
         <record id="group_vystavba_supplier" model="res.groups">
-            <field name="name">Dodaveteľ</field>
+            <field name="name">Dodavateľ</field>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
             <field name="category_id" ref="vystavba.module_category_vystavba"/>
         </record>

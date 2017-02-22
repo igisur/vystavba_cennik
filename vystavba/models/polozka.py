@@ -8,6 +8,7 @@ class VystavbaPolozka(models.Model):
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     name = fields.Char(required=True, string="Názov", size=100)
+    kod = fields.Char(required=True, string="Kód", size=20)
     description = fields.Text(string="Popis", size=1000, default="")
     # Many2one display "name" field value or _rec_name = "field_name"
     # oddiel_id = fields.Many2One('vystavba.oddiel', required=True, string="Oddiel", help="kod oddielu pre SAP")
@@ -29,7 +30,6 @@ class VystavbaPolozka(models.Model):
 
     intern_id = fields.Char(string="Intern ID")
     intern_kod = fields.Char(string="Intern kód")
-    kod = fields.Char(required=True, string="Kód", size=20)
 
 
     # vyhladavame iba podla mena polozky. kod sluzi pre SAP

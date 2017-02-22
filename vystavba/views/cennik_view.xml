@@ -30,7 +30,7 @@
                                     <tree string="Polozky cennika" editable="bottom">
                                         <field name="polozka_id" />
                                         <field name="cena" />
-                                        <field name="polozka_mj"/>
+                                        <field name="mj"/>
                                     </tree>
                                 </field>
                             </page>
@@ -69,6 +69,11 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
+
+        <menuitem id="vystavba.menu_cennik_root"
+                name="Cenník"
+                sequence="30"
+                parent="vystavba.menu_root"/>
 
         <menuitem id="vystavba.menu_cennik"
                   name="Dodávateľ"

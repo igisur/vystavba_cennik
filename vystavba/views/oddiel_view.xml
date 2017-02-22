@@ -33,7 +33,7 @@
             name="Oddiel"
             parent="vystavba.menu_cennik_root"
             sequence="50"
-            action="vystavba.action_window_oddiel" />
+            action="vystavba.action_window_oddiel"/>
 
     </data>
 </openerp>

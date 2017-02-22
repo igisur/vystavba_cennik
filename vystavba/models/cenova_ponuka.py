@@ -200,6 +200,15 @@ class VystavbaCenovaPonuka(models.Model):
             })
             cp.update({'celkova_cena': cp_celkova_cena})
 
+    @api.depends('dodavatel_id')
+    def _compute_approved_cp_ids(self):
+        self.approved_cp_ids = self.env['vystavba.cenova_ponuka'].search(
+            [
+                ('state', '=', 'approved'),
+                ('dodavatel_id.id', '=', self.dodavatel_id.id)
+            ]
+        )
+
     @api.depends('celkova_cena')
     def _compute_celkova_cena_mena(self):
         _logger.info("_compute_celkova_cena_mena: " + str(len(self)))
@@ -212,7 +221,22 @@ class VystavbaCenovaPonuka(models.Model):
 
             celkova_cena_text = 'Celková cena: '
             #line.celkova_cena_mena = celkova_cena_text.encode("utf-8") + str(line.celkova_cena) + ' ' + line.currency_id.symbol
-            line.celkova_cena_mena =  (line.celkova_cena)+ ' ' + line.currency_id.symbol
+
+            if line.currency_id:
+                line.celkova_cena_mena =  str(line.celkova_cena) + ' ' + line.currency_id.symbol
+
+    @api.one
+    @api.depends('dodavatel_id','osoba_priradena_id')
+    def _compute_ro_datumoddo(self):
+        _logger.info("_compute_ro_datumoddo: " + str(len(self)))
+        if self.osoba_priradena_id.id:
+            if self.osoba_priradena_id.id == self.dodavatel_id.id:
+                self.ro_datumoddo = False
+            else:
+                self.ro_datumoddo = True
+        return {}
+
+    ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute="_compute_ro_datumoddo")
 
     name = fields.Char(required=True, string="Názov", size=50, copy=False)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);
@@ -234,14 +258,14 @@ class VystavbaCenovaPonuka(models.Model):
     cennik_id = fields.Many2one('vystavba.cennik', string='Cenník')
     currency_id = fields.Many2one('res.currency', string="Mena")
 
-    cp_polozka_ids = fields.One2many('vystavba.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=True, track_visibility='onchange')
+    cp_polozka_ids = fields.One2many('vystavba.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=False, track_visibility='onchange')
     cp_polozka_atyp_ids = fields.One2many('vystavba.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp polozky', copy=False, track_visibility='onchange')
 
     sap_export_content = fields.Text(string="Export pre SAP", default='ABCDEFGH')
     sap_export_file_name = fields.Char(string="Export file name")
     sap_export_file_binary = fields.Binary(string='Export file')
 
-    approved_cp_ids = fields.One2many('vystavba.cenova_ponuka', compute='_compute_approved_cp_ids', string='Schvalene CP')
+    approved_cp_ids = fields.One2many('vystavba.cenova_ponuka', compute=_compute_approved_cp_ids, string='Schvalene CP')
 
     celkova_cena_mena = fields.Text(compute=_compute_celkova_cena_mena, string='Celková cena', store=True)
 
@@ -272,16 +296,6 @@ class VystavbaCenovaPonuka(models.Model):
         result = {'cennik_id': self.cennik_id, 'currency_id': self.currency_id}
         self.write(result);
         return result
-
-
-    @api.depends('dodavatel_id')
-    def _compute_approved_cp_ids(self):
-        self.approved_cp_ids = self.env['vystavba.cenova_ponuka'].search(
-            [
-                ('state', '=', 'approved'),
-                ('dodavatel_id.id', '=', self.dodavatel_id.id)
-            ]
-        )
 
     @api.onchange('osoba_priradena_id')
     def _sent_notification(self):
@@ -463,55 +477,27 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     _name = 'vystavba.cenova_ponuka.polozka'
     _description = "Vystavba - polozka cenovej ponuky"
 
-    @api.depends('cennik_polozka_id', 'polozka_mj')
-    def _compute_cena_za_mj(self):
-        for line in self:
-            cena_za_mj = ''
-            if line.cennik_polozka_id.cena:
-                cena_za_mj = str(line.cennik_polozka_id.cena)
-                if not line.polozka_mj == '_':
-                    cena_za_mj = cena_za_mj + '/' + str(line.polozka_mj)
-
-            line.cena_za_mj = cena_za_mj
-
     @api.depends('cena_jednotkova', 'mnozstvo')
     def _compute_cena_celkom(self):
         for line in self:
             total = line.cena_jednotkova * line.mnozstvo
             line.cena_celkom = total
 
-    @api.depends('cennik_polozka_id')
-    def _compute_cena_jednotkova(self):
-        _logger.info("_compute_cena_jednotkova: " + str(len(self)))
-        for line in self:
-            line.cena_jednotkova = line.cennik_polozka_id.cena
+    # @api.depends('cennik_polozka_id')
+    # def _compute_cena_jednotkova(self):
+    #     _logger.info("_compute_cena_jednotkova: " + str(len(self)))
+    #     for line in self:
+    #         line.cena_jednotkova = line.cennik_polozka_id.cena
 
     # cena = fields.Float(required=True, digits=(10, 2))
-    cena_jednotkova = fields.Float(compute=_compute_cena_jednotkova, string='Jednotková cena', required=True, digits=(10,2))
+    #cena_jednotkova = fields.Float(compute=_compute_cena_jednotkova, string='Jednotková cena', required=True, digits=(10,2))
+    cena_jednotkova = fields.Float(related = 'cennik_polozka_id.cena', string='Jednotková cena', required=True, digits=(10,2))
     cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
     cenova_ponuka_id = fields.Many2one('vystavba.cenova_ponuka', string='odkaz na cenovu ponuku', change_default=True, required=True, ondelete='cascade')
-    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka',change_default=True, required=True, domain="[('cennik_id.dodavatel_id', '=', parent.dodavatel_id)]")
-    polozka_mj = fields.Selection(related='cennik_polozka_id.polozka_mj', string='Merná jednotka')
-    #mj = fields.Char(string='Merna jednotka', size=5, required=True, readonly=True)
-    cena_za_mj = fields.Char(compute=_compute_cena_za_mj, string='Cena za mj', store=False)
-    polozka_popis = fields.Text(related='cennik_polozka_id.polozka_popis', string='Položka popis')
-
-    @api.onchange('cennik_polozka_id')
-    def onchange_cennik_polozka_id(self):
-        result = {}
-        if not self.cennik_polozka_id:
-            return result
-
-        # Reset date, price and quantity since _onchange_quantity will provide default values
-        #self.date_planned = datetime.date.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        if __name__ == '__main__':
-            self.cena = self.cennik_polozka_id.get
-        self.mj = 'ks'
-        #self._suggest_quantity()
-        #self._onchange_quantity()
-
-        return result
+    cennik_polozka_id = fields.Many2one('vystavba.cennik.polozka', string='Položka cenníka', change_default=True, required=True, domain="[('cennik_id.dodavatel_id', '=', parent.dodavatel_id)]")
+    polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Merná jednotka')
+    polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Popis')
 
 class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
     _name = 'vystavba.cenova_ponuka.polozka_atyp'

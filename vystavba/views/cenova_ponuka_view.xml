@@ -29,6 +29,7 @@
                                 <label string="Cenová ponuka"/>
                                 <field name="id" invisible="True"/>
                                 <field name="name" attrs="{'readonly':[('state','in',['approved'])]}"/>
+                                <field name="ro_datumoddo" invisible="True"/>
                             </h1>
                         </div>
                         <group>
@@ -36,8 +37,8 @@
                                 <field name="cislo" reuired="True"  attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
                                 <field name="financny_kod"  attrs="{'readonly':[('state','not in',['draft','in_progress'])]}"/>
                                 <field name="skratka"  attrs="{'readonly':[('state','not in',['draft','in_progress'])]}"/>
-                                <field name="datum_zaciatok"  attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
-                                <field name="datum_koniec" attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
+                                <field name="datum_zaciatok" attrs="{'readonly':[('ro_datumoddo','=',True)], 'required':[('ro_datumoddo','!=',True)]}"/>
+                                <field name="datum_koniec" attrs="{'readonly':[('ro_datumoddo','=',True)], 'required':[('ro_datumoddo','!=',True)]}"/>
                                 <field name="sap_export_file_binary" filename="sap_export_file_name" readonly="True"/>
                             </group>
                             <group>
@@ -46,8 +47,8 @@
                                 <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                                 <field name="manager_id" readonly="True" options="{'no_create': True}"/>
                                 <field name="osoba_priradena_id" readonly="True"/>
-                                <field name="cennik_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
-                                <field name="currency_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                                <field name="cennik_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+                                <field name="currency_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                             </group>
                         </group>
 
@@ -55,10 +56,9 @@
                             <page string="Položky">
                                 <field name="cp_polozka_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Polozky cennika" editable="bottom">
-                                        <!--<field name="polozka_id" context="{'partner_id': parent.partner_id}"/>-->
-                                        <field name="cennik_polozka_id" context="{'dodavatel_id':parent.dodavatel_id}" string="Položka" options="{'no_create': True}"/>
-                                        <field name="polozka_mj" readonly="1" string="mj" invisible="0"/>
-                                        <field name="cena_jednotkova" invisible="0"/>
+                                        <field name="cennik_polozka_id" string="Položka"/>
+                                        <field name="polozka_mj" readonly="1" string="mj"/>
+                                        <field name="cena_jednotkova"/>
                                         <field name="mnozstvo"  string="Počet"/>
                                         <field name="cena_celkom" string="Cena"/>
                                     </tree>
@@ -67,7 +67,6 @@
                             <page string="Atypické položky" attrs="{'readonly':[('state','in',['approved'])]}">
                                 <field name="cp_polozka_atyp_ids">
                                     <tree string="Polozky cennika" editable="bottom">
-                                        <!--<field name="polozka_id" context="{'partner_id': parent.partner_id}"/>-->
                                         <field name="oddiel_id" string="Oddiel" options="{'no_create': True}"/>
                                         <field name="name"  string="Položka"/>
                                         <field name="cena" string="Cena"/>
@@ -189,7 +188,7 @@
             <field name="view_id" ref="vystavba.view_tree_cenova_ponuka_draft"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="domain"> [('state','=','draft')]</field>
+            <field name="domain">[('state','=','draft')]</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to register a receipt for this product.
