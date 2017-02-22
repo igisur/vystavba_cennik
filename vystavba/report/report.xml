@@ -8,10 +8,11 @@
         <!--report_type="qweb-html" />-->
 
     <report
-        id="report_vystavba_cenova_ponuka_pdf"
+        id="report_cenova_ponuka"
         model="vystavba.cenova_ponuka"
-        string="Cenova ponuka PDF"
-        name="vystavba.report_cenova_ponuka_pdf"
+        string="Cenova ponuka (PDF)"
+        name="vystavba.report_cenova_ponuka"
         report_type="qweb-pdf" />
+
     </data>
 </openerp>
