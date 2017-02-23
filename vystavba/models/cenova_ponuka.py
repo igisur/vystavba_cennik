@@ -157,10 +157,7 @@ class VystavbaCenovaPonuka(models.Model):
         return ret
 
     @api.model
-    def _get_defau3
-
-
-        lt_osoba_priradena(self):
+    def _get_default_osoba_priradena(self):
         self.osoba_priradena_id = self.env.user
 
     # limit partners to specific group
