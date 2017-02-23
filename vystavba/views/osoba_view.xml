@@ -30,6 +30,5 @@
                   sequence="40"
                   parent="vystavba.menu_root"
                   action="act_res_partner_vystavba"/>
-
     </data>
 </openerp>

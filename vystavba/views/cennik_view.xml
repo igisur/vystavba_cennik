@@ -76,10 +76,10 @@
                 parent="vystavba.menu_root"/>
 
         <menuitem id="vystavba.menu_cennik"
-                  name="Dodávateľ"
-                  parent="vystavba.menu_cennik_root"
-                  sequence="31"
-                  action="vystavba.action_window_cennik_dodavatel"/>
+                name="Dodávateľ"
+                parent="vystavba.menu_cennik_root"
+                sequence="31"
+                action="vystavba.action_window_cennik_dodavatel"/>
 
     </data>
 </openerp>

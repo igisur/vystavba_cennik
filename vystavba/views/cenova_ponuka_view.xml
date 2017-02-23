@@ -9,7 +9,6 @@
             <field name="priority" eval="5"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
-
                 <form>
                     <header>
                         <!-- use class="oe_highlight" to suggest WF action -->
@@ -108,7 +107,7 @@
 
                     </sheet>
                     <div class="oe_chatter">
-                        <field name="message_follower_ids" widget="mail_followers" invisible="True"/>
+                        <!--<field name="message_follower_ids" widget="mail_followers" invisible="True"/>-->
                         <field name="message_ids" widget="mail_thread"/>
                     </div>
                 </form>
@@ -132,7 +131,7 @@
                     <field name="datum_koniec"/>
                     <field name="celkova_cena"/>
                     <field name="dodavatel_id"/>
-                    <field name="osoba_priradena_id" string="Schvaľovateľ"/>
+                    <field name="osoba_priradena_id" string="Priradený"/>
                 </tree>
             </field>
         </record>
@@ -150,9 +149,11 @@
                   <field name="name"/>
                   <field name="cislo"/>
                   <field name="financny_kod"/>
-                  <field name="datum_zaciatok"/>
-                  <field name="datum_koniec"/>
+                  <field name="skratka"/>
+                  <!--<field name="datum_zaciatok"/>-->
+                  <!--<field name="datum_koniec"/>-->
                   <field name="dodavatel_id"/>
+                  <field name="osoba_priradena_id" string="Priradený"/>
                 </tree>
             </field>
         </record>
@@ -174,9 +175,7 @@
                     <field name="datum_koniec" string="Ukončené"/>
                     <field name="celkova_cena"  string="Cena"/>
                     <field name="dodavatel_id"/>
-                    <field name="pc_id"/>
-                    <field name="pm_id"/>
-                    <field name="manager_id"/>
+                    <field name="osoba_priradena_id" string="Priradený"/>
                 </tree>
             </field>
         </record>
@@ -186,18 +185,13 @@
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_draft">
             <field name="name">Návrh cenovej ponuky</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka_draft"/>-->
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka_draft"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('state','=','draft')]</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                Click to register a receipt for this product.
-                </p><p>
-                Here you will find the history of all receipts related to
-                this product, as well as all future receipts you are waiting
-                from your suppliers.
-                </p>
+                <p class="oe_view_nocontent_create">Klikni pre založenie novej hlavičky cenovej ponuky.</p>
+                <p>Tu nájdete založené cenové ponuky.</p>
             </field>
         </record>
 
@@ -205,18 +199,12 @@
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_assigned">
             <field name="name">Priradené cenové ponuky</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>-->
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','assigned')]</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                Click to register a receipt for this product.
-                </p><p>
-                Here you will find the history of all receipts related to
-                this product, as well as all future receipts you are waiting
-                from your suppliers.
-                </p>
+                <p>Tu nájdete cenové ponuky, ktoré sú priradené na dodávateľa.</p>
             </field>
         </record>
 
@@ -224,36 +212,24 @@
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_in_progress">
             <field name="name">Rozpracované cenové ponuky</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>-->
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','in_progress')]</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                Click to register a receipt for this product.
-                </p><p>
-                Here you will find the history of all receipts related to
-                this product, as well as all future receipts you are waiting
-                from your suppliers.
-                </p>
+                <p>Tu nájdete rozpracované cenové ponuky, kde ste ich dodávateľ.</p>
             </field>
         </record>
 
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_to_approve">
             <field name="name">Cenové ponuky čakajúce na schválenie</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>-->
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','to_approve')]</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                Click to register a receipt for this product.
-                </p><p>
-                Here you will find the history of all receipts related to
-                this product, as well as all future receipts you are waiting
-                from your suppliers.
-                </p>
+                <p>Tu nájdete cenové ponuky čakajúce na schválenie, ktoré sú vám priradené alebo ste ich dodávateľ.</p>
             </field>
         </record>
 
@@ -261,53 +237,35 @@
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_approved">
             <field name="name">Schválené cenové ponuky</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>-->
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','approved')]</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                Click to register a receipt for this product.
-                </p><p>
-                Here you will find the history of all receipts related to
-                this product, as well as all future receipts you are waiting
-                from your suppliers.
-                </p>
+                <p>Tu nájdete schválené cenové ponuky, ktoré vám boli priradené alebo ste ich dodávateľ.</p>
             </field>
         </record>
 
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_cancel">
             <field name="name">Zrušené cenové ponuky</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>-->
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','cancel')]</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                Click to register a receipt for this product.
-                </p><p>
-                Here you will find the history of all receipts related to
-                this product, as well as all future receipts you are waiting
-                from your suppliers.
-                </p>
+                <p>Tu nájdete zrušené cenové ponuky, ktoré vám boli priradené alebo ste ich dodávateľ.</p>
             </field>
         </record>
 
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_preview">
             <field name="name">Prehľad cenových ponúk</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka_preview"/>-->
+            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka_preview"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                Click to register a receipt for this product.
-                </p><p>
-                Here you will find the history of all receipts related to
-                this product, as well as all future receipts you are waiting
-                from your suppliers.
-                </p>
+                <p>Tu nájdete všetky cenové ponuky, ktoré sú vám priradené alebo ste ich dodávateľ.</p>
             </field>
         </record>
 
@@ -321,25 +279,29 @@
                   name="Návrh"
                   sequence="11"
                   parent="vystavba.menu_cenova_ponuka_root"
-                  action="vystavba.action_window_cp_draft"/>
+                  action="vystavba.action_window_cp_draft"
+                  groups="group_vystavba_pc,group_vystavba_pm,group_vystavba_admin"/>
 
         <menuitem id="vystavba.menu_cenova_ponuka_assigned"
                   name="Priradené"
                   sequence="12"
                   parent="vystavba.menu_cenova_ponuka_root"
-                  action="vystavba.action_window_cp_assigned"/>
+                  action="vystavba.action_window_cp_assigned"
+                  groups="group_vystavba_supplier,group_vystavba_pc,group_vystavba_pm,group_vystavba_admin"/>
 
         <menuitem id="vystavba.menu_cenova_ponuka_in_progress"
                   name="Rozpracované"
                   sequence="13"
                   parent="vystavba.menu_cenova_ponuka_root"
-                  action="vystavba.action_window_cp_in_progress"/>
+                  action="vystavba.action_window_cp_in_progress"
+                  groups="group_vystavba_supplier,group_vystavba_pc,group_vystavba_pm,group_vystavba_admin"/>
 
         <menuitem id="vystavba.menu_cenova_ponuka_to_approve"
                   name="Na schválenie"
                   sequence="14"
                   parent="vystavba.menu_cenova_ponuka_root"
-                  action="vystavba.action_window_cp_to_approve"/>
+                  action="vystavba.action_window_cp_to_approve"
+                  groups="group_vystavba_pc,group_vystavba_pm,group_vystavba_admin"/>
 
         <menuitem id="vystavba.menu_cenova_ponuka_approved"
                   name="Schválené"

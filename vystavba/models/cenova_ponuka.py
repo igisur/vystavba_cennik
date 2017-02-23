@@ -54,8 +54,7 @@ class VystavbaCenovaPonuka(models.Model):
         self.sap_export_file_name = export_file_name
         self.sap_export_content = self._get_sap_export_content()
         self.sap_export_file_binary = base64.encodestring(self.sap_export_content)
-        #self.sap_export_file_binary = base64.encodestring(self._get_sap_export_content())
-        self.message_post(body='Subor "' + export_file_name + '" pre SAP bol vygenerovany', message_type='email')
+        self.message_post(body='<ul class ="o_mail_thread_message_tracking"><li>' + 'Subor "' + export_file_name + '" pre SAP bol vygenerovany' + "</li></ul>", message_type='email')
 
     @api.multi
     def _get_sap_export_content(self):
@@ -163,7 +162,6 @@ class VystavbaCenovaPonuka(models.Model):
     # limit partners to specific group
     @api.model
     def _partners_in_group(self, group_name):
-        _logger.info('get group ' + str(group_name))
         group = self.env.ref(group_name)
         partner_ids = []
         for user in group.users:
@@ -272,31 +270,60 @@ class VystavbaCenovaPonuka(models.Model):
     celkova_cena_mena = fields.Text(compute=_compute_celkova_cena_mena, string='Celková cena', store=True)
 
     @api.one
+    def write(self, vals):
+        self.ensure_one()
+
+        res = super(VystavbaCenovaPonuka, self).write(vals)
+
+        state = vals.get('state')
+        _logger.info("WRITE: " + str(state))
+        # ak zapisujeme stav prisli sme sem z WF akcie, a preto koncime. automaticka zmena stavu WF je len v pripade akcie SAVE kde sa 'state' nemeni!
+        if vals.get('state') == None:
+            return res
+
+        _logger.info("WRITE: user " + str(self.env.user.id))
+        _logger.info("WRITE: user partner" + str(self.env.user.partner_id.id))
+        _logger.info("WRITE: dodavatel " + str(self.dodavatel_id.id))
+        _logger.info("WRITE: priradeny" + str(self.osoba_priradena_id.id))
+        _logger.info("WRITE: stav " + str(self.state))
+
+        # ak je prihlaseny Dodavatel, je mu priradena CP a je v stave ASSIGNED tak pri save zmenime stav na IN_PROGRESS
+        if self.dodavatel_id.id == self.env.user.partner_id.id:
+            _logger.info("WRITE: je prihlaseny dodavatel")
+            if self.dodavatel_id.id == self.osoba_priradena_id.id:
+                _logger.info("WRITE: je mu priradena CP")
+                if self.state == self.ASSIGNED:
+                    _logger.info("WRITE: CP je v stave ASSIGNED")
+                    self.signal_workflow('in_progress')
+
+        return res
+
+    @api.one
     @api.onchange('dodavatel_id')
     def _find_cennik(self):
         result = {}
         if not self.dodavatel_id:
             return result
 
-        _logger.info("Looking supplier's valid pricelist " + str(self.dodavatel_id.name));
+        _logger.info("Looking supplier's valid pricelist " + str(self.dodavatel_id.name))
         cennik_ids = self.env['o2.vys.cennik'].search([('dodavatel_id', '=', self.dodavatel_id.id),
                                                          ('platny_od', '<=', datetime.date.today()),
                                                          ('platny_do', '>', datetime.date.today())], limit = 1)
                                                          #('currency_id', '=', self.currency_id)],
 
         for rec in cennik_ids:
-            _logger.info(rec.name);
+            _logger.info(rec.name)
 
         if cennik_ids:
-            self.cennik_id = cennik_ids[0];
+            self.cennik_id = cennik_ids[0]
             self.currency_id = self.cennik_id.cennik_currency_id
             # musime zapisat rucne, pretoze fields oznacene na view ako READONLY sa nezapisuju :(
         else:
-            self.cennik_id = '';
+            self.cennik_id = ''
             self.currency_id = ''
 
         result = {'cennik_id': self.cennik_id, 'currency_id': self.currency_id}
-        self.write(result);
+        self.write(result)
         return result
 
     @api.onchange('osoba_priradena_id')
@@ -323,14 +350,14 @@ class VystavbaCenovaPonuka(models.Model):
     # Workflow
     # najdi partnera v skupine 'Manager', ktoreho field 'cena_na_schvalenie' je vacsia ako celkova cena CP
     def _find_manager(self):
-        _logger.info("Looking for manager to approve order of price " + str(self.celkova_cena));
+        _logger.info("Looking for manager to approve order of price " + str(self.celkova_cena))
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         manager_ids = self.env['res.partner'].search([('id', 'in', partner_ids),('cp_celkova_cena_limit', '<=', self.celkova_cena)], order = "cp_celkova_cena_limit desc", limit = 1)
 
         for man in manager_ids:
-            _logger.info(man.name);
+            _logger.info(man.name)
 
-        return manager_ids[0];
+        return manager_ids[0]
 
     @api.one
     def wf_draft(self):    # should be create but is set in field definition
@@ -347,10 +374,9 @@ class VystavbaCenovaPonuka(models.Model):
         _logger.info("workflow action to ASSIGN")
         self.ensure_one()
         if self.wf_dovod:
-            self.message_post(body=self.wf_dovod)
-            self.wf_dovod = ''
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Dôvod pre workflow: " + self.wf_dovod + "</li></ul>")
 
-        self.write({'state': self.ASSIGNED, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': self.wf_dovod})
+        self.write({'state': self.ASSIGNED, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
         return True
 
     @api.one
@@ -358,42 +384,41 @@ class VystavbaCenovaPonuka(models.Model):
         _logger.info("workflow action to IN_PROGRESS")
         self.ensure_one()
         if self.wf_dovod:
-            self.message_post(body=self.wf_dovod)
-            self.wf_dovod = ''
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Dôvod pre workflow: " + self.wf_dovod + "</li></ul>")
 
-        self.write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': self.wf_dovod})
+        self.write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
         return True
 
     @api.one
     def wf_approve(self):
         self.ensure_one()
         _logger.info("workflow action to APPROVE")
-        self.write({})
 
+        # do historie pridame 'wf_dovod'
         if self.wf_dovod:
-            self.message_post(body=self.wf_dovod)
-            self.wf_dovod = ''
+            # add to tracking values
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Dôvod pre workflow: " + self.wf_dovod + "</li></ul>")
 
         if self.osoba_priradena_id.id == self.dodavatel_id.id:
             #  Dodavatel poslal na schvalenie PC
             _logger.info("Supplier sent to approve by PC")
-            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': self.wf_dovod})
+            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': ''})
 
         elif self.osoba_priradena_id.id == self.pc_id.id:
             #  PC poslal na schvalenie PM
             _logger.info("PC sent to approve by PM")
-            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pm_id.id, 'wf_dovod': self.wf_dovod})
+            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pm_id.id, 'wf_dovod': ''})
 
         elif self.osoba_priradena_id.id == self.pm_id.id:   
             #  PM poslal na schvalenie Managerovy
             _logger.info("PM sent to approve by Manager")
             manager_id = self._find_manager()
-            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': manager_id.id, 'manager_id': manager_id.id, 'wf_dovod': self.wf_dovod})
+            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': manager_id.id, 'manager_id': manager_id.id, 'wf_dovod': ''})
 
         elif self.osoba_priradena_id.id == self.manager_id.id:
             #  Manager schvalil -> CP je schvalena a koncime
             _logger.info("Manager approved")
-            self.write({'state': self.APPROVED, 'osoba_priradena_id': '', 'wf_dovod': self.wf_dovod})
+            self.write({'state': self.APPROVED, 'osoba_priradena_id': '', 'wf_dovod': ''})
 
         return True
 
@@ -403,20 +428,19 @@ class VystavbaCenovaPonuka(models.Model):
         self.ensure_one()
 
         if self.wf_dovod:
-            self.message_post(body=self.wf_dovod)
-            self.wf_dovod = ''
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Dôvod pre workflow: " + self.wf_dovod + "</li></ul>")
 
         # PC signals 'not complete' - CP should be 'in_progress' and assigned to Supplier
         if self.osoba_priradena_id.id == self.pc_id.id :
             _logger.info("workflow action to IN_PROGRESS")
-            self.write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': self.wf_dovod})
+            self.write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
             self.signal_workflow('not_complete')
             # call WF: signal "not complete". som v stave "to_approve". potrebujem ist do in_progers
 
         # PM signals 'not complete' - CP should be 'to_approve' and assigned to PC
         elif self.osoba_priradena_id.id == self.pm_id.id :
             _logger.info("workflow action to TO_APPROVE")
-            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': self.wf_dovod})
+            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': ''})
 
         return True
 
@@ -426,10 +450,9 @@ class VystavbaCenovaPonuka(models.Model):
         self.ensure_one()
 
         if self.wf_dovod:
-            self.message_post(body=self.wf_dovod)
-            self.wf_dovod = ''
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Dôvod pre workflow: " + self.wf_dovod + "</li></ul>")
 
-        self.write({'state': self.CANCEL, 'osoba_priradena_id': '', 'wf_dovod': self.wf_dovod})
+        self.write({'state': self.CANCEL, 'osoba_priradena_id': '', 'wf_dovod': ''})
         return True
 
 
@@ -485,14 +508,6 @@ class VystavbaCenovaPonukaPolozka(models.Model):
             total = line.cena_jednotkova * line.mnozstvo
             line.cena_celkom = total
 
-    # @api.depends('cennik_polozka_id')
-    # def _compute_cena_jednotkova(self):
-    #     _logger.info("_compute_cena_jednotkova: " + str(len(self)))
-    #     for line in self:
-    #         line.cena_jednotkova = line.cennik_polozka_id.cena
-
-    # cena = fields.Float(required=True, digits=(10, 2))
-    #cena_jednotkova = fields.Float(compute=_compute_cena_jednotkova, string='Jednotková cena', required=True, digits=(10,2))
     cena_jednotkova = fields.Float(related = 'cennik_polozka_id.cena', string='Jednotková cena', required=True, digits=(10,2))
     cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
