@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 {
     'name': "vystavba",
     'summary': 'Výstavbový cenník',
@@ -16,9 +16,9 @@
         'security/vystavba_security.xml',
         'security/ir.model.access.csv',
         'views/views.xml',
+        'views/cenova_ponuka_view.xml',
         'views/polozka_view.xml',
         'views/cennik_view.xml',
-        'views/cenova_ponuka_view.xml',
         'views/osoba_view.xml',
         'workflows/cp_workflow.xml',
         'report/report.xml',
