@@ -14,7 +14,7 @@
     # always loaded
     'data': [
         'security/vystavba_security.xml',
-        'security/ir.model.access.csv',
+        #'security/ir.model.access.csv',
         'views/views.xml',
         'views/polozka_view.xml',
         'views/cennik_view.xml',

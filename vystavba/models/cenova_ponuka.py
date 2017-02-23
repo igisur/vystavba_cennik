@@ -240,7 +240,7 @@ class VystavbaCenovaPonuka(models.Model):
 
     name = fields.Char(required=True, string="Názov", size=50, copy=False)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);
-    financny_kod = fields.Char(string="Finančný kód", required=True, copy=False)
+    financny_kod = fields.Char(string="Finančný kód", size=10, required=True, copy=False)
     skratka = fields.Char(string="Skratka", required=True, copy=False)
     datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today());
     datum_koniec = fields.Date(string="Dátum ukončenia");
@@ -367,7 +367,10 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.one
     def wf_assign_check(self):
-        return not self.dodavatel_id is False
+        if self.dodavatel_id is False:
+            raise AccessError("Cenova ponuka nema priradeneho dodavatela.")
+
+        return True
 
     @api.one
     def wf_assign(self):
