@@ -39,11 +39,11 @@ class VystavbaCenovaPonuka(models.Model):
         (CANCEL, 'Zrušená')
     )
 
-    GROUP_SUPPLIER = 'group_vystavba_supplier'
-    GROUP_PC = 'group_vystavba_pc'
-    GROUP_PM = 'group_vystavba_pm'
-    GROUP_MANAGER = 'group_vystavba_manager'
-    GROUP_ADMIN = 'group_vystavba_admin'
+    GROUP_SUPPLIER = 'vystavba.group_vystavba_supplier'
+    GROUP_PC = 'vystavba.group_vystavba_pc'
+    GROUP_PM = 'vystavba.group_vystavba_pm'
+    GROUP_MANAGER = 'vystavba.group_vystavba_manager'
+    GROUP_ADMIN = 'vystavba.group_vystavba_admin'
 
     @api.one
     def action_exportSAP(self):
@@ -157,12 +157,16 @@ class VystavbaCenovaPonuka(models.Model):
         return ret
 
     @api.model
-    def _get_default_osoba_priradena(self):
+    def _get_defau3
+
+
+        lt_osoba_priradena(self):
         self.osoba_priradena_id = self.env.user
 
     # limit partners to specific group
     @api.model
     def _partners_in_group(self, group_name):
+        _logger.info('get group ' + str(group_name))
         group = self.env.ref(group_name)
         partner_ids = []
         for user in group.users:

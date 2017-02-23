@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+
         <!-- VIEWS -->
         <record model="ir.ui.view" id="vystavba.view_form_cenova_ponuka">
             <field name="name">cenova ponuka</field>
@@ -185,7 +186,7 @@
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_draft">
             <field name="name">Návrh cenovej ponuky</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka_draft"/>
+            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka_draft"/>-->
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('state','=','draft')]</field>
@@ -204,7 +205,7 @@
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_assigned">
             <field name="name">Priradené cenové ponuky</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
+            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>-->
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','assigned')]</field>
@@ -223,7 +224,7 @@
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_in_progress">
             <field name="name">Rozpracované cenové ponuky</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
+            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>-->
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','in_progress')]</field>
@@ -241,7 +242,7 @@
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_to_approve">
             <field name="name">Cenové ponuky čakajúce na schválenie</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
+            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>-->
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','to_approve')]</field>
@@ -260,7 +261,7 @@
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_approved">
             <field name="name">Schválené cenové ponuky</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
+            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>-->
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','approved')]</field>
@@ -278,7 +279,7 @@
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_cancel">
             <field name="name">Zrušené cenové ponuky</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>
+            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka"/>-->
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','cancel')]</field>
@@ -296,7 +297,7 @@
         <record model="ir.actions.act_window" id="vystavba.action_window_cp_preview">
             <field name="name">Prehľad cenových ponúk</field>
             <field name="res_model">o2.vys.cenova_ponuka</field>
-            <field name="view_id" ref="vystavba.view_tree_cenova_ponuka_preview"/>
+            <!--<field name="view_id" ref="vystavba.view_tree_cenova_ponuka_preview"/>-->
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
