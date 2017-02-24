@@ -458,47 +458,35 @@ class VystavbaCenovaPonuka(models.Model):
         self.write({'state': self.CANCEL, 'osoba_priradena_id': '', 'wf_dovod': ''})
         return True
 
-
     @api.multi
-    def action_invoice_sent(self):
-        """ Open a window to compose an email, with the edi invoice template
-            message loaded by default
-        """
-        self.ensure_one()
-        template = self.env.ref('account.email_template_edi_invoice', False)
-        compose_form = self.env.ref('mail.email_compose_message_wizard_form', False)
-        ctx = dict(
-            default_model='account.invoice',
-            default_res_id=self.id,
-            default_use_template=bool(template),
-            default_template_id=template.id,
-            default_composition_mode='comment',
-            mark_invoice_as_sent=True,
-        )
-        return {
-            'name': _('Compose Email'),
-            'type': 'ir.actions.act_window',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'mail.compose.message',
-            'views': [(compose_form.id, 'form')],
-            'view_id': compose_form.id,
-            'target': 'new',
-            'context': ctx,
+    def send_mail_template(self):
+        # Find the e-mail template
+        # definovane v views/email_template.xml
+        template = self.env.ref('o2_net.workflow_cp_assigned')
+        # You can also find the e-mail template like this:
+        # template = self.env['ir.model.data'].get_object('mail_template_demo', 'example_email_template')
+
+        # Send out the e-mail template to the user
+        self.env['mail.template'].browse(template.id).send_mail(self.id)
+
+
+    @api.one
+    def send_mail(self):
+        template_obj = self.env('email.template')
+        group_model_id = self.env('ir.model').search(self, [('model', '=', 'sale.order')])[0]
+        body_html = '''Message whatever you want to send'''
+        template_data = {
+            'model_id': group_model_id,
+            'name': 'Template Name',
+            'subject': 'Subject for your email',
+            'body_html': body_html,
+            'email_from': '${object.user_id.email}',
+            'email_to': '${object.partner_id.email}',
         }
 
-    @api.multi
-    def send_mail(self):
-        user_id = self.user_target.id
-        body = self.message_target
-
-        mail_details = {'subject': "Message subject",
-                        'body': body
-                        #'partner_ids': [(user_target)]
-                        }
-
-        mail = self.env['mail.thread']
-        mail.message_post(type="notification", subtype="mt_comment", **mail_details)
+        template_id = template_obj.create(self, template_data)
+        template_obj.send_mail(self, template_id, ids[0], force_send=True)
+        return True
 
 
 class VystavbaCenovaPonukaPolozka(models.Model):
