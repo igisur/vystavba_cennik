@@ -1,0 +1,10 @@
+<openerp>
+  <data>
+
+    <!-- Top menu item -->
+    <menuitem id="menu_root"
+              name="O2 Network"
+              groups="group_vystavba_supplier,group_vystavba_pc,group_vystavba_pm,group_vystavba_manager,group_vystavba_admin"/>
+
+  </data>
+</openerp>

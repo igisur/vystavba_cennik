@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_form_osoba">
+            <field name="name">view_osoba_form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_simple_form"/>
+            <field name="arch" type="xml">
+                <!-- potrebujeme odkaz na User-a -->
+                <!-- pridaj fields z vystavby -->
+                <field name="mobile" position="after">
+                    <field name="kod"/>
+                    <field name="cp_celkova_cena_limit"/>
+                    <field name="reminder_interval"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_res_partner_vystavba">
+            <field name="name">Osoba</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_form_osoba"/>
+            <field name="view_type">form</field>
+        </record>
+
+        <menuitem id="menu_osoba"
+                  name="Osoba"
+                  sequence="40"
+                  parent="menu_root"
+                  action="act_res_partner_vystavba"/>
+    </data>
+</openerp>

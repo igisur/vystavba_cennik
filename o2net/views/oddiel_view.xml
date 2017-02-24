@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+         <record model="ir.ui.view" id="view_tree_oddiel">
+            <field name="name">Oddiel</field>
+            <field name="model">o2net.oddiel</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_window_oddiel">
+            <field name="name">Oddiel</field>
+            <field name="res_model">o2net.oddiel</field>
+            <field name="view_id" ref="view_tree_oddiel"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    <!-- Menu item to open To-do Task list -->
+    <menuitem id="menu_oddiel"
+            name="Oddiel"
+            parent="menu_cennik_root"
+            sequence="50"
+            action="action_window_oddiel"/>
+
+    </data>
+</openerp>
