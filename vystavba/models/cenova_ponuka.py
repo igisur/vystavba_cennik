@@ -499,6 +499,7 @@ class VystavbaCenovaPonukaPolozka(models.Model):
             total = line.cena_jednotkova * line.mnozstvo
             line.cena_celkom = total
 
+
     cena_jednotkova = fields.Float(related = 'cennik_polozka_id.cena', string='Jednotková cena', required=True, digits=(10,2))
     cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)

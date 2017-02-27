@@ -7,13 +7,13 @@ class VystavbaPolozka(models.Model):
     _description = "vystavba - polozka"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
-    name = fields.Char(required=True, string="Názov", size=100)
-    kod = fields.Char(required=True, string="Kód", size=20)
-    description = fields.Text(string="Popis", size=1000, default="")
+    name = fields.Char(required=True, string="Názov", size=1000)
+    kod = fields.Char(required=True, string="Kód", size=30)
+    description = fields.Text(string="Popis", size=2000, default="")
     # Many2one display "name" field value or _rec_name = "field_name"
     # oddiel_id = fields.Many2One('vystavba.oddiel', required=True, string="Oddiel", help="kod oddielu pre SAP")
     # oddiel_id = fields.Char(size=10, required=True, string="Oddiel", help="kod oddielu pre SAP")
-    oddiel_id = fields.Many2one('o2net.oddiel', string='Oddiel', required=True)
+    oddiel_id = fields.Many2one('o2net.oddiel', string='Oddiel', required=False)
     mj = fields.Selection([
         ('_', 'neurčená MJ'),
         ('kg', 'Kilogram'),
@@ -24,6 +24,7 @@ class VystavbaPolozka(models.Model):
         ('m2', 'Meter kubicky'),
         ('m3', 'Meter stvorcovy'),
         ('sada', 'sada'),
+        ('bm', 'Bežný meter'),
         ('vl.', 'vl'),
     ], string="Merná jednotka", default="_")
     is_balicek = fields.Boolean("Balíček", default=False)

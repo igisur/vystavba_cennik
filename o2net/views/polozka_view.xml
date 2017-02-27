@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-
         <record model="ir.ui.view" id="view_form_polozka">
             <field name="name">Položky</field>
             <field name="model">o2net.polozka</field>
@@ -35,6 +34,10 @@
                     </div>
                 </form>
             </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Klikni pre založenie novej položky.</p>
+                <p>Tu nájdete zoznam položiek.</p>
+            </field>
         </record>
 
        <record model="ir.ui.view" id="view_tree_polozka">
@@ -52,25 +55,29 @@
                 <field name="intern_kod"/>
             </tree>
             </field>
+       </record>
+
+       <record model="ir.actions.act_window" id="action_window_balicek">
+           <field name="name">Balíčky</field>
+           <field name="res_model">o2net.polozka</field>
+           <field name="view_id" ref="view_tree_polozka"/>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+           <field name="domain"> [('is_balicek','=','True')]</field>
+           <field name="help" type="html">
+               <p class="oe_view_nocontent_create">Klikni pre založenie nového balíčka.</p>
+               <p>Tu nájdete zoznam balíčkov.</p>
+           </field>
         </record>
 
-        <record model="ir.actions.act_window" id="action_window_balicek">
-            <field name="name">Balíčky</field>
-            <field name="res_model">o2net.polozka</field>
-            <field name="view_id" ref="view_tree_polozka"/>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="domain"> [('is_balicek','=','True')]</field>
-        </record>
-
-        <record model="ir.actions.act_window" id="action_window_polozka">
-            <field name="name">Položky</field>
-            <field name="res_model">o2net.polozka</field>
-            <field name="view_id" ref="view_tree_polozka"/>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="domain"> [('is_balicek','!=','True')]</field>
-        </record>
+       <record model="ir.actions.act_window" id="action_window_polozka">
+           <field name="name">Položky</field>
+           <field name="res_model">o2net.polozka</field>
+           <field name="view_id" ref="view_tree_polozka"/>
+           <field name="view_type">form</field>
+           <field name="view_mode">tree,form</field>
+           <field name="domain"> [('is_balicek','!=','True')]</field>
+       </record>
 
         <menuitem id="menu_balicek"
                   name="Balíčky"

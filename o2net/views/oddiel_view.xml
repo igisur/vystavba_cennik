@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-         <record model="ir.ui.view" id="view_tree_oddiel">
+        <record model="ir.ui.view" id="view_tree_oddiel">
             <field name="name">Oddiel</field>
             <field name="model">o2net.oddiel</field>
             <field name="type">tree</field>
@@ -19,14 +19,17 @@
             <field name="view_id" ref="view_tree_oddiel"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Klikni pre založenie nového oddielu.</p>
+                <p>Tu nájdete zoznam oddielov.</p>
+            </field>
         </record>
 
-    <!-- Menu item to open To-do Task list -->
-    <menuitem id="menu_oddiel"
+        <!-- Menu item to open To-do Task list -->
+        <menuitem id="menu_oddiel"
             name="Oddiel"
             parent="menu_cennik_root"
             sequence="50"
             action="action_window_oddiel"/>
-
-    </data>
+        </data>
 </openerp>

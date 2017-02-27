@@ -162,6 +162,7 @@ class VystavbaCenovaPonuka(models.Model):
     # limit partners to specific group
     @api.model
     def _partners_in_group(self, group_name):
+        _logger.info("_partners_in_group: " + str(len(self)))
         group = self.env.ref(group_name)
         partner_ids = []
         for user in group.users:
@@ -170,23 +171,28 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.model
     def partners_in_group_supplier(self):
+        _logger.info("partners_in_group_supplier: " + str(len(self)))
         partner_ids = self._partners_in_group(self.GROUP_SUPPLIER)
         return [('id', 'in', partner_ids)]
 
     def partners_in_group_pc(self):
+        _logger.info("partners_in_group_pc: " + str(len(self)))
         partner_ids = self._partners_in_group(self.GROUP_PC)
         return [('id', 'in', partner_ids)]
 
     def partners_in_group_pm(self):
+        _logger.info("partners_in_group_pm: " + str(len(self)))
         partner_ids = self._partners_in_group(self.GROUP_PM)
         return [('id', 'in', partner_ids)]
 
     def partners_in_group_manager(self):
+        _logger.info("partners_in_group_manager: " + str(len(self)))
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         return [('id', 'in', partner_ids)]
 
     @api.depends('cp_polozka_ids.cena_celkom','cp_polozka_atyp_ids.cena')
     def _amount_all(self):
+        _logger.info("_amount_all: " + str(len(self)))
         for cp in self:
             cp_celkova_cena = 0.0
             for line in cp.cp_polozka_ids:
@@ -202,6 +208,7 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.depends('dodavatel_id')
     def _compute_approved_cp_ids(self):
+        _logger.info("_compute_approved_cp_ids: " + str(len(self)))
         self.approved_cp_ids = self.env['o2net.cenova_ponuka'].search(
             [
                 ('state', '=', 'approved'),
@@ -304,7 +311,6 @@ class VystavbaCenovaPonuka(models.Model):
         result = {}
         if not self.dodavatel_id:
             return result
-
         _logger.info("Looking supplier's valid pricelist " + str(self.dodavatel_id.name))
         cennik_ids = self.env['o2net.cennik'].search([('dodavatel_id', '=', self.dodavatel_id.id),
                                                          ('platny_od', '<=', datetime.date.today()),
@@ -505,13 +511,19 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     _name = 'o2net.cenova_ponuka.polozka'
     _description = "vystavba - polozka cenovej ponuky"
 
-    @api.depends('cena_jednotkova', 'mnozstvo')
+    @api.depends('cena_jednotkova', 'mnozstvo','cennik_polozka_id')
     def _compute_cena_celkom(self):
         for line in self:
             total = line.cena_jednotkova * line.mnozstvo
             line.cena_celkom = total
 
-    cena_jednotkova = fields.Float(related = 'cennik_polozka_id.cena', string='Jednotková cena', required=True, digits=(10,2))
+    @api.depends('cennik_polozka_id')
+    def _compute_cena_jednotkova(self):
+        _logger.info("_compute_cena_jednotkova: " + str(len(self)))
+        for line in self:
+            line.cena_jednotkova = line.cennik_polozka_id.cena
+
+    cena_jednotkova = fields.Float(compute=_compute_cena_jednotkova, string='Jednotková cena', store=True, required=True, digits=(10, 2))
     cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
     cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='odkaz na cenovu ponuku', required=True, ondelete='cascade')
@@ -526,4 +538,4 @@ class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
     name = fields.Char(required=True, string="Nazov", size=30, help="Kod polozky")
     oddiel_id = fields.Many2one('o2net.oddiel', required=True, string="Oddiel")
     cena = fields.Float(required=True, digits=(10, 2))
-    cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='odkaz na cenovu ponuku', required=True, ondelete='cascade')
+    cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='Cenová ponuka', required=True, ondelete='cascade')
