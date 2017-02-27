@@ -514,8 +514,8 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     cena_jednotkova = fields.Float(related = 'cennik_polozka_id.cena', string='Jednotková cena', required=True, digits=(10,2))
     cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
-    cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='odkaz na cenovu ponuku', change_default=True, required=True, ondelete='cascade')
-    cennik_polozka_id = fields.Many2one('o2net.cennik.polozka', string='Položka cenníka', change_default=True, required=True, domain="[('cennik_id.dodavatel_id', '=', parent.dodavatel_id)]")
+    cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='odkaz na cenovu ponuku', required=True, ondelete='cascade')
+    cennik_polozka_id = fields.Many2one('o2net.cennik.polozka', string='Položka cenníka', required=True, domain="[('cennik_id', '=', parent.cennik_id)]")
     polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Merná jednotka')
     polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Popis')
 
