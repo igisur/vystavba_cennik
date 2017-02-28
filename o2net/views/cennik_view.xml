@@ -76,7 +76,8 @@
         <menuitem id="menu_cennik_root"
                 name="Cenník"
                 sequence="30"
-                parent="menu_root"/>
+                parent="menu_root"
+                groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
 
         <menuitem id="menu_cennik"
                 name="Dodávateľ"

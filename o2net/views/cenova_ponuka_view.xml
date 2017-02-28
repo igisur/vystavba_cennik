@@ -41,7 +41,7 @@
                                 <field name="sap_export_file_binary" filename="sap_export_file_name" readonly="True"/>
                             </group>
                             <group>
-                                <field name="dodavatel_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+                                <field name="dodavatel_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" context="{'group_name':'TEST_GROUP'}"/>
                                 <field name="pc_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
                                 <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                                 <field name="manager_id" readonly="True" options="{'no_create': True}"/>
@@ -55,7 +55,7 @@
                             <page string="Položky">
                                 <field name="cp_polozka_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Polozky cennika" editable="bottom">
-                                        <field name="cennik_polozka_id" string="Položka"/>
+                                        <field name="cennik_polozka_id" string="Položka" options="{'no_create': True}"/>
                                         <field name="polozka_mj" readonly="1" string="mj"/>
                                         <field name="cena_jednotkova"/>
                                         <field name="mnozstvo"  string="Počet"/>
@@ -144,7 +144,7 @@
             <field name="priority" eval="5"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree colors="red:dodavatel_id==False" edit="true" create="true" delete="false">
+                <tree colors="red:dodavatel_id==False">
                   <field name="name"/>
                   <field name="cislo"/>
                   <field name="financny_kod"/>
@@ -278,21 +278,25 @@
                   name="Návrh"
                   sequence="11"
                   parent="menu_cenova_ponuka_root"
-                  action="action_window_cp_draft"/>
+                  action="action_window_cp_draft"
+                  groups="o2net.group_vystavba_supplier,o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
+
                   <!--groups="base.group_vystavba_pc,base.group_vystavba_pm,base.group_vystavba_admin"/>-->
 
         <menuitem id="menu_cenova_ponuka_assigned"
                   name="Priradené"
                   sequence="12"
                   parent="menu_cenova_ponuka_root"
-                  action="action_window_cp_assigned"/>
+                  action="action_window_cp_assigned"
+                  groups="o2net.group_vystavba_supplier,o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
                   <!--groups="base.group_vystavba_supplier,base.group_vystavba_pc,base.group_vystavba_pm,base.group_vystavba_admin"/>-->
 
         <menuitem id="menu_cenova_ponuka_in_progress"
                   name="Rozpracované"
                   sequence="13"
                   parent="menu_cenova_ponuka_root"
-                  action="action_window_cp_in_progress"/>
+                  action="action_window_cp_in_progress"
+                  groups="o2net.group_vystavba_supplier,o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
                   <!--groups="base.group_vystavba_supplier,base.group_vystavba_pc,base.group_vystavba_pm,base.group_vystavba_admin"/>-->
 
         <menuitem id="menu_cenova_ponuka_to_approve"

@@ -39,11 +39,11 @@ class VystavbaCenovaPonuka(models.Model):
         (CANCEL, 'Zrušená')
     )
 
-    GROUP_SUPPLIER = 'group_vystavba_supplier'
-    GROUP_PC = 'group_vystavba_pc'
-    GROUP_PM = 'group_vystavba_pm'
-    GROUP_MANAGER = 'group_vystavba_manager'
-    GROUP_ADMIN = 'group_vystavba_admin'
+    GROUP_SUPPLIER = 'o2net.group_vystavba_supplier'
+    GROUP_PC = 'o2net.group_vystavba_pc'
+    GROUP_PM = 'o2net.group_vystavba_pm'
+    GROUP_MANAGER = 'o2net.group_vystavba_manager'
+    GROUP_ADMIN = 'o2net.group_vystavba_admin'
 
     @api.one
     def action_exportSAP(self):
@@ -162,31 +162,28 @@ class VystavbaCenovaPonuka(models.Model):
     # limit partners to specific group
     @api.model
     def _partners_in_group(self, group_name):
-        _logger.info("_partners_in_group: " + str(len(self)))
+        _logger.info("_partners_in_group: " + str(group_name))
         group = self.env.ref(group_name)
         partner_ids = []
         for user in group.users:
             partner_ids.append(user.partner_id.id)
+        _logger.info("_partners_in_group: " + str(len(partner_ids)))
         return partner_ids
 
     @api.model
     def partners_in_group_supplier(self):
-        _logger.info("partners_in_group_supplier: " + str(len(self)))
         partner_ids = self._partners_in_group(self.GROUP_SUPPLIER)
         return [('id', 'in', partner_ids)]
 
     def partners_in_group_pc(self):
-        _logger.info("partners_in_group_pc: " + str(len(self)))
         partner_ids = self._partners_in_group(self.GROUP_PC)
         return [('id', 'in', partner_ids)]
 
     def partners_in_group_pm(self):
-        _logger.info("partners_in_group_pm: " + str(len(self)))
         partner_ids = self._partners_in_group(self.GROUP_PM)
         return [('id', 'in', partner_ids)]
 
     def partners_in_group_manager(self):
-        _logger.info("partners_in_group_manager: " + str(len(self)))
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         return [('id', 'in', partner_ids)]
 
@@ -255,10 +252,10 @@ class VystavbaCenovaPonuka(models.Model):
     wf_dovod = fields.Text(string="Dôvod pre workflow", copy=False, help='Uvedte dôvod pre zmenu stavu workflow, najme pri akcii "Vratiť na opravu" a "Zrušiť"')
     celkova_cena = fields.Float(compute='_amount_all', string='Celková cena', store=True, digits=(10,2), track_visibility='onchange')
 
-    dodavatel_id = fields.Many2one('res.partner', required=True, string='Dodávateľ', track_visibility='onchange')
-    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange')
-    pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange')
-    manager_id = fields.Many2one('res.partner', string='Manager', copy=False, track_visibility='onchange')
+    dodavatel_id = fields.Many2one('res.partner', required=True, string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier)
+    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc)
+    pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm)
+    manager_id = fields.Many2one('res.partner', string='Manager', copy=False, track_visibility='onchange', domain=partners_in_group_manager)
     osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange', default= lambda self: self.env.user.partner_id.id)
     state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange')
 
@@ -523,13 +520,13 @@ class VystavbaCenovaPonukaPolozka(models.Model):
         for line in self:
             line.cena_jednotkova = line.cennik_polozka_id.cena
 
-    cena_jednotkova = fields.Float(compute=_compute_cena_jednotkova, string='Jednotková cena', store=True, required=True, digits=(10, 2))
+    cena_jednotkova = fields.Float(compute=_compute_cena_jednotkova, string='Jednotková cena', store=True, digits=(10, 2))
     cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
     cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='odkaz na cenovu ponuku', required=True, ondelete='cascade')
     cennik_polozka_id = fields.Many2one('o2net.cennik.polozka', string='Položka cenníka', required=True, domain="[('cennik_id', '=', parent.cennik_id)]")
-    polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Merná jednotka')
-    polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Popis')
+    polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Merná jednotka', stored=False)
+    polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Popis', stored=False)
 
 class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
     _name = 'o2net.cenova_ponuka.polozka_atyp'
