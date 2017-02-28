@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+
+
+        <record model="ir.ui.view" id="view_form_cenova_ponuka_polozka">
+            <field name="name">cenova ponuka polozka</field>
+            <field name="model">o2net.cenova_ponuka.polozka</field>
+            <field name="priority" eval="5"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" class="oe_readonly" nolabel="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="kod" readonly="1"/>
+                        <field name="polozka_mj" readonly="1" string="MJ"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="cena_jednotkova" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    </group>
+
+                    <div class="oe_clear"/>
+
+                    <label for="polozka_popis"/>
+                    <field name="polozka_popis" readonly="1"/>
+                </form>
+            </field>
+        </record>
+
         <!-- VIEWS -->
         <record model="ir.ui.view" id="view_form_cenova_ponuka">
             <field name="name">cenova ponuka</field>

@@ -205,7 +205,6 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.depends('dodavatel_id')
     def _compute_approved_cp_ids(self):
-        _logger.info("_compute_approved_cp_ids: " + str(len(self)))
         self.approved_cp_ids = self.env['o2net.cenova_ponuka'].search(
             [
                 ('state', '=', 'approved'),
@@ -264,6 +263,7 @@ class VystavbaCenovaPonuka(models.Model):
 
         state = vals.get('state')
         _logger.info("WRITE: " + str(state))
+        _logger.info("COND = " + str(vals.get('state') == None))
         # ak zapisujeme stav prisli sme sem z WF akcie, a preto koncime. automaticka zmena stavu WF je len v pripade akcie SAVE kde sa 'state' nemeni!
         if vals.get('state') == None:
             return res
@@ -507,6 +507,10 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     cennik_polozka_id = fields.Many2one('o2net.cennik.polozka', string='Položka cenníka', required=True, domain="[('cennik_id', '=', parent.cennik_id)]")
     polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Merná jednotka', stored=False)
     polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Popis', stored=False)
+    name = fields.Char(related='cennik_polozka_id.name', string='Názov')
+    kod = fields.Char(related='cennik_polozka_id.kod', string='Kód')
+
+    currency_id = fields.Many2one(related='cenova_ponuka_id.currency_id', string="Mena")
 
 class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
     _name = 'o2net.cenova_ponuka.polozka_atyp'
@@ -516,3 +520,4 @@ class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
     oddiel_id = fields.Many2one('o2net.oddiel', required=True, string="Oddiel")
     cena = fields.Float(required=True, digits=(10, 2))
     cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='Cenová ponuka', required=True, ondelete='cascade')
+    currency_id = fields.Many2one(related='cenova_ponuka_id.currency_id', string="Mena")
