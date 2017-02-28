@@ -24,7 +24,7 @@
                             <field name="dodavatel_id"/> <!-- musi byt firma - dodavatel -->
                             <field name="platny_od"/>
                             <field name="platny_do"/>
-                            <field name="cennik_currency_id"/>
+                            <field name="currency_id"/>
                         </group>
 
                         <notebook>

@@ -47,7 +47,7 @@
                                 <field name="manager_id" readonly="True" options="{'no_create': True}"/>
                                 <field name="osoba_priradena_id" readonly="True"/>
                                 <field name="cennik_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
-                                <field name="currency_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+                                <field name="currency_id" invisible="1"/>
                             </group>
                         </group>
 
@@ -55,7 +55,7 @@
                             <page string="Položky">
                                 <field name="cp_polozka_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Polozky cennika" editable="bottom">
-                                        <field name="cennik_polozka_id" string="Položka" options="{'no_create': True}"/>
+                                        <field name="cennik_polozka_id" string="Položka cenníka" options="{'no_create': True}"/>
                                         <field name="polozka_mj" readonly="1" string="mj"/>
                                         <field name="cena_jednotkova"/>
                                         <field name="mnozstvo"  string="Počet"/>
@@ -89,12 +89,9 @@
 
                         <group class="oe_subtotal_footer oe_right">
                             <div class="oe_subtotal_footer_separator oe_inline">
-                                <label for="celkova_cena_mena"/>
+                                <label for="celkova_cena"/>
                             </div>
-                            <!--
                             <field name="celkova_cena" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                            -->
-                            <field name="celkova_cena_mena" nolabel="1" class="oe_subtotal_footer_separator" readonly="True"/>
                         </group>
                         <div class="oe_clear"/>
 

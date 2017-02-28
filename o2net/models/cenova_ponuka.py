@@ -213,22 +213,6 @@ class VystavbaCenovaPonuka(models.Model):
             ]
         )
 
-    @api.depends('celkova_cena')
-    def _compute_celkova_cena_mena(self):
-        _logger.info("_compute_celkova_cena_mena: " + str(len(self)))
-        for line in self:
-            celkova_cena_mena = ''
-            #if line.cennik_polozka_id.cena:
-            #    cena_za_mj = str(line.cennik_polozka_id.cena)
-            #    if not line.polozka_mj == '_':
-            #        cena_za_mj = cena_za_mj + '/' + str(line.polozka_mj)
-
-            celkova_cena_text = 'Celková cena: '
-            #line.celkova_cena_mena = celkova_cena_text.encode("utf-8") + str(line.celkova_cena) + ' ' + line.currency_id.symbol
-
-            if line.currency_id:
-                line.celkova_cena_mena =  str(line.celkova_cena) + ' ' + line.currency_id.symbol
-
     @api.one
     @api.depends('dodavatel_id','osoba_priradena_id')
     def _compute_ro_datumoddo(self):
@@ -260,7 +244,7 @@ class VystavbaCenovaPonuka(models.Model):
     state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange')
 
     cennik_id = fields.Many2one('o2net.cennik', string='Cenník')
-    currency_id = fields.Many2one('res.currency', string="Mena")
+    currency_id = fields.Many2one(related='cennik_id.currency_id', string="Mena")
 
     cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=False, track_visibility='onchange')
     cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp polozky', copy=False, track_visibility='onchange')
@@ -271,7 +255,6 @@ class VystavbaCenovaPonuka(models.Model):
 
     approved_cp_ids = fields.One2many('o2net.cenova_ponuka', compute=_compute_approved_cp_ids, string='Schvalene CP')
 
-    celkova_cena_mena = fields.Text(compute=_compute_celkova_cena_mena, string='Celková cena', store=True)
 
     @api.one
     def write(self, vals):
@@ -312,20 +295,16 @@ class VystavbaCenovaPonuka(models.Model):
         cennik_ids = self.env['o2net.cennik'].search([('dodavatel_id', '=', self.dodavatel_id.id),
                                                          ('platny_od', '<=', datetime.date.today()),
                                                          ('platny_do', '>', datetime.date.today())], limit = 1)
-                                                         #('currency_id', '=', self.currency_id)],
 
         for rec in cennik_ids:
             _logger.info(rec.name)
 
         if cennik_ids:
             self.cennik_id = cennik_ids[0]
-            self.currency_id = self.cennik_id.cennik_currency_id
-            # musime zapisat rucne, pretoze fields oznacene na view ako READONLY sa nezapisuju :(
         else:
             self.cennik_id = ''
-            self.currency_id = ''
 
-        result = {'cennik_id': self.cennik_id, 'currency_id': self.currency_id}
+        result = {'cennik_id': self.cennik_id}
         self.write(result)
         return result
 
@@ -508,11 +487,12 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     _name = 'o2net.cenova_ponuka.polozka'
     _description = "vystavba - polozka cenovej ponuky"
 
-    @api.depends('cena_jednotkova', 'mnozstvo','cennik_polozka_id')
+    @api.depends('cena_jednotkova', 'mnozstvo')
     def _compute_cena_celkom(self):
+        _logger.info("_compute_cena_celkom: " + str(len(self)))
         for line in self:
-            total = line.cena_jednotkova * line.mnozstvo
-            line.cena_celkom = total
+            if line.mnozstvo:
+                line.cena_celkom = line.cena_jednotkova * line.mnozstvo
 
     @api.depends('cennik_polozka_id')
     def _compute_cena_jednotkova(self):

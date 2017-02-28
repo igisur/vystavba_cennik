@@ -13,7 +13,7 @@ class VystavbaCennik(models.Model):
     platny_od = fields.Date(string="Platný od", required=True)
     platny_do = fields.Date(string="Platný do", required=True)
     dodavatel_id = fields.Many2one('res.partner', string='Dodávateľ', required=True)
-    cennik_currency_id = fields.Many2one('res.currency', string="Mena", required=True)
+    currency_id = fields.Many2one('res.currency', string="Mena", required=True)
 
     cennik_polozka_ids = fields.One2many('o2net.cennik.polozka', 'cennik_id', string='Polozky', copy=True)
 
@@ -33,10 +33,11 @@ class VystavbaCennikPolozka(models.Model):
     mj = fields.Selection(related='polozka_id.mj', string='Merná jednotka')
     popis = fields.Text(related='polozka_id.description', string='Popis')
     cena = fields.Float(required=True, digits=(10, 2))
+    currency_id = fields.Many2one(related='cennik_id.currency_id', string='Mena')
 
-    @api.multi
-    def name_get(self):
-        result = []
-        for po in self:
-            result.append((po.polozka_id.id, po.polozka_id.name))
-        return result
+    # @api.multi
+    # def name_get(self):
+    #     result = []
+    #     for po in self:
+    #         result.append((po.id, po.name))
+    #     return result

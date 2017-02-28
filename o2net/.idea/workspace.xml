@@ -15,11 +15,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="cennik.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="cennik.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/models/cennik.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="34" column="54" lean-forward="true" selection-start-line="34" selection-start-column="54" selection-end-line="34" selection-end-column="54" />
+            <state relative-caret-position="238">
+              <caret line="15" column="72" lean-forward="false" selection-start-line="15" selection-start-column="72" selection-end-line="15" selection-end-column="72" />
               <folding />
             </state>
           </provider>
@@ -28,8 +28,8 @@
       <file leaf-file-name="cenova_ponuka.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/cenova_ponuka.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="550">
-              <caret line="525" column="50" lean-forward="true" selection-start-line="525" selection-start-column="50" selection-end-line="525" selection-end-column="50" />
+            <state relative-caret-position="308">
+              <caret line="246" column="4" lean-forward="false" selection-start-line="246" selection-start-column="4" selection-end-line="246" selection-end-column="15" />
               <folding>
                 <element signature="e#25#54#0" expanded="true" />
               </folding>
@@ -40,8 +40,18 @@
       <file leaf-file-name="cenova_ponuka_view.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/cenova_ponuka_view.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="677">
-              <caret line="319" column="0" lean-forward="true" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
+            <state relative-caret-position="612">
+              <caret line="91" column="0" lean-forward="false" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="purchase_view.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../openerp/addons/purchase/purchase_view.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="341">
+              <caret line="244" column="0" lean-forward="false" selection-start-line="240" selection-start-column="0" selection-end-line="244" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -52,16 +62,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="442">
               <caret line="53" column="0" lean-forward="true" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="vystavba_security.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../vystavba/security/vystavba_security.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="26" lean-forward="true" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -87,11 +87,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cennik_view.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="cennik_view.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/cennik_view.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="609">
-              <caret line="81" column="34" lean-forward="true" selection-start-line="81" selection-start-column="34" selection-end-line="81" selection-end-column="34" />
+            <state relative-caret-position="286">
+              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -128,11 +128,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>vystavbacennik.vystavbacennik</find>
-      <find>res_model</find>
-      <find>model_id</find>
-      <find>models.Model</find>
-      <find>res.partner</find>
       <find>Float</find>
       <find>name=</find>
       <find>user</find>
@@ -156,6 +151,13 @@
       <find>context=</find>
       <find>compa</find>
       <find>account_analytic_id</find>
+      <find>o2net.cennik.polozk</find>
+      <find>celkova_cena_mena</find>
+      <find>_compute_celkova_cena_mena</find>
+      <find>celkova_cena</find>
+      <find />
+      <find>currency_id</find>
+      <find>oe_subtotal_footer_separator</find>
     </findStrings>
     <replaceStrings>
       <replace>model_o2net_</replace>
@@ -184,11 +186,11 @@
         <option value="$PROJECT_DIR$/../vystavba/security/ir.model.access.csv" />
         <option value="$PROJECT_DIR$/__openerp__.py" />
         <option value="$PROJECT_DIR$/security/ir.model.access.csv" />
-        <option value="$PROJECT_DIR$/models/cenova_ponuka.py" />
-        <option value="$PROJECT_DIR$/models/cennik.py" />
         <option value="$PROJECT_DIR$/views/osoba_view.xml" />
-        <option value="$PROJECT_DIR$/views/cennik_view.xml" />
         <option value="$PROJECT_DIR$/views/views.xml" />
+        <option value="$PROJECT_DIR$/models/cennik.py" />
+        <option value="$PROJECT_DIR$/views/cennik_view.xml" />
+        <option value="$PROJECT_DIR$/models/cenova_ponuka.py" />
         <option value="$PROJECT_DIR$/views/cenova_ponuka_view.xml" />
       </list>
     </option>
@@ -817,14 +819,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../openerp/addons/purchase/purchase_view.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="196" column="49" lean-forward="true" selection-start-line="196" selection-start-column="49" selection-end-line="196" selection-end-column="68" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../openerp/addons/purchase/purchase.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="316">
@@ -845,24 +839,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
           <caret line="53" column="0" lean-forward="true" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/cenova_ponuka.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="550">
-          <caret line="525" column="50" lean-forward="true" selection-start-line="525" selection-start-column="50" selection-end-line="525" selection-end-column="50" />
-          <folding>
-            <element signature="e#25#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/cennik.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="34" column="54" lean-forward="true" selection-start-line="34" selection-start-column="54" selection-end-line="34" selection-end-column="54" />
           <folding />
         </state>
       </provider>
@@ -899,18 +875,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/cenova_ponuka_view.xml">
+    <entry file="file://$PROJECT_DIR$/views/cennik_view.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="677">
-          <caret line="319" column="0" lean-forward="true" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
+        <state relative-caret-position="286">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/cennik_view.xml">
+    <entry file="file://$PROJECT_DIR$/models/cenova_ponuka.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="609">
-          <caret line="81" column="34" lean-forward="true" selection-start-line="81" selection-start-column="34" selection-end-line="81" selection-end-column="34" />
+        <state relative-caret-position="308">
+          <caret line="246" column="4" lean-forward="false" selection-start-line="246" selection-start-column="4" selection-end-line="246" selection-end-column="15" />
+          <folding>
+            <element signature="e#25#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../openerp/addons/purchase/purchase_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="244" column="0" lean-forward="false" selection-start-line="240" selection-start-column="0" selection-end-line="244" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/cenova_ponuka_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="91" column="0" lean-forward="false" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/cennik.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="15" column="72" lean-forward="false" selection-start-line="15" selection-start-column="72" selection-end-line="15" selection-end-column="72" />
           <folding />
         </state>
       </provider>
