@@ -51,6 +51,7 @@
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button string="Export SAP" name="action_exportSAP" type="object" icon="fa-file-text-o"/>
+                            <button string="Send mail" name="action_sendMail" type="object" icon="fa-file-text-o"/>
                         </div>
                         <div class="oe_title">
                             <h1>

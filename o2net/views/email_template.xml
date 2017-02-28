@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="mail_cp_assigned" model="mail.template">
+            <field name="name">e-mail workflow</field>
+            <field name="email_from">${object.email or ''}</field>
+            <field name="subject">Congratz ${object.name}</field>
+            <field name="email_to">${object.email|safe}</field>
+            <field name="lang">${object.lang}</field>
+            <field name="model_id" ref="model_o2net_cenova_ponuka"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html">
+            <![CDATA[
+            <p>Dear ${(object.name)},<br/><br/>
+
+            Good job, you've just created your first e-mail template!<br/></p>
+
+            Regards,<br/>
+            ${(object.name)}
+            ]]>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+
+
