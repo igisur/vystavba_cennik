@@ -81,13 +81,13 @@
 
         <menuitem id="menu_balicek"
                   name="Balíčky"
-                  sequence="32"
+                  sequence="40"
                   parent="menu_cennik_root"
                   action="action_window_balicek"/>
 
         <menuitem id="menu_polozka"
                   name="Položky"
-                  sequence="33"
+                  sequence="41"
                   parent="menu_cennik_root"
                   action="action_window_polozka"/>
 

@@ -76,8 +76,8 @@
                                 <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
                                 <field name="manager_id" readonly="True" options="{'no_create': True}"/>
                                 <field name="osoba_priradena_id" readonly="True"/>
-                                <field name="cennik_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
-                                <field name="currency_id" invisible="1"/>
+                                <field name="cennik_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" class="oe_read_only"/>
+                                <field name="currency_id" invisible="1" class="oe_read_only"/>
                             </group>
                         </group>
 

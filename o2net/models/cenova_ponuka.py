@@ -223,6 +223,15 @@ class VystavbaCenovaPonuka(models.Model):
     def write(self, vals):
         self.ensure_one()
 
+        _logger.info("WRITE: polozky OLD " + str(self.cp_polozka_ids.ids))
+        _logger.info("WRITE: polozky NEW " + str(vals.get('cp_polozka_ids')))
+
+#       (0, _, values)  adds a new record created from the provided value dict.
+#       (1, id, values) updates an existing record of id id with the values in values. Can not be used in create().
+#       (2, id, _)      removes the record of id id from the set, then deletes it (from the database). Can not be used in create().
+#       (3, id, _)      removes the record of id id from the set, but does not delete it. Can not be used on One2many. Can not be used in create().
+#       (4, id, _)      adds an existing record of id id to the set. Can not be used on One2many.
+
         res = super(VystavbaCenovaPonuka, self).write(vals)
 
         state = vals.get('state')
@@ -254,7 +263,11 @@ class VystavbaCenovaPonuka(models.Model):
     def copy(self, default=None):
 
         # meno CP musi byt unikatne, preto pridame prefix. na koniec je lepsie, pretoze pri focuse ma input kurzor na konci -> uzivatel rychlo zmaze
+
         default = {'name': self.name + " [KOPIA]"}
+
+        # ! treba zistit ci cennik_id je platny a prejst prilinokvane polozky a updatnut cenu !!!
+
         _logger.info("copy (duplicate): " + str(default))
 
         new_cp = super(VystavbaCenovaPonuka, self).copy(default=default)
@@ -286,6 +299,8 @@ class VystavbaCenovaPonuka(models.Model):
 
         # pri zmene dodavatela a tym padol aj cennika zmaz vsetky polozky
         self.cp_polozka_ids = None;
+
+
 
         result = {'cennik_id': self.cennik_id}
         self.write(result)
