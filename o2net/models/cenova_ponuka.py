@@ -1,20 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
 from openerp import models, fields, api, _, SUPERUSER_ID
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.tools.translate import _
-from openerp.tools.float_utils import float_is_zero, float_compare
+from openerp.tools.misc import DEFAULT_SERVER_DATE_FORMAT
 from openerp.exceptions import UserError, AccessError, ValidationError
 from openerp import http
 import datetime
 import logging
 import base64
-import xmlrpclib
-import urlparse
-from openerp.addons.base.res.res_users import res_groups, res_users
-from urlparse import urljoin
-import werkzeug
 
 # https://www.odoo.com/forum/help-1/question/how-to-display-dialog-box-16506
 
@@ -62,10 +54,14 @@ class VystavbaCenovaPonuka(models.Model):
     def _get_sap_export_content(self):
         data = []
         data.append('[PSPID]'+chr(9)+self.cislo)
-        data.append('[WEMPF]'+chr(9)+'???')
+        data.append('[WEMPF]'+chr(9)+self.pc_id.kod)
         if self.dodavatel_id.kod:
             data.append('[MSTRT]'+chr(9)+self.dodavatel_id.kod)
-        data.append('[MSCDT]' + chr(9) + datetime.datetime.strptime(self.datum_koniec, '%Y-%m-%d %H:%M:%S.%f'))
+
+        dt_obj = datetime.datetime.strptime(self.datum_koniec, DEFAULT_SERVER_DATE_FORMAT)
+        dt_str = datetime.date.strftime(dt_obj, '%d.%m.%Y')
+        _logger.info("datum koniec: " + dt_str)
+        data.append('[MSCDT]' + chr(9) + dt_str)
 
         query = """select
         zdroj.druh, concat(zdroj.kod,
@@ -93,14 +89,14 @@ class VystavbaCenovaPonuka(models.Model):
             select
         '1T' as druh, max(p.kod) as kod, sum(cena_celkom) as cislo, p.oddiel_id as oddiel_id, max(
             cpp.cenova_ponuka_id) as cenova_ponuka_id
-        from vystavba_cenova_ponuka_polozka cpp
+        from o2net_cenova_ponuka_polozka cpp
         join
-        vystavba_cennik_polozka
+        o2net_cennik_polozka
         cp
         on
         cpp.cennik_polozka_id = cp.id
         join
-        vystavba_polozka
+        o2net_polozka
         p
         on
         cp.polozka_id = p.id
@@ -113,14 +109,14 @@ class VystavbaCenovaPonuka(models.Model):
         union
         select
         '3B', p.kod, cpp.mnozstvo, p.oddiel_id, cpp.cenova_ponuka_id
-        from vystavba_cenova_ponuka_polozka cpp
+        from o2net_cenova_ponuka_polozka cpp
         join
-        vystavba_cennik_polozka
+        o2net_cennik_polozka
         cp
         on
         cpp.cennik_polozka_id = cp.id
         join
-        vystavba_polozka
+        o2net_polozka
         p
         on
         cp.polozka_id = p.id
@@ -130,23 +126,15 @@ class VystavbaCenovaPonuka(models.Model):
         union
         select
         '2A', atyp.name, cena, oddiel_id, cenova_ponuka_id
-        from vystavba_cenova_ponuka_polozka_atyp atyp
+        from o2net_cenova_ponuka_polozka_atyp atyp
         where
         cenova_ponuka_id = %s
         ) zdroj
-        join
-        vystavba_oddiel
-        o
-        on
-        zdroj.oddiel_id = o.id
-        join
-        vystavba_cenova_ponuka
-        cp
-        on
-        zdroj.cenova_ponuka_id = cp.id
-        order
-        by
-        zdroj.druh;"""
+        join o2net_oddiel
+        o on zdroj.oddiel_id = o.id
+        join o2net_cenova_ponuka
+        cp on zdroj.cenova_ponuka_id = cp.id
+        order by zdroj.druh;"""
 
         self.env.cr.execute(query, (self.id, self.id, self.id))
         fetchrows = self.env.cr.dictfetchall()
