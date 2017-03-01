@@ -13,6 +13,8 @@ import base64
 import xmlrpclib
 import urlparse
 from openerp.addons.base.res.res_users import res_groups, res_users
+from urlparse import urljoin
+import werkzeug
 
 # https://www.odoo.com/forum/help-1/question/how-to-display-dialog-box-16506
 
@@ -310,7 +312,13 @@ class VystavbaCenovaPonuka(models.Model):
     @api.onchange('osoba_priradena_id')
     def _sent_notification(self):
         # sent notification to assigned person
+        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        _logger.info("Page URL: " + base_url)
         _logger.info("Page URL: " + http.request.httprequest.full_path)
+
+        # print http.request.env['ir.config_parameter'].get_param('web.base.url')  # BASE URL
+        # print http.request.httprequest
+        # print http.request.httprequest.full_path
 
     @api.one
     def copy_polozky(self):
@@ -450,29 +458,10 @@ class VystavbaCenovaPonuka(models.Model):
         # Find the e-mail template
         # definovane v views/email_template.xml
         template = self.env.ref('o2net.mail_cp_assigned')
-        # You can also find the e-mail template like this:
-        # template = self.env['ir.model.data'].get_object('mail_template_demo', 'example_email_template')
-        # Send out the e-mail template to the user
-        mail_id = self.env['mail.template'].browse(template.id).send_mail(self.id, force_send=True, raise_exception=True)
-        _logger.info("Send mail: " + str(mail_id))
-
-    @api.one
-    def _send_mail(self):
-        template_obj = self.env('mail.template')
-        group_model_id = self.env('ir.model').search(self, [('model', '=', 'sale.order')])[0]
-        body_html = '''Message whatever you want to send'''
-        template_data = {
-            'model_id': 'o2net.cenova_ponuka',
-            'name': 'Template Name',
-            'subject': 'Subject for your email',
-            'body_html': body_html,
-            'email_from': '${object.user_id.email}',
-            'email_to': '${object.partner_id.email}',
-        }
-
-        ids = None
-        template_id = template_obj.create(self, template_data)
-        template_obj.send_mail(self, template_id, ids[0], force_send=True)
+        templateObj = self.env['mail.template'].browse(template.id)
+        templateObj.email_from = 'stryko.fedor@vecernicek.sk'
+        mail_id = templateObj.send_mail(self.id, force_send=False, raise_exception=False)
+        _logger.info("Mail sent: " + str(mail_id))
 
 
 class VystavbaCenovaPonukaPolozka(models.Model):
