@@ -11,9 +11,8 @@
         id="report_cenova_ponuka"
         model="o2net.cenova_ponuka"
         string="Cenova ponuka (PDF)"
-        name="report_cenova_ponuka_pdf"
+        name="o2net.report_cenova_ponuka_pdf"
         file="report_cenova_ponuka"
         report_type="qweb-pdf" />
-
     </data>
 </openerp>

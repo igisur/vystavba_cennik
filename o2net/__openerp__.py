@@ -23,8 +23,8 @@
         'workflows/cp_workflow.xml',
         'report/report.xml',
         'views/oddiel_view.xml',
-        'views/email_template.xml'
-        #'views/report_cenova_ponuka.xml'
+        'views/email_template.xml',
+        'views/report_cenova_ponuka.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
