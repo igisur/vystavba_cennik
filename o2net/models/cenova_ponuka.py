@@ -245,8 +245,8 @@ class VystavbaCenovaPonuka(models.Model):
     cennik_id = fields.Many2one('o2net.cennik', string='Cenník')
     currency_id = fields.Many2one(related='cennik_id.currency_id', string="Mena")
 
-    cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Polozky', copy=False, track_visibility='onchange')
-    cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp polozky', copy=False, track_visibility='onchange')
+    cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky', copy=False, track_visibility='onchange')
+    cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', copy=False, track_visibility='onchange')
 
     sap_export_content = fields.Text(string="Export pre SAP", default='ABCDEFGH')
     sap_export_file_name = fields.Char(string="Export file name")
@@ -495,7 +495,7 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     cena_jednotkova = fields.Float(compute=_compute_cena_jednotkova, string='Jednotková cena', store=True, digits=(10, 2))
     cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
     mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
-    cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='odkaz na cenovu ponuku', required=True, ondelete='cascade')
+    cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='Cenová ponuka', required=True, ondelete='cascade')
     cennik_polozka_id = fields.Many2one('o2net.cennik.polozka', string='Položka cenníka', required=True, domain="[('cennik_id', '=', parent.cennik_id)]")
     polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Merná jednotka', stored=False)
     polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Popis', stored=False)
