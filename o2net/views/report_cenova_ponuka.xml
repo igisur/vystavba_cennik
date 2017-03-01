@@ -49,7 +49,7 @@
         <template id="report_cenova_ponuka_pdf">
             <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="doc">
-                    <t t-call="report_cenova_ponuka_pdf_document" t-lang="doc.cislo"/>
+                    <t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.cislo"/>
                 </t>
             </t>
         </template>
