@@ -284,6 +284,9 @@ class VystavbaCenovaPonuka(models.Model):
         else:
             self.cennik_id = ''
 
+        # pri zmene dodavatela a tym padol aj cennika zmaz vsetky polozky
+        self.cp_polozka_ids = None;
+
         result = {'cennik_id': self.cennik_id}
         self.write(result)
         return result
