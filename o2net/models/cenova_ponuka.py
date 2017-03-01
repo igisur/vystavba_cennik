@@ -142,12 +142,11 @@ class VystavbaCenovaPonuka(models.Model):
     # limit partners to specific group
     @api.model
     def _partners_in_group(self, group_name):
-        _logger.info("_partners_in_group: " + str(group_name))
         group = self.env.ref(group_name)
         partner_ids = []
         for user in group.users:
             partner_ids.append(user.partner_id.id)
-        _logger.info("_partners_in_group: " + str(len(partner_ids)))
+        _logger.info(str(len(partner_ids) + " partners in group '" + str(group_name) + "'"))
         return partner_ids
 
     @api.model
@@ -178,9 +177,6 @@ class VystavbaCenovaPonuka(models.Model):
             for lineAtyp in cp.cp_polozka_atyp_ids:
                 cp_celkova_cena += lineAtyp.cena
 
-            cp.update({
-                'celkova_cena': cp_celkova_cena
-            })
             cp.update({'celkova_cena': cp_celkova_cena})
 
     @api.depends('dodavatel_id')
@@ -244,13 +240,13 @@ class VystavbaCenovaPonuka(models.Model):
         _logger.info("WRITE: " + str(state))
         _logger.info("COND = " + str(vals.get('state') == None))
         # ak zapisujeme stav prisli sme sem z WF akcie, a preto koncime. automaticka zmena stavu WF je len v pripade akcie SAVE kde sa 'state' nemeni!
-        if vals.get('state') == None:
+        if not vals.get('state') == None:
             return res
 
         _logger.info("WRITE: user " + str(self.env.user.id))
-        _logger.info("WRITE: user partner" + str(self.env.user.partner_id.id))
+        _logger.info("WRITE: user partner " + str(self.env.user.partner_id.id))
         _logger.info("WRITE: dodavatel " + str(self.dodavatel_id.id))
-        _logger.info("WRITE: priradeny" + str(self.osoba_priradena_id.id))
+        _logger.info("WRITE: priradeny " + str(self.osoba_priradena_id.id))
         _logger.info("WRITE: stav " + str(self.state))
 
         # ak je prihlaseny Dodavatel, je mu priradena CP a je v stave ASSIGNED tak pri save zmenime stav na IN_PROGRESS
@@ -260,6 +256,7 @@ class VystavbaCenovaPonuka(models.Model):
                 _logger.info("WRITE: je mu priradena CP")
                 if self.state == self.ASSIGNED:
                     _logger.info("WRITE: CP je v stave ASSIGNED")
+                    _logger.info("WRITE: stav sa automaticky meni na IN_PROGRESS")
                     self.signal_workflow('in_progress')
 
         return res
