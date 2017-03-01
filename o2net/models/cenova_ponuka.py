@@ -179,15 +179,6 @@ class VystavbaCenovaPonuka(models.Model):
 
             cp.update({'celkova_cena': cp_celkova_cena})
 
-    @api.depends('dodavatel_id')
-    def _compute_approved_cp_ids(self):
-        self.approved_cp_ids = self.env['o2net.cenova_ponuka'].search(
-            [
-                ('state', '=', 'approved'),
-                ('dodavatel_id.id', '=', self.dodavatel_id.id)
-            ]
-        )
-
     @api.one
     @api.depends('dodavatel_id','osoba_priradena_id')
     def _compute_ro_datumoddo(self):
@@ -227,8 +218,6 @@ class VystavbaCenovaPonuka(models.Model):
     sap_export_content = fields.Text(string="Export pre SAP", default='ABCDEFGH', copy=False)
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
     sap_export_file_binary = fields.Binary(string='Export file', copy=False)
-
-    approved_cp_ids = fields.One2many('o2net.cenova_ponuka', compute=_compute_approved_cp_ids, string='Schvalene CP', copy=False)
 
     @api.one
     def write(self, vals):

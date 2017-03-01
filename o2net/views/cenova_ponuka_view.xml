@@ -102,19 +102,6 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Schválené CP">
-                                <field name="approved_cp_ids">
-                                    <tree create="false" delete="false">
-                                        <field name="name"/>
-                                        <field name="cislo" string="PSID"/>
-                                        <field name="financny_kod" string="Fin.kód"/>
-                                        <field name="datum_zaciatok" string="Začaté"/>
-                                        <field name="datum_koniec" string="Ukončené"/>
-                                        <field name="celkova_cena"  string="Cena"/>
-                                        <!--<button name="copy_polozky" type="object" string="Copy"/>-->
-                                    </tree>
-                                </field>
-                            </page>
                         </notebook>
 
                         <group class="oe_subtotal_footer oe_right">
