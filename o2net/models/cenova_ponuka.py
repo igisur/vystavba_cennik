@@ -146,7 +146,7 @@ class VystavbaCenovaPonuka(models.Model):
         partner_ids = []
         for user in group.users:
             partner_ids.append(user.partner_id.id)
-        _logger.info(str(len(partner_ids) + " partners in group '" + str(group_name) + "'"))
+        _logger.info(str(len(partner_ids)) + " partners in group '" + str(group_name) + "'")
         return partner_ids
 
     @api.model
@@ -201,34 +201,34 @@ class VystavbaCenovaPonuka(models.Model):
 
     ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute="_compute_ro_datumoddo")
 
-    name = fields.Char(required=True, string="Názov", size=50, copy=False)
-    cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);
-    financny_kod = fields.Char(string="Finančný kód", size=10, required=True, copy=False)
-    skratka = fields.Char(string="Skratka", required=True, copy=False)
-    datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today());
-    datum_koniec = fields.Date(string="Dátum ukončenia");
-    poznamka = fields.Text(string="Poznámka", copy=False, track_visibility='onchange')
+    name = fields.Char(required=True, string="Názov", size=50, copy=True)
+    cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=True);
+    financny_kod = fields.Char(string="Finančný kód", size=10, required=True, copy=True)
+    skratka = fields.Char(string="Skratka", required=True, copy=True)
+    datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today(), copy=False);
+    datum_koniec = fields.Date(string="Dátum ukončenia", copy=False);
+    poznamka = fields.Text(string="Poznámka", track_visibility='onchange', copy=False)
     wf_dovod = fields.Text(string="Dôvod pre workflow", copy=False, help='Uvedte dôvod pre zmenu stavu workflow, najme pri akcii "Vratiť na opravu" a "Zrušiť"')
-    celkova_cena = fields.Float(compute='_amount_all', string='Celková cena', store=True, digits=(10,2), track_visibility='onchange')
+    celkova_cena = fields.Float(compute='_amount_all', string='Celková cena', store=True, digits=(10,2), track_visibility='onchange', copy=False)
 
-    dodavatel_id = fields.Many2one('res.partner', required=True, string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier)
-    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc)
-    pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm)
-    manager_id = fields.Many2one('res.partner', string='Manager', copy=False, track_visibility='onchange', domain=partners_in_group_manager)
+    dodavatel_id = fields.Many2one('res.partner', required=True, string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
+    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True)
+    pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm, copy=True)
+    manager_id = fields.Many2one('res.partner', string='Manager', track_visibility='onchange', domain=partners_in_group_manager, copy=False)
     osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange', default= lambda self: self.env.user.partner_id.id)
-    state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange')
+    state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange', copy=False)
 
-    cennik_id = fields.Many2one('o2net.cennik', string='Cenník')
-    currency_id = fields.Many2one(related='cennik_id.currency_id', string="Mena")
+    cennik_id = fields.Many2one('o2net.cennik', string='Cenník', copy=True)
+    currency_id = fields.Many2one(related='cennik_id.currency_id', string="Mena", copy=True)
 
-    cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky', copy=False, track_visibility='onchange')
-    cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', copy=False, track_visibility='onchange')
+    cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky', track_visibility='onchange', copy=True)
+    cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', track_visibility='onchange', copy=True)
 
-    sap_export_content = fields.Text(string="Export pre SAP", default='ABCDEFGH')
-    sap_export_file_name = fields.Char(string="Export file name")
-    sap_export_file_binary = fields.Binary(string='Export file')
+    sap_export_content = fields.Text(string="Export pre SAP", default='ABCDEFGH', copy=False)
+    sap_export_file_name = fields.Char(string="Export file name", copy=False)
+    sap_export_file_binary = fields.Binary(string='Export file', copy=False)
 
-    approved_cp_ids = fields.One2many('o2net.cenova_ponuka', compute=_compute_approved_cp_ids, string='Schvalene CP')
+    approved_cp_ids = fields.One2many('o2net.cenova_ponuka', compute=_compute_approved_cp_ids, string='Schvalene CP', copy=False)
 
     @api.one
     def write(self, vals):
@@ -261,13 +261,28 @@ class VystavbaCenovaPonuka(models.Model):
 
         return res
 
+    @api.multi
+    def copy(self, default=None):
+
+        # meno CP musi byt unikatne, preto pridame prefix. na koniec je lepsie, pretoze pri focuse ma input kurzor na konci -> uzivatel rychlo zmaze
+        default = {'name': self.name + " [KOPIA]"}
+        _logger.info("copy (duplicate): " + str(default))
+
+        new_cp = super(VystavbaCenovaPonuka, self).copy(default=default)
+
+        # cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky',track_visibility='onchange', copy=True)
+        # cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', track_visibility='onchange', copy=True)
+
+        return new_cp
+
     @api.one
     @api.onchange('dodavatel_id')
     def _find_cennik(self):
         result = {}
         if not self.dodavatel_id:
             return result
-        _logger.info("Looking supplier's valid pricelist " + str(self.dodavatel_id.name))
+
+        _logger.info("Looking for supplier's valid pricelist " + str(self.dodavatel_id.name))
         cennik_ids = self.env['o2net.cennik'].search([('dodavatel_id', '=', self.dodavatel_id.id),
                                                          ('platny_od', '<=', datetime.date.today()),
                                                          ('platny_do', '>', datetime.date.today())], limit = 1)
@@ -294,11 +309,6 @@ class VystavbaCenovaPonuka(models.Model):
         # print http.request.env['ir.config_parameter'].get_param('web.base.url')  # BASE URL
         # print http.request.httprequest
         # print http.request.httprequest.full_path
-
-    @api.one
-    def copy_polozky(self):
-        _logger.info("Copy polozky")
-        return []
 
     # @api.model
     # def create(self, args):
