@@ -8,8 +8,6 @@ import datetime
 import logging
 import base64
 
-# https://www.odoo.com/forum/help-1/question/how-to-display-dialog-box-16506
-
 _logger = logging.getLogger(__name__)
 
 class VystavbaCenovaPonuka(models.Model):
@@ -57,84 +55,72 @@ class VystavbaCenovaPonuka(models.Model):
         data.append('[WEMPF]'+chr(9)+self.pc_id.kod)
         if self.dodavatel_id.kod:
             data.append('[MSTRT]'+chr(9)+self.dodavatel_id.kod)
+        if self.datum_koniec:
+            dt_obj = datetime.datetime.strptime(self.datum_koniec, DEFAULT_SERVER_DATE_FORMAT)
+            dt_str = datetime.date.strftime(dt_obj, '%d.%m.%Y')
+            _logger.info("datum koniec: " + dt_str)
+            data.append('[MSCDT]' + chr(9) + dt_str)
+        else:
+            data.append('[MSCDT]' + chr(9) + 'Nezadaný dátum ukončenia')
 
-        dt_obj = datetime.datetime.strptime(self.datum_koniec, DEFAULT_SERVER_DATE_FORMAT)
-        dt_str = datetime.date.strftime(dt_obj, '%d.%m.%Y')
-        _logger.info("datum koniec: " + dt_str)
-        data.append('[MSCDT]' + chr(9) + dt_str)
-
-        query = """select
-        zdroj.druh, concat(zdroj.kod,
-                           CHR(9),
-                           'JV',
-                           CHR(9),
-                           zdroj.cislo,
-                           CHR(9),
-                           case
-        when
-        zdroj.druh = '1T'
-        then
-        concat(cp.cislo, '.', o.name)
-        when
-        zdroj.druh = '2A'
-        then
-        concat(cp.cislo, '.', o.name)
-        else
-        cp.cislo
-        end,
-        CHR(9),
-        to_char(cp.datum_koniec, 'DD.MM.YYYY')) as vystup
-        from
-        (
-            select
-        '1T' as druh, max(p.kod) as kod, sum(cena_celkom) as cislo, p.oddiel_id as oddiel_id, max(
-            cpp.cenova_ponuka_id) as cenova_ponuka_id
-        from o2net_cenova_ponuka_polozka cpp
-        join
-        o2net_cennik_polozka
-        cp
-        on
-        cpp.cennik_polozka_id = cp.id
-        join
-        o2net_polozka
-        p
-        on
-        cp.polozka_id = p.id
-        where
-        cenova_ponuka_id = %s
-                           and p.is_balicek = false
-        group
-        by
-        p.oddiel_id
-        union
-        select
-        '3B', p.kod, cpp.mnozstvo, p.oddiel_id, cpp.cenova_ponuka_id
-        from o2net_cenova_ponuka_polozka cpp
-        join
-        o2net_cennik_polozka
-        cp
-        on
-        cpp.cennik_polozka_id = cp.id
-        join
-        o2net_polozka
-        p
-        on
-        cp.polozka_id = p.id
-        where
-        cenova_ponuka_id = %s
-                           and p.is_balicek = true
-        union
-        select
-        '2A', atyp.name, cena, oddiel_id, cenova_ponuka_id
-        from o2net_cenova_ponuka_polozka_atyp atyp
-        where
-        cenova_ponuka_id = %s
-        ) zdroj
-        join o2net_oddiel
-        o on zdroj.oddiel_id = o.id
-        join o2net_cenova_ponuka
-        cp on zdroj.cenova_ponuka_id = cp.id
-        order by zdroj.druh;"""
+        query = """ select
+                        zdroj.druh, concat(zdroj.kod,
+                        CHR(9),
+                        'JV',
+                        CHR(9),
+                        zdroj.cislo,
+                        CHR(9),
+                        case
+                            when zdroj.druh = '1T' then
+                                concat(cp.cislo, '.', o.name)
+                            when zdroj.druh = '2A' then
+                                concat(cp.cislo, '.', o.name)
+                        else
+                            cp.cislo
+                        end,
+                        CHR(9),
+                        to_char(cp.datum_koniec, 'DD.MM.YYYY')) as vystup
+                    from
+                        (   select
+                                '1T' as druh, max(p.kod) as kod,
+                                sum(cena_celkom) as cislo,
+                                p.oddiel_id as oddiel_id,
+                                max(cpp.cenova_ponuka_id) as cenova_ponuka_id
+                            from o2net_cenova_ponuka_polozka cpp
+                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
+                            join o2net_polozka p on cp.polozka_id = p.id
+                            where
+                               cenova_ponuka_id = %s
+                               and p.is_balicek = false
+                            group by p.oddiel_id
+                            union
+                            select
+                                '3B',
+                                p.kod,
+                                cpp.mnozstvo,
+                                p.oddiel_id,
+                                cpp.cenova_ponuka_id
+                            from o2net_cenova_ponuka_polozka cpp
+                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
+                            join o2net_polozka p on cp.polozka_id = p.id
+                            where
+                                cenova_ponuka_id = %s
+                                and p.is_balicek = true
+                            union
+                            select
+                                '2A',
+                                atyp.name,
+                                cena,
+                                oddiel_id,
+                                cenova_ponuka_id
+                            from o2net_cenova_ponuka_polozka_atyp atyp
+                            where cenova_ponuka_id = %s
+                        ) zdroj
+                    join
+                        o2net_oddiel o on zdroj.oddiel_id = o.id
+                    join
+                        o2net_cenova_ponuka cp on zdroj.cenova_ponuka_id = cp.id
+                    order by zdroj.druh;"""
 
         self.env.cr.execute(query, (self.id, self.id, self.id))
         fetchrows = self.env.cr.dictfetchall()
