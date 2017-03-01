@@ -51,8 +51,12 @@ class VystavbaCenovaPonuka(models.Model):
     @api.multi
     def _get_sap_export_content(self):
         data = []
-        data.append('[PSPID]'+chr(9)+self.cislo)
-        data.append('[WEMPF]'+chr(9)+self.pc_id.kod)
+        if self.cislo:
+            data.append('[PSPID]'+chr(9)+self.cislo)
+        if self.pc_id.kod:
+            data.append('[WEMPF]'+chr(9)+self.pc_id.kod)
+        else:
+            data.append('[WEMPF]' + chr(9) + '???')
         if self.dodavatel_id.kod:
             data.append('[MSTRT]'+chr(9)+self.dodavatel_id.kod)
         if self.datum_koniec:
@@ -61,7 +65,7 @@ class VystavbaCenovaPonuka(models.Model):
             _logger.info("datum koniec: " + dt_str)
             data.append('[MSCDT]' + chr(9) + dt_str)
         else:
-            data.append('[MSCDT]' + chr(9) + 'Nezadaný dátum ukončenia')
+            data.append('[MSCDT]' + chr(9) + '???')
 
         query = """ select
                         zdroj.druh, concat(zdroj.kod,
