@@ -130,7 +130,7 @@ class VystavbaCenovaPonuka(models.Model):
         fetchrows = self.env.cr.dictfetchall()
 
         for row in fetchrows:
-            data.append(row.get('vystup'))
+            data.append(row.get('vystup').decode('utf8'))
         # rozparsujem pole do stringu a oddelim enterom
         ret = '\r\n'.join(data)
         return ret
@@ -489,7 +489,7 @@ class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
     _name = 'o2net.cenova_ponuka.polozka_atyp'
     _description = "vystavba - atyp polozka cenovej ponuky"
 
-    name = fields.Char(required=True, string="Nazov", size=30, help="Kod polozky")
+    name = fields.Char(required=True, string="Nazov", size=100, help="Kod polozky")
     oddiel_id = fields.Many2one('o2net.oddiel', required=True, string="Oddiel")
     cena = fields.Float(required=True, digits=(10, 2))
     cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='Cenová ponuka', required=True, ondelete='cascade')
