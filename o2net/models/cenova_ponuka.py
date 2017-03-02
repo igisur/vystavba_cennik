@@ -190,6 +190,25 @@ class VystavbaCenovaPonuka(models.Model):
                 self.ro_datumoddo = True
         return {}
 
+    @api.one
+    def _resolve_record_url(self):
+        _logger.info("_resolve_record_url")
+        base = self.env['ir.config_parameter'].get_param('web.base.url')
+        id = self.id
+
+        ir_model_data = self.env['ir.model.data']
+        menu_id = ir_model_data.get_object_reference('o2net', 'menu_cenova_ponuka_preview')[1]
+        action_id = ir_model_data.get_object_reference('o2net', 'action_window_cp_preview')[1]
+
+        url = "%s/web#id=%s&view_type=form&model=o2net.cenova_ponuka&menu_id=%s&action=%s" % (base, id, menu_id, action_id)
+
+        _logger.info("URL full path: " + http.request.httprequest.full_path)
+        _logger.info("URL: " + url)
+
+        self.base_url = url
+        return {}
+
+
     ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute="_compute_ro_datumoddo")
 
     name = fields.Char(required=True, string="Názov", size=50, copy=True)
@@ -200,7 +219,7 @@ class VystavbaCenovaPonuka(models.Model):
     datum_koniec = fields.Date(string="Dátum ukončenia", copy=False);
     poznamka = fields.Text(string="Poznámka", track_visibility='onchange', copy=False)
     wf_dovod = fields.Text(string="Dôvod pre workflow", copy=False, help='Uvedte dôvod pre zmenu stavu workflow, najme pri akcii "Vratiť na opravu" a "Zrušiť"')
-    celkova_cena = fields.Float(compute='_amount_all', string='Celková cena', store=True, digits=(10,2), track_visibility='onchange', copy=False)
+    celkova_cena = fields.Float(compute=_amount_all, string='Celková cena', store=True, digits=(10,2), track_visibility='onchange', copy=False)
 
     dodavatel_id = fields.Many2one('res.partner', required=True, string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
     pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True)
@@ -219,13 +238,11 @@ class VystavbaCenovaPonuka(models.Model):
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
     sap_export_file_binary = fields.Binary(string='Export file', copy=False)
 
+    base_url = fields.Char(compute=_resolve_record_url, string="Link", store=False, copy=False, )
+
     @api.one
     def write(self, vals):
         self.ensure_one()
-
-        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        _logger.info("Page URL: " + base_url)
-        _logger.info("Page URL: " + http.request.httprequest.full_path)
 
         _logger.info("WRITE: polozky OLD " + str(self.cp_polozka_ids.ids))
         _logger.info("WRITE: polozky NEW " + str(vals.get('cp_polozka_ids')))
@@ -240,7 +257,6 @@ class VystavbaCenovaPonuka(models.Model):
 
         state = vals.get('state')
         _logger.info("WRITE: " + str(state))
-        _logger.info("COND = " + str(vals.get('state') == None))
         # ak zapisujeme stav prisli sme sem z WF akcie, a preto koncime. automaticka zmena stavu WF je len v pripade akcie SAVE kde sa 'state' nemeni!
         if not vals.get('state') == None:
             return res
@@ -462,7 +478,7 @@ class VystavbaCenovaPonuka(models.Model):
         # definovane v views/email_template.xml
         template = self.env.ref('o2net.mail_cp_assigned')
         templateObj = self.env['mail.template'].browse(template.id)
-        templateObj.email_from = 'stryko.fedor@vecernicek.sk'
+        templateObj.email_from = 'odoo-mailer-daemon@o2network.sk'
         mail_id = templateObj.send_mail(self.id, force_send=False, raise_exception=False)
         _logger.info("Mail sent: " + str(mail_id))
 

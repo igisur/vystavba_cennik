@@ -5,8 +5,9 @@
         <record id="mail_cp_assigned" model="mail.template">
             <field name="name">e-mail workflow</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
-            <field name="subject">Cenová ponuka ${object.name}/${object.skratka} priradená</field>
+            <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="email_to">${object.osoba_priradena_id.email}</field>
+            <!--<field name="reply_to">${user.email}</field>-->
             <field name="lang">${object.osoba_priradena_id.lang}</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
@@ -14,14 +15,12 @@
             <field name="auto_delete" eval="True"/>
             <field name="body_html">
             <![CDATA[
-
             <p>
-            Dobrý deň ${(object.osoba_priradena_id.display_name)},<br/><br/>
-            Bola Vám priradená cenová ponuka <b>${object.name} / ${object.skratka}</b><br/>
-            Ak chcete prejst na cenovu ponuku kliknite na <a href="http://localhost:8069/web#id=1&view_type=form&model=o2net.cenova_ponuka&menu_id=108&action=104">${object.name} / ${object.skratka}</a>.</br></br>
+            Dobrý deň ${object.osoba_priradena_id.display_name},<br/><br/>
 
+
+            Bola Vám priradená cenová ponuka <a href="${object.base_url}">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>
             </p>
-
             s pozdravom,<br/>
                O2 network team
             ]]>
