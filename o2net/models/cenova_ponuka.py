@@ -223,6 +223,10 @@ class VystavbaCenovaPonuka(models.Model):
     def write(self, vals):
         self.ensure_one()
 
+        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        _logger.info("Page URL: " + base_url)
+        _logger.info("Page URL: " + http.request.httprequest.full_path)
+
         _logger.info("WRITE: polozky OLD " + str(self.cp_polozka_ids.ids))
         _logger.info("WRITE: polozky NEW " + str(vals.get('cp_polozka_ids')))
 
@@ -276,6 +280,13 @@ class VystavbaCenovaPonuka(models.Model):
         # cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', track_visibility='onchange', copy=True)
 
         return new_cp
+
+    @api.multi
+    def unlink(self):
+        # cenova ponuka moze byt zmazane len v stave "DRAFT". potom je mozne ju zrusit cez WF akciu "Cancel"
+        if not self.state == self.DRAFT:
+            raise AccessError("Cenovú ponuku je možné zmazať len pokiaľ je v stave 'Návrh'. V ostatnom prípade použite workflow akciu 'Zrušiť'")
+
 
     @api.one
     @api.onchange('dodavatel_id')
