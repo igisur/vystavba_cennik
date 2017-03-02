@@ -9,7 +9,9 @@
             <field name="email_to">${object.osoba_priradena_id.email}</field>
             <field name="lang">${object.osoba_priradena_id.lang}</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
-            <field name="auto_delete" eval="False"/>
+            <field name="report_template" ref="report_cenova_ponuka"/>
+            <field name="report_name">CP_${(object.name or '').replace('/','_')}</field>
+            <field name="auto_delete" eval="True"/>
             <field name="body_html">
             <![CDATA[
 
