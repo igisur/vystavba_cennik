@@ -32,11 +32,45 @@
                     <p>
                         <div>Poznámka: <span t-field="doc.poznamka"/></div>
                     </p>
-                    <p>
-                        <t t-foreach="doc.cp_polozka_ids" t-as="cennik_polozka">
-                            <div><span t-field="cennik_polozka.cennik_polozka_id.name"/> - <span t-field="cennik_polozka.mnozstvo"/> - <span t-field="cennik_polozka.cena_celkom"/></div>
-                        </t>
-                    </p>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th><strong>Oddiel</strong></th>
+                                <th><strong>Položka</strong></th>
+                                <th><strong>Merná jednotka</strong></th>
+                                <th class="text-right"><strong>Počet</strong></th>
+                                <th class="text-right"><strong>Jednotková cena</strong></th>
+                                <th class="text-right"><strong>Cena celkom</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="doc.cp_polozka_ids" t-as="cennik_polozka">
+                                <td>
+                                    <span t-field="cennik_polozka.cennik_polozka_id.polozka_id.oddiel_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="cennik_polozka.name"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="cennik_polozka.polozka_mj"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="cennik_polozka.mnozstvo"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="cennik_polozka.cena_jednotkova"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="cennik_polozka.cena_celkom"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+
+                    </div>
                 </div>
 
                 <div class="footer">
