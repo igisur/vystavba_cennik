@@ -245,21 +245,22 @@ class VystavbaCenovaPonuka(models.Model):
         self.ensure_one()
 
         # log changes in purchase order lines
-        record_history_tmpl = "<li><b>%s</b> %s</li>"
-        msg = ""
-        for record in vals.get('cp_polozka_ids'):
-            _logger.info("record " + str(record))
-            action_id = record[0]
-            if action_id == 0:
-                id = record[2].get('cennik_polozka_id')
-                name = self.env['o2net.cennik.polozka'].browse(id).name
-                msg += record_history_tmpl % ('+++', name)
-            elif action_id == 2:
-                id = record[1]
-                name = self.env['o2net.cenova_ponuka.polozka'].browse(id).name
-                msg += record_history_tmpl % ('---', name)
+        if 'cp_polozka_ids' in vals:
+            record_history_tmpl = "<li><b>%s</b> %s</li>"
+            msg = ""
+            for record in vals.get('cp_polozka_ids'):
+                _logger.info("record " + str(record))
+                action_id = record[0]
+                if action_id == 0:
+                    id = record[2].get('cennik_polozka_id')
+                    name = self.env['o2net.cennik.polozka'].browse(id).name
+                    msg += record_history_tmpl % ('+++', name)
+                elif action_id == 2:
+                    id = record[1]
+                    name = self.env['o2net.cenova_ponuka.polozka'].browse(id).name
+                    msg += record_history_tmpl % ('---', name)
 
-        self.message_post(body="<ul class =""o_mail_thread_message_tracking"">%s</ul>" % msg, message_type="notification")
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking"">%s</ul>" % msg, message_type="notification")
 
         # [[1, 42, {u'mnozstvo': 10}], [4, 43, False], [2, 44, False], [0, False, {u'cennik_polozka_id': 2, u'mnozstvo': 0}]]
 #       NEW (0, _, values)  adds a new record created from the provided value dict.
