@@ -343,27 +343,9 @@ class VystavbaCenovaPonuka(models.Model):
         # pri zmene dodavatela a tym padol aj cennika zmaz vsetky polozky
         self.cp_polozka_ids = None;
 
-
-
         result = {'cennik_id': self.cennik_id}
         self.write(result)
         return result
-
-    @api.onchange('osoba_priradena_id')
-    def _sent_notification(self):
-        # sent notification to assigned person
-        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        _logger.info("Page URL: " + base_url)
-        _logger.info("Page URL: " + http.request.httprequest.full_path)
-
-        # print http.request.env['ir.config_parameter'].get_param('web.base.url')  # BASE URL
-        # print http.request.httprequest
-        # print http.request.httprequest.full_path
-
-    # @api.model
-    # def create(self, args):
-    #     self._standardize(args)
-    #     return super(Model, self).create(args) -> global name 'Model' is not defined
 
     @api.constrains('name')
     def _check_unique_constraint(self):
