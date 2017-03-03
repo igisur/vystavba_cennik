@@ -2,7 +2,6 @@
 <openerp>
     <data>
 
-
         <record model="ir.ui.view" id="view_form_cenova_ponuka_polozka">
             <field name="name">cenova ponuka polozka</field>
             <field name="model">o2net.cenova_ponuka.polozka</field>
@@ -120,7 +119,6 @@
 
                     </sheet>
                     <div class="oe_chatter">
-                        <!--<field name="message_follower_ids" widget="mail_followers" invisible="True"/>-->
                         <field name="message_ids" widget="mail_thread"/>
                     </div>
                 </form>

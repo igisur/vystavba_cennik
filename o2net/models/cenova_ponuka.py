@@ -46,7 +46,7 @@ class VystavbaCenovaPonuka(models.Model):
         self.sap_export_file_name = export_file_name
         self.sap_export_content = self._get_sap_export_content()
         self.sap_export_file_binary = base64.encodestring(self.sap_export_content)
-        self.message_post(body='<ul class ="o_mail_thread_message_tracking"><li>' + 'Subor "' + export_file_name + '" pre SAP bol vygenerovany' + "</li></ul>", message_type='email')
+        self.message_post(body='<ul class ="o_mail_thread_message_tracking"><li>' + 'Subor "' + export_file_name + '" pre SAP bol vygenerovany' + "</li></ul>")
 
     @api.multi
     def _get_sap_export_content(self):
@@ -244,14 +244,29 @@ class VystavbaCenovaPonuka(models.Model):
     def write(self, vals):
         self.ensure_one()
 
-        _logger.info("WRITE: polozky OLD " + str(self.cp_polozka_ids.ids))
-        _logger.info("WRITE: polozky NEW " + str(vals.get('cp_polozka_ids')))
+        # log changes in purchase order lines
+        record_history_tmpl = "<li><b>%s</b> %s</li>"
+        msg = ""
+        for record in vals.get('cp_polozka_ids'):
+            _logger.info("record " + str(record))
+            action_id = record[0]
+            if action_id == 0:
+                id = record[2].get('cennik_polozka_id')
+                name = self.env['o2net.cennik.polozka'].browse(id).name
+                msg += record_history_tmpl % ('+++', name)
+            elif action_id == 2:
+                id = record[1]
+                name = self.env['o2net.cenova_ponuka.polozka'].browse(id).name
+                msg += record_history_tmpl % ('---', name)
 
-#       (0, _, values)  adds a new record created from the provided value dict.
-#       (1, id, values) updates an existing record of id id with the values in values. Can not be used in create().
-#       (2, id, _)      removes the record of id id from the set, then deletes it (from the database). Can not be used in create().
+        self.message_post(body="<ul class =""o_mail_thread_message_tracking"">%s</ul>" % msg, message_type="notification")
+
+        # [[1, 42, {u'mnozstvo': 10}], [4, 43, False], [2, 44, False], [0, False, {u'cennik_polozka_id': 2, u'mnozstvo': 0}]]
+#       NEW (0, _, values)  adds a new record created from the provided value dict.
+#       UPDATE (1, id, values) updates an existing record of id id with the values in values. Can not be used in create().
+#       REMOVE (2, id, _)      removes the record of id id from the set, then deletes it (from the database). Can not be used in create().
 #       (3, id, _)      removes the record of id id from the set, but does not delete it. Can not be used on One2many. Can not be used in create().
-#       (4, id, _)      adds an existing record of id id to the set. Can not be used on One2many.
+#       NO CHANGE  (4, id, _)      adds an existing record of id id to the set. Can not be used on One2many.
 
         res = super(VystavbaCenovaPonuka, self).write(vals)
 
