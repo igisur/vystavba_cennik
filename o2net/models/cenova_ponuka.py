@@ -265,13 +265,6 @@ class VystavbaCenovaPonuka(models.Model):
 
             self.message_post(body="<ul class =""o_mail_thread_message_tracking"">%s</ul>" % msg, message_type="notification")
 
-        # [[1, 42, {u'mnozstvo': 10}], [4, 43, False], [2, 44, False], [0, False, {u'cennik_polozka_id': 2, u'mnozstvo': 0}]]
-#       NEW (0, _, values)  adds a new record created from the provided value dict.
-#       UPDATE (1, id, values) updates an existing record of id id with the values in values. Can not be used in create().
-#       REMOVE (2, id, _)      removes the record of id id from the set, then deletes it (from the database). Can not be used in create().
-#       (3, id, _)      removes the record of id id from the set, but does not delete it. Can not be used on One2many. Can not be used in create().
-#       NO CHANGE  (4, id, _)      adds an existing record of id id to the set. Can not be used on One2many.
-
         res = super(VystavbaCenovaPonuka, self).write(vals)
 
         state = vals.get('state')
@@ -302,17 +295,10 @@ class VystavbaCenovaPonuka(models.Model):
     def copy(self, default=None):
 
         # meno CP musi byt unikatne, preto pridame prefix. na koniec je lepsie, pretoze pri focuse ma input kurzor na konci -> uzivatel rychlo zmaze
-
         default = {'name': self.name + " [KOPIA]"}
-
         # ! treba zistit ci cennik_id je platny a prejst prilinokvane polozky a updatnut cenu !!!
-
         _logger.info("copy (duplicate): " + str(default))
-
         new_cp = super(VystavbaCenovaPonuka, self).copy(default=default)
-
-        # cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky',track_visibility='onchange', copy=True)
-        # cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', track_visibility='onchange', copy=True)
 
         return new_cp
 
@@ -389,6 +375,8 @@ class VystavbaCenovaPonuka(models.Model):
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
         self.write({'state': self.ASSIGNED, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
+        # send email to supplier
+        self.send_mail([self.dodavatel_id.email])
         return True
 
     @api.one
@@ -399,6 +387,8 @@ class VystavbaCenovaPonuka(models.Model):
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
         self.write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
+        # notify PC via email that supplier starts wirking on CP
+        # self.send_mail([self.dodavatel_id.email])
         return True
 
     @api.one
@@ -415,22 +405,26 @@ class VystavbaCenovaPonuka(models.Model):
             #  Dodavatel poslal na schvalenie PC
             _logger.info("Supplier sent to approve by PC")
             self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': ''})
+            self.send_mail([self.pc_id.email])
 
         elif self.osoba_priradena_id.id == self.pc_id.id:
             #  PC poslal na schvalenie PM
             _logger.info("PC sent to approve by PM")
             self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pm_id.id, 'wf_dovod': ''})
+            self.send_mail([self.pm_id.email])
 
         elif self.osoba_priradena_id.id == self.pm_id.id:   
             #  PM poslal na schvalenie Managerovy
             _logger.info("PM sent to approve by Manager")
             manager_id = self._find_manager()
             self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': manager_id.id, 'manager_id': manager_id.id, 'wf_dovod': ''})
+            self.send_mail([manager_id.email])
 
         elif self.osoba_priradena_id.id == self.manager_id.id:
             #  Manager schvalil -> CP je schvalena a koncime
             _logger.info("Manager approved")
             self.write({'state': self.APPROVED, 'osoba_priradena_id': '', 'wf_dovod': ''})
+            self.send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_approved')
 
         return True
 
@@ -446,6 +440,7 @@ class VystavbaCenovaPonuka(models.Model):
         if self.osoba_priradena_id.id == self.pc_id.id :
             _logger.info("workflow action to IN_PROGRESS")
             self.write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
+            self.send_mail([self.dodavatel_id.email])
             self.signal_workflow('not_complete')
             # call WF: signal "not complete". som v stave "to_approve". potrebujem ist do in_progers
 
@@ -453,6 +448,7 @@ class VystavbaCenovaPonuka(models.Model):
         elif self.osoba_priradena_id.id == self.pm_id.id :
             _logger.info("workflow action to TO_APPROVE")
             self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': ''})
+            self.send_mail([self.pc_id.email])
 
         return True
 
@@ -465,21 +461,31 @@ class VystavbaCenovaPonuka(models.Model):
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
         self.write({'state': self.CANCEL, 'osoba_priradena_id': '', 'wf_dovod': ''})
+        self.send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_canceled')
         return True
 
     @api.one
     def action_sendMail(self):
         self.ensure_one()
-        self.send_mail_template()
+        self.send_mail()
         return
 
     @api.one
-    def send_mail_template(self):
+    def send_mail(self, mail_to=None, template_name='mail_cp_assigned'):
+
+        _logger.info("send mail to " + str(mail_to))
+
         # Find the e-mail template
-        # definovane v views/email_template.xml
-        template = self.env.ref('o2net.mail_cp_assigned')
+        # definovane vo views/email_template.xml
+        template = self.env.ref('o2net.' + template_name)
+        if not template:
+            _logger.info("unable send mail. template not found. template_name: " + str(template_name))
+            return
+
         templateObj = self.env['mail.template'].browse(template.id)
         templateObj.email_from = 'odoo-mailer-daemon@o2network.sk'
+        if mail_to:
+            templateObj.email_to = ",".join(mail_to)
         mail_id = templateObj.send_mail(self.id, force_send=False, raise_exception=False)
         _logger.info("Mail sent: " + str(mail_id))
 
