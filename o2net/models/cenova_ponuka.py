@@ -8,6 +8,9 @@ import datetime
 import logging
 import base64
 
+#ivan.dian@o2.sk
+#tomas.hellebrandt@o2.sk
+
 _logger = logging.getLogger(__name__)
 
 class VystavbaCenovaPonuka(models.Model):
@@ -383,7 +386,7 @@ class VystavbaCenovaPonuka(models.Model):
         _logger.info("workflow action to ASSIGN")
         self.ensure_one()
         if self.wf_dovod:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Dôvod pre workflow: " + self.wf_dovod + "</li></ul>")
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
         self.write({'state': self.ASSIGNED, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
         return True
@@ -393,7 +396,7 @@ class VystavbaCenovaPonuka(models.Model):
         _logger.info("workflow action to IN_PROGRESS")
         self.ensure_one()
         if self.wf_dovod:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Dôvod pre workflow: " + self.wf_dovod + "</li></ul>")
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
         self.write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
         return True
@@ -406,7 +409,7 @@ class VystavbaCenovaPonuka(models.Model):
         # do historie pridame 'wf_dovod'
         if self.wf_dovod:
             # add to tracking values
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Dôvod pre workflow: " + self.wf_dovod + "</li></ul>")
+            self.message_post(body='<ul class="o_mail_thread_message_tracking"><li>Workflow reason: ' + self.wf_dovod + '</li></ul>')
 
         if self.osoba_priradena_id.id == self.dodavatel_id.id:
             #  Dodavatel poslal na schvalenie PC
@@ -437,7 +440,7 @@ class VystavbaCenovaPonuka(models.Model):
         self.ensure_one()
 
         if self.wf_dovod:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Dôvod pre workflow: " + self.wf_dovod + "</li></ul>")
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
         # PC signals 'not complete' - CP should be 'in_progress' and assigned to Supplier
         if self.osoba_priradena_id.id == self.pc_id.id :
@@ -459,7 +462,7 @@ class VystavbaCenovaPonuka(models.Model):
         self.ensure_one()
 
         if self.wf_dovod:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Dôvod pre workflow: " + self.wf_dovod + "</li></ul>")
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
         self.write({'state': self.CANCEL, 'osoba_priradena_id': '', 'wf_dovod': ''})
         return True
