@@ -13,8 +13,8 @@
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
         'security/vystavba_security.xml',
+        'security/ir.model.access.csv',
         'views/views.xml',
         'views/cennik_view.xml',
         'views/polozka_view.xml',
