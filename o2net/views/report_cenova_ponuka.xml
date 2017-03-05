@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <!--name = fields.Char(required=True, string="Názov", size=50, copy=False)-->
     <!--cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);-->
@@ -9,7 +10,7 @@
     <data>
         <template id="report_cenova_ponuka_pdf_document">
             <t t-call="report.external_layout">
-                <t t-set="doc" t-value="doc.with_context({'lang':'SK'})" />
+                <t t-set="doc" t-value="doc.with_context({'lang':doc.dodavatel_id.lang})" />
                 <div class="page">
                     <h2>Cenova ponuka <span t-field="doc.name"/></h2>
                     <div>
@@ -24,7 +25,7 @@
                         <div>Ukončenie: <span t-field="doc.datum_koniec"/></div>
                     </p>
                     <p>
-                        <div>Dodávateľ: <span t-field="doc.dodavatel_id.name"/> - Cenník: <span t-field="doc.cennik_id.name"/></div>
+                        <div>??? Dodávateľ: ???<span t-field="doc.dodavatel_id.name"/> - Cenník: <span t-field="doc.cennik_id.name"/></div>
                         <div>PC(projektový koordinátor): <span t-field="doc.pc_id.name"/></div>
                         <div>PM(projektový manažér): <span t-field="doc.pm_id.name"/></div>
                         <div>Manager: <span t-field="doc.manager_id.name"/></div>
@@ -45,26 +46,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr t-foreach="doc.cp_polozka_ids" t-as="cennik_polozka">
-                                <td>
-                                    <span t-field="cennik_polozka.cennik_polozka_id.polozka_id.oddiel_id.name"/>
-                                </td>
-                                <td>
-                                    <span t-field="cennik_polozka.name"/>
-                                </td>
-                                <td class="text-center">
-                                    <span t-field="cennik_polozka.polozka_mj"/>
-                                </td>
-                                <td class="text-right">
-                                    <span t-field="cennik_polozka.mnozstvo"/>
-                                </td>
-                                <td class="text-right">
-                                    <span t-field="cennik_polozka.cena_jednotkova"/>
-                                </td>
-                                <td class="text-right">
-                                    <span t-field="cennik_polozka.cena_celkom"/>
-                                </td>
+
+                            <t t-set="rows" t-value="get_rows(doc.id)"/>
+                            <tr t-foreach="rows" t-as="row">
+                                <td><span t-esc="row.oddiel"/></td>
+                                <td><span t-esc="row.polozka"/></td>
                             </tr>
+
                         </tbody>
                     </table>
 
@@ -83,7 +71,7 @@
         <template id="report_cenova_ponuka_pdf">
             <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="doc">
-                    <t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.cislo"/>
+                    <t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.dodavatel_id.lang"/>
                 </t>
             </t>
         </template>
