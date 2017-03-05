@@ -425,6 +425,7 @@ class VystavbaCenovaPonuka(models.Model):
             _logger.info("Manager approved")
             self.write({'state': self.APPROVED, 'osoba_priradena_id': '', 'wf_dovod': ''})
             self.send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_approved')
+            self.action_exportSAP()
 
         return True
 
