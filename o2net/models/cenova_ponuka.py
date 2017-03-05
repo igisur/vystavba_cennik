@@ -211,6 +211,50 @@ class VystavbaCenovaPonuka(models.Model):
         self.base_url = url
         return {}
 
+    @api.one
+    def _get_rows(self, cp_id):
+        data = []
+        _logger.info("a_function_name")
+
+        if cp_id:
+            idecko = id
+        else:
+            idecko = 99
+
+        _logger.info("a_function_name " + str(len(idecko)))
+
+        query = """ select typ, cp.id as id, oddiel, polozka, cena_jednotkova, mj, pocet, cena_celkom, cp.cislo as cislo
+                            from
+                            (
+                            select '1t' as typ, cpp.cenova_ponuka_id as cp_id, o.name as oddiel, p.name as polozka, cpp.cena_jednotkova as cena_jednotkova, p.mj as mj, cpp.mnozstvo as pocet, cpp.cena_celkom as cena_celkom
+                            from o2net_cenova_ponuka_polozka cpp
+                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
+                            join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = false
+                            join o2net_oddiel o on p.oddiel_id = o.id
+                            where cpp.cenova_ponuka_id = %s
+                            union all
+                            select '2a',cppa.cenova_ponuka_id, o.name, cppa.name, null, null, null, cppa.cena
+                            from o2net_cenova_ponuka_polozka_atyp cppa
+                            join o2net_oddiel o on cppa.oddiel_id = o.id
+                            where cppa.cenova_ponuka_id = %s
+                            union all
+                            select '3b',cpp.cenova_ponuka_id, o.name, p.name, cpp.cena_jednotkova, p.mj, cpp.mnozstvo, cpp.cena_celkom
+                            from o2net_cenova_ponuka_polozka cpp
+                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
+                            join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = true
+                            join o2net_oddiel o on p.oddiel_id = o.id
+                            where cpp.cenova_ponuka_id = %s
+                            ) zdroj
+                            join o2net_cenova_ponuka cp on zdroj.cp_id = cp.id;"""
+
+        # self.env.cr.execute(query, (self.id, self.id, self.id))
+        self.env.cr.execute(query, (idecko, idecko, idecko))
+        fetchrows = self.env.cr.dictfetchall()
+
+        for row in fetchrows:
+            data.append(row.get('vystup').decode('utf8'))
+
+        return data
 
     ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute="_compute_ro_datumoddo")
 
@@ -236,6 +280,9 @@ class VystavbaCenovaPonuka(models.Model):
 
     cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky', track_visibility='onchange', copy=True)
     cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', track_visibility='onchange', copy=True)
+
+    #cp_polozky_rows = fields.Selection(selection=a_function_name, string='daky text')
+    #cp_polozky_rows = fields.Selection(selection=a_function_name, string='daky text', default='draft', track_visibility='onchange')
 
     sap_export_content = fields.Text(string="Export pre SAP", default='ABCDEFGH', copy=False)
     sap_export_file_name = fields.Char(string="Export file name", copy=False)

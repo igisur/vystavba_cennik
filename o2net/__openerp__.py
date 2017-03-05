@@ -24,7 +24,8 @@
         'report/report.xml',
         'views/oddiel_view.xml',
         'views/email_template.xml',
-        'views/report_cenova_ponuka.xml'
+        'views/report_cenova_ponuka.xml',
+        'report/cenova_ponuka_report_view.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -1,11 +1,14 @@
 <openerp>
 <data>
     <!-- report's id is used in email_template.xml -->
-    <report id="report_cenova_ponuka"  model="o2net.cenova_ponuka"
-        string="Cenova ponuka (PDF)"
-        name="o2net.report_cenova_ponuka_pdf"
-        file="report_cenova_ponuka"
-        report_type="qweb-pdf" />
+    <report
+            id="report_cenova_ponuka"
+            model = "o2net.cenova_ponuka"
+            string="Cenova ponuka (PDF)"
+            name="o2net.report_cenova_ponuka_pdf"
+            file="report_cenova_ponuka"
+            report_type="qweb-pdf" />
+        <!--model="o2net.cenova_ponuka"-->
         <!--attachment_use="True"-->
         <!--attachment="(object.state in ('open','paid')) and ('INV'+(object.name or '').replace('/','')+'.pdf')"    -->
     </data>
