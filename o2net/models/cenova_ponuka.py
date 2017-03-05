@@ -247,6 +247,8 @@ class VystavbaCenovaPonuka(models.Model):
     def write(self, vals):
         self.ensure_one()
 
+        _logger.info("WRITE: MODEL CHANGED")
+
         # log changes in purchase order lines
         if 'cp_polozka_ids' in vals:
             record_history_tmpl = "<li><b>%s</b> %s</li>"

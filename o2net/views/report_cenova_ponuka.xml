@@ -9,7 +9,7 @@
     <data>
         <template id="report_cenova_ponuka_pdf_document">
             <t t-call="report.external_layout">
-                <t t-set="doc" t-value="doc.with_context({'lang':doc.cislo})" />
+                <t t-set="doc" t-value="doc.with_context({'lang':'SK'})" />
                 <div class="page">
                     <h2>Cenova ponuka <span t-field="doc.name"/></h2>
                     <div>
