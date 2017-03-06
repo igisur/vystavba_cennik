@@ -46,13 +46,29 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            <t t-set="rows" t-value="get_rows(doc.id)"/>
+                            <t t-set="rows" t-value="doc._get_rows(2)"/>
                             <tr t-foreach="rows" t-as="row">
-                                <td><span t-esc="row.oddiel"/></td>
-                                <td><span t-esc="row.polozka"/></td>
-                            </tr>
+                                <!--<t t-call="o.a_function_name" t-lang="o"/>-->
 
+                                <td>
+                                    <span t-field="row.polozka"/>
+                                </td>
+                                <td>
+                                    <!--<span t-field="cennik_polozka.polozka"/>-->
+                                </td>
+                                <td class="text-center">
+                                    <!--<span t-field="mj"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <!--<span t-field="cennik_polozka.pocet"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <!--<span t-field="cennik_polozka.cena_jednotkova"/>-->
+                                </td>
+                                <td class="text-right">
+                                    <!--<span t-field="cennik_polozka.cena_celkom"/>-->
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
 

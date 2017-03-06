@@ -8,7 +8,6 @@ import datetime
 import logging
 import base64
 
-
 #ivan.dian@o2.sk
 #tomas.hellebrandt@o2.sk
 
@@ -215,15 +214,7 @@ class VystavbaCenovaPonuka(models.Model):
     @api.one
     def _get_rows(self, cp_id):
         data = []
-        _logger.info("a_function_name")
-        _logger.info("_get_rows: " + str(cp_id))
-
-        if cp_id:
-            idecko = id
-        else:
-            idecko = 99
-
-        _logger.info("a_function_name " + str(len(idecko)))
+        _logger.info("a_function_name " + str(cp_id))
 
         query = """ select typ, cp.id as id, oddiel, polozka, cena_jednotkova, mj, pocet, cena_celkom, cp.cislo as cislo
                             from
@@ -250,11 +241,8 @@ class VystavbaCenovaPonuka(models.Model):
                             join o2net_cenova_ponuka cp on zdroj.cp_id = cp.id;"""
 
         # self.env.cr.execute(query, (self.id, self.id, self.id))
-        self.env.cr.execute(query, (idecko, idecko, idecko))
-        fetchrows = self.env.cr.dictfetchall()
-
-        for row in fetchrows:
-            data.append(row.get('vystup').decode('utf8'))
+        self.env.cr.execute(query, (cp_id, cp_id, cp_id))
+        data = self.env.cr.dictfetchall()
 
         return data
 
@@ -538,6 +526,7 @@ class VystavbaCenovaPonuka(models.Model):
             templateObj.email_to = ",".join(mail_to)
         mail_id = templateObj.send_mail(self.id, force_send=False, raise_exception=False)
         _logger.info("Mail sent: " + str(mail_id))
+
 
 class VystavbaCenovaPonukaPolozka(models.Model):
     _name = 'o2net.cenova_ponuka.polozka'
