@@ -1,92 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <!--name = fields.Char(required=True, string="Názov", size=50, copy=False)-->
-    <!--cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=False);-->
-    <!--financny_kod = fields.Char(string="Finančný kód", required=True, copy=False)-->
-    <!--datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today());-->
-    <!--datum_koniec = fields.Date(string="Dátum ukončenia");-->
-    <!--poznamka = fields.Text(string="Poznámka", copy=False)-->
-    <!--celkova_cena = fields.Float(string='Celkova cena', digits=(10,2), copy=False)-->
     <data>
         <template id="report_cenova_ponuka_pdf_document">
-            <t t-call="report.external_layout">
                 <t t-set="doc" t-value="doc.with_context({'lang':doc.dodavatel_id.lang})" />
-                <div class="page">
-                    <h2>Cenova ponuka <span t-field="doc.name"/></h2>
-                    <div>
-                        <div>stav: <span t-field="doc.state"/></div>
-                        <div>Celkova cena: <span t-field="doc.celkova_cena"/></div>
+                <t t-call="report.internal_layout">
+                    <div class="page">
+                        <h2>Cenova ponuka <span t-field="doc.name"/></h2>
+                        <div>
+                            <div>stav: <span t-field="doc.state"/></div>
+                            <div>Celkova cena: <span t-field="doc.celkova_cena"/></div>
+                        </div>
+                        <p>
+                            <div>Číslo: <span t-field="doc.cislo"/></div>
+                            <div>Finančný kód: <span t-field="doc.financny_kod"/></div>
+                            <div>Skratka: <span t-field="doc.skratka"/></div>
+                            <div>Zahájenie: <span t-field="doc.datum_zaciatok"/></div>
+                            <div>Ukončenie: <span t-field="doc.datum_koniec"/></div>
+                        </p>
+                        <p>
+                            <div>??? Dodávateľ: ???<span t-field="doc.dodavatel_id.name"/> - Cenník: <span t-field="doc.cennik_id.name"/></div>
+                            <div>PC(projektový koordinátor): <span t-field="doc.pc_id.name"/></div>
+                            <div>PM(projektový manažér): <span t-field="doc.pm_id.name"/></div>
+                            <div>Manager: <span t-field="doc.manager_id.name"/></div>
+                        </p>
+                        <p>
+                            <div>Poznámka: <span t-field="doc.poznamka"/></div>
+                        </p>
+
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th><strong>Oddiel</strong></th>
+                                    <th><strong>Položka</strong></th>
+                                    <th><strong>Merná jednotka</strong></th>
+                                    <th class="text-right"><strong>Počet</strong></th>
+                                    <th class="text-right"><strong>Jednotková cena</strong></th>
+                                    <th class="text-right"><strong>Cena celkom</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="rows" t-value="doc._get_rows(doc.id)"/>
+                                <tr t-foreach="rows[0]" t-as="row">
+                                    <td>
+                                        <span t-esc="row['oddiel']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="row['polozka']"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="row['mj']"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="row['pocet']"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="row['cena_jednotkova']"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="row['cena_celkom']"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <p>
-                        <div>Číslo: <span t-field="doc.cislo"/></div>
-                        <div>Finančný kód: <span t-field="doc.financny_kod"/></div>
-                        <div>Skratka: <span t-field="doc.skratka"/></div>
-                        <div>Zahájenie: <span t-field="doc.datum_zaciatok"/></div>
-                        <div>Ukončenie: <span t-field="doc.datum_koniec"/></div>
-                    </p>
-                    <p>
-                        <div>??? Dodávateľ: ???<span t-field="doc.dodavatel_id.name"/> - Cenník: <span t-field="doc.cennik_id.name"/></div>
-                        <div>PC(projektový koordinátor): <span t-field="doc.pc_id.name"/></div>
-                        <div>PM(projektový manažér): <span t-field="doc.pm_id.name"/></div>
-                        <div>Manager: <span t-field="doc.manager_id.name"/></div>
-                    </p>
-                    <p>
-                        <div>Poznámka: <span t-field="doc.poznamka"/></div>
-                    </p>
 
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th><strong>Oddiel</strong></th>
-                                <th><strong>Položka</strong></th>
-                                <th><strong>Merná jednotka</strong></th>
-                                <th class="text-right"><strong>Počet</strong></th>
-                                <th class="text-right"><strong>Jednotková cena</strong></th>
-                                <th class="text-right"><strong>Cena celkom</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <t t-set="rows" t-value="doc._get_rows(doc.id)"/>
-                            <tr t-foreach="rows[0]" t-as="row">
-                                <!--<t t-call="o.a_function_name" t-lang="o"/>-->
-
-                                <td>
-                                    <span t-esc="row['oddiel']"/>
-                                </td>
-                                <td>
-                                    <span t-esc="row['polozka']"/>
-                                </td>
-                                <td class="text-center">
-                                    <span t-esc="row['mj']"/>
-                                </td>
-                                <td class="text-right">
-                                    <span t-esc="row['pocet']"/>
-                                </td>
-                                <td class="text-right">
-                                    <span t-esc="row['cena_jednotkova']"/>
-                                </td>
-                                <td class="text-right">
-                                    <span t-esc="row['cena_celkom']"/>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="row">
-
+                    <div class="footer">
+                        <div class="row">Vytlacil: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
                     </div>
-                </div>
 
-                <div class="footer">
-                    <div class="row">Vytlacil: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
-                </div>
-
-            </t>
+                </t>
         </template>
+
+        <!-- copied from report/views/layouts.xml -->
+        <template id="layout_header">
+            <div class="header">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 45px;"/>
+                    </div>
+                    <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.rml_header1"/>
+                </div>
+                <div class="row zero_min_height">
+                    <div class="col-xs-12">
+                        <div style="border-bottom: 1px solid black;"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3" name="company_address">
+                        <div t-field="company.partner_id"
+                            t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'
+                            style="border-bottom: 1px solid black;"/>
+                    </div>
+                </div>
+            </div>
+
+        </template>
+
+        <template id="layout_footer">
+            <div class="footer">
+                <div class="row">Vytlacil: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
+            </div>
+        </template>
+
 
         <template id="report_cenova_ponuka_pdf">
             <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="doc">
+
+                    <!--<t t-call="o2net.layout_header" />-->
+                    <!--<t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.dodavatel_id.lang"/>-->
+                    <!--<t t-call="o2net.layout_footer" />-->
+
                     <t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.dodavatel_id.lang"/>
                 </t>
             </t>
