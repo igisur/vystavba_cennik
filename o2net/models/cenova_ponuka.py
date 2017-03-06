@@ -244,6 +244,8 @@ class VystavbaCenovaPonuka(models.Model):
         self.env.cr.execute(query, (cp_id, cp_id, cp_id))
         data = self.env.cr.dictfetchall()
 
+        _logger.info("a_function_name " + str(data[1]))
+
         return data
 
     ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute="_compute_ro_datumoddo")
