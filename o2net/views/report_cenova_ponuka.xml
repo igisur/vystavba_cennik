@@ -39,10 +39,24 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <group></group>
+                                <t t-set="oddiel_group" t-value="[]"/>
                                 <t t-set="rows" t-value="doc._get_rows(doc.id)"/>
+                                <t t-foreach="rows[0]" t-as="row">
+                                    <t t-set="oddiel_group" t-value="oddiel_group+[row['oddiel']]"/>
+                                </t>
+                                <t t-foreach="set(oddiel_group)" t-as="oddielg">
+                                    <div><strong t-esc="oddielg"/></div>
+                                    <t t-foreach="rows[0]" t-as="row">
+                                        <t t-if="oddielg==row['oddiel']">
+                                            <div><span t-esc="row['oddiel']"/></div>
+                                        </t>
+                                    </t>
+                                </t>
                                 <tr t-foreach="rows[0]" t-as="row">
                                     <td>
                                         <span t-esc="row['oddiel']"/>
+                                        <!--<span t-esc="row['oddiel']" groups="oddiel" />-->
                                     </td>
                                     <td>
                                         <span t-esc="row['polozka']"/>

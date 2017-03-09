@@ -40,6 +40,15 @@ class VystavbaCenovaPonuka(models.Model):
     GROUP_MANAGER = 'o2net.group_vystavba_manager'
     GROUP_ADMIN = 'o2net.group_vystavba_admin'
 
+    @api.model
+    def do_check_approve(self):
+        #
+        #
+        _logger.info('do_check_approve')
+        if self.state=='TO_APPROVE':
+            _logger.info('do_check_approve TO_APPROVE')
+
+
     @api.one
     def action_exportSAP(self):
         # zavolat ako default pre self.sap_export_file_binary ak je CP v stave 'approved'
