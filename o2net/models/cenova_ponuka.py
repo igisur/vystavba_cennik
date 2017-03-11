@@ -40,15 +40,6 @@ class VystavbaCenovaPonuka(models.Model):
     GROUP_MANAGER = 'o2net.group_vystavba_manager'
     GROUP_ADMIN = 'o2net.group_vystavba_admin'
 
-    @api.model
-    def do_check_approve(self):
-        #
-        #
-        _logger.info('do_check_approve')
-        if self.state=='TO_APPROVE':
-            _logger.info('do_check_approve TO_APPROVE')
-
-
     @api.one
     def action_exportSAP(self):
         # zavolat ako default pre self.sap_export_file_binary ak je CP v stave 'approved'
@@ -194,13 +185,29 @@ class VystavbaCenovaPonuka(models.Model):
     @api.one
     @api.depends('dodavatel_id','osoba_priradena_id')
     def _compute_ro_datumoddo(self):
-        _logger.info("_compute_ro_datumoddo: " + str(len(self)))
+        _logger.info("_compute_ro_datumoddo")
         if self.osoba_priradena_id.id:
             if self.osoba_priradena_id.id == self.dodavatel_id.id:
                 self.ro_datumoddo = False
             else:
                 self.ro_datumoddo = True
         return {}
+
+    @api.depends('osoba_priradena_id')
+    def _compute_can_user_exec_wf(self):
+        _logger.info("_compute_can_user_exec_wf")
+
+        ret = False
+
+        _logger.info("logged user: " + str(self.env.user.partner_id.id))
+        _logger.info("superuser: " + str(SUPERUSER_ID))
+        _logger.info("assigned: " + str(self.osoba_priradena_id.id))
+        if self.env.user.partner_id.id == self.osoba_priradena_id.id or SUPERUSER_ID == self.osoba_priradena_id.id:
+            ret = True
+
+        _logger.info("result: " + str(ret))
+
+        return ret
 
     @api.one
     def _resolve_record_url(self):
@@ -254,7 +261,8 @@ class VystavbaCenovaPonuka(models.Model):
         data = self.env.cr.dictfetchall()
         return data
 
-    ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute="_compute_ro_datumoddo")
+    ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute=_compute_ro_datumoddo, store=False, copy=False)
+    can_user_exec_wf = fields.Boolean(string="Can user execute workflow action", compute=_compute_can_user_exec_wf, store=False, copy=False)
 
     name = fields.Char(required=True, string="Názov", size=50, copy=True)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=True);

@@ -84,19 +84,6 @@
             <field name="perm_create" eval="False"/>
         </record>
 
-<!--
-        <record model="ir.rule" id="rule_assigned_user">
-            <field name="name">supplier can read_write</field>
-            <field name="model_id" ref="model_o2_vys_cenova_ponuka"/>
-            <field name="domain_force">[('osoba_priradena_id.id','=',user.partner_id.id)]</field>
-            <field name="groups" eval="[(4, ref('group_vystavba_supplier'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_unlink" eval="False"/>
-            <field name="perm_create" eval="False"/>
-        </record>
--->
-
     </data>
 
 </openerp>

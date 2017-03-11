@@ -39,12 +39,13 @@
                 <form>
                     <header>
                         <!-- use class="oe_highlight" to suggest WF action -->
-                        <button name="assign" type="workflow" states="draft" string="Priradiť" class="oe_highlight"/>
-                        <button name="in_progress" type="workflow" states="assigned" string="Rozpracovať" class="oe_highlight"/>
-                        <button name="wf_not_complete" type="object" states="to_approve" string="Vratiť na opravu"/>
-                        <button name="to_approve" type="workflow" states="in_progress" string="Odoslať na schválenie" class="oe_highlight"/>
-                        <button name="approve" type="workflow" states="to_approve" string="Schváliť" class="oe_highlight"/>
-                        <button name="cancel" type="workflow" states="to_approve" string="Zrušiť"/>
+                        <field name="can_user_exec_wf" invisible="1"/>
+                        <button name="assign" type="workflow" string="Priradiť" class="oe_highlight" attrs="{'invisible':['|',('can_user_exec_wf','!=',True),('state','!=','draft')]}"/>
+                        <button name="in_progress" type="workflow" string="Rozpracovať" class="oe_highlight"  attrs="{'invisible':['|',('can_user_exec_wf','!=',True),('state','!=','assigned')]}"/>
+                        <button name="wf_not_complete" type="object" string="Vratiť na opravu" attrs="{'invisible':['|',('can_user_exec_wf','!=',True),('state','!=','to_approve')]}"/>
+                        <button name="to_approve" type="workflow" string="Odoslať na schválenie" class="oe_highlight" attrs="{'invisible':['|',('can_user_exec_wf','!=',True),('state','!=','in_progress')]}"/>
+                        <button name="approve" type="workflow" string="Schváliť" class="oe_highlight" attrs="{'invisible':['|',('can_user_exec_wf','!=',True),('state','!=','to_approve')]}"/>
+                        <button name="cancel" type="workflow" string="Zrušiť" attrs="{'invisible':['|',('can_user_exec_wf','!=',True),('state','!=','to_approve')]}"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,assigned,in_progress,to_approve,approved" readonly="1"/>
                     </header>
                     <sheet>
