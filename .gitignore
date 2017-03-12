@@ -1,3 +1,4 @@
+.idea
 *.pyc
 /vystavba/*.pyc
 /vystavba/models/*.pyc

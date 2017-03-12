@@ -8,9 +8,6 @@ import datetime
 import logging
 import base64
 
-#ivan.dian@o2.sk
-#tomas.hellebrandt@o2.sk
-
 _logger = logging.getLogger(__name__)
 
 class VystavbaCenovaPonuka(models.Model):
@@ -40,27 +37,6 @@ class VystavbaCenovaPonuka(models.Model):
     GROUP_MANAGER = 'o2net.group_vystavba_manager'
     GROUP_ADMIN = 'o2net.group_vystavba_admin'
 
-<<<<<<< .mine
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
     @api.model
     def do_check_approve(self):
         # kontrola cakania na schvalenie CP
@@ -80,7 +56,6 @@ class VystavbaCenovaPonuka(models.Model):
                 #poslem mail
                 self.send_mail([self.manager_id.email], template_name='mail_manager_warning')
 
->>>>>>> .theirs
     @api.one
     def action_exportSAP(self):
         # zavolat ako default pre self.sap_export_file_binary ak je CP v stave 'approved'
