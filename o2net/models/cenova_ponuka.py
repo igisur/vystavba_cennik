@@ -42,12 +42,22 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.model
     def do_check_approve(self):
-        #
-        #
+        # kontrola cakania na schvalenie CP
+        # volane zo schhedulera
         _logger.info('do_check_approve')
-        if self.state=='TO_APPROVE':
-            _logger.info('do_check_approve TO_APPROVE')
+        index = 0
+        today = datetime.datetime.now()
+        for row in self.search([('state', '=', 'to_approve')]):
+            index += 1
+            if not row.manager_id:
+                _logger.info('manager nie je nasetovany !!!!')
+                return
 
+            rozdiel = abs((today - datetime.datetime.strptime(row.state_date, DEFAULT_SERVER_DATE_FORMAT)).days)
+            _logger.info('rozdiel ' + str(rozdiel) + ' ---- je na schvalenie pocet dni: ' + str(row.manager_id.reminder_interval))
+            if rozdiel >  row.manager_id.reminder_interval:
+                #poslem mail
+                self.send_mail([self.manager_id.email], template_name='mail_manager_warning')
 
     @api.one
     def action_exportSAP(self):
@@ -272,7 +282,7 @@ class VystavbaCenovaPonuka(models.Model):
     manager_id = fields.Many2one('res.partner', string='Manager', track_visibility='onchange', domain=partners_in_group_manager, copy=False)
     osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange', default= lambda self: self.env.user.partner_id.id)
     state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange', copy=False)
-
+    state_date = fields.Date(string="date state", default=datetime.date.today(), copy=False);
     cennik_id = fields.Many2one('o2net.cennik', string='Cenník', copy=True)
     currency_id = fields.Many2one(related='cennik_id.currency_id', string="Mena", copy=True)
 
@@ -380,6 +390,11 @@ class VystavbaCenovaPonuka(models.Model):
         result = {'cennik_id': self.cennik_id}
         self.write(result)
         return result
+
+    @api.one
+    @api.onchange('state')
+    def _set_state_date(self):
+        self.state_date = datetime.date.today()
 
     @api.constrains('name')
     def _check_unique_constraint(self):
