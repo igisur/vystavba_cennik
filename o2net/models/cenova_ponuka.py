@@ -423,6 +423,7 @@ class VystavbaCenovaPonuka(models.Model):
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         manager_ids = self.env['res.partner'].search([('id', 'in', partner_ids),('cp_celkova_cena_limit', '<=', self.celkova_cena)], order = "cp_celkova_cena_limit desc", limit = 1)
 
+        _logger.info("Found managers: " + str(manager_ids))
         for man in manager_ids:
             _logger.info(man.name)
 
@@ -448,9 +449,8 @@ class VystavbaCenovaPonuka(models.Model):
         if self.wf_dovod:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
-        self.write({'state': self.ASSIGNED, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
-        # send email to supplier
-        self.send_mail([self.dodavatel_id.email])
+        self.sudo().write({'state': self.ASSIGNED, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
+        self.sudo().send_mail([self.dodavatel_id.email])
         return True
 
     @api.one
@@ -460,9 +460,9 @@ class VystavbaCenovaPonuka(models.Model):
         if self.wf_dovod:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
-        self.write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
-        # notify PC via email that supplier starts wirking on CP
-        # self.send_mail([self.dodavatel_id.email])
+        self.sudo().write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
+        # notify PC via email that supplier starts working on CP
+        self.sudo().send_mail([self.pc_id.email], template_name='mail_cp_in_progress')
         return True
 
     @api.one
@@ -478,28 +478,28 @@ class VystavbaCenovaPonuka(models.Model):
         if self.osoba_priradena_id.id == self.dodavatel_id.id:
             #  Dodavatel poslal na schvalenie PC
             _logger.info("Supplier sent to approve by PC")
-            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': ''})
-            self.send_mail([self.pc_id.email])
+            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': ''})
+            self.sudo().send_mail([self.pc_id.email])
 
         elif self.osoba_priradena_id.id == self.pc_id.id:
             #  PC poslal na schvalenie PM
             _logger.info("PC sent to approve by PM")
-            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pm_id.id, 'wf_dovod': ''})
-            self.send_mail([self.pm_id.email])
+            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pm_id.id, 'wf_dovod': ''})
+            self.sudo().send_mail([self.pm_id.email])
 
         elif self.osoba_priradena_id.id == self.pm_id.id:   
             #  PM poslal na schvalenie Managerovy
             _logger.info("PM sent to approve by Manager")
             manager_id = self._find_manager()
-            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': manager_id.id, 'manager_id': manager_id.id, 'wf_dovod': ''})
-            self.send_mail([manager_id.email])
+            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_id': manager_id.id, 'manager_id': manager_id.id, 'wf_dovod': ''})
+            self.sudo().send_mail([manager_id.email])
 
         elif self.osoba_priradena_id.id == self.manager_id.id:
             #  Manager schvalil -> CP je schvalena a koncime
             _logger.info("Manager approved")
-            self.write({'state': self.APPROVED, 'osoba_priradena_id': '', 'wf_dovod': ''})
-            self.send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_approved')
-            self.action_exportSAP()
+            self.sudo().write({'state': self.APPROVED, 'osoba_priradena_id': '', 'wf_dovod': ''})
+            self.sudo().send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_approved')
+            self.sudo().action_exportSAP()
 
         return True
 
@@ -514,16 +514,16 @@ class VystavbaCenovaPonuka(models.Model):
         # PC signals 'not complete' - CP should be 'in_progress' and assigned to Supplier
         if self.osoba_priradena_id.id == self.pc_id.id :
             _logger.info("workflow action to IN_PROGRESS")
-            self.write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
-            self.send_mail([self.dodavatel_id.email])
-            self.signal_workflow('not_complete')
+            self.sudo().write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
+            self.sudo().send_mail([self.dodavatel_id.email])
+            self.sudo().signal_workflow('not_complete')
             # call WF: signal "not complete". som v stave "to_approve". potrebujem ist do in_progers
 
         # PM signals 'not complete' - CP should be 'to_approve' and assigned to PC
         elif self.osoba_priradena_id.id == self.pm_id.id :
             _logger.info("workflow action to TO_APPROVE")
-            self.write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': ''})
-            self.send_mail([self.pc_id.email])
+            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': ''})
+            self.sudo().send_mail([self.pc_id.email])
 
         return True
 
@@ -535,15 +535,9 @@ class VystavbaCenovaPonuka(models.Model):
         if self.wf_dovod:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
-        self.write({'state': self.CANCEL, 'osoba_priradena_id': '', 'wf_dovod': ''})
-        self.send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_canceled')
+        self.sudo().write({'state': self.CANCEL, 'osoba_priradena_id': '', 'wf_dovod': ''})
+        self.sudo().send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_canceled')
         return True
-
-    @api.one
-    def action_sendMail(self):
-        self.ensure_one()
-        self.send_mail()
-        return
 
     @api.one
     def send_mail(self, mail_to=None, template_name='mail_cp_assigned'):

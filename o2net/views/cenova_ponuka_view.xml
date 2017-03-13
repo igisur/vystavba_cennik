@@ -44,15 +44,13 @@
                         <button name="in_progress" type="workflow" string="Rozpracovať" class="oe_highlight" states="assigned" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
                         <button name="wf_not_complete" type="object" string="Vratiť na opravu" states="to_approve" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
                         <button name="to_approve" type="workflow" string="Odoslať na schválenie" class="oe_highlight" states="in_progress" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
-                        <button name="to_approve" type="workflow" string="Odoslať na schválenie" class="oe_highlight" states="to_approve" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
-                        <button name="approve" type="workflow" string="Schváliť" class="oe_highlight" states="to_approve" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
+                        <button name="approve" type="workflow" string="Schváliť" class="oe_highlight" states="to_approve" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
                         <button name="cancel" type="workflow" string="Zrušiť" states="to_approve" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,assigned,in_progress,to_approve,approved" readonly="1"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button string="Export SAP" name="action_exportSAP" type="object" icon="fa-file-text-o" groups="o2net.group_vystavba_admin"/>
-                            <button string="Send mail" name="action_sendMail" type="object" icon="fa-file-text-o" groups="o2net.group_vystavba_admin"/>
                         </div>
                         <div class="oe_title">
                             <h1>
