@@ -300,6 +300,10 @@ class VystavbaCenovaPonuka(models.Model):
     cennik_id = fields.Many2one('o2net.cennik', string='Cenník', copy=True)
     currency_id = fields.Many2one(related='cennik_id.currency_id', string="Mena", copy=True)
 
+    manager_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_manager_rel", string='Managers', domain=partners_in_group_manager, copy=False)
+    osoba_priradena_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_assigned_rel", string='Priradené osoby', copy=False, default = lambda self: [(4,self.env.user.partner_id.id)])
+    # default = lambda self: [(4, False, self.env.user.partner_id.id)]
+
     cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky', track_visibility='onchange', copy=True)
     cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', track_visibility='onchange', copy=True)
 

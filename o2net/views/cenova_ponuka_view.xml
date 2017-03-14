@@ -77,7 +77,18 @@
                                 <field name="osoba_priradena_id" readonly="True"/>
                                 <field name="cennik_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" class="oe_read_only"/>
                                 <field name="currency_id" invisible="1" class="oe_read_only"/>
+                                <field name="manager_ids" options="{'no_create': True}" groups="o2net.group_vystavba_admin">
+                                    <tree>
+                                        <field name="display_name"/>
+                                    </tree>
+                                </field>
+                                <field name="osoba_priradena_ids" readonly="True" options="{'no_create_edit': True}" groups="o2net.group_vystavba_admin">
+                                    <tree>
+                                        <field name="display_name"/>
+                                    </tree>
+                                </field>
                             </group>
+
                         </group>
 
                         <notebook>
