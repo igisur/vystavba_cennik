@@ -442,6 +442,15 @@ class VystavbaCenovaPonuka(models.Model):
 
         return True
 
+    def wf_can_user_workflow(self):
+
+        ret = self._compute_can_user_exec_wf()
+
+        if ret is False:
+            raise AccessError("Nemáte oprávnenie vykonat workflow akciu.")
+
+        return ret
+
     @api.one
     def wf_assign(self):
         _logger.info("workflow action to ASSIGN")
@@ -507,6 +516,8 @@ class VystavbaCenovaPonuka(models.Model):
     def wf_not_complete(self):
         _logger.info("workflow action to NOT_COMPLETE")
         self.ensure_one()
+
+        self.wf_can_user_workflow()
 
         if self.wf_dovod:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")

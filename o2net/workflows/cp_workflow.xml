@@ -60,43 +60,49 @@
             <field name="act_from" ref="draft"/>
             <field name="act_to" ref="assigned"/>
             <field name="signal">assign</field>
-            <field name="condition">wf_assign_check()</field>
+            <field name="condition">wf_assign_check();wf_can_user_workflow()</field>
         </record>
 
         <record model="workflow.transition" id="cp_assigned_in_progress">
             <field name="act_from" ref="assigned"/>
             <field name="act_to" ref="in_progress"/>
             <field name="signal">in_progress</field>
+            <field name="condition">wf_can_user_workflow()</field>
         </record>
 
         <record model="workflow.transition" id="cp_in_progress_to_to_approve">
             <field name="act_from" ref="in_progress"/>
             <field name="act_to" ref="to_approve"/>
             <field name="signal">to_approve</field>
+            <field name="condition">wf_can_user_workflow()</field>
         </record>
 
         <record model="workflow.transition" id="cp_to_approve_to_approve">
             <field name="act_from" ref="to_approve"/>
             <field name="act_to" ref="to_approve"/>
             <field name="signal">approve</field>
+            <field name="condition">wf_can_user_workflow()</field>
         </record>
 
         <record model="workflow.transition" id="cp_to_approve_to_approved">
             <field name="act_from" ref="to_approve"/>
             <field name="act_to" ref="approved"/>
             <field name="signal">approved</field>
+            <field name="condition">wf_can_user_workflow()</field>
         </record>
 
         <record model="workflow.transition" id="cp_to_approve_to_cancel">
             <field name="act_from" ref="to_approve"/>
             <field name="act_to" ref="cancel"/>
             <field name="signal">cancel</field>
+            <field name="condition">wf_can_user_workflow()</field>
         </record>
 
         <record model="workflow.transition" id="cp_to_approve_to_in_progress">
             <field name="act_from" ref="to_approve"/>
             <field name="act_to" ref="in_progress"/>
             <field name="signal">not_complete</field>
+            <field name="condition">wf_can_user_workflow()</field>
         </record>
 
     </data>
