@@ -154,10 +154,6 @@ class VystavbaCenovaPonuka(models.Model):
         ret = '\r\n'.join(data)
         return ret
 
-    @api.model
-    def _get_default_osoba_priradena(self):
-        self.osoba_priradena_id = self.env.user.partner_id
-
     # limit partners to specific group
     @api.model
     def _partners_in_group(self, group_name):
@@ -199,26 +195,35 @@ class VystavbaCenovaPonuka(models.Model):
             cp.update({'celkova_cena': cp_celkova_cena})
 
     @api.one
-    @api.depends('dodavatel_id','osoba_priradena_id')
+    @api.depends('dodavatel_id','osoba_priradena_ids')
     def _compute_ro_datumoddo(self):
         _logger.info("_compute_ro_datumoddo")
-        if self.osoba_priradena_id.id:
-            if self.osoba_priradena_id.id == self.dodavatel_id.id:
+        if self.osoba_priradena_ids:
+            if self.dodavatel_id.id in self.osoba_priradena_ids.ids:
                 self.ro_datumoddo = False
             else:
                 self.ro_datumoddo = True
         return {}
 
-    @api.depends('osoba_priradena_id')
+    def _is_user_assigned(self):
+        ret = False;
+        if self.env.user.partner_id.id in self.osoba_priradena_ids.ids:
+            ret = True
+
+        _logger.info("is_user_assigned " + str(ret))
+        self.is_user_assigned = ret
+        return ret
+
+    @api.depends('osoba_priradena_ids')
     def _compute_can_user_exec_wf(self):
         _logger.info("_compute_can_user_exec_wf")
 
         ret = False
 
-        _logger.info("logged user: " + str(self.env.user.partner_id.id))
         _logger.info("superuser: " + str(SUPERUSER_ID))
-        _logger.info("assigned: " + str(self.osoba_priradena_id.id))
-        if self.env.user.partner_id.id == self.osoba_priradena_id.id or SUPERUSER_ID == self.osoba_priradena_id.id:
+        _logger.info("logged user: " + str(self.env.user.partner_id.id))
+        _logger.info("assigned: " + str(self.osoba_priradena_ids.ids))
+        if self.is_user_assigned or self.env.user.id == SUPERUSER_ID:
             ret = True
 
         _logger.info("result: " + str(ret))
@@ -277,8 +282,10 @@ class VystavbaCenovaPonuka(models.Model):
         data = self.env.cr.dictfetchall()
         return data
 
+    # computed fields
     ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute=_compute_ro_datumoddo, store=False, copy=False)
     can_user_exec_wf = fields.Boolean(string="Can user execute workflow action", compute=_compute_can_user_exec_wf, store=False, copy=False)
+    is_user_assigned = fields.Boolean(string="Is current user assigned", compute=_is_user_assigned)
 
     name = fields.Char(required=True, string="Názov", size=50, copy=True)
     cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=True);
@@ -291,18 +298,18 @@ class VystavbaCenovaPonuka(models.Model):
     celkova_cena = fields.Float(compute=_amount_all, string='Celková cena', store=True, digits=(10,2), track_visibility='onchange', copy=False)
 
     dodavatel_id = fields.Many2one('res.partner', required=True, string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
-    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True)
+    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True, default= lambda self: self.env.user.partner_id.id)
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm, copy=True)
-    manager_id = fields.Many2one('res.partner', string='Manager', track_visibility='onchange', domain=partners_in_group_manager, copy=False)
-    osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange', default= lambda self: self.env.user.partner_id.id)
+    manager_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_manager_rel", string='Manager', domain=partners_in_group_manager, copy=False)
+    osoba_priradena_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_assigned_rel", string='Priradené osoby', copy=False, default = lambda self: [(4,self.env.user.partner_id.id)])
+
     state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange', copy=False)
     state_date = fields.Date(string="date state", default=datetime.date.today(), copy=False);
     cennik_id = fields.Many2one('o2net.cennik', string='Cenník', copy=True)
     currency_id = fields.Many2one(related='cennik_id.currency_id', string="Mena", copy=True)
 
-    manager_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_manager_rel", string='Managers', domain=partners_in_group_manager, copy=False)
-    osoba_priradena_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_assigned_rel", string='Priradené osoby', copy=False, default = lambda self: [(4,self.env.user.partner_id.id)])
-    # default = lambda self: [(4, False, self.env.user.partner_id.id)]
+    #osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange', default= lambda self: self.env.user.partner_id.id)
+    #manager_id = fields.Many2one('res.partner', string='Manager', track_visibility='onchange', domain=partners_in_group_manager, copy=False)
 
     cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky', track_visibility='onchange', copy=True)
     cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', track_visibility='onchange', copy=True)
@@ -314,11 +321,27 @@ class VystavbaCenovaPonuka(models.Model):
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
     sap_export_file_binary = fields.Binary(string='Export file', copy=False)
 
+    #msg_ids = fields.One2many('mail.message', 'res_id', string='Messages',domain=lambda self: [('model', '=', self._name)], auto_join=True)
     base_url = fields.Char(compute=_resolve_record_url, string="Link", store=False, copy=False, )
 
-    @api.one
+    @api.model
+    def create(self, vals):
+        # PC - ak ativny user je PC, tak ho rovno predvolime
+        if self.env.user.id in self._partners_in_group(self.GROUP_PC):
+            vals['pc_id'] = self.env.user.id;
+
+        return super(VystavbaCenovaPonuka, self).create(vals)
+
+
+    @api.multi
     def write(self, vals):
         self.ensure_one()
+        _logger.info("WRITE: ")
+        _logger.info("user " + str(self.env.user.id))
+        _logger.info("user partner " + str(self.env.user.partner_id.id))
+        _logger.info("dodavatel " + str(self.dodavatel_id.id))
+        _logger.info("priradeny " + str(self.osoba_priradena_ids.ids))
+        _logger.info("stav " + str(self.state))
 
         # log changes in purchase order lines
         if 'cp_polozka_ids' in vals:
@@ -341,26 +364,16 @@ class VystavbaCenovaPonuka(models.Model):
         res = super(VystavbaCenovaPonuka, self).write(vals)
 
         state = vals.get('state')
-        _logger.info("WRITE: " + str(state))
         # ak zapisujeme stav prisli sme sem z WF akcie, a preto koncime. automaticka zmena stavu WF je len v pripade akcie SAVE kde sa 'state' nemeni!
         if not vals.get('state') == None:
             return res
 
-        _logger.info("WRITE: user " + str(self.env.user.id))
-        _logger.info("WRITE: user partner " + str(self.env.user.partner_id.id))
-        _logger.info("WRITE: dodavatel " + str(self.dodavatel_id.id))
-        _logger.info("WRITE: priradeny " + str(self.osoba_priradena_id.id))
-        _logger.info("WRITE: stav " + str(self.state))
-
         # ak je prihlaseny Dodavatel, je mu priradena CP a je v stave ASSIGNED tak pri save zmenime stav na IN_PROGRESS
-        if self.dodavatel_id.id == self.env.user.partner_id.id:
-            _logger.info("WRITE: je prihlaseny dodavatel")
-            if self.dodavatel_id.id == self.osoba_priradena_id.id:
-                _logger.info("WRITE: je mu priradena CP")
-                if self.state == self.ASSIGNED:
-                    _logger.info("WRITE: CP je v stave ASSIGNED")
-                    _logger.info("WRITE: stav sa automaticky meni na IN_PROGRESS")
-                    self.signal_workflow('in_progress')
+        if self.dodavatel_id.id in self.osoba_priradena_ids.ids:
+            _logger.info("CP je priradena dodavatelovy")
+            if self.state == self.ASSIGNED:
+                _logger.info("CP je v stave ASSIGNED > stav sa automaticky meni na IN_PROGRESS")
+                self.signal_workflow('in_progress')
 
         return res
 
@@ -381,8 +394,6 @@ class VystavbaCenovaPonuka(models.Model):
         if not self.state == self.DRAFT:
             raise AccessError("Cenovú ponuku je možné zmazať len pokiaľ je v stave 'Návrh'. V ostatnom prípade použite workflow akciu 'Zrušiť'")
 
-
-    @api.one
     @api.onchange('dodavatel_id')
     def _find_cennik(self):
         result = {}
@@ -409,7 +420,6 @@ class VystavbaCenovaPonuka(models.Model):
         self.write(result)
         return result
 
-    @api.one
     @api.onchange('state')
     def _set_state_date(self):
         self.state_date = datetime.date.today()
@@ -422,31 +432,34 @@ class VystavbaCenovaPonuka(models.Model):
 
     # Workflow
     # najdi partnera v skupine 'Manager', ktoreho field 'cena_na_schvalenie' je vacsia ako celkova cena CP
-    def _find_manager(self):
+    def _find_managers(self):
         _logger.info("Looking for manager to approve order of price " + str(self.celkova_cena))
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
-        manager_ids = self.env['res.partner'].search([('id', 'in', partner_ids),('cp_celkova_cena_limit', '<=', self.celkova_cena)], order = "cp_celkova_cena_limit desc", limit = 1)
+        manager_ids = self.env['res.partner'].search([('id', 'in', partner_ids),('cp_celkova_cena_limit', '<=', self.celkova_cena)], order = "cp_celkova_cena_limit desc")
 
-        _logger.info("Found managers: " + str(manager_ids))
+        _logger.info("Found managers: " + str(manager_ids.ids))
         for man in manager_ids:
             _logger.info(man.name)
 
-        return manager_ids[0]
+        return manager_ids
 
-    @api.one
+    @api.multi
     def wf_draft(self):    # should be create but is set in field definition
         self.ensure_one()
         self.write({'state': self.DRAFT})
         return True
 
-    @api.one
+    @api.multi
     def wf_assign_check(self):
+        self.ensure_one()
         if self.dodavatel_id is False:
             raise AccessError("Cenova ponuka nema priradeneho dodavatela.")
 
         return True
 
+    @api.multi
     def wf_can_user_workflow(self):
+        self.ensure_one()
 
         ret = self._compute_can_user_exec_wf()
 
@@ -462,7 +475,7 @@ class VystavbaCenovaPonuka(models.Model):
         if self.wf_dovod:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
-        self.sudo().write({'state': self.ASSIGNED, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
+        self.sudo().write({'state': self.ASSIGNED, 'osoba_priradena_ids': [(6,0,[self.dodavatel_id.id])], 'wf_dovod': ''})
         self.sudo().send_mail([self.dodavatel_id.email])
         return True
 
@@ -473,7 +486,7 @@ class VystavbaCenovaPonuka(models.Model):
         if self.wf_dovod:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
-        self.sudo().write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
+        self.sudo().write({'state': self.IN_PROGRESS, 'osoba_priradena_ids': [(6,0,[self.dodavatel_id.id])], 'wf_dovod': ''})
         # notify PC via email that supplier starts working on CP
         self.sudo().send_mail([self.pc_id.email], template_name='mail_cp_in_progress')
         return True
@@ -488,31 +501,50 @@ class VystavbaCenovaPonuka(models.Model):
             # add to tracking values
             self.message_post(body='<ul class="o_mail_thread_message_tracking"><li>Workflow reason: ' + self.wf_dovod + '</li></ul>')
 
-        if self.osoba_priradena_id.id == self.dodavatel_id.id:
-            #  Dodavatel poslal na schvalenie PC
+        # Dodavatel poslal na schvalenie PC
+        if self.dodavatel_id.id in self.osoba_priradena_ids.ids:
             _logger.info("Supplier sent to approve by PC")
-            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': ''})
+            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
             self.sudo().send_mail([self.pc_id.email])
 
-        elif self.osoba_priradena_id.id == self.pc_id.id:
-            #  PC poslal na schvalenie PM
+        # PC poslal na schvalenie PM
+        elif self.pc_id.id in self.osoba_priradena_ids.ids:
             _logger.info("PC sent to approve by PM")
-            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pm_id.id, 'wf_dovod': ''})
+            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pm_id.id])], 'wf_dovod': ''})
             self.sudo().send_mail([self.pm_id.email])
 
-        elif self.osoba_priradena_id.id == self.pm_id.id:   
-            #  PM poslal na schvalenie Managerovy
+        # PM poslal na schvalenie Managerovy
+        elif self.pm_id.id in self.osoba_priradena_ids.ids:
             _logger.info("PM sent to approve by Manager")
-            manager_id = self._find_manager()
-            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_id': manager_id.id, 'manager_id': manager_id.id, 'wf_dovod': ''})
-            self.sudo().send_mail([manager_id.email])
+            manager_ids = self._find_managers()
+            if manager_ids:
+                self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,manager_ids.ids)], 'manager_ids': [(6,0,manager_ids.ids)], 'wf_dovod': ''})
+                emails = []
+                for manager in manager_ids:
+                    emails.append(manager.email)
+                # Nemozem pouzit current-user, pretoze mail sa posiela cez konto Admina!!!
+                self.sudo().send_mail(emails)
+            else:
+                _logger.info("no managers found")
+                raise UserError('No manager(s) found to assign.')
 
-        elif self.osoba_priradena_id.id == self.manager_id.id:
-            #  Manager schvalil -> CP je schvalena a koncime
-            _logger.info("Manager approved")
-            self.sudo().write({'state': self.APPROVED, 'osoba_priradena_id': '', 'wf_dovod': ''})
-            self.sudo().send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_approved')
-            self.sudo().action_exportSAP()
+        # Manager schvalil
+        elif self.env.user.partner_id.id in self.manager_ids.ids:
+            if self.is_user_assigned:
+                _logger.info("Manager '" + self.env.user.partner_id.display_name + "' approved")
+                self.sudo().write({'osoba_priradena_ids': [(3,self.env.user.partner_id.id)], 'wf_dovod': ''})
+                # posleme email PC, aby vedel, ze manager schvalil
+                self.sudo().send_mail([self.pc_id.email], template_name='mail_cp_manager_approved')
+
+        # aktualny uzivatel je medzi priradenymi managermi
+        if self.env.user.partner_id.id in self.manager_ids.ids:
+            # vsetci managery schvalili
+            if not self.osoba_priradena_ids.ids:
+                _logger.info("ALL managers approved")
+                self.sudo().write({'state': self.APPROVED, 'osoba_priradena_ids': [(5)], 'wf_dovod': ''})
+                self.sudo().send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_approved')
+                self.sudo().action_exportSAP()
+
 
         return True
 
@@ -527,17 +559,17 @@ class VystavbaCenovaPonuka(models.Model):
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
         # PC signals 'not complete' - CP should be 'in_progress' and assigned to Supplier
-        if self.osoba_priradena_id.id == self.pc_id.id :
+        if self.pc_id.id in self.osoba_priradena_ids.ids:
             _logger.info("workflow action to IN_PROGRESS")
-            self.sudo().write({'state': self.IN_PROGRESS, 'osoba_priradena_id': self.dodavatel_id.id, 'wf_dovod': ''})
+            self.sudo().write({'state': self.IN_PROGRESS, 'osoba_priradena_ids': [(6,0,[self.dodavatel_id.id])], 'wf_dovod': ''})
             self.sudo().send_mail([self.dodavatel_id.email])
             self.sudo().signal_workflow('not_complete')
             # call WF: signal "not complete". som v stave "to_approve". potrebujem ist do in_progers
 
         # PM signals 'not complete' - CP should be 'to_approve' and assigned to PC
-        elif self.osoba_priradena_id.id == self.pm_id.id :
+        elif self.pm_id.id in self.osoba_priradena_ids.ids:
             _logger.info("workflow action to TO_APPROVE")
-            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_id': self.pc_id.id, 'wf_dovod': ''})
+            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
             self.sudo().send_mail([self.pc_id.email])
 
         return True
@@ -550,7 +582,7 @@ class VystavbaCenovaPonuka(models.Model):
         if self.wf_dovod:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
-        self.sudo().write({'state': self.CANCEL, 'osoba_priradena_id': '', 'wf_dovod': ''})
+        self.sudo().write({'state': self.CANCEL, 'osoba_priradena_ids': [(5)], 'wf_dovod': ''})
         self.sudo().send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_canceled')
         return True
 
@@ -569,7 +601,9 @@ class VystavbaCenovaPonuka(models.Model):
         templateObj = self.env['mail.template'].browse(template.id)
         templateObj.email_from = 'odoo-mailer-daemon@o2network.sk'
         if mail_to:
-            templateObj.email_to = ",".join(mail_to)
+            email_to = ",".join(mail_to)
+            _logger.info("email_to:" + email_to)
+            templateObj.email_to = email_to
 
         # mail message
         # - author_id

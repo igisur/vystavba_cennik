@@ -11,7 +11,7 @@
                 <!-- pridaj fields z vystavby -->
                 <field name="mobile" position="after">
                     <field name="kod"/>
-                    <field name="cp_celkova_cena_limit"/>
+                    <field name="cp_celkova_cena_limit" groups="o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
                     <field name="reminder_interval"/>
                 </field>
             </field>

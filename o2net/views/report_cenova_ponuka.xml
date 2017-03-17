@@ -21,7 +21,7 @@
                             <div>??? Dodávateľ: ???<span t-field="doc.dodavatel_id.name"/> - Cenník: <span t-field="doc.cennik_id.name"/></div>
                             <div>PC(projektový koordinátor): <span t-field="doc.pc_id.name"/></div>
                             <div>PM(projektový manažér): <span t-field="doc.pm_id.name"/></div>
-                            <div>Manager: <span t-field="doc.manager_id.name"/></div>
+                            <div>Manager: <span t-field="doc.manager_ids"/></div>
                         </p>
                         <p>
                             <div>Poznámka: <span t-field="doc.poznamka"/></div>

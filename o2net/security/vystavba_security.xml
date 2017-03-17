@@ -58,7 +58,7 @@
             <field name="name">supplier can write purchase order where is assigned</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_supplier'))]"/>
-            <field name="domain_force">[('osoba_priradena_id.id','=',user.partner_id.id)]</field>
+            <field name="domain_force">[('osoba_priradena_ids', 'in', [user.partner_id.id])]</field>
             <field name="perm_read" eval="False"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_unlink" eval="True"/>
@@ -79,10 +79,10 @@
         </record>
 
         <record model="ir.rule" id="rule_pc">
-            <field name="name">project coordinator can read purchase order where is assigned</field>
+            <field name="name">project coordinator can write/unlink purchase order where is assigned</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_pc'))]"/>
-            <field name="domain_force">[('osoba_priradena_id.id','=',user.partner_id.id)]</field>
+            <field name="domain_force">[('osoba_priradena_ids', 'in', [user.partner_id.id])]</field>
             <field name="perm_read" eval="False"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_unlink" eval="True"/>
@@ -106,7 +106,7 @@
             <field name="name">project manager can read purchase order where is assigned</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_pm'))]"/>
-            <field name="domain_force">[('osoba_priradena_id.id','=',user.partner_id.id)]</field>
+            <field name="domain_force">[('osoba_priradena_ids', 'in', [user.partner_id.id])]</field>
             <field name="perm_read" eval="False"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_unlink" eval="True"/>
@@ -130,7 +130,7 @@
             <field name="name">manager can read purchase order where is assigned</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_manager'))]"/>
-            <field name="domain_force">[('osoba_priradena_id.id','=',user.partner_id.id)]</field>
+            <field name="domain_force">[('osoba_priradena_ids', 'in', [user.partner_id.id])]</field>
             <field name="perm_read" eval="False"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_unlink" eval="True"/>

@@ -39,13 +39,12 @@
                 <form>
                     <header>
                         <!-- use class="oe_highlight" to suggest WF action -->
-                        <field name="can_user_exec_wf" invisible="1"/>
-                        <button name="assign" type="workflow" string="Priradiť" class="oe_highlight" states="draft" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_pc,o2net.group_vystavba_admin"/>
-                        <button name="in_progress" type="workflow" string="Rozpracovať" class="oe_highlight" states="assigned" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
-                        <button name="wf_not_complete" type="object" string="Vratiť na opravu" states="to_approve" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
-                        <button name="to_approve" type="workflow" string="Odoslať na schválenie" class="oe_highlight" states="in_progress" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
-                        <button name="approve" type="workflow" string="Schváliť" class="oe_highlight" states="to_approve" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
-                        <button name="cancel" type="workflow" string="Zrušiť" states="to_approve" attrs="{'readonly':[('can_user_exec_wf','=',False)]}" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
+                        <button name="assign" type="workflow" string="Priradiť" class="oe_highlight" states="draft" groups="o2net.group_vystavba_pc,o2net.group_vystavba_admin"/>
+                        <button name="in_progress" type="workflow" string="Rozpracovať" class="oe_highlight" states="assigned" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
+                        <button name="wf_not_complete" type="object" string="Vratiť na opravu" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
+                        <button name="to_approve" type="workflow" string="Odoslať na schválenie" class="oe_highlight" states="in_progress" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
+                        <button name="approve" type="workflow" string="Schváliť" class="oe_highlight" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
+                        <button name="cancel" type="workflow" string="Zrušiť" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,assigned,in_progress,to_approve,approved" readonly="1"/>
                     </header>
                     <sheet>
@@ -73,20 +72,12 @@
                                 <field name="dodavatel_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" context="{'group_name':'TEST_GROUP'}"/>
                                 <field name="pc_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
                                 <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
-                                <field name="manager_id" readonly="True" options="{'no_create': True}"/>
-                                <field name="osoba_priradena_id" readonly="True"/>
+                                <!--<field name="manager_id" readonly="True" options="{'no_create': True}"/>-->
+                                <!--<field name="osoba_priradena_id" readonly="True"/>-->
+                                <field name="manager_ids" readonly="True" options="{'no_create': True}" widget="many2many_tags"/>
+                                <field name="osoba_priradena_ids" readonly="True" options="{'no_create_edit': True}" widget="many2many_tags"/>
                                 <field name="cennik_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" class="oe_read_only"/>
                                 <field name="currency_id" invisible="1" class="oe_read_only"/>
-                                <field name="manager_ids" options="{'no_create': True}" groups="o2net.group_vystavba_admin">
-                                    <tree>
-                                        <field name="display_name"/>
-                                    </tree>
-                                </field>
-                                <field name="osoba_priradena_ids" readonly="True" options="{'no_create_edit': True}" groups="o2net.group_vystavba_admin">
-                                    <tree>
-                                        <field name="display_name"/>
-                                    </tree>
-                                </field>
                             </group>
 
                         </group>
@@ -96,6 +87,7 @@
                                 <field name="cp_polozka_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Polozky cennika" editable="bottom">
                                         <field name="cennik_polozka_id" string="Položka cenníka" options="{'no_create': True}"/>
+                                        <!--context="{'form_view_ref' : 'module.view_id', 'tree_view_ref' : model.view_id'}"-->
                                         <field name="polozka_mj" readonly="1" string="mj"/>
                                         <field name="cena_jednotkova"/>
                                         <field name="mnozstvo"  string="Počet"/>
@@ -126,7 +118,7 @@
                         <label for="poznamka"/>
                         <field name="poznamka" attrs="{'readonly':[('state','in',['approved'])]}"/>
                         <label for="wf_dovod"/>
-                        <field name="wf_dovod" attrs="{'readonly':[('state','in',['approved'])]}"/>
+                        <field name="wf_dovod" attrs="{'invisible':[('state','in',['approved'])]}"/>
 
                     </sheet>
                     <div class="oe_chatter">
@@ -151,9 +143,10 @@
                     <field name="financny_kod"/>
                     <field name="datum_zaciatok"/>
                     <field name="datum_koniec"/>
-                    <field name="celkova_cena"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="celkova_cena" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                     <field name="dodavatel_id"/>
-                    <field name="osoba_priradena_id" string="Priradený"/>
+                    <field name="osoba_priradena_ids" string="Priradený" widget="one2many_list"/>
                 </tree>
             </field>
         </record>
@@ -172,10 +165,8 @@
                   <field name="cislo"/>
                   <field name="financny_kod"/>
                   <field name="skratka"/>
-                  <!--<field name="datum_zaciatok"/>-->
-                  <!--<field name="datum_koniec"/>-->
                   <field name="dodavatel_id"/>
-                  <field name="osoba_priradena_id" string="Priradený"/>
+                  <field name="osoba_priradena_ids" string="Priradený" widget="one2many_list"/>
                 </tree>
             </field>
         </record>
@@ -187,7 +178,7 @@
             <field name="priority" eval="6"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree colors="blue:state == 'draft';green:state == 'assigned';orange:state == 'in_progress';red:state == 'to_approve';gray:state in ('cancel','approved');"
+                <tree colors="blue:state == 'draft';green:state == 'assigned';orange:state == 'in_progress';red:state == 'to_approve';gray:state == 'cancel'"
                         edit="false" create="false" delete="false">
                     <field name="state"/>
                     <field name="name"/>
@@ -195,9 +186,10 @@
                     <field name="financny_kod"/>
                     <field name="datum_zaciatok" string="Začaté"/>
                     <field name="datum_koniec" string="Ukončené"/>
-                    <field name="celkova_cena"  string="Cena"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="celkova_cena"  string="Cena" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                     <field name="dodavatel_id"/>
-                    <field name="osoba_priradena_id" string="Priradený"/>
+                    <field name="osoba_priradena_ids" string="Priradený" widget="one2many_list"/>
                 </tree>
             </field>
         </record>
