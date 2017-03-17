@@ -570,6 +570,12 @@ class VystavbaCenovaPonuka(models.Model):
         templateObj.email_from = 'odoo-mailer-daemon@o2network.sk'
         if mail_to:
             templateObj.email_to = ",".join(mail_to)
+
+        # mail message
+        # - author_id
+        # mail.message.subtype "workflow_notification", "reminder"
+        # - partner_ids
+
         mail_id = templateObj.send_mail(self.id, force_send=False, raise_exception=False)
         _logger.info("Mail sent: " + str(mail_id))
 

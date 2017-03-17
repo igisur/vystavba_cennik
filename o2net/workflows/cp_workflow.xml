@@ -60,7 +60,10 @@
             <field name="act_from" ref="draft"/>
             <field name="act_to" ref="assigned"/>
             <field name="signal">assign</field>
-            <field name="condition">wf_assign_check();wf_can_user_workflow()</field>
+            <field name="condition">
+                wf_assign_check()
+                wf_can_user_workflow()
+            </field>
         </record>
 
         <record model="workflow.transition" id="cp_assigned_in_progress">
