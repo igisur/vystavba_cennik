@@ -68,7 +68,7 @@ class VystavbaCenovaPonuka(models.Model):
                 _logger.info('rozdiel ' + str(rozdiel) + ' ---- je na schvalenie pocet dni: ' + str(manager.reminder_interval))
                 if rozdiel >  manager.reminder_interval:
                     #poslem mail
-                    self.send_mail([manager.email], template_name='mail_manager_warning')
+                    self.send_mail([manager], template_name='mail_manager_warning')
 
     def get_last_mail_date(self, partner_id):
         ret = {}
