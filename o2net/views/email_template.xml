@@ -68,7 +68,6 @@
             <p>
             Dobrý deň,<br/><br/>
 
-            Nemozem pouzit current-user, pretoze mail sa posiela cez konto Admina!!!
             ${user.partner_id.display_name} schválil cenovú ponuku <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>
             </p>
             s pozdravom,<br/>

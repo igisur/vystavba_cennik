@@ -54,7 +54,7 @@ class VystavbaCenovaPonuka(models.Model):
             _logger.info('rozdiel ' + str(rozdiel) + ' ---- je na schvalenie pocet dni: ' + str(row.manager_id.reminder_interval))
             if rozdiel >  row.manager_id.reminder_interval:
                 #poslem mail
-                self.send_mail([self.manager_id.email], template_name='mail_manager_warning')
+                self.send_mail([self.manager_id], template_name='mail_manager_warning')
 
     def get_last_mail_date(self, partner_id):
         ret = {}
@@ -306,7 +306,7 @@ class VystavbaCenovaPonuka(models.Model):
     celkova_cena = fields.Float(compute=_amount_all, string='Celková cena', store=True, digits=(10,2), track_visibility='onchange', copy=False)
 
     dodavatel_id = fields.Many2one('res.partner', required=True, string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
-    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True, default= lambda self: self.env.user.partner_id.id)
+    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True)
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm, copy=True)
     manager_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_manager_rel", string='Manager', domain=partners_in_group_manager, copy=False)
     osoba_priradena_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_assigned_rel", string='Priradené osoby', copy=False, default = lambda self: [(4,self.env.user.partner_id.id)])
@@ -334,9 +334,13 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.model
     def create(self, vals):
+        _logger.info('CREATE')
         # PC - ak ativny user je PC, tak ho rovno predvolime
-        if self.env.user.id in self._partners_in_group(self.GROUP_PC):
-            vals['pc_id'] = self.env.user.id;
+        partners = self._partners_in_group(self.GROUP_PC)
+        _logger.info('partners: ' + str(partners))
+        if self.env.user.partner_id.id in partners:
+            _logger.info('current user is PC. will be used as ddefault PC.')
+            vals['pc_id'] = self.env.user.partner_id.id;
 
         return super(VystavbaCenovaPonuka, self).create(vals)
 
@@ -484,7 +488,7 @@ class VystavbaCenovaPonuka(models.Model):
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
         self.sudo().write({'state': self.ASSIGNED, 'osoba_priradena_ids': [(6,0,[self.dodavatel_id.id])], 'wf_dovod': ''})
-        self.sudo().send_mail([self.dodavatel_id.email])
+        self.sudo().send_mail([self.dodavatel_id])
         return True
 
     @api.one
@@ -496,7 +500,7 @@ class VystavbaCenovaPonuka(models.Model):
 
         self.sudo().write({'state': self.IN_PROGRESS, 'osoba_priradena_ids': [(6,0,[self.dodavatel_id.id])], 'wf_dovod': ''})
         # notify PC via email that supplier starts working on CP
-        self.sudo().send_mail([self.pc_id.email], template_name='mail_cp_in_progress')
+        self.sudo().send_mail([self.pc_id], template_name='mail_cp_in_progress')
         return True
 
     @api.one
@@ -513,13 +517,13 @@ class VystavbaCenovaPonuka(models.Model):
         if self.dodavatel_id.id in self.osoba_priradena_ids.ids:
             _logger.info("Supplier sent to approve by PC")
             self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
-            self.sudo().send_mail([self.pc_id.email])
+            self.sudo().send_mail([self.pc_id])
 
         # PC poslal na schvalenie PM
         elif self.pc_id.id in self.osoba_priradena_ids.ids:
             _logger.info("PC sent to approve by PM")
             self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pm_id.id])], 'wf_dovod': ''})
-            self.sudo().send_mail([self.pm_id.email])
+            self.sudo().send_mail([self.pm_id])
 
         # PM poslal na schvalenie Managerovy
         elif self.pm_id.id in self.osoba_priradena_ids.ids:
@@ -527,11 +531,8 @@ class VystavbaCenovaPonuka(models.Model):
             manager_ids = self._find_managers()
             if manager_ids:
                 self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,manager_ids.ids)], 'manager_ids': [(6,0,manager_ids.ids)], 'wf_dovod': ''})
-                emails = []
-                for manager in manager_ids:
-                    emails.append(manager.email)
                 # Nemozem pouzit current-user, pretoze mail sa posiela cez konto Admina!!!
-                self.sudo().send_mail(emails)
+                self.sudo().send_mail(manager_ids)
             else:
                 _logger.info("no managers found")
                 raise UserError('No manager(s) found to assign.')
@@ -542,7 +543,7 @@ class VystavbaCenovaPonuka(models.Model):
                 _logger.info("Manager '" + self.env.user.partner_id.display_name + "' approved")
                 self.sudo().write({'osoba_priradena_ids': [(3,self.env.user.partner_id.id)], 'wf_dovod': ''})
                 # posleme email PC, aby vedel, ze manager schvalil
-                self.sudo().send_mail([self.pc_id.email], template_name='mail_cp_manager_approved')
+                self.sudo().send_mail([self.pc_id], template_name='mail_cp_manager_approved')
 
         # aktualny uzivatel je medzi priradenymi managermi
         if self.env.user.partner_id.id in self.manager_ids.ids:
@@ -550,7 +551,7 @@ class VystavbaCenovaPonuka(models.Model):
             if not self.osoba_priradena_ids.ids:
                 _logger.info("ALL managers approved")
                 self.sudo().write({'state': self.APPROVED, 'osoba_priradena_ids': [(5)], 'wf_dovod': ''})
-                self.sudo().send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_approved')
+                self.sudo().send_mail([self.dodavatel_id, self.pc_id], template_name='mail_cp_approved')
                 self.sudo().action_exportSAP()
 
 
@@ -570,7 +571,7 @@ class VystavbaCenovaPonuka(models.Model):
         if self.pc_id.id in self.osoba_priradena_ids.ids:
             _logger.info("workflow action to IN_PROGRESS")
             self.sudo().write({'state': self.IN_PROGRESS, 'osoba_priradena_ids': [(6,0,[self.dodavatel_id.id])], 'wf_dovod': ''})
-            self.sudo().send_mail([self.dodavatel_id.email])
+            self.sudo().send_mail([self.dodavatel_id])
             self.sudo().signal_workflow('not_complete')
             # call WF: signal "not complete". som v stave "to_approve". potrebujem ist do in_progers
 
@@ -578,7 +579,7 @@ class VystavbaCenovaPonuka(models.Model):
         elif self.pm_id.id in self.osoba_priradena_ids.ids:
             _logger.info("workflow action to TO_APPROVE")
             self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
-            self.sudo().send_mail([self.pc_id.email])
+            self.sudo().send_mail([self.pc_id])
 
         return True
 
@@ -591,13 +592,13 @@ class VystavbaCenovaPonuka(models.Model):
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
 
         self.sudo().write({'state': self.CANCEL, 'osoba_priradena_ids': [(5)], 'wf_dovod': ''})
-        self.sudo().send_mail([self.dodavatel_id.email, self.pc_id.email], template_name='mail_cp_canceled')
+        self.sudo().send_mail([self.dodavatel_id, self.pc_id], template_name='mail_cp_canceled')
         return True
 
     @api.one
-    def send_mail(self, mail_to=None, template_name='mail_cp_assigned'):
+    def send_mail(self, partner_ids=None, template_name='mail_cp_assigned'):
 
-        _logger.info("send mail to " + str(mail_to))
+        _logger.info("send mail to " + str(partner_ids))
 
         # Find the e-mail template
         # definovane vo views/email_template.xml
@@ -608,15 +609,17 @@ class VystavbaCenovaPonuka(models.Model):
 
         templateObj = self.env['mail.template'].browse(template.id)
         templateObj.email_from = 'odoo-mailer-daemon@o2network.sk'
-        if mail_to:
-            email_to = ",".join(mail_to)
-            _logger.info("email_to:" + email_to)
-            templateObj.email_to = email_to
+        if partner_ids:
+            emails = []
+            partners = []
+            for partner in partner_ids:
+                emails.append(partner.email)
+                partners.append(str(partner.id))
 
-        # mail message
-        # - author_id
-        # mail.message.subtype "workflow_notification", "reminder"
-        # - partner_ids
+            templateObj.email_to = ",".join(emails)
+            templateObj.partner_to = ",".join(partners)
+            _logger.info("email_to:" + templateObj.email_to)
+            _logger.info("partner_to:" + templateObj.partner_to)
 
         mail_id = templateObj.send_mail(self.id, force_send=False, raise_exception=False)
         _logger.info("Mail sent: " + str(mail_id))

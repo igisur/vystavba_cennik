@@ -41,9 +41,9 @@
                         <!-- use class="oe_highlight" to suggest WF action -->
                         <button name="assign" type="workflow" string="Priradiť" class="oe_highlight" states="draft" groups="o2net.group_vystavba_pc,o2net.group_vystavba_admin"/>
                         <button name="in_progress" type="workflow" string="Rozpracovať" class="oe_highlight" states="assigned" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
-                        <button name="wf_not_complete" type="object" string="Vratiť na opravu" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
                         <button name="to_approve" type="workflow" string="Odoslať na schválenie" class="oe_highlight" states="in_progress" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
                         <button name="approve" type="workflow" string="Schváliť" class="oe_highlight" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
+                        <button name="wf_not_complete" type="object" string="Vratiť na opravu" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
                         <button name="cancel" type="workflow" string="Zrušiť" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,assigned,in_progress,to_approve,approved" readonly="1"/>
                     </header>
