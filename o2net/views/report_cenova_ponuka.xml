@@ -2,7 +2,7 @@
 <openerp>
     <data>
         <template id="report_cenova_ponuka_pdf_document">
-                <t t-set="doc" t-value="doc.with_context({'lang':doc.dodavatel_id.lang})" />
+            <t t-set="doc" t-value="doc.with_context({'lang':doc.dodavatel_id.lang})" />
                 <t t-call="report.internal_layout">
                     <div class="page">
                         <h2>Cenova ponuka <span t-field="doc.name"/></h2>
@@ -26,18 +26,52 @@
                         <p>
                             <div>Poznámka: <span t-field="doc.poznamka"/></div>
                         </p>
+                        <table class="table table-condensed0">
+                            <tbody>
+                                <t t-set="oddiel_group_ot" t-value="[]"/>
+                            </tbody>
+                        </table>
 
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th><strong>Oddiel</strong></th>
-                                    <th><strong>Položka</strong></th>
-                                    <th><strong>Merná jednotka</strong></th>
-                                    <th class="text-right"><strong>Počet</strong></th>
-                                    <th class="text-right"><strong>Jednotková cena</strong></th>
-                                    <th class="text-right"><strong>Cena celkom</strong></th>
-                                </tr>
-                            </thead>
+                        <t t-set="rows" t-value="doc._get_rows(doc.id)"/>
+                        <table class="table table-condensed0">
+                            <t t-set="oddiel_typ_group" t-value="[]"/>
+                            <t t-foreach="rows[0]" t-as="row">
+                                <t t-set="oddiel_typ_group" t-value="oddiel_typ_group+[row['oddieltyp']]"/>
+                            </t>
+                            <t t-foreach="set(oddiel_typ_group)" t-as="oddieltyp">
+                                <div><strong t-esc="oddieltyp"/>
+                                </div>
+                                <t t-foreach="rows[0]" t-as="row">
+                                    <t t-if="oddieltyp==row['oddieltyp']">
+                                        <div><span t-esc="row['oddiel']"/></div>
+                                    </t>
+                                </t>
+                            </t>
+                        </table>
+                        <table class="table table-condensed1">
+                            <t t-set="oddiel_group" t-value="[]"/>
+                            <t t-foreach="rows[0]" t-as="row">
+                                <t t-set="oddiel_group" t-value="oddiel_group+[row['oddiel']]"/>
+                            </t>
+                            <t t-foreach="set(oddiel_group)" t-as="oddielg">
+                                <div><strong t-esc="oddielg"/>
+                                </div>
+                                <t t-foreach="rows[0]" t-as="row">
+                                    <t t-if="oddielg==row['oddiel']">
+                                        <div><span t-esc="row['oddiel']"/></div>
+                                    </t>
+                                </t>
+                            </t>
+                        </table>
+
+                    </div>
+
+                    <div class="footer">
+                        <div class="row">Vytlacil: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
+                    </div>
+                </t>
+        </template>
+                        <!--<table class="table table-condensed">
                             <tbody>
                                 <group></group>
                                 <t t-set="oddiel_group" t-value="[]"/>
@@ -46,44 +80,47 @@
                                     <t t-set="oddiel_group" t-value="oddiel_group+[row['oddiel']]"/>
                                 </t>
                                 <t t-foreach="set(oddiel_group)" t-as="oddielg">
-                                    <div><strong t-esc="oddielg"/></div>
+                                    <div><strong t-esc="oddielg"/>
+                                        <tr>
+                                            <th><strong>Oddiel</strong></th>
+                                            <th><strong>Položka</strong></th>
+                                            <th><strong>Merná jednotka</strong></th>
+                                            <th class="text-right"><strong>Počet</strong></th>
+                                            <th class="text-right"><strong>Jednotková cena</strong></th>
+                                            <th class="text-right"><strong>Cena celkom</strong></th>
+                                        </tr>
+                                    </div>
                                     <t t-foreach="rows[0]" t-as="row">
                                         <t t-if="oddielg==row['oddiel']">
                                             <div><span t-esc="row['oddiel']"/></div>
+                                            <div><span t-esc="row['polozka']"/></div>
                                         </t>
                                     </t>
                                 </t>
-                                <tr t-foreach="rows[0]" t-as="row">
-                                    <td>
-                                        <span t-esc="row['oddiel']"/>
-                                        <!--<span t-esc="row['oddiel']" groups="oddiel" />-->
-                                    </td>
-                                    <td>
-                                        <span t-esc="row['polozka']"/>
-                                    </td>
-                                    <td class="text-center">
-                                        <span t-esc="row['mj']"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-esc="row['pocet']"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-esc="row['cena_jednotkova']"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-esc="row['cena_celkom']"/>
-                                    </td>
-                                </tr>
+
+                                        <tr t-foreach="rows[0]" t-as="row">
+                                            <td>
+                                                <span t-esc="row['oddiel']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="row['polozka']"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-esc="row['mj']"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="row['pocet']"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="row['cena_jednotkova']"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="row['cena_celkom']"/>
+                                            </td>
+                                        </tr>
                             </tbody>
-                        </table>
-                    </div>
+                        </table>-->
 
-                    <div class="footer">
-                        <div class="row">Vytlacil: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
-                    </div>
-
-                </t>
-        </template>
 
         <!-- copied from report/views/layouts.xml -->
         <template id="layout_header">

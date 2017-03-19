@@ -42,19 +42,33 @@ class VystavbaCenovaPonuka(models.Model):
         # kontrola cakania na schvalenie CP
         # volane zo schhedulera
         _logger.info('do_check_approve')
-        index = 0
         today = datetime.datetime.now()
-        for row in self.search([('state', '=', 'to_approve')]):
-            index += 1
+        schvalene = self.search([('state', '=', 'to_approve')])
+        for row in schvalene:
             if not row.manager_ids:
                 _logger.info('manager nie je nasetovany !!!!')
-                return
+                continue
 
-            rozdiel = abs((today - datetime.datetime.strptime(row.state_date, DEFAULT_SERVER_DATE_FORMAT)).days)
-            _logger.info('rozdiel ' + str(rozdiel) + ' ---- je na schvalenie pocet dni: ' + str(row.manager_id.reminder_interval))
-            if rozdiel >  row.manager_id.reminder_interval:
-                #poslem mail
-                self.send_mail([self.manager_id], template_name='mail_manager_warning')
+            _logger.info('manager = '+str(row.manager_ids))
+
+            for manager in row.manager_ids:
+
+                query = """select date(mm.date) as datum
+                                    from mail_mail m
+                                    join mail_mail_res_partner_rel mrespartner on m.id = mrespartner.mail_mail_id
+                                    join res_partner p on mrespartner.res_partner_id = p.id
+                                    join mail_message mm on m.mail_message_id = mm.id
+                                    where mrespartner.res_partner_id = %s
+                                    order by mm.date desc
+                                    limit 1;"""
+
+                self.env.cr.execute(query, ([manager.id]))
+                fetchrow = self.env.cr.fetchone()
+                rozdiel = abs((today - datetime.datetime.strptime(fetchrow[0], DEFAULT_SERVER_DATE_FORMAT)).days)
+                _logger.info('rozdiel ' + str(rozdiel) + ' ---- je na schvalenie pocet dni: ' + str(manager.reminder_interval))
+                if rozdiel >  manager.reminder_interval:
+                    #poslem mail
+                    self.send_mail([manager], template_name='mail_manager_warning')
 
     def get_last_mail_date(self, partner_id):
         ret = {}
@@ -261,29 +275,29 @@ class VystavbaCenovaPonuka(models.Model):
         data = []
         _logger.info("a_function_name " + str(cp_id))
 
-        query = """ select typ, cp.id as id, oddiel, polozka, cena_jednotkova, mj, pocet, cena_celkom, cp.cislo as cislo
+        query = """ select typorder as typorder, typ as typ, oddieltyp as oddieltyp, cp.id as id, oddiel, polozka, cena_jednotkova, mj, pocet, cena_celkom, cp.cislo as cislo
                             from
                             (
-                            select '1t' as typ, cpp.cenova_ponuka_id as cp_id, o.name as oddiel, p.name as polozka, cpp.cena_jednotkova as cena_jednotkova, p.mj as mj, cpp.mnozstvo as pocet, cpp.cena_celkom as cena_celkom
+                            select '1t' as typorder, 't' as typ, concat(o.name,'p') as oddieltyp, cpp.cenova_ponuka_id as cp_id, o.name as oddiel, p.name as polozka, cpp.cena_jednotkova as cena_jednotkova, p.mj as mj, cpp.mnozstvo as pocet, cpp.cena_celkom as cena_celkom
                             from o2net_cenova_ponuka_polozka cpp
                             join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
                             join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = false
                             join o2net_oddiel o on p.oddiel_id = o.id
                             where cpp.cenova_ponuka_id = %s
                             union all
-                            select '2a',cppa.cenova_ponuka_id, o.name, cppa.name, null, null, null, cppa.cena
+                            select '2a', 'a', concat(o.name,'p'), cppa.cenova_ponuka_id, o.name, cppa.name, null, null, null, cppa.cena
                             from o2net_cenova_ponuka_polozka_atyp cppa
                             join o2net_oddiel o on cppa.oddiel_id = o.id
                             where cppa.cenova_ponuka_id = %s
                             union all
-                            select '3b',cpp.cenova_ponuka_id, o.name, p.name, cpp.cena_jednotkova, p.mj, cpp.mnozstvo, cpp.cena_celkom
+                            select '3b','b', concat(o.name,'b'), cpp.cenova_ponuka_id, o.name, p.name, cpp.cena_jednotkova, p.mj, cpp.mnozstvo, cpp.cena_celkom
                             from o2net_cenova_ponuka_polozka cpp
                             join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
                             join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = true
                             join o2net_oddiel o on p.oddiel_id = o.id
                             where cpp.cenova_ponuka_id = %s
                             ) zdroj
-                            join o2net_cenova_ponuka cp on zdroj.cp_id = cp.id;"""
+                            join o2net_cenova_ponuka cp on zdroj.cp_id = cp.id order by typorder;"""
 
         # self.env.cr.execute(query, (self.id, self.id, self.id))
         self.env.cr.execute(query, (cp_id, cp_id, cp_id))
