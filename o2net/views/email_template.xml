@@ -7,6 +7,7 @@
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="email_to">${object.osoba_priradena_ids[0].email}</field>
+            <field name="partner_to">${object.osoba_priradena_ids[0].id}</field>
             <field name="lang">${object.osoba_priradena_ids[0].lang}</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
@@ -31,6 +32,7 @@
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="email_to">${object.osoba_priradena_ids[0].email}</field>
+            <field name="partner_to">${object.osoba_priradena_ids[0].id}</field>
             <field name="lang">${object.osoba_priradena_ids[0].lang}</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
@@ -55,6 +57,7 @@
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="email_to">${object.pc_id.email}</field>
+            <field name="partner_to">${object.osoba_priradena_ids[0].id}</field>
             <field name="lang">${object.pc_id.lang}</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
@@ -80,6 +83,7 @@
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="email_to">${object.osoba_priradena_ids[0].email}</field>
+            <field name="partner_to">${object.osoba_priradena_ids[0].id}</field>
             <field name="lang">${object.osoba_priradena_ids[0].lang}</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
@@ -103,6 +107,7 @@
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="email_to">${object.osoba_priradena_ids[0].email}</field>
+            <field name="partner_to">${object.osoba_priradena_ids[0].id}</field>
             <field name="lang">${object.osoba_priradena_ids[0].lang}</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
@@ -126,6 +131,7 @@
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="subject">Cenová ponuka - čakanie na schválenie ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="email_to">${object.manager_id.email}</field>
+            <field name="partner_to">${object.manager_id.id}</field>
             <field name="lang">${object.manager_id.lang}</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="auto_delete" eval="False"/>
