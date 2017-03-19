@@ -339,8 +339,8 @@ class VystavbaCenovaPonuka(models.Model):
         partners = self._partners_in_group(self.GROUP_PC)
         _logger.info('partners: ' + str(partners))
         if self.env.user.partner_id.id in partners:
-            _logger.info('current user is PC. will be used as ddefault PC.')
-            vals['pc_id'] = self.env.user.partner_id.id;
+            _logger.info('current user is PC. will be used as default PC.')
+            vals['pc_id'] = self.env.user.partner_id.id
 
         return super(VystavbaCenovaPonuka, self).create(vals)
 
@@ -542,8 +542,10 @@ class VystavbaCenovaPonuka(models.Model):
             if self.is_user_assigned:
                 _logger.info("Manager '" + self.env.user.partner_id.display_name + "' approved")
                 self.sudo().write({'osoba_priradena_ids': [(3,self.env.user.partner_id.id)], 'wf_dovod': ''})
+
                 # posleme email PC, aby vedel, ze manager schvalil
-                self.sudo().send_mail([self.pc_id], template_name='mail_cp_manager_approved')
+                context = {'manager_name': self.env.user.partner_id.display_name}
+                self.sudo().send_mail([self.pc_id], template_name='mail_cp_manager_approved', context=context)
 
         # aktualny uzivatel je medzi priradenymi managermi
         if self.env.user.partner_id.id in self.manager_ids.ids:
@@ -551,7 +553,8 @@ class VystavbaCenovaPonuka(models.Model):
             if not self.osoba_priradena_ids.ids:
                 _logger.info("ALL managers approved")
                 self.sudo().write({'state': self.APPROVED, 'osoba_priradena_ids': [(5)], 'wf_dovod': ''})
-                self.sudo().send_mail([self.dodavatel_id, self.pc_id], template_name='mail_cp_approved')
+                self.sudo().send_mail([self.dodavatel_id, self.pc_id])
+                # self.sudo().send_mail([self.dodavatel_id, self.pc_id], template_name='mail_cp_approved')
                 self.sudo().action_exportSAP()
 
 
@@ -596,7 +599,7 @@ class VystavbaCenovaPonuka(models.Model):
         return True
 
     @api.one
-    def send_mail(self, partner_ids=None, template_name='mail_cp_assigned'):
+    def send_mail(self, partner_ids=None, template_name='mail_cp_assigned', context=None):
 
         _logger.info("send mail to " + str(partner_ids))
 
@@ -621,7 +624,13 @@ class VystavbaCenovaPonuka(models.Model):
             _logger.info("email_to:" + templateObj.email_to)
             _logger.info("partner_to:" + templateObj.partner_to)
 
-        mail_id = templateObj.send_mail(self.id, force_send=False, raise_exception=False)
+        if context is None:
+            _logger.info('send mail without context')
+            mail_id = templateObj.send_mail(self.id, force_send=False, raise_exception=False)
+        else:
+            _logger.info('send mail using context: ' + str(context))
+            mail_id = templateObj.with_context(context).send_mail(self.id, force_send=False, raise_exception=False)
+
         _logger.info("Mail sent: " + str(mail_id))
 
 
