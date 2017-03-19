@@ -46,7 +46,7 @@ class VystavbaCenovaPonuka(models.Model):
         today = datetime.datetime.now()
         for row in self.search([('state', '=', 'to_approve')]):
             index += 1
-            if not row.manager_id:
+            if not row.manager_ids:
                 _logger.info('manager nie je nasetovany !!!!')
                 return
 
@@ -55,6 +55,14 @@ class VystavbaCenovaPonuka(models.Model):
             if rozdiel >  row.manager_id.reminder_interval:
                 #poslem mail
                 self.send_mail([self.manager_id.email], template_name='mail_manager_warning')
+
+    def get_last_mail_date(self, partner_id):
+        ret = {}
+
+        # najdeme posledny mail odoslany partnerovy
+        mail_ids = self.env['mail.mail'].search([('', '=', partner_id)], order = "cp_celkova_cena_limit desc", limit=1)
+
+        return ret;
 
     @api.one
     def action_exportSAP(self):
