@@ -304,6 +304,20 @@ class VystavbaCenovaPonuka(models.Model):
         data = self.env.cr.dictfetchall()
         return data
 
+    @api.model
+    def _get_default_pc(self):
+        _logger.info('_get_default_pc')
+        # PC - ak ativny user je PC, tak ho rovno predvolime
+        partners = self._partners_in_group(self.GROUP_PC)
+        _logger.info('partners: ' + str(partners))
+
+        ret = None
+        if self.env.user.partner_id.id in partners:
+            _logger.info('current user is PC. will be used as default PC.')
+            ret = self.env.user.partner_id.id
+
+        return ret
+
     # computed fields
     ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute=_compute_ro_datumoddo, store=False, copy=False)
     can_user_exec_wf = fields.Boolean(string="Can user execute workflow action", compute=_compute_can_user_exec_wf, store=False, copy=False)
@@ -320,7 +334,7 @@ class VystavbaCenovaPonuka(models.Model):
     celkova_cena = fields.Float(compute=_amount_all, string='Celková cena', store=True, digits=(10,2), track_visibility='onchange', copy=False)
 
     dodavatel_id = fields.Many2one('res.partner', required=True, string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
-    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True)
+    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True, default=lambda self: self._get_default_pc())
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm, copy=True)
     manager_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_manager_rel", string='Manager', domain=partners_in_group_manager, copy=False)
     osoba_priradena_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_assigned_rel", string='Priradené osoby', copy=False, default = lambda self: [(4,self.env.user.partner_id.id)])
@@ -345,19 +359,6 @@ class VystavbaCenovaPonuka(models.Model):
 
     #msg_ids = fields.One2many('mail.message', 'res_id', string='Messages',domain=lambda self: [('model', '=', self._name)], auto_join=True)
     base_url = fields.Char(compute=_resolve_record_url, string="Link", store=False, copy=False, )
-
-    @api.model
-    def create(self, vals):
-        _logger.info('CREATE')
-        # PC - ak ativny user je PC, tak ho rovno predvolime
-        partners = self._partners_in_group(self.GROUP_PC)
-        _logger.info('partners: ' + str(partners))
-        if self.env.user.partner_id.id in partners:
-            _logger.info('current user is PC. will be used as default PC.')
-            vals['pc_id'] = self.env.user.partner_id.id
-
-        return super(VystavbaCenovaPonuka, self).create(vals)
-
 
     @api.multi
     def write(self, vals):
