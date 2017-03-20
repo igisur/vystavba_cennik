@@ -567,8 +567,7 @@ class VystavbaCenovaPonuka(models.Model):
             if not self.osoba_priradena_ids.ids:
                 _logger.info("ALL managers approved")
                 self.sudo().write({'state': self.APPROVED, 'osoba_priradena_ids': [(5)], 'wf_dovod': ''})
-                self.sudo().send_mail([self.dodavatel_id, self.pc_id])
-                # self.sudo().send_mail([self.dodavatel_id, self.pc_id], template_name='mail_cp_approved')
+                self.sudo().send_mail([self.dodavatel_id, self.pc_id], template_name='mail_cp_approved')
                 self.sudo().action_exportSAP()
 
 
