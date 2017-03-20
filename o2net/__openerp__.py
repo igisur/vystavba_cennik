@@ -26,7 +26,7 @@
         'views/email_template.xml',
         'views/report_cenova_ponuka.xml',
         'report/cenova_ponuka_report_view.xml'
-        #'views/cenova_ponuka_cron.xml'
+        'views/cenova_ponuka_cron.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
