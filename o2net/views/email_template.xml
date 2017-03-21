@@ -5,6 +5,9 @@
         <record id="mail_cp_assigned" model="mail.template">
             <field name="name">eCenova ponuka - mail_cp_assigned</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
+            <field name="email_to"></field>
+            <field name="partner_to"></field>
+            <field name="lang"></field>
             <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
@@ -25,8 +28,11 @@
 
 
         <record id="mail_cp_in_progress" model="mail.template">
-            <field name="name">mail_cp_assigned - mail_cp_in_progress</field>
+            <field name="name">Cenova ponuka - mail_cp_in_progress</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
+            <field name="email_to"></field>
+            <field name="partner_to"></field>
+            <field name="lang"></field>
             <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
@@ -47,10 +53,12 @@
 
 
         <record id="mail_cp_manager_approved" model="mail.template">
-            <field name="name">mail_cp_in_progress - mail_cp_manager_approved</field>
+            <field name="name">Cenova ponuka - mail_cp_manager_approved</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
+            <field name="email_to"></field>
+            <field name="partner_to"></field>
+            <field name="lang"></field>
             <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
-            <field name="lang">${object.pc_id.lang}</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
             <field name="report_name">CP_${object.name}/${object.skratka}/${object.financny_kod}</field>
@@ -72,6 +80,9 @@
         <record id="mail_cp_approved" model="mail.template">
             <field name="name">Cenova ponuka - mail_cp_approved</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
+            <field name="email_to"></field>
+            <field name="partner_to"></field>
+            <field name="lang"></field>
             <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
@@ -91,8 +102,11 @@
         </record>
 
         <record id="mail_cp_canceled" model="mail.template">
-            <field name="name">mail_cp_manager_approved - mail_cp_canceled</field>
+            <field name="name">Cenova ponuka - mail_cp_canceled</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
+            <field name="email_to"></field>
+            <field name="partner_to"></field>
+            <field name="lang"></field>
             <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
@@ -114,6 +128,9 @@
         <record id="mail_manager_warning" model="mail.template">
             <field name="name">Cenova ponuka - mail_manager_warning</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
+            <field name="email_to"></field>
+            <field name="partner_to"></field>
+            <field name="lang"></field>
             <field name="subject">Cenová ponuka - čakanie na schválenie ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="auto_delete" eval="False"/>
