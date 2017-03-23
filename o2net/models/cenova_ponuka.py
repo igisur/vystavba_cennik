@@ -625,7 +625,12 @@ class VystavbaCenovaPonuka(models.Model):
             return
 
         templateObj = self.env['mail.template'].browse(template.id)
-        templateObj.email_from = 'odoo-mailer-daemon@o2network.sk'
+
+        admin = self.env['res.users'].browse(SUPERUSER_ID)
+        if admin:
+            _logger.info("admin mail: " + admin.partner_id.email)
+            templateObj.email_from = admin.partner_id.email
+
         if partner_ids:
             emails = []
             partners = []
@@ -640,10 +645,10 @@ class VystavbaCenovaPonuka(models.Model):
 
         if context is None:
             _logger.info('send mail without context')
-            mail_id = templateObj.send_mail(self.id, force_send=False, raise_exception=False)
+            mail_id = templateObj.send_mail(self.id, force_send=True, raise_exception=False)
         else:
             _logger.info('send mail using context: ' + str(context))
-            mail_id = templateObj.with_context(context).send_mail(self.id, force_send=False, raise_exception=False)
+            mail_id = templateObj.with_context(context).send_mail(self.id, force_send=True, raise_exception=False)
 
         _logger.info("Mail sent: " + str(mail_id))
 
