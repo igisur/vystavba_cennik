@@ -1,6 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+
+        <template id="report_cenova_ponuka_pdf_document_oddiel">
+            <t t-call="report.internal_layout">
+                <t t-set="o" t-value="oddiel" />
+                <div class="page">
+                    <h2>sub page Cenova ponuka</h2>
+                    <h1>sub page IDecko</h1>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_cenova_ponuka_pdf_document">
+             <t t-call="report.internal_layout">
+                <div class="page">
+                    <t t-set="d" t-value="doc" />
+                    <div>
+                        <div class="row1">
+                            <p t-if="d.name">Názov: <strong><span t-field="d.name"/></strong></p>
+                        </div>
+                        <div class="row2">
+                            <p t-if="d.financny_kod">Finančný kód: <strong><span t-field="d.financny_kod"/></strong></p>
+                        </div>
+                        <div class="row3">
+                            <p t-if="d.skratka">Skratka: <strong><span t-field="d.skratka"/></strong></p>
+                        </div>
+                        <div class="row4">
+                            <p t-if="d.skratka">Poznámka: <strong><span t-field="d.poznamka"/></strong></p>
+                        </div>
+                        <div class="row5">
+                            <p t-if="d.pc_id.name">PC: <strong><span t-field="d.pc_id.name"/></strong></p>
+                            <p t-if="d.pm_id.name">PM: <strong><span t-field="d.pm_id.name"/></strong></p>
+                        </div>
+                        <div class="row6">
+                            <p t-if="d.cislo">Číslo projektu PSID: <strong><span t-field="d.cislo"/></strong></p>
+                        </div>
+                        <div class="row7">
+                            <p t-if="d.datum_zaciatok">Dátum zahájenia: <strong><span t-field="d.datum_zaciatok"/></strong></p>
+                            <p t-if="d.datum_koniec">Dátum ukončenia: <strong><span t-field="d.datum_koniec"/></strong></p>
+                        </div>
+                    </div>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Oddiel</th>
+                                <th class="text-left">Položka</th>
+                                <th class="text-left">Merná j.</th>
+                                <!--<th t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">Disc.(%)</th>-->
+                                <th class="text-right">Počet</th>
+                                <th class="text-right">Jednotková cena</th>
+                                <th class="text-right">Cena celkom</th>
+                            </tr>
+                        </thead>
+                        <tbody class="moje_tbody">
+                            <t t-set="rows" t-value="d._get_oddiel(d.id)"/>
+                            <tr t-foreach="rows[0]" t-as="row">
+                                <!--<th><span t-esc="row['oddiel']"/></th>-->
+                                <div>
+                                    <th><strong><span t-esc="row['oddiel']"/></strong></th>
+                                </div>
+                                <tbody class="moje_body_typ">
+                                    <t t-set="rowstyp" t-value="d._get_rows_oddiel_typ(d.id,row['id'])"/>
+                                    <t t-set="index" t-value="0" />
+                                    <tr t-foreach="rowstyp[0]" t-as="rowtyp">
+                                        <t t-set="index" t-value="index+1" />
+                                        <t t-if="index==1">
+                                             <tr><th>Typové položky</th></tr>
+                                        </t>
+                                        <th><span t-esc="rowtyp['oddiel']"/></th>
+                                        <th><span t-esc="rowtyp['polozka']"/></th>
+                                        <th><span t-esc="rowtyp['mj']"/></th>
+                                        <th><span t-esc="rowtyp['cena_jednotkova']"/></th>
+                                        <th><span t-esc="rowtyp['cena_celkom']"/></th>
+                                    </tr>
+                                </tbody>
+                                <tbody class="moje_body_atyp">
+                                    <t t-set="rowsatyp" t-value="d._get_rows_oddiel_atyp(d.id,row['id'])"/>
+                                    <t t-set="index" t-value="0" />
+                                    <tr t-foreach="rowsatyp[0]" t-as="rowatyp">
+                                        <t t-set="index" t-value="index+1" />
+                                        <t t-if="index==1">
+                                            <tr><th>Atypové položky</th></tr>
+                                        </t>
+                                        <th><span t-esc="rowatyp['oddiel']"/></th>
+                                        <th><span t-esc="rowatyp['polozka']"/></th>
+                                        <th><span t-esc="rowatyp['cena_celkom']"/></th>
+                                    </tr>
+                                </tbody>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+
+                    <!--<tbody>
+                        <div class="row">??????: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/>
+                            <t t-set="oddiels" t-value="d._get_oddiel(d.id)"/>
+                                <tr t-foreach="d._get_oddiel(d.id)" t-as="oddiel">
+                                <t t-call="report.html_container">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="oddiel[0]"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-call="o2net.report_cenova_ponuka_pdf_document_oddiel"/>
+                            </tr>
+                        </div>
+                    </tbody>-->
+                </div>
+            </t>
+        </template>
+
+        <template id="report_cenova_ponuka_pdf">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="doc">
+
+                    <!--<t t-call="o2net.layout_header" />-->
+                    <!--<t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.dodavatel_id.lang"/>-->
+                    <!--<t t-call="o2net.layout_footer" />-->
+                    <t t-call="o2net.report_cenova_ponuka_pdf_document"/>
+                    <!--<t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.dodavatel_id.lang"/>-->
+                </t>
+                 <div class="footer">
+                     <div class="row">Vytlacil: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
+                 </div>
+            </t>
+        </template>
+
+        <!--
         <template id="report_cenova_ponuka_pdf_document">
             <t t-set="doc" t-value="doc.with_context({'lang':doc.dodavatel_id.lang})" />
                 <t t-call="report.internal_layout">
@@ -71,6 +201,7 @@
                     </div>
                 </t>
         </template>
+        -->
                         <!--<table class="table table-condensed">
                             <tbody>
                                 <group></group>
@@ -123,6 +254,7 @@
 
 
         <!-- copied from report/views/layouts.xml -->
+        <!--
         <template id="layout_header">
             <div class="header">
                 <div class="row">
@@ -146,26 +278,8 @@
             </div>
 
         </template>
+        -->
 
-        <template id="layout_footer">
-            <div class="footer">
-                <div class="row">Vytlacil: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
-            </div>
-        </template>
-
-
-        <template id="report_cenova_ponuka_pdf">
-            <t t-call="report.html_container">
-                <t t-foreach="docs" t-as="doc">
-
-                    <!--<t t-call="o2net.layout_header" />-->
-                    <!--<t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.dodavatel_id.lang"/>-->
-                    <!--<t t-call="o2net.layout_footer" />-->
-
-                    <t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.dodavatel_id.lang"/>
-                </t>
-            </t>
-        </template>
 
     </data>
 </openerp>

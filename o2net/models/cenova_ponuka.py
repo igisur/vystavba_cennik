@@ -151,11 +151,6 @@ class VystavbaCenovaPonuka(models.Model):
                             where
                                 cenova_ponuka_id = %s
                                 and p.is_balicek = true
-                            union
-                            select
-                                '2A',
-                                atyp.name,
-                                cena,
                                 oddiel_id,
                                 cenova_ponuka_id
                             from o2net_cenova_ponuka_polozka_atyp atyp
@@ -269,6 +264,79 @@ class VystavbaCenovaPonuka(models.Model):
 
         self.base_url = url
         return {}
+
+    @api.one
+    def _get_oddiel(self, cp_id):
+        data = []
+        _logger.info("_get_oddiel " + str(cp_id))
+
+        query = """select zdroj.id as id, zdroj.oddiel as oddiel
+                            from
+                            (
+                            select o.ID as id,o.name as oddiel
+                            from o2net_cenova_ponuka_polozka cpp
+                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
+                            join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = false
+                            join o2net_oddiel o on p.oddiel_id = o.id
+                            where cpp.cenova_ponuka_id = %s
+                            union all
+                            select o.ID, o.name
+                            from o2net_cenova_ponuka_polozka_atyp cppa
+                            join o2net_oddiel o on cppa.oddiel_id = o.id
+                            where cppa.cenova_ponuka_id = %s
+                            ) zdroj
+                            group by zdroj.id, zdroj.oddiel
+                            order by zdroj.oddiel;"""
+
+        self.env.cr.execute(query, (cp_id,cp_id))
+        data = self.env.cr.dictfetchall()
+        _logger.info("_get_oddiel data " + str(data))
+
+        if data:
+            return data
+        else:
+            return {}
+
+    @api.one
+    def _get_rows_oddiel_typ(self, cp_id, oddiel_id):
+        data = []
+        _logger.info("_get_rows_oddiel_typ " + str(cp_id) + ", " + str(oddiel_id))
+
+        query = """ select  cpp.cenova_ponuka_id as cp_id,
+                            o.name as oddiel,
+                            p.name as polozka,
+                            cpp.cena_jednotkova as cena_jednotkova,
+                            p.mj as mj,
+                            cpp.mnozstvo as pocet,
+                            cpp.cena_celkom as cena_celkom
+                    from o2net_cenova_ponuka_polozka cpp
+                        join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
+                        join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = false
+                        join o2net_oddiel o on p.oddiel_id = o.id
+                    where cpp.cenova_ponuka_id = %s
+                        and o.id = %s;"""
+
+        self.env.cr.execute(query, (cp_id, oddiel_id))
+        data = self.env.cr.dictfetchall()
+        return data
+
+    @api.one
+    def _get_rows_oddiel_atyp(self, cp_id, oddiel_id):
+        data = []
+        _logger.info("_get_rows_oddiel_typ " + str(cp_id) + ", " + str(oddiel_id))
+
+        query = """ select  cppa.cenova_ponuka_id as cp_id,
+                            o.name as oddiel,
+                            cppa.name as polozka,
+                            cppa.cena as cena_celkom
+                            from o2net_cenova_ponuka_polozka_atyp cppa
+                            join o2net_oddiel o on cppa.oddiel_id = o.id
+                    where cppa.cenova_ponuka_id = %s
+                        and o.id = %s;"""
+
+        self.env.cr.execute(query, (cp_id, oddiel_id))
+        data = self.env.cr.dictfetchall()
+        return data
 
     @api.one
     def _get_rows(self, cp_id):
@@ -651,7 +719,6 @@ class VystavbaCenovaPonuka(models.Model):
             mail_id = templateObj.with_context(context).send_mail(self.id, force_send=True, raise_exception=False)
 
         _logger.info("Mail sent: " + str(mail_id))
-
 
 class VystavbaCenovaPonukaPolozka(models.Model):
     _name = 'o2net.cenova_ponuka.polozka'
