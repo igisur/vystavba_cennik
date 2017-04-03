@@ -127,7 +127,8 @@ class VystavbaCenovaPonuka(models.Model):
                         to_char(cp.datum_koniec, 'DD.MM.YYYY')) as vystup
                     from
                         (   select
-                                '1T' as druh, max(p.kod) as kod,
+                                '1T' as druh,
+                         		max(p.intern_kod) as kod,
                                 sum(cena_celkom) as cislo,
                                 p.oddiel_id as oddiel_id,
                                 max(cpp.cenova_ponuka_id) as cenova_ponuka_id
@@ -137,8 +138,18 @@ class VystavbaCenovaPonuka(models.Model):
                             where
                                cenova_ponuka_id = %s
                                and p.is_balicek = false
-                            group by p.oddiel_id
+                            group by p.oddiel_id,p.intern_kod
                             union
+                         	select
+                         		'2A',
+                         		'',
+                         		sum(cena),
+                          		atyp.oddiel_id,
+                                max(atyp.cenova_ponuka_id)
+                            from o2net_cenova_ponuka_polozka_atyp atyp
+                            where cenova_ponuka_id = %s
+                            group by atyp.oddiel_id
+                         	union
                             select
                                 '3B',
                                 p.kod,
@@ -151,10 +162,7 @@ class VystavbaCenovaPonuka(models.Model):
                             where
                                 cenova_ponuka_id = %s
                                 and p.is_balicek = true
-                                oddiel_id,
-                                cenova_ponuka_id
-                            from o2net_cenova_ponuka_polozka_atyp atyp
-                            where cenova_ponuka_id = %s
+
                         ) zdroj
                     join
                         o2net_oddiel o on zdroj.oddiel_id = o.id
