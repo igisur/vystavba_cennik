@@ -312,10 +312,11 @@ class VystavbaCenovaPonuka(models.Model):
 
         query = """ select  cpp.cenova_ponuka_id as cp_id,
                             o.name as oddiel,
+                            p.intern_kod as ksz,
                             p.name as polozka,
-                            cpp.cena_jednotkova as cena_jednotkova,
                             p.mj as mj,
                             cpp.mnozstvo as pocet,
+                            cpp.cena_jednotkova as cena_jednotkova,
                             cpp.cena_celkom as cena_celkom
                     from o2net_cenova_ponuka_polozka cpp
                         join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
@@ -331,14 +332,14 @@ class VystavbaCenovaPonuka(models.Model):
     @api.one
     def _get_rows_oddiel_atyp(self, cp_id, oddiel_id):
         data = []
-        _logger.info("_get_rows_oddiel_typ " + str(cp_id) + ", " + str(oddiel_id))
+        _logger.info("_get_rows_oddiel_atyp " + str(cp_id) + ", " + str(oddiel_id))
 
         query = """ select  cppa.cenova_ponuka_id as cp_id,
                             o.name as oddiel,
                             cppa.name as polozka,
                             cppa.cena as cena_celkom
-                            from o2net_cenova_ponuka_polozka_atyp cppa
-                            join o2net_oddiel o on cppa.oddiel_id = o.id
+                    from o2net_cenova_ponuka_polozka_atyp cppa
+                    join o2net_oddiel o on cppa.oddiel_id = o.id
                     where cppa.cenova_ponuka_id = %s
                         and o.id = %s;"""
 
@@ -347,26 +348,90 @@ class VystavbaCenovaPonuka(models.Model):
         return data
 
     @api.one
+    def _get_rows_oddiel_balicek(self, cp_id):
+        data = []
+        _logger.info("_get_rows_oddiel_balicek " + str(cp_id))
+
+        query = """select   cpp.cenova_ponuka_id as cp_id,
+                            o.name as oddiel,
+                            p.kod as kod,
+                            p.name as polozka,
+                            p.mj as mj,
+                            cpp.cena_jednotkova,
+                            cpp.mnozstvo as pocet,
+                            cpp.cena_celkom as cena_celkom
+                    from o2net_cenova_ponuka_polozka cpp
+                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
+                            join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = true
+                            join o2net_oddiel o on p.oddiel_id = o.id
+                        where cpp.cenova_ponuka_id = %s   ;"""
+
+        self.env.cr.execute(query, ([cp_id]))
+        data = self.env.cr.dictfetchall()
+        return data
+
+    @api.one
     def _get_rows(self, cp_id):
         data = []
         _logger.info("a_function_name " + str(cp_id))
 
-        query = """ select typorder as typorder, typ as typ, oddieltyp as oddieltyp, cp.id as id, oddiel, polozka, cena_jednotkova, mj, pocet, cena_celkom, cp.cislo as cislo
+        query = """ select  typorder as typorder,
+                            typ as typ,
+                            oddieltyp as oddieltyp,
+                            cp.id as id,
+                            oddiel as oddiel,
+                            ksz as ksz,
+                            polozka as polozka,
+                            cena_jednotkova as cena_jednotkova,
+                            mj as mj,
+                            pocet as pocet,
+                            cena_celkom as cena_celkom,
+                            cp.cislo as cislo
                             from
                             (
-                            select '1t' as typorder, 't' as typ, concat(o.name,'p') as oddieltyp, cpp.cenova_ponuka_id as cp_id, o.name as oddiel, p.name as polozka, cpp.cena_jednotkova as cena_jednotkova, p.mj as mj, cpp.mnozstvo as pocet, cpp.cena_celkom as cena_celkom
+                            select  '1t' as typorder,
+                                    't' as typ,
+                                    concat(o.name,'p') as oddieltyp,
+                                    cpp.cenova_ponuka_id as cp_id,
+                                    o.name as oddiel,
+                                    p.intern_kod as ksz,
+                                    p.name as polozka,
+                                    cpp.cena_jednotkova as cena_jednotkova,
+                                    p.mj as mj,
+                                    cpp.mnozstvo as pocet,
+                                    cpp.cena_celkom as cena_celkom
                             from o2net_cenova_ponuka_polozka cpp
                             join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
                             join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = false
                             join o2net_oddiel o on p.oddiel_id = o.id
                             where cpp.cenova_ponuka_id = %s
                             union all
-                            select '2a', 'a', concat(o.name,'p'), cppa.cenova_ponuka_id, o.name, cppa.name, null, null, null, cppa.cena
+                            select  '2a',
+                                    'a',
+                                    concat(o.name,'p'),
+                                    cppa.cenova_ponuka_id,
+                                    o.name,
+                                    '',
+                                    cppa.name,
+                                    null,
+                                    null,
+                                    null,
+                                    cppa.cena
                             from o2net_cenova_ponuka_polozka_atyp cppa
                             join o2net_oddiel o on cppa.oddiel_id = o.id
                             where cppa.cenova_ponuka_id = %s
                             union all
-                            select '3b','b', concat(o.name,'b'), cpp.cenova_ponuka_id, o.name, p.name, cpp.cena_jednotkova, p.mj, cpp.mnozstvo, cpp.cena_celkom
+                            select  '3b',
+                                    'b',
+                                    concat(o.name,'b'),
+                                    cpp.cenova_ponuka_id,
+                                    o.name,
+                                    p.kod,
+                                    p.name,
+                                    cpp.cena_jednotkova,
+                                    p.mj,
+                                    cpp.mnozstvo,
+                                    cpp.cena_celkom
                             from o2net_cenova_ponuka_polozka cpp
                             join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
                             join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = true
