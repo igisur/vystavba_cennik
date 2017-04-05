@@ -142,7 +142,7 @@ class VystavbaCenovaPonuka(models.Model):
                             union
                          	select
                          		'2A',
-                         		'',
+                         		(select atypsluzba from o2net_oddiel where id = atyp.oddiel_id),
                          		sum(cena),
                           		atyp.oddiel_id,
                                 max(atyp.cenova_ponuka_id)
@@ -424,6 +424,8 @@ class VystavbaCenovaPonuka(models.Model):
     #manager_id = fields.Many2one('res.partner', string='Manager', track_visibility='onchange', domain=partners_in_group_manager, copy=False)
 
     cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky', track_visibility='onchange', copy=True)
+    cp_polozka_balicek_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Balíčky', track_visibility='onchange', copy=True)
+    #, domain="[('polozka_isbalicek','=','True')]"
     cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', track_visibility='onchange', copy=True)
 
     #cp_polozky_rows = fields.Selection(selection=a_function_name, string='daky text')
@@ -752,6 +754,7 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     cennik_polozka_id = fields.Many2one('o2net.cennik.polozka', string='Položka cenníka', required=True, domain="[('cennik_id', '=', parent.cennik_id)]")
     polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Merná jednotka', stored=False)
     polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Popis', stored=False)
+    polozka_isbalicek = fields.Boolean(related='cennik_polozka_id.is_balicek', string='Balicek', stored=False)
     name = fields.Char(related='cennik_polozka_id.name', string='Názov')
     kod = fields.Char(related='cennik_polozka_id.kod', string='Kód')
 
