@@ -35,7 +35,7 @@
                                         <field name="polozka_id" />
                                         <field name="cena" />
                                         <field name="mj"/>
-                                        <field name="is_balicek"/>
+                                        <field name="is_balicek" readonly="True"/>
                                     </tree>
                                 </field>
                             </page>
