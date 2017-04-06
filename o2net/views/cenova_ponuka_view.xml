@@ -67,6 +67,7 @@
                                 <field name="datum_zaciatok" attrs="{'readonly':[('ro_datumoddo','=',True)], 'required':[('ro_datumoddo','!=',True)]}"/>
                                 <field name="datum_koniec" attrs="{'readonly':[('ro_datumoddo','=',True)], 'required':[('ro_datumoddo','!=',True)]}"/>
                                 <field name="sap_export_file_binary" filename="sap_export_file_name" readonly="True" attrs="{'invisible':[('state','not in',['approved'])]}"/>
+                                <field name="sap_export_file_binary" filename="sap_export_file_name" readonly="True" groups="o2net.group_vystavba_admin"/>
                             </group>
                             <group>
                                 <field name="dodavatel_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" context="{'group_name':'TEST_GROUP'}"/>
@@ -86,9 +87,23 @@
                             <page string="Položky">
                                 <field name="cp_polozka_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Polozky cennika" editable="bottom">
-                                        <field name="cennik_polozka_id" string="Položka cenníka" options="{'no_create': True}"/>
+                                        <field name="cennik_polozka_id" string="Položky" options="{'no_create': True}" domain="[('polozka_id.is_balicek','!=','True')]"/>
+                                        <!--<field name="cennik_polozka_id" string="Položky" options="{'no_create': True}" domain="[('polozka_id.is_balicek','!=','True')]"/>-->
                                         <!--context="{'form_view_ref' : 'module.view_id', 'tree_view_ref' : model.view_id'}"-->
-                                        <field name="polozka_mj" readonly="1" string="mj"/>
+                                        <field name="polozka_mj" readonly="1" string="Mj"/>
+                                        <field name="cena_jednotkova" string="Jednotková cena"/>
+                                        <field name="mnozstvo"  string="Počet"/>
+                                        <field name="cena_celkom" string="Celková cena"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Balíčky">
+                                <field name="cp_polozka_balicek_ids" attrs="{'readonly':[('state','in',['approved'])]}">
+                                    <tree string="Balicky cennika" editable="bottom">
+                                        <field name="cennik_polozka_id" string="Balíčky" options="{'no_create': True}" domain="[('polozka_id.is_balicek','=','True')]"/>
+                                        <!--<filter domain="[('cennik_polozka_id.polozka_id.is_balicek','=','True')]"/>-->
+                                        <!--context="{'form_view_ref' : 'module.view_id', 'tree_view_ref' : model.view_id'}"-->
+                                        <field name="polozka_mj" readonly="1" string="Merná jednotka"/>
                                         <field name="cena_jednotkova"/>
                                         <field name="mnozstvo"  string="Počet"/>
                                         <field name="cena_celkom" string="Cena"/>

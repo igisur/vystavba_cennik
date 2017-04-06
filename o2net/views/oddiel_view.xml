@@ -13,6 +13,28 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="view_form_oddiel">
+            <field name="name">Oddiel</field>
+            <field name="model">o2net.oddiel</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <label for="name" string="Kód"/>
+                        <field name="name"/>
+                        <label for="description" string="Popis"/>
+                        <field name="description"/>
+                        <label for="atypsluzba" string="KSZ (pre atyp)"/>
+                        <field name="atypsluzba"/>
+                    </sheet>
+                </form>
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Klikni pre založenie novej položky.</p>
+                <p>Tu nájdete zoznam položiek.</p>
+            </field>
+        </record>
+
         <record model="ir.actions.act_window" id="action_window_oddiel">
             <field name="name">Oddiel</field>
             <field name="res_model">o2net.oddiel</field>

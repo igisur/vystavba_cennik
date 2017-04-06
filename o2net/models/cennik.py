@@ -30,6 +30,7 @@ class VystavbaCennikPolozka(models.Model):
     polozka_id = fields.Many2one('o2net.polozka', string='Položka', required=True)
     name = fields.Char(related='polozka_id.name', string='Názov')
     kod = fields.Char(related='polozka_id.kod', string='Kód')
+    is_balicek = fields.Boolean(related='polozka_id.is_balicek', string='Balíček')
     mj = fields.Selection(related='polozka_id.mj', string='Merná jednotka')
     popis = fields.Text(related='polozka_id.description', string='Popis')
     cena = fields.Float(required=True, digits=(10, 2))
