@@ -206,12 +206,15 @@ class VystavbaCenovaPonuka(models.Model):
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         return [('id', 'in', partner_ids)]
 
-    @api.depends('cp_polozka_ids.cena_celkom','cp_polozka_atyp_ids.cena')
+    @api.depends('cp_polozka_ids.cena_celkom','cp_polozka_balicek_ids.cena_celkom','cp_polozka_atyp_ids.cena')
     def _amount_all(self):
         _logger.info("_amount_all: " + str(len(self)))
         for cp in self:
             cp_celkova_cena = 0.0
             for line in cp.cp_polozka_ids:
+                cp_celkova_cena += line.cena_celkom
+
+            for line in cp.cp_polozka_balicek_ids:
                 cp_celkova_cena += line.cena_celkom
 
             for lineAtyp in cp.cp_polozka_atyp_ids:

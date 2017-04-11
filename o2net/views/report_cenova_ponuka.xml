@@ -13,10 +13,78 @@
         </template>
 
         <template id="report_cenova_ponuka_pdf_document">
-             <th t-call="report.internal_layout">
+             <t t-call="report.internal_layout">
                 <div class="page">
                     <t t-set="d" t-value="doc" />
-                    <div class="hlavicka">
+                    <t t-if="d.name"><h2><span t-field="d.name"/></h2></t>
+                    <!--<table>
+                        <tr>
+                            <td t-if="d.financny_kod">Finančný kód: <strong><span t-field="d.financny_kod"/></strong></td>
+                            <td t-if="d.cislo">Číslo projektu PSID: <strong><span t-field="d.cislo"/></strong></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td t-if="d.skratka">Skratka: <strong><span t-field="d.skratka"/></strong></td>
+                            <td t-if="d.datum_zaciatok">Dátum zahájenia: <strong><span t-field="d.datum_zaciatok"/></strong></td>
+                            <td>Celková cena:</td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td t-if="d.datum_koniec">Dátum ukončenia: <strong><span t-field="d.datum_koniec"/></strong></td>
+                            <td t-if="d.celkova_cena"><span t-field="d.celkova_cena"/></td>
+                        </tr>
+                        <tr>
+                            <td t-if="d.pc_id.name">PC: <strong><span t-field="d.pc_id.name"/></strong></td>
+                            <td t-if="d.pc_id.name">PC: <strong><span t-field="d.pc_id.name"/></strong></td>
+                            <td t-if="d.pm_id.name">PM: <strong><span t-field="d.pc_id.name"/></strong></td>
+                        </tr>
+                    </table>-->
+
+                    <div class="row mt32 mb32">
+                        <div t-if="d.skratka" class="col-xs-3">
+                            <strong>Skratka:</strong>
+                            <p t-field="d.skratka"/>
+                        </div>
+                        <div t-if="d.financny_kod" class="col-xs-3">
+                            <strong>Finančný kód:</strong>
+                            <p t-field="d.financny_kod"/>
+                        </div>
+                        <div t-if="d.datum_zaciatok" class="col-xs-3">
+                            <strong>Dátum začiatku</strong>
+                            <p t-field="d.datum_zaciatok"/>
+                        </div>
+                        <div t-if="d.datum_koniec" class="col-xs-3">
+                            <strong>Dátum dokončenia:</strong>
+                            <p t-field="d.datum_koniec"/>
+                        </div>
+                    </div>
+
+                    <div class="row mt32 xs_32">
+                        <div t-if="d.dodavatel_id.name" class="col-xs-3">
+                            <strong>Dodávateľ:</strong>
+                            <p t-field="d.dodavatel_id.name"/>
+                        </div>
+                        <div t-if="d.pc_id.name" class="col-xs-3">
+                            <strong>PC:</strong>
+                            <p t-field="d.pc_id.name"/>
+                        </div>
+                        <div t-if="d.pm_id.display_name" class="col-xs-3">
+                            <strong>PM:</strong>
+                            <p t-field="d.pm_id.display_name"/>
+                        </div>
+                        <div t-if="d.celkova_cena">
+                            <table width="100%">
+                                <tr>
+                                    <td style="font-size:20px;text-align:right;">Celková cena:</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size:20px;text-align:right;"><span t-esc="d.celkova_cena" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!--<div class="hlavicka">
                         <div class="row1">
                             <p t-if="d.name">Názov: <h3><span t-field="d.name"/></h3></p>
                         </div>
@@ -39,7 +107,7 @@
                         <div class="row6">
                             <p t-if="d.celkova_cena">Celková cena: <h4><span t-field="d.celkova_cena"/></h4></p>
                         </div>
-                    </div>
+                    </div>-->
                     <t t-set="rows" t-value="d._get_oddiel(d.id)"/>
                     <t t-set="oddiels" t-value="d._get_oddiel(d.id)"/>
                     <section>
@@ -178,7 +246,7 @@
                         </table>
                     </section>
                 </div>
-            </th>
+            </t>
         </template>
 
         <template id="report_cenova_ponuka_pdf">
