@@ -371,6 +371,80 @@ class VystavbaCenovaPonuka(models.Model):
         return data
 
     @api.one
+    def _get_price_oddiel(self, cp_id, oddiel_id, atyp, balicek):
+        cena = 0
+        _logger.info("_get_price_oddiel cp_id=" + str(cp_id)+ " oodiel_id="+str(oddiel_id)+" atyp="+str(atyp)+" balicek="+str(balicek))
+
+        if atyp==1:
+            #1 atypove polozky
+            query = """select sum(cppa.cena)
+                        from o2net_cenova_ponuka cp
+                        join o2net_cenova_ponuka_polozka_atyp cppa on cp.id = cppa.cenova_ponuka_id
+                        join o2net_oddiel o on cppa.oddiel_id = o.id
+                        where
+                            cp.id = %s
+                            and o.id = %s;"""
+
+            self.env.cr.execute(query, (cp_id, oddiel_id))
+            cena = self.env.cr.fetchone()[0]
+
+        if atyp==0:
+            # 0 typove polozky berie sa do uvahy aj parameter ci balicek
+            query = """select sum(cpp.cena_celkom)
+                        from o2net_cenova_ponuka cp
+                        join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
+                        join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
+                        join o2net_polozka p on c.polozka_id = p.id
+                        where cp.id = %s
+                        and p.oddiel_id = %s
+                        and p.is_balicek = ( case when 0=%s then false else true end );"""
+
+            self.env.cr.execute(query, (cp_id, oddiel_id, balicek))
+            cena = self.env.cr.fetchone()[0]
+
+        if atyp == 3:
+            # query = """select to_char(coalesce(sum(cpp.cena_celkom), 0), '999 999 999D99')
+            query = """select sum(zdroj.cena)
+                        from
+                        (   select sum(cppa.cena) as cena
+                            from o2net_cenova_ponuka cp
+                            join o2net_cenova_ponuka_polozka_atyp cppa on cp.id = cppa.cenova_ponuka_id
+                            join o2net_oddiel o on cppa.oddiel_id = o.id
+                            where cp.id = %s
+                            and o.id = %s
+                            union all
+                            select sum(cpp.cena_celkom)
+                            from o2net_cenova_ponuka cp
+                            join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
+                            join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
+                            join o2net_polozka p on c.polozka_id = p.id
+                            where cp.id = %s
+                            and p.oddiel_id = %s
+                            and p.is_balicek = false ) zdroj;"""
+
+            self.env.cr.execute(query, (cp_id,oddiel_id,cp_id,oddiel_id))
+            cena = self.env.cr.fetchone()[0]
+
+        return cena
+
+    @api.one
+    def _get_price_balicky(self, cp_id):
+        cena = 0
+        _logger.info("_get_price_balicky cp_id=" + str(cp_id))
+
+        query = """select sum(cpp.cena_celkom)
+                    from o2net_cenova_ponuka cp
+                    join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
+                    join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
+                    join o2net_polozka p on c.polozka_id = p.id
+                    where cp.id = %s
+                    and p.is_balicek = true;"""
+
+        self.env.cr.execute(query, ([cp_id]))
+        cena = self.env.cr.fetchone()[0]
+        return cena
+
+    @api.one
     def _get_rows(self, cp_id):
         data = []
         _logger.info("a_function_name " + str(cp_id))
