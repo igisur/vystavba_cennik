@@ -459,6 +459,35 @@ class VystavbaCenovaPonuka(models.Model):
 
         return ret
 
+    def _get_cp_polozka_ids(self):
+        _logger.info('_get_polozka_ids')
+        for record in self:
+            _logger.info('record:' + str(record))
+            record.cp_polozka_ids = self.env['o2net.cenova_ponuka.polozka'].search([('cenova_ponuka_id', '=', record.id), ('cennik_polozka_id.is_balicek', '!=', True)])
+
+    def _get_cp_polozka_balicek_ids(self):
+        _logger.info('_get_polozka_balicek_ids')
+        for record in self:
+            _logger.info('record:' + str(record))
+            record.cp_polozka_balicek_ids = self.env['o2net.cenova_ponuka.polozka'].search([('cenova_ponuka_id', '=', record.id), ('cennik_polozka_id.is_balicek', '=', True)])
+
+    def _set_polozka_ids(self):
+        self.ensure_one()
+        _logger.info('_set_polozka_balicek_ids')
+        _logger.info('polozky: ' + str(self.polozka_ids))
+        #self.write({'polozka_ids': [(6, 0, [self.dodavatel_id.id])]})
+
+        for record in self.cp_polozka_ids:
+            _logger.info('polozka: ' + str(record))
+            self.polozka_ids = record
+
+        for record in self.cp_polozka_balicek_ids:
+            _logger.info('balicek: ' + str(record))
+            self.polozka_ids = record
+
+        _logger.info('polozky: ' + str(self.polozka_ids))
+
+    # FIELDS
     # computed fields
     ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute=_compute_ro_datumoddo, store=False, copy=False)
     can_user_exec_wf = fields.Boolean(string="Can user execute workflow action", compute=_compute_can_user_exec_wf, store=False, copy=False)
@@ -485,22 +514,14 @@ class VystavbaCenovaPonuka(models.Model):
     cennik_id = fields.Many2one('o2net.cennik', string='Cenník', copy=True)
     currency_id = fields.Many2one(related='cennik_id.currency_id', string="Mena", copy=True)
 
-    #osoba_priradena_id = fields.Many2one('res.partner', string='Priradený', copy=False, track_visibility='onchange', default= lambda self: self.env.user.partner_id.id)
-    #manager_id = fields.Many2one('res.partner', string='Manager', track_visibility='onchange', domain=partners_in_group_manager, copy=False)
-
     cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky', track_visibility='onchange', copy=True)
-    cp_polozka_balicek_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Balíčky', track_visibility='onchange', copy=True)
-    #, domain="[('polozka_isbalicek','=','True')]"
+    cp_polozka_balicek_ids = fields.One2many('o2net.cenova_ponuka.balicek', 'cenova_ponuka_id', string='Balíčky', track_visibility='onchange', copy=True)
     cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', track_visibility='onchange', copy=True)
-
-    #cp_polozky_rows = fields.Selection(selection=a_function_name, string='daky text')
-    #cp_polozky_rows = fields.Selection(selection=a_function_name, string='daky text', default='draft', track_visibility='onchange')
 
     sap_export_content = fields.Text(string="Export pre SAP", default='ABCDEFGH', copy=False)
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
     sap_export_file_binary = fields.Binary(string='Export file', copy=False)
 
-    #msg_ids = fields.One2many('mail.message', 'res_id', string='Messages',domain=lambda self: [('model', '=', self._name)], auto_join=True)
     base_url = fields.Char(compute=_resolve_record_url, string="Link", store=False, copy=False, )
 
     @api.multi
@@ -819,11 +840,16 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     cennik_polozka_id = fields.Many2one('o2net.cennik.polozka', string='Položka cenníka', required=True, domain="[('cennik_id', '=', parent.cennik_id)]")
     polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Merná jednotka', stored=False)
     polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Popis', stored=False)
-    polozka_isbalicek = fields.Boolean(related='cennik_polozka_id.is_balicek', string='Balicek', stored=False)
+    polozka_isbalicek = fields.Boolean(related='cennik_polozka_id.is_balicek', string='Balicek', stored=True)
     name = fields.Char(related='cennik_polozka_id.name', string='Názov')
     kod = fields.Char(related='cennik_polozka_id.kod', string='Kód')
 
     currency_id = fields.Many2one(related='cenova_ponuka_id.currency_id', string="Mena")
+
+class VystavbaCenovaPonukaBalicek(models.Model):
+    _name = 'o2net.cenova_ponuka.balicek'
+    _inherit = 'o2net.cenova_ponuka.polozka'
+    _description = "vystavba - balicek cenovej ponuky"
 
 class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
     _name = 'o2net.cenova_ponuka.polozka_atyp'
