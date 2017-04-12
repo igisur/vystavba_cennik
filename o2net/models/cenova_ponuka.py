@@ -156,7 +156,7 @@ class VystavbaCenovaPonuka(models.Model):
                                 cpp.mnozstvo,
                                 p.oddiel_id,
                                 cpp.cenova_ponuka_id
-                            from o2net_cenova_ponuka_polozka cpp
+                            from o2net_cenova_ponuka_polozka_balicek cpp
                             join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
                             join o2net_polozka p on cp.polozka_id = p.id
                             where
@@ -363,7 +363,7 @@ class VystavbaCenovaPonuka(models.Model):
                             cpp.cena_jednotkova,
                             cpp.mnozstvo as pocet,
                             cpp.cena_celkom as cena_celkom
-                    from o2net_cenova_ponuka_polozka cpp
+                    from o2net_cenova_ponuka_polozka_balicek cpp
                             join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
                             join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = true
                             join o2net_oddiel o on p.oddiel_id = o.id
@@ -374,9 +374,47 @@ class VystavbaCenovaPonuka(models.Model):
         return data
 
     @api.one
-    def _get_price_oddiel(self, cp_id, oddiel_id, atyp, balicek):
+    def _get_price_oddiel(self, cp_id, oddiel_id):
+    # -------------------------------------------------------------
+    # celkova cena pre cenovu ponuku a oddiel
+    # pocitaju sa polozky typove a atypove spolu podla oddielu
+    # -------------------------------------------------------------
+
         cena = 0
-        _logger.info("_get_price_oddiel cp_id=" + str(cp_id)+ " oodiel_id="+str(oddiel_id)+" atyp="+str(atyp)+" balicek="+str(balicek))
+        _logger.info("_get_price_oddiel cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id))
+
+        query = """select sum(zdroj.cena)
+                    from
+                    (   select sum(cppa.cena) as cena
+                        from o2net_cenova_ponuka cp
+                        join o2net_cenova_ponuka_polozka_atyp cppa on cp.id = cppa.cenova_ponuka_id
+                        join o2net_oddiel o on cppa.oddiel_id = o.id
+                        where cp.id = %s
+                        and o.id = %s
+                        union all
+                        select sum(cpp.cena_celkom)
+                        from o2net_cenova_ponuka cp
+                        join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
+                        join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
+                        join o2net_polozka p on c.polozka_id = p.id
+                        where cp.id = %s
+                        and p.oddiel_id = %s
+                        and p.is_balicek = false ) zdroj;"""
+
+        self.env.cr.execute(query, (cp_id, oddiel_id, cp_id, oddiel_id))
+        cena = self.env.cr.fetchone()[0]
+        _logger.info("_get_price_oddiel cena=" + str(cena))
+
+        return cena
+
+    @api.one
+    def _get_price_oddiel_atyp(self, cp_id, oddiel_id, atyp):
+    # --------------------------------------------------------------------------
+    # celkova cena pre cenovu ponuku a oddiel a typ/atyp
+    # pocita as suma pre cp a oddiel a polozky typove resp. atypove polozky
+    # --------------------------------------------------------------------------
+        cena = 0
+        _logger.info("_get_price_oddiel_atyp cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id)+ " atyp=" + str(atyp))
 
         if atyp==1:
             #1 atypove polozky
@@ -392,7 +430,6 @@ class VystavbaCenovaPonuka(models.Model):
             cena = self.env.cr.fetchone()[0]
 
         if atyp==0:
-            # 0 typove polozky berie sa do uvahy aj parameter ci balicek
             query = """select sum(cpp.cena_celkom)
                         from o2net_cenova_ponuka cp
                         join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
@@ -400,44 +437,25 @@ class VystavbaCenovaPonuka(models.Model):
                         join o2net_polozka p on c.polozka_id = p.id
                         where cp.id = %s
                         and p.oddiel_id = %s
-                        and p.is_balicek = ( case when 0=%s then false else true end );"""
+                        and p.is_balicek = false;"""
 
-            self.env.cr.execute(query, (cp_id, oddiel_id, balicek))
+            self.env.cr.execute(query, (cp_id, oddiel_id))
             cena = self.env.cr.fetchone()[0]
 
-        if atyp == 3:
-            # query = """select to_char(coalesce(sum(cpp.cena_celkom), 0), '999 999 999D99')
-            query = """select sum(zdroj.cena)
-                        from
-                        (   select sum(cppa.cena) as cena
-                            from o2net_cenova_ponuka cp
-                            join o2net_cenova_ponuka_polozka_atyp cppa on cp.id = cppa.cenova_ponuka_id
-                            join o2net_oddiel o on cppa.oddiel_id = o.id
-                            where cp.id = %s
-                            and o.id = %s
-                            union all
-                            select sum(cpp.cena_celkom)
-                            from o2net_cenova_ponuka cp
-                            join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
-                            join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
-                            join o2net_polozka p on c.polozka_id = p.id
-                            where cp.id = %s
-                            and p.oddiel_id = %s
-                            and p.is_balicek = false ) zdroj;"""
-
-            self.env.cr.execute(query, (cp_id,oddiel_id,cp_id,oddiel_id))
-            cena = self.env.cr.fetchone()[0]
-
+        _logger.info("_get_price_oddiel_atyp cena=" + str(cena))
         return cena
 
     @api.one
     def _get_price_balicky(self, cp_id):
+    # ---------------------------------------------
+    # celkova cena pre cenovu ponuku a balicky
+    # ---------------------------------------------
         cena = 0
         _logger.info("_get_price_balicky cp_id=" + str(cp_id))
 
         query = """select sum(cpp.cena_celkom)
                     from o2net_cenova_ponuka cp
-                    join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
+                    join o2net_cenova_ponuka_polozka_balicek cpp on cp.id = cpp.cenova_ponuka_id
                     join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
                     join o2net_polozka p on c.polozka_id = p.id
                     where cp.id = %s
@@ -509,7 +527,7 @@ class VystavbaCenovaPonuka(models.Model):
                                     p.mj,
                                     cpp.mnozstvo,
                                     cpp.cena_celkom
-                            from o2net_cenova_ponuka_polozka cpp
+                            from o2net_cenova_ponuka_polozka_balicek cpp
                             join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
                             join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = true
                             join o2net_oddiel o on p.oddiel_id = o.id
@@ -592,7 +610,7 @@ class VystavbaCenovaPonuka(models.Model):
     currency_id = fields.Many2one(related='cennik_id.currency_id', string="Mena", copy=True)
 
     cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky', track_visibility='onchange', copy=True)
-    cp_polozka_balicek_ids = fields.One2many('o2net.cenova_ponuka.balicek', 'cenova_ponuka_id', string='Balíčky', track_visibility='onchange', copy=True)
+    cp_polozka_balicek_ids = fields.One2many('o2net.cenova_ponuka.polozka_balicek', 'cenova_ponuka_id', string='Balíčky', track_visibility='onchange', copy=True)
     cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', track_visibility='onchange', copy=True)
 
     sap_export_content = fields.Text(string="Export pre SAP", default='ABCDEFGH', copy=False)
@@ -923,8 +941,8 @@ class VystavbaCenovaPonukaPolozka(models.Model):
 
     currency_id = fields.Many2one(related='cenova_ponuka_id.currency_id', string="Mena")
 
-class VystavbaCenovaPonukaBalicek(models.Model):
-    _name = 'o2net.cenova_ponuka.balicek'
+class VystavbaCenovaPonukaPolozkaBalicek(models.Model):
+    _name = 'o2net.cenova_ponuka.polozka_balicek'
     _inherit = 'o2net.cenova_ponuka.polozka'
     _description = "vystavba - balicek cenovej ponuky"
 
