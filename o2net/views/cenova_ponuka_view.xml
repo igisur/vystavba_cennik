@@ -16,7 +16,7 @@
                     </div>
                     <group>
                         <field name="kod" readonly="1"/>
-                        <field name="polozka_mj" readonly="1" string="MJ"/>
+                        <field name="polozka_mj" readonly="1" string="Measure unit"/>
                         <field name="currency_id" invisible="1"/>
                         <field name="cena_jednotkova" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
                     </group>
@@ -39,21 +39,21 @@
                 <form>
                     <header>
                         <!-- use class="oe_highlight" to suggest WF action -->
-                        <button name="assign" type="workflow" string="Priradiť" class="oe_highlight" states="draft" groups="o2net.group_vystavba_pc,o2net.group_vystavba_admin"/>
-                        <button name="in_progress" type="workflow" string="Rozpracovať" class="oe_highlight" states="assigned" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
-                        <button name="to_approve" type="workflow" string="Odoslať na schválenie" class="oe_highlight" states="in_progress" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
-                        <button name="approve" type="workflow" string="Schváliť" class="oe_highlight" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
-                        <button name="wf_not_complete" type="object" string="Vratiť na opravu" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
-                        <button name="cancel" type="workflow" string="Zrušiť" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
+                        <button name="assign" type="workflow" string="Assign" class="oe_highlight" states="draft" groups="o2net.group_vystavba_pc,o2net.group_vystavba_admin"/>
+                        <button name="in_progress" type="workflow" string="To progress" class="oe_highlight" states="assigned" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
+                        <button name="to_approve" type="workflow" string="Send to approve" class="oe_highlight" states="in_progress" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
+                        <button name="approve" type="workflow" string="Approve" class="oe_highlight" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
+                        <button name="wf_not_complete" type="object" string="Return to correct" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
+                        <button name="cancel" type="workflow" string="Cancel" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,assigned,in_progress,to_approve,approved" readonly="1"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button string="Export SAP" name="action_exportSAP" type="object" icon="fa-file-text-o" groups="o2net.group_vystavba_admin"/>
+                            <button string="Export to SAP" name="action_exportSAP" type="object" icon="fa-file-text-o" groups="o2net.group_vystavba_admin"/>
                         </div>
                         <div class="oe_title">
                             <h1>
-                                <label string="Cenová ponuka"/>
+                                <label string="Price offer"/>
                                 <field name="id" invisible="True"/>
                                 <field name="name" attrs="{'readonly':[('state','in',['approved'])]}"/>
                                 <field name="ro_datumoddo" invisible="True"/>
@@ -84,36 +84,36 @@
                         </group>
 
                         <notebook>
-                            <page string="Položky">
+                            <page string="Items">
                                 <field name="cp_polozka_ids" attrs="{'readonly':[('state','in',['approved'])]}">
-                                    <tree string="Polozky cennika" editable="bottom">
+                                    <tree string="Price list items" editable="bottom">
                                         <!--<field name="cennik_polozka_id" string="Položky" options="{'no_create': True}"/>-->
-                                        <field name="cennik_polozka_id" string="Položky" options="{'no_create': True}" domain="[('polozka_id.is_balicek','!=','True')]"/>
-                                        <field name="polozka_mj" readonly="1" string="Mj"/>
-                                        <field name="cena_jednotkova" string="Jednotková cena"/>
-                                        <field name="mnozstvo"  string="Počet"/>
-                                        <field name="cena_celkom" string="Celková cena"/>
+                                        <field name="cennik_polozka_id" string="Items" options="{'no_create': True}" domain="[('polozka_id.is_balicek','!=','True')]"/>
+                                        <field name="polozka_mj" readonly="1" string="Measure unit"/>
+                                        <field name="cena_jednotkova" string="Unit price"/>
+                                        <field name="mnozstvo"  string="Quantity"/>
+                                        <field name="cena_celkom" string="Total price"/>
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Balíčky">
+                            <page string="Packages">
                                 <field name="cp_polozka_balicek_ids" attrs="{'readonly':[('state','in',['approved'])]}">
-                                    <tree string="Balicky cennika" editable="bottom">
+                                    <tree string="Price list packages" editable="bottom">
                                         <!--<field name="cennik_polozka_id" string="Balíčky" options="{'no_create': True}"/>-->
-                                        <field name="cennik_polozka_id" string="Balíčky" options="{'no_create': True}" domain="[('polozka_id.is_balicek','=','True')]"/>
-                                        <field name="polozka_mj" readonly="1" string="Merná jednotka"/>
+                                        <field name="cennik_polozka_id" string="Packages" options="{'no_create': True}" domain="[('polozka_id.is_balicek','=','True')]"/>
+                                        <field name="polozka_mj" readonly="1" string="Measure unit"/>
                                         <field name="cena_jednotkova"/>
-                                        <field name="mnozstvo"  string="Počet"/>
-                                        <field name="cena_celkom" string="Cena"/>
+                                        <field name="mnozstvo"  string="Quantity"/>
+                                        <field name="cena_celkom" string="Total price"/>
                                     </tree>
                                 </field>
                             </page>
                             <page string="Atypické položky" attrs="{'readonly':[('state','in',['approved'])]}">
                                 <field name="cp_polozka_atyp_ids">
                                     <tree string="Polozky cennika" editable="bottom">
-                                        <field name="oddiel_id" string="Oddiel" options="{'no_create': True}"/>
-                                        <field name="name"  string="Položka"/>
-                                        <field name="cena" string="Cena"/>
+                                        <field name="oddiel_id" string="Section" options="{'no_create': True}"/>
+                                        <field name="name"  string="Item"/>
+                                        <field name="cena" string="Price"/>
                                     </tree>
                                 </field>
                             </page>

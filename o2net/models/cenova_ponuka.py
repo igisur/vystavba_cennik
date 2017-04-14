@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 class VystavbaCenovaPonuka(models.Model):
     _name = 'o2net.cenova_ponuka'
-    _description = "vystavba - cenova ponuka"
+    _description = "o2net - price offer"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     DRAFT = 'draft'
@@ -913,7 +913,7 @@ class VystavbaCenovaPonuka(models.Model):
 
 class VystavbaCenovaPonukaPolozka(models.Model):
     _name = 'o2net.cenova_ponuka.polozka'
-    _description = "vystavba - polozka cenovej ponuky"
+    _description = "o2net - price offer item"
 
     @api.depends('cena_jednotkova', 'mnozstvo')
     def _compute_cena_celkom(self):
@@ -943,11 +943,11 @@ class VystavbaCenovaPonukaPolozka(models.Model):
 class VystavbaCenovaPonukaPolozkaBalicek(models.Model):
     _name = 'o2net.cenova_ponuka.polozka_balicek'
     _inherit = 'o2net.cenova_ponuka.polozka'
-    _description = "vystavba - balicek cenovej ponuky"
+    _description = "o2net - price offer package"
 
 class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
     _name = 'o2net.cenova_ponuka.polozka_atyp'
-    _description = "vystavba - atyp polozka cenovej ponuky"
+    _description = "o2net - price offer atypical"
 
     name = fields.Char(required=True, string="Name", size=100, help="Code item")
     oddiel_id = fields.Many2one('o2net.oddiel', required=True, string="Section")

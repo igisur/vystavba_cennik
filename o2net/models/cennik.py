@@ -5,7 +5,7 @@ from openerp.exceptions import UserError, AccessError, ValidationError
 
 class VystavbaCennik(models.Model):
     _name = 'o2net.cennik'
-    _description = "vystavba - cennik"
+    _description = "o2net - price list"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     name = fields.Char(required=True, string="Code", size=30, help="Price list code")
@@ -24,7 +24,7 @@ class VystavbaCennik(models.Model):
 
 class VystavbaCennikPolozka(models.Model):
     _name = 'o2net.cennik.polozka'
-    _description = "vystavba - polozka cennika"
+    _description = "o2net - price list item"
 
     cennik_id = fields.Many2one('o2net.cennik', string='Price list', required=True, ondelete='cascade')
     polozka_id = fields.Many2one('o2net.polozka', string='Item', required=True)

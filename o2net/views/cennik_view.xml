@@ -96,7 +96,7 @@
        </record>
 
        <record model="ir.ui.view" id="view_tree_cennik_dodavatel">
-            <field name="name">Cennik dodávateľa</field>
+            <field name="name">Vendor's price list</field>
             <field name="model">o2net.cennik</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
@@ -111,7 +111,7 @@
        </record>
 
        <record model="ir.actions.act_window" id="action_window_cennik_dodavatel">
-           <field name="name">Cennik dodávateľa</field>
+           <field name="name">Vendor's price list</field>
            <field name="res_model">o2net.cennik</field>
            <field name="view_id" ref="view_tree_cennik_dodavatel"/>
            <field name="view_type">form</field>
@@ -119,7 +119,7 @@
        </record>
 
        <record model="ir.actions.act_window" id="action_window_cennik_cennik">
-           <field name="name">Cennik dodávateľa</field>
+           <field name="name">Vendor's price list</field>
            <field name="res_model">o2net.cennik.polozka</field>
            <field name="view_id" ref="view_tree_cennik_polozky"/>
            <field name="view_type">form</field>

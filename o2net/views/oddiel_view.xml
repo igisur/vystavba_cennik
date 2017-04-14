@@ -20,18 +20,18 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <label for="name" string="Kód"/>
+                        <label for="name" string="Code"/>
                         <field name="name"/>
-                        <label for="description" string="Popis"/>
+                        <label for="description" string="Description"/>
                         <field name="description"/>
-                        <label for="atypsluzba" string="KSZ (pre atyp)"/>
+                        <label for="atypsluzba" string="KSZ"/>
                         <field name="atypsluzba"/>
                     </sheet>
                 </form>
             </field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Klikni pre založenie novej položky.</p>
-                <p>Tu nájdete zoznam položiek.</p>
+                <p class="oe_view_nocontent_create">Clik for establishment of new item.</p>
+                <p>Here you can find list of itmes.</p>
             </field>
         </record>
 
@@ -42,8 +42,8 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Klikni pre založenie nového oddielu.</p>
-                <p>Tu nájdete zoznam oddielov.</p>
+                <p class="oe_view_nocontent_create">Clik for establishment of new section.</p>
+                <p>Here you can find list of section.</p>
             </field>
         </record>
 

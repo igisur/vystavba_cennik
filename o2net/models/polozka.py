@@ -4,7 +4,7 @@ from openerp import models, fields, api
 
 class VystavbaPolozka(models.Model):
     _name = 'o2net.polozka'
-    _description = "vystavba - polozka"
+    _description = "o2net - item"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     name = fields.Char(required=True, string="Name", size=1000)
@@ -15,7 +15,7 @@ class VystavbaPolozka(models.Model):
     # oddiel_id = fields.Char(size=10, required=True, string="Oddiel", help="kod oddielu pre SAP")
     oddiel_id = fields.Many2one('o2net.oddiel', string='Section', required=False)
     mj = fields.Selection([
-        ('_', 'neurčená MJ'),
+        ('_', 'Not given'),
         ('kg', 'Kilogram'),
         ('ks', 'Piece'),
         ('km', 'Kilometer'),
