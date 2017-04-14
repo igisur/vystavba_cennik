@@ -159,7 +159,7 @@
                     <field name="currency_id" invisible="1"/>
                     <field name="celkova_cena" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                     <field name="dodavatel_id"/>
-                    <field name="osoba_priradena_ids" string="Priradený" widget="one2many_list"/>
+                    <field name="osoba_priradena_ids" string="Assigned" widget="one2many_list"/>
                 </tree>
             </field>
         </record>
@@ -179,7 +179,7 @@
                   <field name="financny_kod"/>
                   <field name="skratka"/>
                   <field name="dodavatel_id"/>
-                  <field name="osoba_priradena_ids" string="Priradený" widget="one2many_list"/>
+                  <field name="osoba_priradena_ids" string="Assigned" widget="one2many_list"/>
                 </tree>
             </field>
         </record>
@@ -197,12 +197,12 @@
                     <field name="name"/>
                     <field name="cislo"/>
                     <field name="financny_kod"/>
-                    <field name="datum_zaciatok" string="Začaté"/>
-                    <field name="datum_koniec" string="Ukončené"/>
+                    <field name="datum_zaciatok" string="Start date"/>
+                    <field name="datum_koniec" string="End date"/>
                     <field name="currency_id" invisible="1"/>
                     <field name="celkova_cena"  string="Cena" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                     <field name="dodavatel_id"/>
-                    <field name="osoba_priradena_ids" string="Priradený" widget="one2many_list"/>
+                    <field name="osoba_priradena_ids" string="Assigned" widget="one2many_list"/>
                 </tree>
             </field>
         </record>
@@ -210,89 +210,89 @@
         <!-- ACTIONS -->
        <!-- PC: vytvorenie a zoznam vytvorenych navrhov CP -->
         <record model="ir.actions.act_window" id="action_window_cp_draft">
-            <field name="name">Návrh cenovej ponuky</field>
+            <field name="name">Price offer draft</field>
             <field name="res_model">o2net.cenova_ponuka</field>
             <field name="view_id" ref="view_tree_cenova_ponuka_draft"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('state','=','draft')]</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Klikni pre založenie novej hlavičky cenovej ponuky.</p>
-                <p>Tu nájdete založené cenové ponuky.</p>
+                <p class="oe_view_nocontent_create">Click here for establishment of new price offer header.</p>
+                <p>Here you can find founded price offers.</p>
             </field>
         </record>
 
         <!-- Dodavatel: zoznam priradenych navrhov CP. to-do pool navrhov CP, ktoré su priradene dodavatelovy. ak ich zedituje stavaju sa "rozpracované" -->
         <record model="ir.actions.act_window" id="action_window_cp_assigned">
-            <field name="name">Priradené cenové ponuky</field>
+            <field name="name">Assigned price offers</field>
             <field name="res_model">o2net.cenova_ponuka</field>
             <field name="view_id" ref="view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','assigned')]</field>
             <field name="help" type="html">
-                <p>Tu nájdete cenové ponuky, ktoré sú priradené na dodávateľa.</p>
+                <p>Here you can find price offers assigned to vendor.</p>
             </field>
         </record>
 
         <!-- Dodavatel: zoznam rozpracovanych CP. to-do pool navrhov CP, ktoré treba dospecifikovat a posunut ich na schvalenie -->
         <record model="ir.actions.act_window" id="action_window_cp_in_progress">
-            <field name="name">Rozpracované cenové ponuky</field>
+            <field name="name">Price offers in progres</field>
             <field name="res_model">o2net.cenova_ponuka</field>
             <field name="view_id" ref="view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','in_progress')]</field>
             <field name="help" type="html">
-                <p>Tu nájdete rozpracované cenové ponuky, kde ste ich dodávateľ.</p>
+                <p>Here you can find price offers in progress, where you are the vendor.</p>
             </field>
         </record>
 
         <record model="ir.actions.act_window" id="action_window_cp_to_approve">
-            <field name="name">Cenové ponuky čakajúce na schválenie</field>
+            <field name="name">Price offers waiting for approval</field>
             <field name="res_model">o2net.cenova_ponuka</field>
             <field name="view_id" ref="view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','to_approve')]</field>
             <field name="help" type="html">
-                <p>Tu nájdete cenové ponuky čakajúce na schválenie, ktoré sú vám priradené alebo ste ich dodávateľ.</p>
+                <p>Here you can find price offers waiting for approval, which are assigned to you or you are thier vendor.</p>
             </field>
         </record>
 
         <!-- Dodavatel / PC / PM / Manager: zoznam schvalenych CP (v podstate historia CP) READ ONLY -->
         <record model="ir.actions.act_window" id="action_window_cp_approved">
-            <field name="name">Schválené cenové ponuky</field>
+            <field name="name">Approved price offers</field>
             <field name="res_model">o2net.cenova_ponuka</field>
             <field name="view_id" ref="view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','approved')]</field>
             <field name="help" type="html">
-                <p>Tu nájdete schválené cenové ponuky, ktoré vám boli priradené alebo ste ich dodávateľ.</p>
+                <p>Here you can find approved price offers, which are assigned to you or you are thier vendor.</p>
             </field>
         </record>
 
         <record model="ir.actions.act_window" id="action_window_cp_cancel">
-            <field name="name">Zrušené cenové ponuky</field>
+            <field name="name">Canceled price offers</field>
             <field name="res_model">o2net.cenova_ponuka</field>
             <field name="view_id" ref="view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','cancel')]</field>
             <field name="help" type="html">
-                <p>Tu nájdete zrušené cenové ponuky, ktoré vám boli priradené alebo ste ich dodávateľ.</p>
+                <p>Here you can find canceled price offers, which are assigned to you or you are thier vendor.</p>
             </field>
         </record>
 
         <record model="ir.actions.act_window" id="action_window_cp_preview">
-            <field name="name">Prehľad cenových ponúk</field>
+            <field name="name">Overview price offers</field>
             <field name="res_model">o2net.cenova_ponuka</field>
             <field name="view_id" ref="view_tree_cenova_ponuka_preview"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
-                <p>Tu nájdete všetky cenové ponuky, ktoré sú vám priradené alebo ste ich dodávateľ.</p>
+                <p>Here you can find all price offers, which are assigned to you or you are thier vendor.</p>
             </field>
         </record>
 
