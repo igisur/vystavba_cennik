@@ -175,7 +175,7 @@
                                                 <td>
                                                     <t t-set="indexatyp" t-value="indexatyp+1" />
                                                     <t t-if="indexatyp==1">
-                                                        <h5>Atypové položky</h5>
+                                                        <h5>Atypical items</h5>
                                                     </t>
                                                     <table style="width:100%">
                                                         <t t-if="indexatyp==1">

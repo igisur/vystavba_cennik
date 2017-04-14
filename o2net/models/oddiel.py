@@ -6,7 +6,7 @@ class VystavbaOddiel(models.Model):
     _name = 'o2net.oddiel'
     _description = "o2net - section"
 
-    name = fields.Char(required=True, string="Code", size=30, help="Kód")
+    name = fields.Char(required=True, string="Code", size=30, help="Code")
     description = fields.Text(string="Description")
     atypsluzba = fields.Char(string="KSZ", size=30)
 

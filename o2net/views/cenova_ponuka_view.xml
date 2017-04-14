@@ -3,7 +3,7 @@
     <data>
 
         <record model="ir.ui.view" id="view_form_cenova_ponuka_polozka">
-            <field name="name">cenova ponuka polozka</field>
+            <field name="name">Price offer item</field>
             <field name="model">o2net.cenova_ponuka.polozka</field>
             <field name="priority" eval="5"/>
             <field name="type">form</field>
@@ -31,7 +31,7 @@
 
         <!-- VIEWS -->
         <record model="ir.ui.view" id="view_form_cenova_ponuka">
-            <field name="name">cenova ponuka</field>
+            <field name="name">Price offer</field>
             <field name="model">o2net.cenova_ponuka</field>
             <field name="priority" eval="5"/>
             <field name="type">form</field>
@@ -98,7 +98,7 @@
                             </page>
                             <page string="Packages">
                                 <field name="cp_polozka_balicek_ids" attrs="{'readonly':[('state','in',['approved'])]}">
-                                    <tree string="Price list packages" editable="bottom">
+                                    <tree string="Packages" editable="bottom">
                                         <!--<field name="cennik_polozka_id" string="Balíčky" options="{'no_create': True}"/>-->
                                         <field name="cennik_polozka_id" string="Packages" options="{'no_create': True}" domain="[('polozka_id.is_balicek','=','True')]"/>
                                         <field name="polozka_mj" readonly="1" string="Measure unit"/>
@@ -108,9 +108,9 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Atypické položky" attrs="{'readonly':[('state','in',['approved'])]}">
+                            <page string="Atypical items" attrs="{'readonly':[('state','in',['approved'])]}">
                                 <field name="cp_polozka_atyp_ids">
-                                    <tree string="Polozky cennika" editable="bottom">
+                                    <tree string="Atypical items" editable="bottom">
                                         <field name="oddiel_id" string="Section" options="{'no_create': True}"/>
                                         <field name="name"  string="Item"/>
                                         <field name="cena" string="Price"/>
@@ -144,7 +144,7 @@
         <!-- zobrazenie pre vsetky stavy okrem 'draft'
         -->
         <record model="ir.ui.view" id="view_tree_cenova_ponuka">
-            <field name="name">cenova ponuka</field>
+            <field name="name">Price offer</field>
             <field name="model">o2net.cenova_ponuka</field>
             <field name="priority" eval="5"/>
             <field name="type">tree</field>
@@ -168,7 +168,7 @@
             nepotrebujeme: priradenu osobu, celkovu cenu
         -->
         <record model="ir.ui.view" id="view_tree_cenova_ponuka_draft">
-            <field name="name">cenova ponuka</field>
+            <field name="name">Price offer</field>
             <field name="model">o2net.cenova_ponuka</field>
             <field name="priority" eval="5"/>
             <field name="type">tree</field>
@@ -186,7 +186,7 @@
 
         <!-- zobrazenie pre vsetky cenove ponuky podla stavu -->
         <record model="ir.ui.view" id="view_tree_cenova_ponuka_preview">
-            <field name="name">cenova ponuka</field>
+            <field name="name">Price offer</field>
             <field name="model">o2net.cenova_ponuka</field>
             <field name="priority" eval="6"/>
             <field name="type">tree</field>
