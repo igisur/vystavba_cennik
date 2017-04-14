@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c-20161019\n"
+"Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-13 19:08+0000\n"
-"PO-Revision-Date: 2017-04-13 19:08+0000\n"
+"POT-Creation-Date: 2017-04-14 19:54+0000\n"
+"PO-Revision-Date: 2017-04-14 19:54+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,41 +20,11 @@ msgstr ""
 msgid "\n"
 "            \n"
 "            <p>\n"
-"            Dobrý deň,<br/><br/>\n"
+"            Hello,<br/><br/>\n"
 "\n"
-"            ${ctx.get('manager_name')} schválil(a) cenovú ponuku <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
+"            ${ctx.get('manager_name')} has approved price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
 "            </p>\n"
-"            s pozdravom,<br/>\n"
-"               O2 network team\n"
-"            \n"
-"            "
-msgstr ""
-
-#. module: o2net
-#: model:mail.template,body_html:o2net.mail_cp_assigned
-msgid "\n"
-"            \n"
-"            <p>\n"
-"            Dobrý deň,<br/><br/>\n"
-"\n"
-"            Bola Vám priradená cenová ponuka <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
-"            </p>\n"
-"            s pozdravom,<br/>\n"
-"               O2 network team\n"
-"            \n"
-"            "
-msgstr ""
-
-#. module: o2net
-#: model:mail.template,body_html:o2net.mail_cp_approved
-msgid "\n"
-"            \n"
-"            <p>\n"
-"            Dobrý deň,<br/><br/>\n"
-"\n"
-"            Cenová ponuka <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a> bola schválená.<br/>\n"
-"            </p>\n"
-"            s pozdravom,<br/>\n"
+"            best regards,<br/>\n"
 "               O2 network team\n"
 "            \n"
 "            "
@@ -65,11 +35,26 @@ msgstr ""
 msgid "\n"
 "            \n"
 "            <p>\n"
-"            Dobrý deň,<br/><br/>\n"
+"            Hello,<br/><br/>\n"
 "\n"
-"            Cenová ponuka <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a> bola zrušená.<br/>\n"
+"            Price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a> has been canceled.<br/>\n"
 "            </p>\n"
-"            s pozdravom,<br/>\n"
+"            best regards,<br/>\n"
+"               O2 network team\n"
+"            \n"
+"            "
+msgstr ""
+
+#. module: o2net
+#: model:mail.template,body_html:o2net.mail_cp_approved
+msgid "\n"
+"            \n"
+"            <p>\n"
+"            Hello,<br/><br/>\n"
+"\n"
+"            Price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a> is approved.<br/>\n"
+"            </p>\n"
+"            best regards,<br/>\n"
 "               O2 network team\n"
 "            \n"
 "            "
@@ -80,11 +65,11 @@ msgstr ""
 msgid "\n"
 "            \n"
 "            <p>\n"
-"            Dobrý deň,<br/><br/>\n"
+"            Hello,<br/><br/>\n"
 "\n"
-"            Dodávateľ \"${object.dodavatel_id.display_name}\" má rozpracovanú cenovú ponuku <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
+"            Vendor \"${object.dodavatel_id.display_name}\" has unfinished price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
 "            </p>\n"
-"            s pozdravom,<br/>\n"
+"            best regards,<br/>\n"
 "               O2 network team\n"
 "            \n"
 "            "
@@ -95,11 +80,26 @@ msgstr ""
 msgid "\n"
 "            \n"
 "            <p>\n"
-"            Dobrý deň,<br/><br/>\n"
+"            Hello,<br/><br/>\n"
 "\n"
-"            Upozornenie na čakajúce schválenie cenovej ponuky <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
+"            Warning awaiting approval for price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
 "            </p>\n"
-"            s pozdravom,<br/>\n"
+"            best regards,<br/>\n"
+"               O2 network team\n"
+"            \n"
+"            "
+msgstr ""
+
+#. module: o2net
+#: model:mail.template,body_html:o2net.mail_cp_assigned
+msgid "\n"
+"            \n"
+"            <p>\n"
+"            Hello,<br/><br/>\n"
+"\n"
+"            You've been assigned to price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
+"            </p>\n"
+"            best regards,<br/>\n"
 "               O2 network team\n"
 "            \n"
 "            "
@@ -153,18 +153,50 @@ msgid "Administrator"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cp_polozka_atyp_ids
-msgid "Atyp položky"
+#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_approved
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "Approve"
+msgstr ""
+
+#. module: o2net
+#: selection:o2net.cenova_ponuka,state:0
+msgid "Approved"
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_cp_approved
+msgid "Approved price offers"
 msgstr ""
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Atypické položky"
+msgid "Assign"
 msgstr ""
 
 #. module: o2net
+#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_assigned
+#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka
+#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_draft
+#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_preview
+#: selection:o2net.cenova_ponuka,state:0
+msgid "Assigned"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_osoba_priradena_ids
+msgid "Assigned persons"
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_cp_assigned
+msgid "Assigned price offers"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cp_polozka_atyp_ids
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-msgid "Atypové položky"
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "Atypical items"
 msgstr ""
 
 #. module: o2net
@@ -178,52 +210,13 @@ msgid "BALÍČKY"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_polozka_isbalicek
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_polozka_isbalicek
-msgid "Balicek"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_polozka
-msgid "Balicek?"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Balicky cennika"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_is_balicek
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_is_balicek
-msgid "Balíček"
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_balicek
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cp_polozka_balicek_ids
-#: model:ir.ui.menu,name:o2net.menu_balicek
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Balíčky"
-msgstr ""
-
-#. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
 msgid "Balíčky celkom"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
-msgid "Bežný meter"
-msgstr ""
-
-#. module: o2net
-#: model:mail.template,report_name:o2net.mail_cp_approved
-#: model:mail.template,report_name:o2net.mail_cp_assigned
-#: model:mail.template,report_name:o2net.mail_cp_canceled
-#: model:mail.template,report_name:o2net.mail_cp_in_progress
-#: model:mail.template,report_name:o2net.mail_cp_manager_approved
-msgid "CP_${object.name}/${object.skratka}/${object.financny_kod}"
+#: model:ir.module.category,description:o2net.module_category_o2net
+msgid "Builders price list"
 msgstr ""
 
 #. module: o2net
@@ -232,14 +225,19 @@ msgid "Can user execute workflow action"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_celkova_cena
 #: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Celková cena"
+#: selection:o2net.cenova_ponuka,state:0
+msgid "Cancel"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_res_partner_cp_celkova_cena_limit
-msgid "Celková cena cenovej ponuky"
+#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_cancel
+msgid "Canceled"
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_cp_cancel
+msgid "Canceled price offers"
 msgstr ""
 
 #. module: o2net
@@ -248,37 +246,13 @@ msgid "Celková cena:"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_cena
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_cena
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
 #: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_preview
 msgid "Cena"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cena_celkom
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cena_celkom
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
 msgid "Cena celkom"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cennik_dodavatel
-msgid "Cennik"
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_cennik_cennik
-#: model:ir.actions.act_window,name:o2net.action_window_cennik_dodavatel
-msgid "Cennik dodávateľa"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_cennik_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cennik_id
-#: model:ir.ui.menu,name:o2net.menu_cennik_cennik
-#: model:ir.ui.menu,name:o2net.menu_cennik_root
-msgid "Cenník"
 msgstr ""
 
 #. module: o2net
@@ -297,46 +271,36 @@ msgid "Cenova ponuka report"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_report_form_creation
-msgid "Cenova ponuka report form"
+#: model:ir.actions.act_window,help:o2net.action_window_cp_draft
+msgid "Click here for establishment of new price offer header."
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_cenova_ponuka_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cenova_ponuka_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cenova_ponuka_id
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_root
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Cenová ponuka"
+#: model:ir.actions.act_window,help:o2net.action_window_balicek
+msgid "Click to create a new package."
 msgstr ""
 
 #. module: o2net
-#: model:mail.template,subject:o2net.mail_cp_approved
-#: model:mail.template,subject:o2net.mail_cp_assigned
-#: model:mail.template,subject:o2net.mail_cp_canceled
-#: model:mail.template,subject:o2net.mail_cp_in_progress
-#: model:mail.template,subject:o2net.mail_cp_manager_approved
-msgid "Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})"
+#: model:ir.actions.act_window,help:o2net.action_window_oddiel
+msgid "Clik for establishment of new section."
 msgstr ""
 
 #. module: o2net
-#: model:mail.template,subject:o2net.mail_manager_warning
-msgid "Cenová ponuka - čakanie na schválenie ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})"
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_kod
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_kod
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_kod
+#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_kod
+#: model:ir.model.fields,field_description:o2net.field_res_partner_kod
+#: model:ir.model.fields,help:o2net.field_o2net_oddiel_name
+#: model:ir.ui.view,arch_db:o2net.view_form_oddiel
+msgid "Code"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_cp_to_approve
-msgid "Cenové ponuky čakajúce na schválenie"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,help:o2net.field_res_partner_cp_celkova_cena_limit
-msgid "Cenový limit cenovej ponuky, pri ktorého prekročení musí CP schváli%t danaá osoba"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_report_cislo
-msgid "Cislo"
+#: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_polozka_atyp_name
+msgid "Code item"
 msgstr ""
 
 #. module: o2net
@@ -364,10 +328,36 @@ msgid "Created on"
 msgstr ""
 
 #. module: o2net
+#: selection:o2net.polozka,mj:0
+msgid "Cubic meter"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_currency_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_currency_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_currency_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_currency_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_currency_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_currency_id
+msgid "Currency"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model.fields,help:o2net.field_o2net_cennik_message_last_post
 #: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_message_last_post
 #: model:ir.model.fields,help:o2net.field_o2net_polozka_message_last_post
 msgid "Date of the last message posted on the record."
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_description
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_popis
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_polozka_popis
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_polozka_popis
+#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_description
+#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_description
+#: model:ir.ui.view,arch_db:o2net.view_form_oddiel
+msgid "Description"
 msgstr ""
 
 #. module: o2net
@@ -377,43 +367,21 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_display_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_display_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_display_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_report_display_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_display_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_polozka_display_name
-#: model:ir.model.fields,field_description:o2net.field_report_o2net_report_cenova_ponuka_pdf_display_name
 msgid "Display Name"
 msgstr ""
 
 #. module: o2net
-#: model:res.groups,name:o2net.group_vystavba_supplier
-msgid "Dodavateľ"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_dodavatel_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_dodavatel_id
-#: model:ir.ui.menu,name:o2net.menu_cennik
-msgid "Dodávateľ"
+#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_draft
+#: selection:o2net.cenova_ponuka,state:0
+msgid "Draft"
 msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_datum_koniec
-msgid "Dátum ukončenia"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_datum_zaciatok
-msgid "Dátum zahájenia"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_wf_dovod
-msgid "Dôvod pre workflow"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Export SAP"
+#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_preview
+msgid "End date"
 msgstr ""
 
 #. module: o2net
@@ -428,12 +396,17 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_sap_export_content
-msgid "Export pre SAP"
+msgid "Export for SAP"
+msgstr ""
+
+#. module: o2net
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "Export to SAP"
 msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_financny_kod
-msgid "Finančný kód"
+msgid "Financial code"
 msgstr ""
 
 #. module: o2net
@@ -458,8 +431,53 @@ msgid "Followers (Partners)"
 msgstr ""
 
 #. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_balicek
+msgid "Here is the list of price lists's packages."
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_cp_preview
+msgid "Here you can find all price offers, which are assigned to you or you are thier vendor."
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_cp_approved
+msgid "Here you can find approved price offers, which are assigned to you or you are thier vendor."
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_cp_cancel
+msgid "Here you can find canceled price offers, which are assigned to you or you are thier vendor."
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_cp_draft
+msgid "Here you can find founded price offers."
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_oddiel
+msgid "Here you can find list of section."
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_cp_assigned
+msgid "Here you can find price offers assigned to vendor."
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_cp_in_progress
+msgid "Here you can find price offers in progress, where you are the vendor."
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_cp_to_approve
+msgid "Here you can find price offers waiting for approval, which are assigned to you or you are thier vendor."
+msgstr ""
+
+#. module: o2net
 #: selection:o2net.polozka,mj:0
-msgid "Hodina"
+msgid "Hour"
 msgstr ""
 
 #. module: o2net
@@ -469,10 +487,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_report_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_polozka_id
-#: model:ir.model.fields,field_description:o2net.field_report_o2net_report_cenova_ponuka_pdf_id
 msgid "ID"
 msgstr ""
 
@@ -491,18 +507,24 @@ msgid "If checked, new messages require your attention."
 msgstr ""
 
 #. module: o2net
+#: model:ir.model.fields,help:o2net.field_res_partner_cp_celkova_cena_limit
+msgid "In case the price limit is exceeded, price offer must be approved by a given person"
+msgstr ""
+
+#. module: o2net
+#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_in_progress
+#: selection:o2net.cenova_ponuka,state:0
+msgid "In progress"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_polozka_intern_id
-msgid "Intern ID"
+msgid "Internal ID"
 msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_polozka_intern_kod
-msgid "Intern kód"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_res_partner_reminder_interval
-msgid "Interval pripomienky"
+msgid "Internal code"
 msgstr ""
 
 #. module: o2net
@@ -518,26 +540,33 @@ msgid "Is current user assigned"
 msgstr ""
 
 #. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_polozka_id
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.ui.view,arch_db:o2net.view_form_polozka
+#: model:ir.ui.view,arch_db:o2net.view_tree_polozka
+msgid "Item"
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_polozka
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_cennik_polozka_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cp_polozka_ids
+#: model:ir.ui.menu,name:o2net.menu_polozka
+#: model:ir.ui.view,arch_db:o2net.view_form_cennik_dodavatel
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "Items"
+msgstr ""
+
+#. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
 msgid "J. cena"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cena_jednotkova
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cena_jednotkova
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Jednotková cena"
-msgstr ""
-
-#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_atypsluzba
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-msgid "KSZ"
-msgstr ""
-
-#. module: o2net
 #: model:ir.ui.view,arch_db:o2net.view_form_oddiel
-msgid "KSZ (pre atyp)"
+msgid "KSZ"
 msgstr ""
 
 #. module: o2net
@@ -551,51 +580,13 @@ msgid "Kilometer"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_cp_draft
-msgid "Klikni pre založenie novej hlavičky cenovej ponuky."
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_balicek
-msgid "Klikni pre založenie nového balíčka."
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_oddiel
-msgid "Klikni pre založenie nového oddielu."
+#: model:ir.actions.act_window,help:o2net.act_res_partner_vystavba
+msgid "Klikni pre založenie novej osoby resp. partnera."
 msgstr ""
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
 msgid "Kod"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_polozka_atyp_name
-msgid "Kod polozky"
-msgstr ""
-
-#. module: o2net
-#: selection:o2net.polozka,mj:0
-msgid "Kus"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_kod
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_kod
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_kod
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_kod
-#: model:ir.model.fields,field_description:o2net.field_res_partner_kod
-#: model:ir.model.fields,help:o2net.field_o2net_oddiel_name
-#: model:ir.ui.view,arch_db:o2net.view_form_oddiel
-msgid "Kód"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,help:o2net.field_o2net_cennik_name
-msgid "Kód cenníka"
 msgstr ""
 
 #. module: o2net
@@ -612,10 +603,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka___last_update
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp___last_update
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek___last_update
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_report___last_update
 #: model:ir.model.fields,field_description:o2net.field_o2net_oddiel___last_update
 #: model:ir.model.fields,field_description:o2net.field_o2net_polozka___last_update
-#: model:ir.model.fields,field_description:o2net.field_report_o2net_report_cenova_ponuka_pdf___last_update
 msgid "Last Modified on"
 msgstr ""
 
@@ -650,7 +639,6 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.view_form_cennik_polozka
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka_polozka
 #: model:ir.ui.view,arch_db:o2net.view_tree_polozka
 msgid "MJ"
 msgstr ""
@@ -667,23 +655,13 @@ msgid "Manager"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_currency_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_currency_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_currency_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_currency_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_currency_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_currency_id
-msgid "Mena"
-msgstr ""
-
-#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_mj
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_polozka_mj
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_polozka_mj
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_report_mj
 #: model:ir.model.fields,field_description:o2net.field_o2net_polozka_mj
 #: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Merná jednotka"
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka_polozka
+msgid "Measure unit"
 msgstr ""
 
 #. module: o2net
@@ -699,41 +677,33 @@ msgid "Meter"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
-msgid "Meter kubicky"
-msgstr ""
-
-#. module: o2net
-#: selection:o2net.polozka,mj:0
-msgid "Meter stvorcovy"
-msgstr ""
-
-#. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
 msgid "Mj"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_mnozstvo
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_mnozstvo
-msgid "Množstvo"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_to_approve
-#: selection:o2net.cenova_ponuka,state:0
-msgid "Na schválenie"
-msgstr ""
-
-#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_name
-msgid "Nazov"
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_name
+msgid "Name"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_cenova_ponuka_report_all
-msgid "Nejaky text"
+#: selection:o2net.polozka,mj:0
+msgid "Not given"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_poznamka
+msgid "Note"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_res_partner_reminder_interval
+msgid "Notification interval"
 msgstr ""
 
 #. module: o2net
@@ -741,6 +711,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_message_needaction_counter
 #: model:ir.model.fields,field_description:o2net.field_o2net_polozka_message_needaction_counter
 msgid "Number of Actions"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,help:o2net.field_res_partner_reminder_interval
+msgid "Number of days, after which the notification will be send (email)"
 msgstr ""
 
 #. module: o2net
@@ -758,61 +733,24 @@ msgid "Number of unread messages"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_draft
-#: selection:o2net.cenova_ponuka,state:0
-msgid "Návrh"
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_cp_draft
-msgid "Návrh cenovej ponuky"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_name
-msgid "Názov"
-msgstr ""
-
-#. module: o2net
 #: model:ir.module.category,name:o2net.module_category_o2net
 #: model:ir.ui.menu,name:o2net.menu_root
 msgid "O2 Network"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_oddiel
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_oddiel_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_report_oddiel
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_report_polozka
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_oddiel_id
-#: model:ir.ui.menu,name:o2net.menu_oddiel
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
 msgid "Oddiel"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Odoslať na schválenie"
+#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_preview
+msgid "Overview"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,name:o2net.act_res_partner_vystavba
-msgid "Osoba"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_osoba
-msgid "Osoba/Partner"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_osoba_root
-msgid "Osoby/Partneri"
+#: model:ir.actions.act_window,name:o2net.action_window_cp_preview
+msgid "Overview price offers"
 msgstr ""
 
 #. module: o2net
@@ -826,69 +764,61 @@ msgid "PM"
 msgstr ""
 
 #. module: o2net
+#: model:mail.template,report_name:o2net.mail_cp_approved
+#: model:mail.template,report_name:o2net.mail_cp_assigned
+#: model:mail.template,report_name:o2net.mail_cp_canceled
+#: model:mail.template,report_name:o2net.mail_cp_in_progress
+#: model:mail.template,report_name:o2net.mail_cp_manager_approved
+msgid "PO_${object.name}/${object.skratka}/${object.financny_kod}"
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_oddiel
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_is_balicek
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_polozka_isbalicek
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_polozka_isbalicek
+#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_is_balicek
+#: model:ir.ui.menu,name:o2net.menu_oddiel
+msgid "Package"
+msgstr ""
+
+#. module: o2net
+#: model:ir.ui.view,arch_db:o2net.view_form_polozka
+msgid "Package?"
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_balicek
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cp_polozka_balicek_ids
+#: model:ir.ui.menu,name:o2net.menu_balicek
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "Packages"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model,name:o2net.model_res_partner
+#: model:ir.ui.menu,name:o2net.menu_osoba
 msgid "Partner"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_report_cena_celkom
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_report_cena_jednotkova
-msgid "Planned Amount"
+#: model:ir.ui.menu,name:o2net.menu_osoba_root
+msgid "Partners"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_platny_do
-msgid "Platný do"
+#: model:ir.actions.act_window,name:o2net.act_res_partner_vystavba
+msgid "Person"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_platny_od
-msgid "Platný od"
+#: selection:o2net.polozka,mj:0
+msgid "Piece"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,help:o2net.field_res_partner_reminder_interval
-msgid "Po koľkých dňoch od poslednej pripomienky sa má opatovne poslať notifikácia (email)"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_report_pocet
-msgid "Pocet"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_cennik_polozka_ids
-msgid "Polozky"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cennik_dodavatel
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Polozky cennika"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_polozka_id
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-#: model:ir.ui.view,arch_db:o2net.view_form_polozka
-#: model:ir.ui.view,arch_db:o2net.view_tree_polozka
 msgid "Položka"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cennik_polozka_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cennik_polozka_id
-msgid "Položka cenníka"
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_polozka
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cp_polozka_ids
-#: model:ir.ui.menu,name:o2net.menu_polozka
-#: model:ir.ui.view,arch_db:o2net.view_form_cennik_dodavatel
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Položky"
 msgstr ""
 
 #. module: o2net
@@ -897,192 +827,195 @@ msgid "Položky celkom"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_description
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_popis
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_polozka_popis
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_polozka_popis
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_description
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_description
-#: model:ir.ui.view,arch_db:o2net.view_form_oddiel
-msgid "Popis"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_poznamka
-msgid "Poznámka"
-msgstr ""
-
-#. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
 msgid "Počet"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_preview
-msgid "Prehľad"
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_cp_preview
-msgid "Prehľad cenových ponúk"
-msgstr ""
-
-#. module: o2net
-#: selection:o2net.cenova_ponuka,state:0
-msgid "Priradená"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_assigned
-msgid "Priradené"
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_cp_assigned
-msgid "Priradené cenové ponuky"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_osoba_priradena_ids
-msgid "Priradené osoby"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_draft
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_preview
-msgid "Priradený"
-msgstr ""
-
-#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_cena
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_cena
 #: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Priradiť"
+msgid "Price"
 msgstr ""
 
 #. module: o2net
-#: model:res.groups,name:o2net.group_vystavba_pc
-msgid "Projekt koordinátor (PC)"
+#: model:ir.model.fields,field_description:o2net.field_res_partner_cp_celkova_cena_limit
+msgid "Price limit"
 msgstr ""
 
 #. module: o2net
-#: model:res.groups,name:o2net.group_vystavba_pm
-msgid "Projekt manager (PM)"
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_cennik_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cennik_id
+#: model:ir.ui.menu,name:o2net.menu_cennik_cennik
+#: model:ir.ui.menu,name:o2net.menu_cennik_root
+#: model:ir.ui.view,arch_db:o2net.view_form_cennik_dodavatel
+msgid "Price list"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_cenova_ponuka_report_all
-msgid "Purchase Analysis"
+#: model:ir.model.fields,help:o2net.field_o2net_cennik_name
+msgid "Price list code"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_cenova_ponuka_report
-msgid "Purchase Orders Statistics"
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cennik_polozka_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cennik_polozka_id
+msgid "Price list item"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_ro_datumoddo
-msgid "Ro datum OD DO"
+#: model:ir.ui.view,arch_db:o2net.view_form_cennik_dodavatel
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "Price list items"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.cenova_ponuka,state:0
-msgid "Rozpracovaná"
+#: code:addons/o2net/models/cennik.py:23
+#, python-format
+msgid "Price list with the same name already exists. Please choose an unique name."
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_in_progress
-msgid "Rozpracované"
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_cenova_ponuka_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cenova_ponuka_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cenova_ponuka_id
+#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_root
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "Price offer"
+msgstr ""
+
+#. module: o2net
+#: model:mail.template,subject:o2net.mail_cp_approved
+#: model:mail.template,subject:o2net.mail_cp_assigned
+#: model:mail.template,subject:o2net.mail_cp_canceled
+#: model:mail.template,subject:o2net.mail_cp_in_progress
+#: model:mail.template,subject:o2net.mail_cp_manager_approved
+msgid "Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})"
+msgstr ""
+
+#. module: o2net
+#: model:mail.template,subject:o2net.mail_manager_warning
+msgid "Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name}) is awaiting approval"
+msgstr ""
+
+#. module: o2net
+#: code:addons/o2net/models/cenova_ponuka.py:742
+#, python-format
+msgid "Price offer does not have vendor assigned"
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_cp_draft
+msgid "Price offer draft"
 msgstr ""
 
 #. module: o2net
 #: model:ir.actions.act_window,name:o2net.action_window_cp_in_progress
-msgid "Rozpracované cenové ponuky"
+msgid "Price offers in progres"
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_cp_to_approve
+msgid "Price offers waiting for approval"
+msgstr ""
+
+#. module: o2net
+#: model:res.groups,name:o2net.group_vystavba_pc
+msgid "Project coordinator (PC)"
+msgstr ""
+
+#. module: o2net
+#: model:res.groups,name:o2net.group_vystavba_pm
+msgid "Project manager (PM)"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cislo
+msgid "Project number (PSID)"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_mnozstvo
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_mnozstvo
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "Quantity"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_ro_datumoddo
+msgid "RO date From To"
 msgstr ""
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Rozpracovať"
+msgid "Return to correct"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.cenova_ponuka,state:0
-msgid "Schválená"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_approved
-msgid "Schválené"
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_cp_approved
-msgid "Schválené cenové ponuky"
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_oddiel_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_oddiel_id
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "Section"
 msgstr ""
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Schváliť"
+msgid "Send to approve"
+msgstr ""
+
+#. module: o2net
+#: selection:o2net.polozka,mj:0
+msgid "Set"
 msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_skratka
-msgid "Skratka"
+msgid "Short cut"
+msgstr ""
+
+#. module: o2net
+#: selection:o2net.polozka,mj:0
+msgid "Square meter"
+msgstr ""
+
+#. module: o2net
+#: selection:o2net.polozka,mj:0
+msgid "Standard meter"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_datum_zaciatok
+#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_preview
+msgid "Start date"
 msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_state
-msgid "Stav"
+msgid "State"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_cp_to_approve
-msgid "Tu nájdete cenové ponuky čakajúce na schválenie, ktoré sú vám priradené alebo ste ich dodávateľ."
+#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_to_approve
+#: selection:o2net.cenova_ponuka,state:0
+msgid "To approve"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_cp_assigned
-msgid "Tu nájdete cenové ponuky, ktoré sú priradené na dodávateľa."
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "To progress"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_cp_in_progress
-msgid "Tu nájdete rozpracované cenové ponuky, kde ste ich dodávateľ."
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_celkova_cena
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cena_celkom
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cena_celkom
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "Total price"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_cp_approved
-msgid "Tu nájdete schválené cenové ponuky, ktoré vám boli priradené alebo ste ich dodávateľ."
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_cp_preview
-msgid "Tu nájdete všetky cenové ponuky, ktoré sú vám priradené alebo ste ich dodávateľ."
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_cp_draft
-msgid "Tu nájdete založené cenové ponuky."
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_balicek
-msgid "Tu nájdete zoznam balíčkov."
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_oddiel
-msgid "Tu nájdete zoznam oddielov."
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_cp_cancel
-msgid "Tu nájdete zrušené cenové ponuky, ktoré vám boli priradené alebo ste ich dodávateľ."
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_report_typ
-msgid "Typ"
+#: model:ir.actions.act_window,help:o2net.act_res_partner_vystavba
+msgid "Tu nájdete zoznam osôb a partnerov."
 msgstr ""
 
 #. module: o2net
@@ -1091,8 +1024,10 @@ msgid "Typové položky"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_preview
-msgid "Ukončené"
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cena_jednotkova
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cena_jednotkova
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+msgid "Unit price"
 msgstr ""
 
 #. module: o2net
@@ -1115,13 +1050,32 @@ msgid "Uvedte dôvod pre zmenu stavu workflow, najme pri akcii \"Vratiť na opra
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Vratiť na opravu"
+#: selection:o2net.polozka,mj:0
+msgid "VL"
 msgstr ""
 
 #. module: o2net
-#: model:ir.module.category,description:o2net.module_category_o2net
-msgid "Vystavbovy cennik"
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_platny_od
+msgid "Valid from"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_platny_do
+msgid "Valid to"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_dodavatel_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_dodavatel_id
+#: model:ir.ui.menu,name:o2net.menu_cennik
+#: model:res.groups,name:o2net.group_vystavba_supplier
+msgid "Vendor"
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_cennik_cennik
+#: model:ir.actions.act_window,name:o2net.action_window_cennik_dodavatel
+msgid "Vendor's price list"
 msgstr ""
 
 #. module: o2net
@@ -1130,28 +1084,14 @@ msgid "Vytlacil:"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_preview
-msgid "Začaté"
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_wf_dovod
+msgid "Workflow reason"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.cenova_ponuka,state:0
-msgid "Zrušená"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_cancel
-msgid "Zrušené"
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_cp_cancel
-msgid "Zrušené cenové ponuky"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Zrušiť"
+#: code:addons/o2net/models/cenova_ponuka.py:753
+#, python-format
+msgid "You do not have permission for workflow action"
 msgstr ""
 
 #. module: o2net
@@ -1160,18 +1100,8 @@ msgid "date state"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
-msgid "neurčená MJ"
-msgstr ""
-
-#. module: o2net
 #: model:ir.model,name:o2net.model_report_o2net_report_cenova_ponuka_pdf
 msgid "report.o2net.report_cenova_ponuka_pdf"
-msgstr ""
-
-#. module: o2net
-#: selection:o2net.polozka,mj:0
-msgid "sada"
 msgstr ""
 
 #. module: o2net
@@ -1182,11 +1112,6 @@ msgstr ""
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document_oddiel
 msgid "sub page IDecko"
-msgstr ""
-
-#. module: o2net
-#: selection:o2net.polozka,mj:0
-msgid "vl"
 msgstr ""
 
 #. module: o2net
@@ -1228,10 +1153,5 @@ msgstr ""
 #. module: o2net
 #: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka
 msgid "vystavba - polozka cenovej ponuky"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cislo
-msgid "Číslo projektu (PSID)"
 msgstr ""
 
