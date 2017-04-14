@@ -298,12 +298,12 @@
 
         <!-- MENU -->
         <menuitem id="menu_cenova_ponuka_root"
-                  name="Cenová ponuka"
+                  name="Price offer"
                   sequence="10"
                   parent="menu_root"/>
 
         <menuitem id="menu_cenova_ponuka_draft"
-                  name="Návrh"
+                  name="Draft"
                   sequence="11"
                   parent="menu_cenova_ponuka_root"
                   action="action_window_cp_draft"
@@ -312,7 +312,7 @@
                   <!--groups="base.group_vystavba_pc,base.group_vystavba_pm,base.group_vystavba_admin"/>-->
 
         <menuitem id="menu_cenova_ponuka_assigned"
-                  name="Priradené"
+                  name="Assigned"
                   sequence="12"
                   parent="menu_cenova_ponuka_root"
                   action="action_window_cp_assigned"
@@ -320,7 +320,7 @@
                   <!--groups="base.group_vystavba_supplier,base.group_vystavba_pc,base.group_vystavba_pm,base.group_vystavba_admin"/>-->
 
         <menuitem id="menu_cenova_ponuka_in_progress"
-                  name="Rozpracované"
+                  name="In progress"
                   sequence="13"
                   parent="menu_cenova_ponuka_root"
                   action="action_window_cp_in_progress"
@@ -328,26 +328,26 @@
                   <!--groups="base.group_vystavba_supplier,base.group_vystavba_pc,base.group_vystavba_pm,base.group_vystavba_admin"/>-->
 
         <menuitem id="menu_cenova_ponuka_to_approve"
-                  name="Na schválenie"
+                  name="To approve"
                   sequence="14"
                   parent="menu_cenova_ponuka_root"
                   action="action_window_cp_to_approve"/>
                   <!--groups="base.group_vystavba_pc,base.group_vystavba_pm,base.group_vystavba_admin"/>-->
 
         <menuitem id="menu_cenova_ponuka_approved"
-                  name="Schválené"
+                  name="Approve"
                   sequence="15"
                   parent="menu_cenova_ponuka_root"
                   action="action_window_cp_approved"/>
 
         <menuitem id="menu_cenova_ponuka_cancel"
-                  name="Zrušené"
+                  name="Canceled"
                   sequence="16"
                   parent="menu_cenova_ponuka_root"
                   action="action_window_cp_cancel"/>
 
         <menuitem id="menu_cenova_ponuka_preview"
-                  name="Prehľad"
+                  name="Overview"
                   sequence="17"
                   parent="menu_cenova_ponuka_root"
                   action="action_window_cp_preview"/>

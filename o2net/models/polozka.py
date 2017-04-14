@@ -7,30 +7,30 @@ class VystavbaPolozka(models.Model):
     _description = "vystavba - polozka"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
-    name = fields.Char(required=True, string="Názov", size=1000)
-    kod = fields.Char(required=True, string="Kód", size=30)
-    description = fields.Text(string="Popis", size=2000, default="")
+    name = fields.Char(required=True, string="Name", size=1000)
+    kod = fields.Char(required=True, string="Code", size=30)
+    description = fields.Text(string="Description", size=2000, default="")
     # Many2one display "name" field value or _rec_name = "field_name"
     # oddiel_id = fields.Many2One('vystavba.oddiel', required=True, string="Oddiel", help="kod oddielu pre SAP")
     # oddiel_id = fields.Char(size=10, required=True, string="Oddiel", help="kod oddielu pre SAP")
-    oddiel_id = fields.Many2one('o2net.oddiel', string='Oddiel', required=False)
+    oddiel_id = fields.Many2one('o2net.oddiel', string='Section', required=False)
     mj = fields.Selection([
         ('_', 'neurčená MJ'),
         ('kg', 'Kilogram'),
-        ('ks', 'Kus'),
+        ('ks', 'Piece'),
         ('km', 'Kilometer'),
-        ('hod', 'Hodina'),
+        ('hod', 'Hour'),
         ('m', 'Meter'),
-        ('m2', 'Meter kubicky'),
-        ('m3', 'Meter stvorcovy'),
-        ('sada', 'sada'),
-        ('bm', 'Bežný meter'),
-        ('vl.', 'vl'),
-    ], string="Merná jednotka", default="_")
-    is_balicek = fields.Boolean("Balíček", default=False)
+        ('m2', 'Square meter'),
+        ('m3', 'Cubic meter'),
+        ('sada', 'Set'),
+        ('bm', 'Standard meter'),
+        ('vl.', 'VL'),
+    ], string="Measure unit", default="_")
+    is_balicek = fields.Boolean("Package", default=False)
 
-    intern_id = fields.Char(string="Intern ID")
-    intern_kod = fields.Char(string="Intern kód")
+    intern_id = fields.Char(string="Internal ID")
+    intern_kod = fields.Char(string="Internal code")
 
 
     # vyhladavame iba podla mena polozky. kod sluzi pre SAP

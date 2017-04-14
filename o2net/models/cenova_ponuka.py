@@ -23,12 +23,12 @@ class VystavbaCenovaPonuka(models.Model):
     CANCEL = 'cancel'
 
     State = (
-        (DRAFT, 'Návrh'),
-        (ASSIGNED, 'Priradená'),
-        (IN_PROGRESS, 'Rozpracovaná'),
-        (TO_APPROVE, 'Na schválenie'),
-        (APPROVED, 'Schválená'),
-        (CANCEL, 'Zrušená')
+        (DRAFT, 'Draft'),
+        (ASSIGNED, 'Assigned'),
+        (IN_PROGRESS, 'In progress'),
+        (TO_APPROVE, 'To approve'),
+        (APPROVED, 'Approved'),
+        (CANCEL, 'Cancel')
     )
 
     GROUP_SUPPLIER = 'o2net.group_vystavba_supplier'
@@ -584,36 +584,36 @@ class VystavbaCenovaPonuka(models.Model):
 
     # FIELDS
     # computed fields
-    ro_datumoddo = fields.Boolean(string="Ro datum OD DO", compute=_compute_ro_datumoddo, store=False, copy=False)
+    ro_datumoddo = fields.Boolean(string="RO date From To", compute=_compute_ro_datumoddo, store=False, copy=False)
     can_user_exec_wf = fields.Boolean(string="Can user execute workflow action", compute=_compute_can_user_exec_wf, store=False, copy=False)
     is_user_assigned = fields.Boolean(string="Is current user assigned", compute=_is_user_assigned)
 
-    name = fields.Char(required=True, string="Názov", size=50, copy=True)
-    cislo = fields.Char(string="Číslo projektu (PSID)", required=True, copy=True);
-    financny_kod = fields.Char(string="Finančný kód", size=10, required=True, copy=True)
-    skratka = fields.Char(string="Skratka", required=True, copy=True)
-    datum_zaciatok = fields.Date(string="Dátum zahájenia", default=datetime.date.today(), copy=False);
-    datum_koniec = fields.Date(string="Dátum ukončenia", copy=False);
-    poznamka = fields.Text(string="Poznámka", track_visibility='onchange', copy=False)
-    wf_dovod = fields.Text(string="Dôvod pre workflow", copy=False, help='Uvedte dôvod pre zmenu stavu workflow, najme pri akcii "Vratiť na opravu" a "Zrušiť"')
-    celkova_cena = fields.Float(compute=_amount_all, string='Celková cena', store=True, digits=(10,2), track_visibility='onchange', copy=False)
+    name = fields.Char(required=True, string="Name", size=50, copy=True)
+    cislo = fields.Char(string="Project number (PSID)", required=True, copy=True);
+    financny_kod = fields.Char(string="Financial code", size=10, required=True, copy=True)
+    skratka = fields.Char(string="Short cut", required=True, copy=True)
+    datum_zaciatok = fields.Date(string="Start date", default=datetime.date.today(), copy=False);
+    datum_koniec = fields.Date(string="End date", copy=False);
+    poznamka = fields.Text(string="Note", track_visibility='onchange', copy=False)
+    wf_dovod = fields.Text(string='Workflow reason', copy=False, help='Uvedte dôvod pre zmenu stavu workflow, najme pri akcii "Vratiť na opravu" a "Zrušiť"')
+    celkova_cena = fields.Float(compute=_amount_all, string='Total price', store=True, digits=(10,2), track_visibility='onchange', copy=False)
 
-    dodavatel_id = fields.Many2one('res.partner', required=True, string='Dodávateľ', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
+    dodavatel_id = fields.Many2one('res.partner', required=True, string='Vendor', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
     pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True, default=lambda self: self._get_default_pc())
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm, copy=True)
     manager_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_manager_rel", string='Manager', domain=partners_in_group_manager, copy=False)
-    osoba_priradena_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_assigned_rel", string='Priradené osoby', copy=False, default = lambda self: [(4,self.env.user.partner_id.id)])
+    osoba_priradena_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_assigned_rel", string='Assigned persons', copy=False, default = lambda self: [(4,self.env.user.partner_id.id)])
 
-    state = fields.Selection(State, string='Stav', readonly=True, default='draft', track_visibility='onchange', copy=False)
+    state = fields.Selection(State, string='State', readonly=True, default='draft', track_visibility='onchange', copy=False)
     state_date = fields.Date(string="date state", default=datetime.date.today(), copy=False);
-    cennik_id = fields.Many2one('o2net.cennik', string='Cenník', copy=True)
-    currency_id = fields.Many2one(related='cennik_id.currency_id', string="Mena", copy=True)
+    cennik_id = fields.Many2one('o2net.cennik', string='Price list', copy=True)
+    currency_id = fields.Many2one(related='cennik_id.currency_id', string="Currency", copy=True)
 
-    cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Položky', track_visibility='onchange', copy=True)
-    cp_polozka_balicek_ids = fields.One2many('o2net.cenova_ponuka.polozka_balicek', 'cenova_ponuka_id', string='Balíčky', track_visibility='onchange', copy=True)
-    cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atyp položky', track_visibility='onchange', copy=True)
+    cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Items', track_visibility='onchange', copy=True)
+    cp_polozka_balicek_ids = fields.One2many('o2net.cenova_ponuka.polozka_balicek', 'cenova_ponuka_id', string='Packages', track_visibility='onchange', copy=True)
+    cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atypical items', track_visibility='onchange', copy=True)
 
-    sap_export_content = fields.Text(string="Export pre SAP", default='ABCDEFGH', copy=False)
+    sap_export_content = fields.Text(string="Export for SAP", default='ABCDEFGH', copy=False)
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
     sap_export_file_binary = fields.Binary(string='Export file', copy=False)
 
@@ -739,7 +739,7 @@ class VystavbaCenovaPonuka(models.Model):
     def wf_assign_check(self):
         self.ensure_one()
         if self.dodavatel_id is False:
-            raise AccessError("Cenova ponuka nema priradeneho dodavatela.")
+            raise AccessError(_("Price offer does not have vendor assigned"))
 
         return True
 
@@ -750,7 +750,7 @@ class VystavbaCenovaPonuka(models.Model):
         ret = self._compute_can_user_exec_wf()
 
         if ret is False:
-            raise AccessError("Nemáte oprávnenie vykonat workflow akciu.")
+            raise AccessError(_("You do not have permission for workflow action"))
 
         return ret
 
@@ -928,18 +928,17 @@ class VystavbaCenovaPonukaPolozka(models.Model):
         for line in self:
             line.cena_jednotkova = line.cennik_polozka_id.cena
 
-    cena_jednotkova = fields.Float(compute=_compute_cena_jednotkova, string='Jednotková cena', store=True, digits=(10, 2))
-    cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Cena celkom', store=True, digits=(10,2))
-    mnozstvo = fields.Float(string='Množstvo', digits=(5,2), required=True)
-    cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='Cenová ponuka', required=True, ondelete='cascade')
-    cennik_polozka_id = fields.Many2one('o2net.cennik.polozka', string='Položka cenníka', required=True, domain="[('cennik_id', '=', parent.cennik_id)]")
-    polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Merná jednotka', stored=False)
-    polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Popis', stored=False)
-    polozka_isbalicek = fields.Boolean(related='cennik_polozka_id.is_balicek', string='Balicek', stored=True)
-    name = fields.Char(related='cennik_polozka_id.name', string='Názov')
-    kod = fields.Char(related='cennik_polozka_id.kod', string='Kód')
-
-    currency_id = fields.Many2one(related='cenova_ponuka_id.currency_id', string="Mena")
+    cena_jednotkova = fields.Float(compute=_compute_cena_jednotkova, string='Unit price', store=True, digits=(10, 2))
+    cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Total price', store=True, digits=(10,2))
+    mnozstvo = fields.Float(string='Quantity', digits=(5,2), required=True)
+    cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='Price offer', required=True, ondelete='cascade')
+    cennik_polozka_id = fields.Many2one('o2net.cennik.polozka', string='Price list item', required=True, domain="[('cennik_id', '=', parent.cennik_id)]")
+    polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Measure unit', stored=False)
+    polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Description', stored=False)
+    polozka_isbalicek = fields.Boolean(related='cennik_polozka_id.is_balicek', string='Package', stored=True)
+    name = fields.Char(related='cennik_polozka_id.name', string='Name')
+    kod = fields.Char(related='cennik_polozka_id.kod', string='Code')
+    currency_id = fields.Many2one(related='cenova_ponuka_id.currency_id', string="Currency")
 
 class VystavbaCenovaPonukaPolozkaBalicek(models.Model):
     _name = 'o2net.cenova_ponuka.polozka_balicek'
@@ -950,8 +949,8 @@ class VystavbaCenovaPonukaPolozkaAtyp(models.Model):
     _name = 'o2net.cenova_ponuka.polozka_atyp'
     _description = "vystavba - atyp polozka cenovej ponuky"
 
-    name = fields.Char(required=True, string="Nazov", size=100, help="Kod polozky")
-    oddiel_id = fields.Many2one('o2net.oddiel', required=True, string="Oddiel")
-    cena = fields.Float(required=True, digits=(10, 2))
-    cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='Cenová ponuka', required=True, ondelete='cascade')
-    currency_id = fields.Many2one(related='cenova_ponuka_id.currency_id', string="Mena")
+    name = fields.Char(required=True, string="Name", size=100, help="Code item")
+    oddiel_id = fields.Many2one('o2net.oddiel', required=True, string="Section")
+    cena = fields.Float(required=True, digits=(10, 2), string='Price')
+    cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='Price offer', required=True, ondelete='cascade')
+    currency_id = fields.Many2one(related='cenova_ponuka_id.currency_id', string="Currency")

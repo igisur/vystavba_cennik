@@ -16,7 +16,7 @@
                     <sheet>
                         <div class="oe_title">
                             <h1>
-                                <label string="Cennik"/>
+                                <label string="Price list"/>
                                 <field name="id" invisible="1"/>
                                 <field name="name"/>
                             </h1>
@@ -29,9 +29,9 @@
                         </group>
 
                         <notebook>
-                            <page string="Položky">
+                            <page string="Items">
                                 <field name="cennik_polozka_ids">
-                                    <tree string="Polozky cennika" editable="bottom">
+                                    <tree string="Price list items" editable="bottom">
                                         <field name="polozka_id" />
                                         <field name="cena" />
                                         <field name="mj"/>
@@ -127,19 +127,19 @@
        </record>
 
        <menuitem id="menu_cennik_root"
-                name="Cenník"
+                name="Price list"
                 sequence="30"
                 parent="menu_root"
                 groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
 
        <menuitem id="menu_cennik"
-                 name="Dodávateľ"
+                 name="Vendor"
                  parent="menu_cennik_root"
                  sequence="31"
                  action="action_window_cennik_dodavatel"/>
 
        <menuitem id="menu_cennik_cennik"
-                 name="Cenník"
+                 name="Price list"
                  parent="menu_cennik_root"
                  sequence="32"
                  action="action_window_cennik_cennik"

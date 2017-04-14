@@ -2,7 +2,7 @@
 <openerp>
     <data>
         <record model="ir.ui.view" id="view_tree_oddiel">
-            <field name="name">Oddiel</field>
+            <field name="name">Package</field>
             <field name="model">o2net.oddiel</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
@@ -14,7 +14,7 @@
         </record>
 
         <record model="ir.ui.view" id="view_form_oddiel">
-            <field name="name">Oddiel</field>
+            <field name="name">Package</field>
             <field name="model">o2net.oddiel</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -36,7 +36,7 @@
         </record>
 
         <record model="ir.actions.act_window" id="action_window_oddiel">
-            <field name="name">Oddiel</field>
+            <field name="name">Package</field>
             <field name="res_model">o2net.oddiel</field>
             <field name="view_id" ref="view_tree_oddiel"/>
             <field name="view_type">form</field>
@@ -49,7 +49,7 @@
 
         <!-- Menu item to open To-do Task list -->
         <menuitem id="menu_oddiel"
-            name="Oddiel"
+            name="Package"
             parent="menu_cennik_root"
             sequence="50"
             action="action_window_oddiel"/>
