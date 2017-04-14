@@ -2,7 +2,7 @@
 <openerp>
     <data>
         <record model="ir.ui.view" id="view_form_polozka">
-            <field name="name">Položky</field>
+            <field name="name">Items</field>
             <field name="model">o2net.polozka</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -10,7 +10,7 @@
                     <sheet>
                         <div class="oe_title">
                             <h1>
-                                <label string="Položka"/>
+                                <label string="Item"/>
                                 <field name="id" invisible="1"/>
                                 <field name="name"/>
                             </h1>
@@ -23,7 +23,7 @@
                             <field name="mj"/>
                         </group>
                         <group>
-                            <field name="is_balicek" string="Balicek?"/>
+                            <field name="is_balicek" string="Package?"/>
                         </group>
                         <label for="description"/>
                         <field name="description"/>
@@ -35,17 +35,17 @@
                 </form>
             </field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Klikni pre založenie novej položky.</p>
-                <p>Tu nájdete zoznam položiek.</p>
+                <p class="oe_view_nocontent_create">Click to create a new item.</p>
+                <p>Here is the list of price list's items.</p>
             </field>
         </record>
 
        <record model="ir.ui.view" id="view_tree_polozka">
-            <field name="name">Položky</field>
+            <field name="name">Items</field>
             <field name="model">o2net.polozka</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-            <tree string="Položka">
+            <tree string="Item">
                 <field name="id"/>
                 <field name="intern_id"/>
                 <field name="kod"/>
@@ -58,20 +58,20 @@
        </record>
 
        <record model="ir.actions.act_window" id="action_window_balicek">
-           <field name="name">Balíčky</field>
+           <field name="name">Packages</field>
            <field name="res_model">o2net.polozka</field>
            <field name="view_id" ref="view_tree_polozka"/>
            <field name="view_type">form</field>
            <field name="view_mode">tree,form</field>
            <field name="domain"> [('is_balicek','=','True')]</field>
            <field name="help" type="html">
-               <p class="oe_view_nocontent_create">Klikni pre založenie nového balíčka.</p>
-               <p>Tu nájdete zoznam balíčkov.</p>
+               <p class="oe_view_nocontent_create">Click to create a new package.</p>
+               <p>Here is the list of price lists's packages.</p>
            </field>
         </record>
 
        <record model="ir.actions.act_window" id="action_window_polozka">
-           <field name="name">Položky</field>
+           <field name="name">Items</field>
            <field name="res_model">o2net.polozka</field>
            <field name="view_id" ref="view_tree_polozka"/>
            <field name="view_type">form</field>
@@ -80,13 +80,13 @@
        </record>
 
         <menuitem id="menu_balicek"
-                  name="Balíčky"
+                  name="Packages"
                   sequence="40"
                   parent="menu_cennik_root"
                   action="action_window_balicek"/>
 
         <menuitem id="menu_polozka"
-                  name="Položky"
+                  name="Items"
                   sequence="41"
                   parent="menu_cennik_root"
                   action="action_window_polozka"/>

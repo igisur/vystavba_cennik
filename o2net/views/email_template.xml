@@ -3,24 +3,24 @@
     <data noupdate="0">
 
         <record id="mail_cp_assigned" model="mail.template">
-            <field name="name">eCenova ponuka - mail_cp_assigned</field>
+            <field name="name">Price offer - mail_cp_assigned</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
+            <field name="subject">Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
-            <field name="report_name">CP_${object.name}/${object.skratka}/${object.financny_kod}</field>
+            <field name="report_name">PO_${object.name}/${object.skratka}/${object.financny_kod}</field>
             <field name="auto_delete" eval="False"/>
             <field name="body_html">
             <![CDATA[
             <p>
-            Dobrý deň,<br/><br/>
+            Hello,<br/><br/>
 
-            Bola Vám priradená cenová ponuka <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>
+            You've been assigned to price offer <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>
             </p>
-            s pozdravom,<br/>
+            best regards,<br/>
                O2 network team
             ]]>
             </field>
@@ -28,24 +28,24 @@
 
 
         <record id="mail_cp_in_progress" model="mail.template">
-            <field name="name">Cenova ponuka - mail_cp_in_progress</field>
+            <field name="name">Price offer - mail_cp_in_progress</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
+            <field name="subject">Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
-            <field name="report_name">CP_${object.name}/${object.skratka}/${object.financny_kod}</field>
+            <field name="report_name">PO_${object.name}/${object.skratka}/${object.financny_kod}</field>
             <field name="auto_delete" eval="False"/>
             <field name="body_html">
             <![CDATA[
             <p>
-            Dobrý deň,<br/><br/>
+            Hello,<br/><br/>
 
-            Dodávateľ "${object.dodavatel_id.display_name}" má rozpracovanú cenovú ponuku <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>
+            Vendor "${object.dodavatel_id.display_name}" has unfinished price offer <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>
             </p>
-            s pozdravom,<br/>
+            best regards,<br/>
                O2 network team
             ]]>
             </field>
@@ -53,24 +53,24 @@
 
 
         <record id="mail_cp_manager_approved" model="mail.template">
-            <field name="name">Cenova ponuka - mail_cp_manager_approved</field>
+            <field name="name">Price offer - mail_cp_manager_approved</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
+            <field name="subject">Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
-            <field name="report_name">CP_${object.name}/${object.skratka}/${object.financny_kod}</field>
+            <field name="report_name">PO_${object.name}/${object.skratka}/${object.financny_kod}</field>
             <field name="auto_delete" eval="False"/>
             <field name="body_html">
             <![CDATA[
             <p>
-            Dobrý deň,<br/><br/>
+            Hello,<br/><br/>
 
-            ${ctx.get('manager_name')} schválil(a) cenovú ponuku <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>
+            ${ctx.get('manager_name')} has approved price offer <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>
             </p>
-            s pozdravom,<br/>
+            best regards,<br/>
                O2 network team
             ]]>
             </field>
@@ -78,70 +78,70 @@
 
 
         <record id="mail_cp_approved" model="mail.template">
-            <field name="name">Cenova ponuka - mail_cp_approved</field>
+            <field name="name">Price offer - mail_cp_approved</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
+            <field name="subject">Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
-            <field name="report_name">CP_${object.name}/${object.skratka}/${object.financny_kod}</field>
+            <field name="report_name">PO_${object.name}/${object.skratka}/${object.financny_kod}</field>
             <field name="auto_delete" eval="False"/>
             <field name="body_html">
             <![CDATA[
             <p>
-            Dobrý deň,<br/><br/>
+            Hello,<br/><br/>
 
-            Cenová ponuka <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a> bola schválená.<br/>
+            Price offer <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a> is approved.<br/>
             </p>
-            s pozdravom,<br/>
+            best regards,<br/>
                O2 network team
             ]]>
             </field>
         </record>
 
         <record id="mail_cp_canceled" model="mail.template">
-            <field name="name">Cenova ponuka - mail_cp_canceled</field>
+            <field name="name">Price offer - mail_cp_canceled</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Cenová ponuka ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
+            <field name="subject">Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
-            <field name="report_name">CP_${object.name}/${object.skratka}/${object.financny_kod}</field>
+            <field name="report_name">PO_${object.name}/${object.skratka}/${object.financny_kod}</field>
             <field name="auto_delete" eval="False"/>
             <field name="body_html">
             <![CDATA[
             <p>
-            Dobrý deň,<br/><br/>
+            Hello,<br/><br/>
 
-            Cenová ponuka <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a> bola zrušená.<br/>
+            Price offer <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a> has been canceled.<br/>
             </p>
-            s pozdravom,<br/>
+            best regards,<br/>
                O2 network team
             ]]>
             </field>
         </record>
 
         <record id="mail_manager_warning" model="mail.template">
-            <field name="name">Cenova ponuka - mail_manager_warning</field>
+            <field name="name">Price offer - mail_manager_warning</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Cenová ponuka - čakanie na schválenie ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</field>
+            <field name="subject">Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name}) is awaiting approval</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="auto_delete" eval="False"/>
             <field name="body_html">
             <![CDATA[
             <p>
-            Dobrý deň,<br/><br/>
+            Hello,<br/><br/>
 
-            Upozornenie na čakajúce schválenie cenovej ponuky <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>
+            Warning awaiting approval for price offer <a href="${object.base_url}">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>
             </p>
-            s pozdravom,<br/>
+            best regards,<br/>
                O2 network team
             ]]>
             </field>

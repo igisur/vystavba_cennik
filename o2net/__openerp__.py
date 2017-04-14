@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 {
     'name': "O2 network",
-    'summary': """Výstavbový cenník""",
-    'description': """Vytváranie objednávky dodávateľom na základe definovaného cenníka""",
+    'summary': """Builders price list""",
+    'description': """Builders price list enables you to track your vendors' price offers""",
     'author': "Igor Surovy / Branislav Vilmon",
     'website': "http://www.o2/sk",
     'category': 'o2net',

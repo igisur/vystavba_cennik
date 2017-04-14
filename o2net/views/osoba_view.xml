@@ -7,8 +7,6 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_simple_form"/>
             <field name="arch" type="xml">
-                <!-- potrebujeme odkaz na User-a -->
-                <!-- pridaj fields z vystavby -->
                 <field name="mobile" position="after">
                     <field name="kod"/>
                     <field name="cp_celkova_cena_limit" groups="o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
@@ -18,7 +16,7 @@
         </record>
 
         <record model="ir.actions.act_window" id="act_res_partner_vystavba">
-            <field name="name">Osoba</field>
+            <field name="name">Person</field>
             <field name="res_model">res.partner</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_form_osoba"/>
@@ -28,13 +26,13 @@
 
 
          <menuitem id="menu_osoba_root"
-                name="Osoby/Partneri"
+                name="Partners"
                 sequence="40"
                 parent="menu_root"
                 groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
 
         <menuitem id="menu_osoba"
-                  name="Osoba/Partner"
+                  name="Partner"
                   sequence="41"
                   parent="menu_osoba_root"
                   action="act_res_partner_vystavba"/>
