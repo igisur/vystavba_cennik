@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-17 22:33+0200\n"
-"PO-Revision-Date: 2017-04-17 22:35+0200\n"
+"POT-Creation-Date: 2017-04-17 18:27+0200\n"
+"PO-Revision-Date: 2017-04-17 23:04+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -226,7 +226,7 @@ msgstr "PM:"
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-msgid "<strong>Short name:</strong>"
+msgid "<strong>Short cut:</strong>"
 msgstr "Skratka:"
 
 #. module: o2net
@@ -1044,7 +1044,7 @@ msgstr "Sada"
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_skratka
-msgid "Short name"
+msgid "Short cut"
 msgstr "Skratka"
 
 #. module: o2net
@@ -1081,8 +1081,17 @@ msgstr "Rozpracovať"
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#, fuzzy
+#| msgid "Atypical items"
 msgid "Total atypical items"
-msgstr "Atypové položky celkom:"
+msgstr "Atypové položky"
+
+#. module: o2net
+#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#, fuzzy
+#| msgid "Total price"
+msgid "Total items"
+msgstr "Celková cena"
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_celkova_cena
@@ -1095,18 +1104,17 @@ msgstr "Celková cena"
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#, fuzzy
+#| msgid "Total price"
 msgid "Total price:"
-msgstr "Celková cena:"
+msgstr "Celková cena"
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-msgid "Total typical items"
-msgstr "Položky celkom:"
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#, fuzzy
+#| msgid "Total price"
 msgid "Totaly price"
-msgstr "Celková cena:"
+msgstr "Celková cena"
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.act_res_partner_vystavba
@@ -1115,6 +1123,8 @@ msgstr "Here you can find partner list"
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#, fuzzy
+#| msgid "Code item"
 msgid "Type item"
 msgstr "Kód položky"
 
@@ -1128,6 +1138,8 @@ msgstr "Jednotková cena"
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#, fuzzy
+#| msgid "Unit price"
 msgid "Unite price"
 msgstr "Jednotková cena"
 
@@ -1147,10 +1159,8 @@ msgstr "Počet neprečítaných správ"
 
 #. module: o2net
 #: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_wf_dovod
-msgid ""
-"Uvedte dôvod pre zmenu stavu workflow, najme pri akcii \"Vratiť na opravu\" "
-"a \"Zrušiť\""
-msgstr ""
+msgid "Enter workflow reason mainly for actions \"Return for repair\" and \"Cancel\""
+msgstr "Uveďte dôvod pre zmenu stavu workflow, najme pre akciu \"Vratiť na opravu\" a \"Zrušiť\""
 
 #. module: o2net
 #: selection:o2net.polozka,mj:0
@@ -1184,7 +1194,7 @@ msgstr "Cenové ponuky dodávateľa"
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_wf_dovod
 msgid "Workflow reason"
-msgstr ""
+msgstr "Dôvod pre workflow"
 
 #. module: o2net
 #: code:addons/o2net/models/cenova_ponuka.py:753
@@ -1252,9 +1262,6 @@ msgstr ""
 #: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka
 msgid "vystavba - polozka cenovej ponuky"
 msgstr ""
-
-#~ msgid "Total items"
-#~ msgstr "Celková cena"
 
 #~ msgid "Package?"
 #~ msgstr "Balíček"

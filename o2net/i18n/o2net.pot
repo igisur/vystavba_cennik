@@ -1021,7 +1021,7 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_wf_dovod
-msgid "Uvedte dôvod pre zmenu stavu workflow, najme pri akcii \"Vratiť na opravu\" a \"Zrušiť\""
+msgid "Enter workflow reason mainly for actions \"Return for repair\" and \"Cancel\""
 msgstr ""
 
 #. module: o2net

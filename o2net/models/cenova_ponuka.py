@@ -595,9 +595,8 @@ class VystavbaCenovaPonuka(models.Model):
     datum_zaciatok = fields.Date(string="Start date", default=datetime.date.today(), copy=False);
     datum_koniec = fields.Date(string="End date", copy=False);
     poznamka = fields.Text(string="Note", track_visibility='onchange', copy=False)
-    wf_dovod = fields.Text(string='Workflow reason', copy=False, help='Uvedte dôvod pre zmenu stavu workflow, najme pri akcii "Vratiť na opravu" a "Zrušiť"')
+    wf_dovod = fields.Text(string='Workflow reason', copy=False, help='Enter workflow reason mainly for actions "Return for repair" and "Cancel"')
     celkova_cena = fields.Float(compute=_amount_all, string='Total price', store=True, digits=(10,2), track_visibility='onchange', copy=False)
-
     dodavatel_id = fields.Many2one('res.partner', required=True, string='Vendor', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
     pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True, default=lambda self: self._get_default_pc())
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm, copy=True)
