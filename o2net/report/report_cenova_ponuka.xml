@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
 
@@ -42,7 +42,7 @@
 
                     <div class="row mt32 mb32">
                         <div t-if="d.skratka" class="col-xs-3">
-                            <strong>Short cut:</strong>
+                            <strong>Short name:</strong>
                             <p t-field="d.skratka"/>
                         </div>
                         <div t-if="d.financny_kod" class="col-xs-3">

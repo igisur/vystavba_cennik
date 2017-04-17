@@ -1,4 +1,4 @@
-# Translation of Odoo Server.
+﻿# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 #	* o2net
 #
@@ -127,7 +127,7 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-msgid "<strong>Short cut:</strong>"
+msgid "<strong>Short name:</strong>"
 msgstr ""
 
 #. module: o2net
@@ -918,7 +918,7 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_skratka
-msgid "Short cut"
+msgid "Short name"
 msgstr ""
 
 #. module: o2net
