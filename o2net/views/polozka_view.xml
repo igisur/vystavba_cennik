@@ -23,7 +23,7 @@
                             <field name="mj"/>
                         </group>
                         <group>
-                            <field name="is_balicek" string="Package?"/>
+                            <field name="is_balicek" string="Package"/>
                         </group>
                         <label for="description"/>
                         <field name="description"/>
