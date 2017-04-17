@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-17 18:27+0200\n"
-"PO-Revision-Date: 2017-04-17 23:04+0200\n"
+"PO-Revision-Date: 2017-04-17 23:15+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -25,9 +25,9 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            ${ctx.get('manager_name')} has approved price offer <a href="
-"\"${object.base_url}\">${object.name}/${object.skratka}/${object."
-"financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
+"            ${ctx.get('manager_name')} has approved price offer <a href=\"${object.base_url}\">"
+"${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</"
+"a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -39,9 +39,9 @@ msgstr ""
 "            <p>\n"
 "            Dobrý deň,<br/><br/>\n"
 "\n"
-"            ${ctx.get('manager_name')} schváli cenovú ponuku <a href="
-"\"${object.base_url}\">${object.name}/${object.skratka}/${object."
-"financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
+"            ${ctx.get('manager_name')} schváli cenovú ponuku <a href=\"${object.base_url}\">"
+"${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</"
+"a><br/>\n"
 "            </p>\n"
 "            s pozdravom,<br/>\n"
 "               O2 network team\n"
@@ -56,9 +56,8 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Price offer <a href=\"${object.base_url}\">${object.name}/"
-"${object.skratka}/${object.financny_kod} (${object.dodavatel_id."
-"display_name})</a> has been canceled.<br/>\n"
+"            Price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/"
+"${object.financny_kod} (${object.dodavatel_id.display_name})</a> has been canceled.<br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -70,9 +69,8 @@ msgstr ""
 "            <p>\n"
 "            Dobrý deň,<br/><br/>\n"
 "\n"
-"            Cenová ponuka<a href=\"${object.base_url}\">${object.name}/"
-"${object.skratka}/${object.financny_kod} (${object.dodavatel_id."
-"display_name})</a> bola zrušená.<br/>\n"
+"            Cenová ponuka <a href=\"${object.base_url}\">${object.name}/${object.skratka}/"
+"${object.financny_kod} (${object.dodavatel_id.display_name})</a> bola zrušená.<br/>\n"
 "            </p>\n"
 "            s pozdravom,<br/>\n"
 "               O2 network team\n"
@@ -87,9 +85,8 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Price offer <a href=\"${object.base_url}\">${object.name}/"
-"${object.skratka}/${object.financny_kod} (${object.dodavatel_id."
-"display_name})</a> is approved.<br/>\n"
+"            Price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/"
+"${object.financny_kod} (${object.dodavatel_id.display_name})</a> is approved.<br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -101,9 +98,8 @@ msgstr ""
 "            <p>\n"
 "            Dobrý deň,<br/><br/>\n"
 "\n"
-"            Cenová ponuka <a href=\"${object.base_url}\">${object.name}/"
-"${object.skratka}/${object.financny_kod} (${object.dodavatel_id."
-"display_name})</a> je schválená.<br/>\n"
+"            Cenová ponuka <a href=\"${object.base_url}\">${object.name}/${object.skratka}/"
+"${object.financny_kod} (${object.dodavatel_id.display_name})</a> je schválená.<br/>\n"
 "            </p>\n"
 "            s pozdravom,<br/>\n"
 "               O2 network team\n"
@@ -118,9 +114,9 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Vendor \"${object.dodavatel_id.display_name}\" has unfinished "
-"price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/"
-"${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
+"            Vendor \"${object.dodavatel_id.display_name}\" has unfinished price offer <a href="
+"\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object."
+"dodavatel_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -132,10 +128,9 @@ msgstr ""
 "            <p>\n"
 "            Dobrý deň,<br/><br/>\n"
 "\n"
-"            Dodávateľ \"${object.dodavatel_id.display_name}\" má "
-"rozpracovanú cenovú ponuku <a href=\"${object.base_url}\">${object.name}/"
-"${object.skratka}/${object.financny_kod} (${object.dodavatel_id."
-"display_name})</a><br/>\n"
+"            Dodávateľ \"${object.dodavatel_id.display_name}\" má rozpracovanú cenovú ponuku <a "
+"href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object."
+"dodavatel_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            s pozdravom,<br/>\n"
 "               O2 network team\n"
@@ -150,9 +145,8 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Warning awaiting approval for price offer <a href=\"${object."
-"base_url}\">${object.name}/${object.skratka}/${object.financny_kod} "
-"(${object.dodavatel_id.display_name})</a><br/>\n"
+"            Warning awaiting approval for price offer <a href=\"${object.base_url}\">${object."
+"name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -164,9 +158,8 @@ msgstr ""
 "            <p>\n"
 "            Dobrý deň,<br/><br/>\n"
 "\n"
-"            Upozornenie  na čakajúcu cenovu <a href=\"${object.base_url}\">"
-"${object.name}/${object.skratka}/${object.financny_kod} (${object."
-"dodavatel_id.display_name})</a><br/>\n"
+"            Upozornenie na čakajúcu cenovu <a href=\"${object.base_url}\">${object.name}/"
+"${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            s pozdravom,<br/>\n"
 "               O2 network team\n"
@@ -181,9 +174,8 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            You've been assigned to price offer <a href=\"${object."
-"base_url}\">${object.name}/${object.skratka}/${object.financny_kod} "
-"(${object.dodavatel_id.display_name})</a><br/>\n"
+"            You've been assigned to price offer <a href=\"${object.base_url}\">${object.name}/"
+"${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -195,9 +187,8 @@ msgstr ""
 "            <p>\n"
 "            Dobrý deň,<br/><br/>\n"
 "\n"
-"            Máte príradenú cenová ponuku<a href=\"${object.base_url}\">"
-"${object.name}/${object.skratka}/${object.financny_kod} (${object."
-"dodavatel_id.display_name})</a><br/>\n"
+"            Máte príradenú cenová ponuku<a href=\"${object.base_url}\">${object.name}/${object."
+"skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            s pozdravom,<br/>\n"
 "               O2 network team\n"
@@ -309,8 +300,7 @@ msgid "Can user execute workflow action"
 msgstr "Can user execute workflow action"
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-#: selection:o2net.cenova_ponuka,state:0
+#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka selection:o2net.cenova_ponuka,state:0
 msgid "Cancel"
 msgstr "Zrušiť"
 
@@ -438,8 +428,7 @@ msgid "Display Name"
 msgstr "Názov zobrazenia"
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_draft
-#: selection:o2net.cenova_ponuka,state:0
+#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_draft selection:o2net.cenova_ponuka,state:0
 msgid "Draft"
 msgstr "Návrh"
 
@@ -502,30 +491,20 @@ msgstr "Zoznam balíčkov cenovej ponuky"
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_preview
-msgid ""
-"Here you can find all price offers, which are assigned to you or you are "
-"thier vendor."
-msgstr ""
-"Tu nájdete schválené cenové ponuky, ktoré vám boli priradené alebo ste ich "
-"dodávateľ."
+msgid "Here you can find all price offers, which are assigned to you or you are thier vendor."
+msgstr "Tu nájdete schválené cenové ponuky, ktoré vám boli priradené alebo ste ich dodávateľ."
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_approved
 msgid ""
-"Here you can find approved price offers, which are assigned to you or you "
-"are thier vendor."
-msgstr ""
-"Tu nájdete schválené cenové ponuky, ktoré sú vám priradené alebo ste ich "
-"dodávateľ."
+"Here you can find approved price offers, which are assigned to you or you are thier vendor."
+msgstr "Tu nájdete schválené cenové ponuky, ktoré sú vám priradené alebo ste ich dodávateľ."
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_cancel
 msgid ""
-"Here you can find canceled price offers, which are assigned to you or you "
-"are thier vendor."
-msgstr ""
-"Tu nájdete zrušené cenové ponuky, ktoré vám boli priradené alebo ste ich "
-"dodávateľ."
+"Here you can find canceled price offers, which are assigned to you or you are thier vendor."
+msgstr "Tu nájdete zrušené cenové ponuky, ktoré vám boli priradené alebo ste ich dodávateľ."
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_draft
@@ -550,11 +529,11 @@ msgstr "Tu nájdete rozpracované cenové ponuky, kde ste ich dodávateľ."
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_to_approve
 msgid ""
-"Here you can find price offers waiting for approval, which are assigned to "
-"you or you are thier vendor."
+"Here you can find price offers waiting for approval, which are assigned to you or you are "
+"thier vendor."
 msgstr ""
-"Tu nájdete cenové ponuky čakajúce na schválenie, ktoré sú vám priradené "
-"alebo ste ich dodávateľ."
+"Tu nájdete cenové ponuky čakajúce na schválenie, ktoré sú vám priradené alebo ste ich "
+"dodávateľ."
 
 #. module: o2net
 #: selection:o2net.polozka,mj:0
@@ -589,9 +568,7 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,help:o2net.field_res_partner_cp_celkova_cena_limit
-msgid ""
-"In case the price limit is exceeded, price offer must be approved by a given "
-"person"
+msgid "In case the price limit is exceeded, price offer must be approved by a given person"
 msgstr ""
 
 #. module: o2net
@@ -786,9 +763,7 @@ msgstr "Číslo akcie"
 #. module: o2net
 #: model:ir.model.fields,help:o2net.field_res_partner_reminder_interval
 msgid "Number of days, after which the notification will be send (email)"
-msgstr ""
-"Po koľkých dňoch od poslednej pripomienky sa má opatovne poslať notifikácia "
-"(email)"
+msgstr "Po koľkých dňoch od poslednej pripomienky sa má opatovne poslať notifikácia (email)"
 
 #. module: o2net
 #: model:ir.model.fields,help:o2net.field_o2net_cennik_message_needaction_counter
@@ -850,8 +825,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_polozka_isbalicek
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_polozka_isbalicek
 #: model:ir.model.fields,field_description:o2net.field_o2net_polozka_is_balicek
-#: model:ir.ui.menu,name:o2net.menu_oddiel
-#: model:ir.ui.view,arch_db:o2net.view_form_polozka
+#: model:ir.ui.menu,name:o2net.menu_oddiel model:ir.ui.view,arch_db:o2net.view_form_polozka
 msgid "Package"
 msgstr "Balíček"
 
@@ -869,8 +843,7 @@ msgid "Packages total"
 msgstr "Balíčky celkom"
 
 #. module: o2net
-#: model:ir.model,name:o2net.model_res_partner
-#: model:ir.ui.menu,name:o2net.menu_osoba
+#: model:ir.model,name:o2net.model_res_partner model:ir.ui.menu,name:o2net.menu_osoba
 msgid "Partner"
 msgstr "Partner"
 
@@ -905,8 +878,7 @@ msgstr "Limit ceny"
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_cennik_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cennik_id
-#: model:ir.ui.menu,name:o2net.menu_cennik_cennik
-#: model:ir.ui.menu,name:o2net.menu_cennik_root
+#: model:ir.ui.menu,name:o2net.menu_cennik_cennik model:ir.ui.menu,name:o2net.menu_cennik_root
 #: model:ir.ui.view,arch_db:o2net.view_form_cennik_dodavatel
 msgid "Price list"
 msgstr "Cenník"
@@ -931,11 +903,8 @@ msgstr "Položky cenníka"
 #. module: o2net
 #: code:addons/o2net/models/cennik.py:23
 #, python-format
-msgid ""
-"Price list with the same name already exists. Please choose an unique name."
-msgstr ""
-"Cenník s rovnakým názvom už existuje. Prosím zvoľte iný názov, ktorý bude "
-"unikátny."
+msgid "Price list with the same name already exists. Please choose an unique name."
+msgstr "Cenník s rovnakým názvom už existuje. Prosím zvoľte iný názov, ktorý bude unikátny."
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_cenova_ponuka_id
@@ -954,15 +923,15 @@ msgstr "Cenová ponuka"
 #: model:mail.template,subject:o2net.mail_cp_in_progress
 #: model:mail.template,subject:o2net.mail_cp_manager_approved
 msgid ""
-"Price offer ${object.name}/${object.skratka}/${object.financny_kod} "
-"(${object.dodavatel_id.display_name})"
+"Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id."
+"display_name})"
 msgstr ""
 
 #. module: o2net
 #: model:mail.template,subject:o2net.mail_manager_warning
 msgid ""
-"Price offer ${object.name}/${object.skratka}/${object.financny_kod} "
-"(${object.dodavatel_id.display_name}) is awaiting approval"
+"Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id."
+"display_name}) is awaiting approval"
 msgstr ""
 
 #. module: o2net
@@ -1180,8 +1149,7 @@ msgstr "Platný do"
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_cennik_dodavatel_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_dodavatel_id
-#: model:ir.ui.menu,name:o2net.menu_cennik
-#: model:res.groups,name:o2net.group_vystavba_supplier
+#: model:ir.ui.menu,name:o2net.menu_cennik model:res.groups,name:o2net.group_vystavba_supplier
 msgid "Vendor"
 msgstr "Dodávateľ"
 
