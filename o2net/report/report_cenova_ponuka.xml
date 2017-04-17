@@ -160,7 +160,7 @@
                                         </table>
                                         <table width="100%" style="margin-top:10px" t-if="index>0">
                                             <tr>
-                                                <td width="75%" style="font-size:16px;text-align:right;font-weight:bold;">Total items</td>
+                                                <td width="75%" style="font-size:16px;text-align:right;font-weight:bold;">Total typical items</td>
                                                 <td width="25%" style="font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._get_price_oddiel_atyp(d.id, oddiel['id'], 0)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                                             </tr>
                                         </table>
