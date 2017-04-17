@@ -42,26 +42,26 @@
 
                     <div class="row mt32 mb32">
                         <div t-if="d.skratka" class="col-xs-3">
-                            <strong>Skratka:</strong>
+                            <strong>Short cut:</strong>
                             <p t-field="d.skratka"/>
                         </div>
                         <div t-if="d.financny_kod" class="col-xs-3">
-                            <strong>Finančný kód:</strong>
+                            <strong>Financial code:</strong>
                             <p t-field="d.financny_kod"/>
                         </div>
                         <div t-if="d.datum_zaciatok" class="col-xs-3">
-                            <strong>Dátum začiatku:</strong>
+                            <strong>Start date:</strong>
                             <p t-field="d.datum_zaciatok" t-field-options='{"format": "dd.MM.yyyy"}'/>
                         </div>
                         <div t-if="d.datum_koniec" class="col-xs-3">
-                            <strong>Dátum dokončenia:</strong>
+                            <strong>End date:</strong>
                             <p t-field="d.datum_koniec" t-field-options='{"format": "dd.MM.yyyy"}'/>
                         </div>
                     </div>
 
                     <div class="row mt32 xs_32">
                         <div t-if="d.dodavatel_id.name" class="col-xs-3">
-                            <strong>Dodávateľ:</strong>
+                            <strong>Vendor:</strong>
                             <p t-field="d.dodavatel_id.name"/>
                         </div>
                         <div t-if="d.pc_id.name" class="col-xs-3">
@@ -75,7 +75,7 @@
                         <div t-if="d.celkova_cena">
                             <table width="100%">
                                 <tr>
-                                    <td style="font-size:20px;text-align:right;font-weight: bold;">Celková cena:</td>
+                                    <td style="font-size:20px;text-align:right;font-weight: bold;">Total price:</td>
                                 </tr>
                                 <tr>
                                     <td style="font-size:20px;text-align:right;font-weight: bold;"><span t-esc="d.celkova_cena" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
@@ -111,7 +111,7 @@
                     <t t-set="rows" t-value="d._get_oddiel(d.id)"/>
                     <t t-set="oddiels" t-value="d._get_oddiel(d.id)"/>
                     <section>
-                        <h3>MONTÁŽ</h3>
+                        <h3>MONTAGE</h3>
                         <t t-foreach="oddiels[0]" t-as="oddiel">
                             <div>
                                 <table width="100%" style="margin-top:20px;margin-bottom:20px">
@@ -129,18 +129,18 @@
                                                 <td>
                                                     <t t-set="index" t-value="index+1" />
                                                         <t t-if="index==1">
-                                                            <h5>Typové položky</h5>
+                                                            <h5>Type item</h5>
                                                         </t>
                                                         <table style="width:100%">
                                                             <t t-if="index==1">
                                                                 <thead style="border-bottom:1pt solid black;padding-bottom:40px;">
                                                                     <tr>
-                                                                        <th style="width:10%;text-align:left">Oddiel</th>
+                                                                        <th style="width:10%;text-align:left">Section</th>
                                                                         <th style="width:10%;text-align:left">KSZ</th>
-                                                                        <th style="width:45%;text-align:left">Položka</th>
-                                                                        <th style="width:5%;text-align:left">Mj</th>
-                                                                        <th style="width:15%;text-align:right">J. cena</th>
-                                                                        <th style="width:15%;text-align:right">Cena celkom</th>
+                                                                        <th style="width:45%;text-align:left">Item</th>
+                                                                        <th style="width:5%;text-align:left">Measure unit</th>
+                                                                        <th style="width:15%;text-align:right">Unite price</th>
+                                                                        <th style="width:15%;text-align:right">Totaly price</th>
                                                                     </tr>
                                                                 </thead>
                                                             </t>
@@ -160,7 +160,7 @@
                                         </table>
                                         <table width="100%" style="margin-top:10px" t-if="index>0">
                                             <tr>
-                                                <td width="75%" style="font-size:16px;text-align:right;font-weight:bold;">Položky celkom</td>
+                                                <td width="75%" style="font-size:16px;text-align:right;font-weight:bold;">Total items</td>
                                                 <td width="25%" style="font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._get_price_oddiel_atyp(d.id, oddiel['id'], 0)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                                             </tr>
                                         </table>
@@ -181,9 +181,9 @@
                                                         <t t-if="indexatyp==1">
                                                             <thead style="border-bottom:1pt solid black;padding-bottom:40px;">
                                                                 <tr>
-                                                                    <th style="width:20%;text-align:left">Oddiel</th>
-                                                                    <th style="width:65%;text-align:left">Položka</th>
-                                                                    <th style="width:15%;text-align:right">Cena celkom</th>
+                                                                    <th style="width:20%;text-align:left">Section</th>
+                                                                    <th style="width:65%;text-align:left">Item</th>
+                                                                    <th style="width:15%;text-align:right">Total price</th>
                                                                 </tr>
                                                             </thead>
                                                         </t>
@@ -200,7 +200,7 @@
                                         </table>
                                         <table width="100%" style="margin-top:10px" t-if="indexatyp>0">
                                             <tr>
-                                                <td style="font-size:16px;width:75%;text-align:right;font-weight:bold;">Atypové položky celkom</td>
+                                                <td style="font-size:16px;width:75%;text-align:right;font-weight:bold;">Total atypical items</td>
                                                 <td style="font-size:16px;width:25%;text-align:right;font-weight:bold;"><span t-esc="d._get_price_oddiel_atyp(d.id, oddiel['id'], 1)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                                             </tr>
                                         </table>
@@ -210,7 +210,7 @@
                         </t>
                     </section>
                     <section>
-                        <h3>BALÍČKY</h3>
+                        <h3>PACKAGES</h3>
                         <table width="100%">
                             <t t-set="rowsbalicek" t-value="d._get_rows_oddiel_balicek(d.id)"/>
                             <t t-set="index" t-value="0" />
@@ -221,11 +221,11 @@
                                         <tr t-if="index==1">
                                             <thead style="border-bottom:1pt solid black;">
                                                 <tr>
-                                                    <th style="width:10%">Kod</th>
-                                                    <th style="width:40%">Položka</th>
-                                                    <th style="width:10%;text-align:right">Počet</th>
-                                                    <th style="width:20%;text-align:right">J. cena</th>
-                                                    <th style="width:20%;text-align:right">Cena celkom</th>
+                                                    <th style="width:10%">Code</th>
+                                                    <th style="width:40%">Item</th>
+                                                    <th style="width:10%;text-align:right">Quantity</th>
+                                                    <th style="width:20%;text-align:right">Unit price</th>
+                                                    <th style="width:20%;text-align:right">Total price</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -242,7 +242,7 @@
                         </table>
                         <table width="100%" style="margin-top:10px" t-if="index>0">
                             <tr>
-                                <td style="width:75%;font-size:16px;text-align:right;font-weight:bold;">Balíčky celkom</td>
+                                <td style="width:75%;font-size:16px;text-align:right;font-weight:bold;">Packages total</td>
                                 <td style="width:25%;font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._get_price_balicky(d.id)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                             </tr>
                         </table>
@@ -262,7 +262,7 @@
                     <!--<t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.dodavatel_id.lang"/>-->
                 </t>
                  <div class="footer">
-                     <div class="row">Vytlacil: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
+                     <div class="row">Printed: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
                  </div>
             </t>
         </template>

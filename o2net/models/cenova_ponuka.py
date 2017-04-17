@@ -591,7 +591,7 @@ class VystavbaCenovaPonuka(models.Model):
     name = fields.Char(required=True, string="Name", size=50, copy=True)
     cislo = fields.Char(string="Project number (PSID)", required=True, copy=True);
     financny_kod = fields.Char(string="Financial code", size=10, required=True, copy=True)
-    skratka = fields.Char(string="Short cut", required=True, copy=True)
+    skratka = fields.Char(string="Short name", required=True, copy=True)
     datum_zaciatok = fields.Date(string="Start date", default=datetime.date.today(), copy=False);
     datum_koniec = fields.Date(string="End date", copy=False);
     poznamka = fields.Text(string="Note", track_visibility='onchange', copy=False)

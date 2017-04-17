@@ -150,7 +150,7 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
 
-                <tree string="Cenova ponuka" edit="false" create="false" delete="false">
+                <tree string="Price offer" edit="false" create="false" delete="false">
                     <field name="name"/>
                     <field name="cislo"/>
                     <field name="financny_kod"/>
@@ -200,7 +200,7 @@
                     <field name="datum_zaciatok" string="Start date"/>
                     <field name="datum_koniec" string="End date"/>
                     <field name="currency_id" invisible="1"/>
-                    <field name="celkova_cena"  string="Cena" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="celkova_cena"  string="Price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                     <field name="dodavatel_id"/>
                     <field name="osoba_priradena_ids" string="Assigned" widget="one2many_list"/>
                 </tree>
