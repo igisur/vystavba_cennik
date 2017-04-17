@@ -899,8 +899,11 @@ class VystavbaCenovaPonuka(models.Model):
 
             templateObj.email_to = ",".join(emails)
             templateObj.partner_to = ",".join(partners)
+            templateObj.lang = self.env.user.partner_id.lang
             _logger.info("email_to:" + templateObj.email_to)
             _logger.info("partner_to:" + templateObj.partner_to)
+            _logger.info("lang:" + templateObj.lang)
+
 
         if context is None:
             _logger.info('send mail without context')
