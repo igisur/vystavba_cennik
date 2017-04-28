@@ -7,10 +7,6 @@
             <field name="model">o2net.cennik</field>
             <field name="priority" eval="5"/>
             <field name="type">form</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Klikni pre založenie nového dodávateľského cenníka.</p>
-                <p>Tu nájdete zoznam dodávateľských cenníkov.</p>
-            </field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>

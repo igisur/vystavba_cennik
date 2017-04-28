@@ -34,10 +34,6 @@
                     </div>
                 </form>
             </field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Click to create a new item.</p>
-                <p>Here is the list of price list's items.</p>
-            </field>
         </record>
 
        <record model="ir.ui.view" id="view_tree_polozka">
