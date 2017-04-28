@@ -2,35 +2,31 @@
 {
     'name': "O2 network",
     'summary': """Builders price list""",
-    'description': """Builders price list enables you to track your vendors' price offers""",
+    'description': """Builders price list enables you to track your vendors' quotations""",
     'author': "Igor Surovy / Branislav Vilmon",
-    'website': "http://www.o2/sk",
+    'website': "http://www.o2.sk",
     'category': 'o2net',
-    'version': '0.1',
+    'version': '1.0',
 
     # any module necessary for this one to work correctly
     'depends': ['base', 'mail'],
 
     # always loaded
     'data': [
-        'security/vystavba_security.xml',
+        'security/groups.xml',
+        'security/record_rules.xml',
         'security/ir.model.access.csv',
         'views/views.xml',
         'views/cennik_view.xml',
         'views/polozka_view.xml',
         'views/osoba_view.xml',
         'views/cenova_ponuka_view.xml',
-        'workflows/cp_workflow.xml',
         'report/report.xml',
         'views/oddiel_view.xml',
-        'views/email_template.xml',
+        'views/mail_template.xml',
+        'workflows/quotation_wf.xml',
         'report/report_cenova_ponuka.xml',
-        #'report/cenova_ponuka_report_view.xml',
         'views/cenova_ponuka_cron.xml'
-    ],
-    # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
     ],
     'installable': True,
     'auto_install': False,

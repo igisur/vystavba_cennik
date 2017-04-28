@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+    <!--  Supplier, PC, PM, Manager -->
+    <data noupdate="0">
+
+        <record model="ir.module.category" id="module_category_o2net">
+            <field name="name">O2 Network</field>
+            <field name="description">Builders price list</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="group_vystavba_supplier" model="res.groups">
+            <field name="name">Vendor</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_category_o2net"/>
+        </record>
+
+        <record id="group_vystavba_pc" model="res.groups">
+            <field name="name">Project coordinator (PC)</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_category_o2net"/>
+        </record>
+
+        <record id="group_vystavba_pm" model="res.groups">
+            <field name="name">Project manager (PM)</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_category_o2net"/>
+        </record>
+
+        <record id="group_vystavba_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_category_o2net"/>
+        </record>
+
+        <record id="group_vystavba_admin" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_category_o2net"/>
+        </record>
+
+    </data>
+</openerp>

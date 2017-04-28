@@ -1,6 +1,6 @@
 <openerp>
 <data>
-    <!-- report's id is used in email_template.xml -->
+    <!-- report's id is used in mail_template.xml -->
     <report
             id="report_cenova_ponuka"
             model = "o2net.cenova_ponuka"

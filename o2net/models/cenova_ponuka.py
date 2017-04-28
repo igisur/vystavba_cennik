@@ -876,7 +876,7 @@ class VystavbaCenovaPonuka(models.Model):
         _logger.info("send mail to " + str(partner_ids))
 
         # Find the e-mail template
-        # definovane vo views/email_template.xml
+        # definovane vo views/mail_template.xml
         template = self.env.ref('o2net.' + template_name)
         if not template:
             _logger.info("unable send mail. template not found. template_name: " + str(template_name))
