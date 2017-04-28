@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import osoba
-import polozka
-import cennik
-import cennik_polozka
-import oddiel
-import cenova_ponuka
-import cenova_ponuka_polozka
-import cenova_ponuka_polozka_atyp
-import cenova_ponuka_balicek
+import partner
+import product
+import pricelist
+import pricelist_item
+import section
+import priceoffer
+import priceoffer_item
+import priceoffer_item_atyp
+import priceoffer_package
