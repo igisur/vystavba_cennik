@@ -39,17 +39,17 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.model
     def do_check_approve(self):
-        # kontrola cakania na schvalenie CP
-        # volane zo schhedulera
-        _logger.info('do_check_approve')
+        # validation of waiting for till Quotation is approved
+        # called from cron
+        _logger.debug('do_check_approve')
         today = datetime.datetime.now()
         schvalene = self.search([('state', '=', 'to_approve')])
         for row in schvalene:
             if not row.manager_ids:
-                _logger.info('manager nie je nasetovany !!!!')
+                _logger.debug('manager nie je nasetovany !!!!')
                 continue
 
-            _logger.info('manager = '+str(row.manager_ids))
+            _logger.debug('manager = '+str(row.manager_ids))
 
             for manager in row.manager_ids:
 
@@ -65,7 +65,7 @@ class VystavbaCenovaPonuka(models.Model):
                 self.env.cr.execute(query, ([manager.id]))
                 fetchrow = self.env.cr.fetchone()
                 rozdiel = abs((today - datetime.datetime.strptime(fetchrow[0], DEFAULT_SERVER_DATE_FORMAT)).days)
-                _logger.info('rozdiel ' + str(rozdiel) + ' ---- je na schvalenie pocet dni: ' + str(manager.reminder_interval))
+                _logger.debug('rozdiel ' + str(rozdiel) + ' ---- je na schvalenie pocet dni: ' + str(manager.reminder_interval))
                 if rozdiel >  manager.reminder_interval:
                     #poslem mail
                     self.send_mail([manager], template_name='mail_manager_warning')
@@ -80,10 +80,7 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.one
     def action_exportSAP(self):
-        # zavolat ako default pre self.sap_export_file_binary ak je CP v stave 'approved'
-        # field 'sap_export_file_binary' viditelny iba v stave 'approved'
         export_file_name = 'sap_export_' + self.cislo + '_' + str(datetime.date.today()) + '.txt'
-        _logger.info('export file name: ' + export_file_name)
         self.sap_export_file_name = export_file_name
         self.sap_export_content = self._get_sap_export_content()
         self.sap_export_file_binary = base64.encodestring(self.sap_export_content)
@@ -103,7 +100,7 @@ class VystavbaCenovaPonuka(models.Model):
         if self.datum_koniec:
             dt_obj = datetime.datetime.strptime(self.datum_koniec, DEFAULT_SERVER_DATE_FORMAT)
             dt_str = datetime.date.strftime(dt_obj, '%d.%m.%Y')
-            _logger.info("datum koniec: " + dt_str)
+            _logger.debug("datum koniec: " + dt_str)
             data.append('[MSCDT]' + chr(9) + dt_str)
         else:
             data.append('[MSCDT]' + chr(9) + '???')
@@ -186,7 +183,6 @@ class VystavbaCenovaPonuka(models.Model):
         partner_ids = []
         for user in group.users:
             partner_ids.append(user.partner_id.id)
-        _logger.info(str(len(partner_ids)) + " partners in group '" + str(group_name) + "'")
         return partner_ids
 
     @api.model
@@ -207,8 +203,7 @@ class VystavbaCenovaPonuka(models.Model):
         return [('id', 'in', partner_ids)]
 
     @api.depends('cp_polozka_ids.cena_celkom','cp_polozka_balicek_ids.cena_celkom','cp_polozka_atyp_ids.cena')
-    def _amount_all(self):
-        _logger.info("_amount_all: " + str(len(self)))
+    def _compute_amount_all(self):
         for cp in self:
             cp_celkova_cena = 0.0
             for line in cp.cp_polozka_ids:
@@ -225,61 +220,34 @@ class VystavbaCenovaPonuka(models.Model):
     @api.one
     @api.depends('dodavatel_id','osoba_priradena_ids')
     def _compute_ro_datumoddo(self):
-        _logger.info("_compute_ro_datumoddo")
         if self.osoba_priradena_ids:
-            if self.dodavatel_id.id in self.osoba_priradena_ids.ids:
-                self.ro_datumoddo = False
-            else:
-                self.ro_datumoddo = True
-        return {}
+            self.ro_datumoddo = not self.dodavatel_id.id in self.osoba_priradena_ids.ids
 
-    def _is_user_assigned(self):
-        ret = False;
-        if self.env.user.partner_id.id in self.osoba_priradena_ids.ids:
-            ret = True
-
-        _logger.info("is_user_assigned " + str(ret))
+    def _compute_is_user_assigned(self):
+        ret = self.env.user.partner_id.id in self.osoba_priradena_ids.ids
         self.is_user_assigned = ret
         return ret
 
     @api.depends('osoba_priradena_ids')
     def _compute_can_user_exec_wf(self):
-        _logger.info("_compute_can_user_exec_wf")
-
-        ret = False
-
-        _logger.info("superuser: " + str(SUPERUSER_ID))
-        _logger.info("logged user: " + str(self.env.user.partner_id.id))
-        _logger.info("assigned: " + str(self.osoba_priradena_ids.ids))
-        if self.is_user_assigned or self.env.user.id == SUPERUSER_ID:
-            ret = True
-
-        _logger.info("result: " + str(ret))
-
+        ret = self.is_user_assigned or self.env.user.id == SUPERUSER_ID
         return ret
 
     @api.one
-    def _resolve_record_url(self):
-        _logger.info("_resolve_record_url")
+    def _compute_record_url(self):
         base = self.env['ir.config_parameter'].get_param('web.base.url')
         id = self.id
-
         ir_model_data = self.env['ir.model.data']
         menu_id = ir_model_data.get_object_reference('o2net', 'menu_cenova_ponuka_preview')[1]
         action_id = ir_model_data.get_object_reference('o2net', 'action_window_cp_preview')[1]
-
         url = "%s/web#id=%s&view_type=form&model=o2net.cenova_ponuka&menu_id=%s&action=%s" % (base, id, menu_id, action_id)
-
-        _logger.info("URL full path: " + http.request.httprequest.full_path)
-        _logger.info("URL: " + url)
-
+        _logger.debug("URL: " + url)
         self.base_url = url
-        return {}
 
     @api.one
     def _get_oddiel(self, cp_id):
         data = []
-        _logger.info("_get_oddiel " + str(cp_id))
+        _logger.debug("_get_oddiel " + str(cp_id))
 
         query = """select zdroj.id as id, zdroj.oddiel as oddiel
                             from
@@ -301,7 +269,7 @@ class VystavbaCenovaPonuka(models.Model):
 
         self.env.cr.execute(query, (cp_id,cp_id))
         data = self.env.cr.dictfetchall()
-        _logger.info("_get_oddiel data " + str(data))
+        _logger.debug("_get_oddiel data " + str(data))
 
         if data:
             return data
@@ -311,7 +279,7 @@ class VystavbaCenovaPonuka(models.Model):
     @api.one
     def _get_rows_oddiel_typ(self, cp_id, oddiel_id):
         data = []
-        _logger.info("_get_rows_oddiel_typ " + str(cp_id) + ", " + str(oddiel_id))
+        _logger.debug("_get_rows_oddiel_typ " + str(cp_id) + ", " + str(oddiel_id))
 
         query = """ select  cpp.cenova_ponuka_id as cp_id,
                             o.name as oddiel,
@@ -335,7 +303,7 @@ class VystavbaCenovaPonuka(models.Model):
     @api.one
     def _get_rows_oddiel_atyp(self, cp_id, oddiel_id):
         data = []
-        _logger.info("_get_rows_oddiel_atyp " + str(cp_id) + ", " + str(oddiel_id))
+        _logger.debug("_get_rows_oddiel_atyp " + str(cp_id) + ", " + str(oddiel_id))
 
         query = """ select  cppa.cenova_ponuka_id as cp_id,
                             o.name as oddiel,
@@ -353,7 +321,7 @@ class VystavbaCenovaPonuka(models.Model):
     @api.one
     def _get_rows_oddiel_balicek(self, cp_id):
         data = []
-        _logger.info("_get_rows_oddiel_balicek " + str(cp_id))
+        _logger.debug("_get_rows_oddiel_balicek " + str(cp_id))
 
         query = """select   cpp.cenova_ponuka_id as cp_id,
                             o.name as oddiel,
@@ -381,7 +349,7 @@ class VystavbaCenovaPonuka(models.Model):
     # -------------------------------------------------------------
 
         cena = 0
-        _logger.info("_get_price_oddiel cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id))
+        _logger.debug("_get_price_oddiel cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id))
 
         query = """select sum(zdroj.cena)
                     from
@@ -403,7 +371,7 @@ class VystavbaCenovaPonuka(models.Model):
 
         self.env.cr.execute(query, (cp_id, oddiel_id, cp_id, oddiel_id))
         cena = self.env.cr.fetchone()[0]
-        _logger.info("_get_price_oddiel cena=" + str(cena))
+        _logger.debug("_get_price_oddiel cena=" + str(cena))
 
         return cena
 
@@ -414,7 +382,7 @@ class VystavbaCenovaPonuka(models.Model):
     # pocita as suma pre cp a oddiel a polozky typove resp. atypove polozky
     # --------------------------------------------------------------------------
         cena = 0
-        _logger.info("_get_price_oddiel_atyp cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id)+ " atyp=" + str(atyp))
+        _logger.debug("_get_price_oddiel_atyp cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id)+ " atyp=" + str(atyp))
 
         if atyp==1:
             #1 atypove polozky
@@ -442,7 +410,7 @@ class VystavbaCenovaPonuka(models.Model):
             self.env.cr.execute(query, (cp_id, oddiel_id))
             cena = self.env.cr.fetchone()[0]
 
-        _logger.info("_get_price_oddiel_atyp cena=" + str(cena))
+        _logger.debug("_get_price_oddiel_atyp cena=" + str(cena))
         return cena
 
     @api.one
@@ -451,7 +419,7 @@ class VystavbaCenovaPonuka(models.Model):
     # celkova cena pre cenovu ponuku a balicky
     # ---------------------------------------------
         cena = 0
-        _logger.info("_get_price_balicky cp_id=" + str(cp_id))
+        _logger.debug("_get_price_balicky cp_id=" + str(cp_id))
 
         query = """select sum(cpp.cena_celkom)
                     from o2net_cenova_ponuka cp
@@ -468,7 +436,7 @@ class VystavbaCenovaPonuka(models.Model):
     @api.one
     def _get_rows(self, cp_id):
         data = []
-        _logger.info("a_function_name " + str(cp_id))
+        _logger.debug("a_function_name " + str(cp_id))
 
         query = """ select  typorder as typorder,
                             typ as typ,
@@ -542,51 +510,51 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.model
     def _get_default_pc(self):
-        _logger.info('_get_default_pc')
+        _logger.debug('_get_default_pc')
         # PC - ak ativny user je PC, tak ho rovno predvolime
         partners = self._partners_in_group(self.GROUP_PC)
-        _logger.info('partners: ' + str(partners))
+        _logger.debug('partners: ' + str(partners))
 
         ret = None
         if self.env.user.partner_id.id in partners:
-            _logger.info('current user is PC. will be used as default PC.')
+            _logger.debug('current user is PC. will be used as default PC.')
             ret = self.env.user.partner_id.id
 
         return ret
 
     def _get_cp_polozka_ids(self):
-        _logger.info('_get_polozka_ids')
+        _logger.debug('_get_polozka_ids')
         for record in self:
-            _logger.info('record:' + str(record))
+            _logger.debug('record:' + str(record))
             record.cp_polozka_ids = self.env['o2net.cenova_ponuka.polozka'].search([('cenova_ponuka_id', '=', record.id), ('cennik_polozka_id.is_balicek', '!=', True)])
 
     def _get_cp_polozka_balicek_ids(self):
-        _logger.info('_get_polozka_balicek_ids')
+        _logger.debug('_get_polozka_balicek_ids')
         for record in self:
-            _logger.info('record:' + str(record))
+            _logger.debug('record:' + str(record))
             record.cp_polozka_balicek_ids = self.env['o2net.cenova_ponuka.polozka'].search([('cenova_ponuka_id', '=', record.id), ('cennik_polozka_id.is_balicek', '=', True)])
 
     def _set_polozka_ids(self):
         self.ensure_one()
-        _logger.info('_set_polozka_balicek_ids')
-        _logger.info('polozky: ' + str(self.polozka_ids))
+        _logger.debug('_set_polozka_balicek_ids')
+        _logger.debug('polozky: ' + str(self.polozka_ids))
         #self.write({'polozka_ids': [(6, 0, [self.dodavatel_id.id])]})
 
         for record in self.cp_polozka_ids:
-            _logger.info('polozka: ' + str(record))
+            _logger.debug('polozka: ' + str(record))
             self.polozka_ids = record
 
         for record in self.cp_polozka_balicek_ids:
-            _logger.info('balicek: ' + str(record))
+            _logger.debug('balicek: ' + str(record))
             self.polozka_ids = record
 
-        _logger.info('polozky: ' + str(self.polozka_ids))
+        _logger.debug('polozky: ' + str(self.polozka_ids))
 
     # FIELDS
     # computed fields
     ro_datumoddo = fields.Boolean(string="RO date From To", compute=_compute_ro_datumoddo, store=False, copy=False)
     can_user_exec_wf = fields.Boolean(string="Can user execute workflow action", compute=_compute_can_user_exec_wf, store=False, copy=False)
-    is_user_assigned = fields.Boolean(string="Is current user assigned", compute=_is_user_assigned)
+    is_user_assigned = fields.Boolean(string="Is current user assigned", compute=_compute_is_user_assigned)
 
     name = fields.Char(required=True, string="Name", size=50, copy=True)
     cislo = fields.Char(string="Project number (PSID)", required=True, copy=True);
@@ -596,7 +564,7 @@ class VystavbaCenovaPonuka(models.Model):
     datum_koniec = fields.Date(string="End date", copy=False);
     poznamka = fields.Text(string="Note", track_visibility='onchange', copy=False)
     wf_dovod = fields.Text(string='Workflow reason', copy=False, help='Enter workflow reason mainly for actions "Return for repair" and "Cancel"')
-    celkova_cena = fields.Float(compute=_amount_all, string='Total price', store=True, digits=(10,2), track_visibility='onchange', copy=False)
+    celkova_cena = fields.Float(compute=_compute_amount_all, string='Total price', store=True, digits=(10, 2), track_visibility='onchange', copy=False)
     dodavatel_id = fields.Many2one('res.partner', required=True, string='Vendor', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
     pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True, default=lambda self: self._get_default_pc())
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm, copy=True)
@@ -616,24 +584,18 @@ class VystavbaCenovaPonuka(models.Model):
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
     sap_export_file_binary = fields.Binary(string='Export file', copy=False)
 
-    base_url = fields.Char(compute=_resolve_record_url, string="Link", store=False, copy=False, )
+    base_url = fields.Char(compute=_compute_record_url, string="Link", store=False, copy=False, )
 
     @api.multi
     def write(self, vals):
         self.ensure_one()
-        _logger.info("WRITE: ")
-        _logger.info("user " + str(self.env.user.id))
-        _logger.info("user partner " + str(self.env.user.partner_id.id))
-        _logger.info("dodavatel " + str(self.dodavatel_id.id))
-        _logger.info("priradeny " + str(self.osoba_priradena_ids.ids))
-        _logger.info("stav " + str(self.state))
 
-        # log changes in purchase order lines
+        # log changes in Quotation's items
         if 'cp_polozka_ids' in vals:
             record_history_tmpl = "<li><b>%s</b> %s</li>"
             msg = ""
             for record in vals.get('cp_polozka_ids'):
-                _logger.info("record " + str(record))
+                _logger.debug("record " + str(record))
                 action_id = record[0]
                 if action_id == 0:
                     id = record[2].get('cennik_polozka_id')
@@ -648,16 +610,15 @@ class VystavbaCenovaPonuka(models.Model):
 
         res = super(VystavbaCenovaPonuka, self).write(vals)
 
-        state = vals.get('state')
         # ak zapisujeme stav prisli sme sem z WF akcie, a preto koncime. automaticka zmena stavu WF je len v pripade akcie SAVE kde sa 'state' nemeni!
         if not vals.get('state') == None:
             return res
 
         # ak je prihlaseny Dodavatel, je mu priradena CP a je v stave ASSIGNED tak pri save zmenime stav na IN_PROGRESS
         if self.dodavatel_id.id in self.osoba_priradena_ids.ids:
-            _logger.info("CP je priradena dodavatelovy")
+            _logger.debug("CP je priradena dodavatelovy")
             if self.state == self.ASSIGNED:
-                _logger.info("CP je v stave ASSIGNED > stav sa automaticky meni na IN_PROGRESS")
+                _logger.debug("CP je v stave ASSIGNED > stav sa automaticky meni na IN_PROGRESS")
                 self.signal_workflow('in_progress')
 
         return res
@@ -668,7 +629,7 @@ class VystavbaCenovaPonuka(models.Model):
         # meno CP musi byt unikatne, preto pridame prefix. na koniec je lepsie, pretoze pri focuse ma input kurzor na konci -> uzivatel rychlo zmaze
         default = {'name': self.name + " [KOPIA]"}
         # ! treba zistit ci cennik_id je platny a prejst prilinokvane polozky a updatnut cenu !!!
-        _logger.info("copy (duplicate): " + str(default))
+        _logger.debug("copy (duplicate): " + str(default))
         new_cp = super(VystavbaCenovaPonuka, self).copy(default=default)
 
         return new_cp
@@ -685,13 +646,13 @@ class VystavbaCenovaPonuka(models.Model):
         if not self.dodavatel_id:
             return result
 
-        _logger.info("Looking for supplier's valid pricelist " + str(self.dodavatel_id.name))
+        _logger.debug("Looking for supplier's valid pricelist " + str(self.dodavatel_id.name))
         cennik_ids = self.env['o2net.cennik'].search([('dodavatel_id', '=', self.dodavatel_id.id),
                                                          ('platny_od', '<=', datetime.date.today()),
                                                          ('platny_do', '>', datetime.date.today())], limit = 1)
 
         for rec in cennik_ids:
-            _logger.info(rec.name)
+            _logger.debug(rec.name)
 
         if cennik_ids:
             self.cennik_id = cennik_ids[0]
@@ -718,13 +679,13 @@ class VystavbaCenovaPonuka(models.Model):
     # Workflow
     # najdi partnera v skupine 'Manager', ktoreho field 'cena_na_schvalenie' je vacsia ako celkova cena CP
     def _find_managers(self):
-        _logger.info("Looking for manager to approve order of price " + str(self.celkova_cena))
+        _logger.debug("Looking for manager to approve order of price " + str(self.celkova_cena))
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         manager_ids = self.env['res.partner'].search([('id', 'in', partner_ids),('cp_celkova_cena_limit', '<=', self.celkova_cena)], order = "cp_celkova_cena_limit desc")
 
-        _logger.info("Found managers: " + str(manager_ids.ids))
+        _logger.debug("Found managers: " + str(manager_ids.ids))
         for man in manager_ids:
-            _logger.info(man.name)
+            _logger.debug(man.name)
 
         return manager_ids
 
@@ -755,7 +716,7 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.one
     def wf_assign(self):
-        _logger.info("workflow action to ASSIGN")
+        _logger.debug("workflow action to ASSIGN")
         self.ensure_one()
         if self.wf_dovod:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
@@ -766,7 +727,7 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.one
     def wf_in_progress(self):
-        _logger.info("workflow action to IN_PROGRESS")
+        _logger.debug("workflow action to IN_PROGRESS")
         self.ensure_one()
         if self.wf_dovod:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
@@ -779,7 +740,7 @@ class VystavbaCenovaPonuka(models.Model):
     @api.one
     def wf_approve(self):
         self.ensure_one()
-        _logger.info("workflow action to APPROVE")
+        _logger.debug("workflow action to APPROVE")
 
         # do historie pridame 'wf_dovod'
         if self.wf_dovod:
@@ -788,32 +749,32 @@ class VystavbaCenovaPonuka(models.Model):
 
         # Dodavatel poslal na schvalenie PC
         if self.dodavatel_id.id in self.osoba_priradena_ids.ids:
-            _logger.info("Supplier sent to approve by PC")
+            _logger.debug("Supplier sent to approve by PC")
             self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
             self.sudo().send_mail([self.pc_id])
 
         # PC poslal na schvalenie PM
         elif self.pc_id.id in self.osoba_priradena_ids.ids:
-            _logger.info("PC sent to approve by PM")
+            _logger.debug("PC sent to approve by PM")
             self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pm_id.id])], 'wf_dovod': ''})
             self.sudo().send_mail([self.pm_id])
 
         # PM poslal na schvalenie Managerovy
         elif self.pm_id.id in self.osoba_priradena_ids.ids:
-            _logger.info("PM sent to approve by Manager")
+            _logger.debug("PM sent to approve by Manager")
             manager_ids = self._find_managers()
             if manager_ids:
                 self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,manager_ids.ids)], 'manager_ids': [(6,0,manager_ids.ids)], 'wf_dovod': ''})
                 # Nemozem pouzit current-user, pretoze mail sa posiela cez konto Admina!!!
                 self.sudo().send_mail(manager_ids)
             else:
-                _logger.info("no managers found")
+                _logger.debug("no managers found")
                 raise UserError('No manager(s) found to assign.')
 
         # Manager schvalil
         elif self.env.user.partner_id.id in self.manager_ids.ids:
             if self.is_user_assigned:
-                _logger.info("Manager '" + self.env.user.partner_id.display_name + "' approved")
+                _logger.debug("Manager '" + self.env.user.partner_id.display_name + "' approved")
                 self.sudo().write({'osoba_priradena_ids': [(3,self.env.user.partner_id.id)], 'wf_dovod': ''})
 
                 # posleme email PC, aby vedel, ze manager schvalil
@@ -824,7 +785,7 @@ class VystavbaCenovaPonuka(models.Model):
         if self.env.user.partner_id.id in self.manager_ids.ids:
             # vsetci managery schvalili
             if not self.osoba_priradena_ids.ids:
-                _logger.info("ALL managers approved")
+                _logger.debug("ALL managers approved")
                 self.sudo().write({'state': self.APPROVED, 'osoba_priradena_ids': [(5)], 'wf_dovod': ''})
                 self.sudo().send_mail([self.dodavatel_id, self.pc_id], template_name='mail_cp_approved')
                 self.sudo().action_exportSAP()
@@ -834,7 +795,7 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.one
     def wf_not_complete(self):
-        _logger.info("workflow action to NOT_COMPLETE")
+        _logger.debug("workflow action to NOT_COMPLETE")
         self.ensure_one()
 
         self.wf_can_user_workflow()
@@ -844,7 +805,7 @@ class VystavbaCenovaPonuka(models.Model):
 
         # PC signals 'not complete' - CP should be 'in_progress' and assigned to Supplier
         if self.pc_id.id in self.osoba_priradena_ids.ids:
-            _logger.info("workflow action to IN_PROGRESS")
+            _logger.debug("workflow action to IN_PROGRESS")
             self.sudo().write({'state': self.IN_PROGRESS, 'osoba_priradena_ids': [(6,0,[self.dodavatel_id.id])], 'wf_dovod': ''})
             self.sudo().send_mail([self.dodavatel_id])
             self.sudo().signal_workflow('not_complete')
@@ -852,7 +813,7 @@ class VystavbaCenovaPonuka(models.Model):
 
         # PM signals 'not complete' - CP should be 'to_approve' and assigned to PC
         elif self.pm_id.id in self.osoba_priradena_ids.ids:
-            _logger.info("workflow action to TO_APPROVE")
+            _logger.debug("workflow action to TO_APPROVE")
             self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
             self.sudo().send_mail([self.pc_id])
 
@@ -860,7 +821,7 @@ class VystavbaCenovaPonuka(models.Model):
 
     @api.one
     def wf_cancel(self):
-        _logger.info("workflow action to CANCEL")
+        _logger.debug("workflow action to CANCEL")
         self.ensure_one()
 
         if self.wf_dovod:
@@ -873,20 +834,20 @@ class VystavbaCenovaPonuka(models.Model):
     @api.one
     def send_mail(self, partner_ids=None, template_name='mail_cp_assigned', context=None):
 
-        _logger.info("send mail to " + str(partner_ids))
+        _logger.debug("send mail to " + str(partner_ids))
 
         # Find the e-mail template
         # definovane vo views/mail_template.xml
         template = self.env.ref('o2net.' + template_name)
         if not template:
-            _logger.info("unable send mail. template not found. template_name: " + str(template_name))
+            _logger.debug("unable send mail. template not found. template_name: " + str(template_name))
             return
 
         templateObj = self.env['mail.template'].browse(template.id)
 
         admin = self.env['res.users'].browse(SUPERUSER_ID)
         if admin:
-            _logger.info("admin mail: " + admin.partner_id.email)
+            _logger.debug("admin mail: " + admin.partner_id.email)
             templateObj.email_from = admin.partner_id.email
 
         if partner_ids:
@@ -899,16 +860,11 @@ class VystavbaCenovaPonuka(models.Model):
             templateObj.email_to = ",".join(emails)
             templateObj.partner_to = ",".join(partners)
             templateObj.lang = self.env.user.partner_id.lang
-            _logger.info("email_to:" + templateObj.email_to)
-            _logger.info("partner_to:" + templateObj.partner_to)
-            _logger.info("lang:" + templateObj.lang)
 
 
         if context is None:
-            _logger.info('send mail without context')
+            _logger.debug('send mail without context')
             mail_id = templateObj.send_mail(self.id, force_send=True, raise_exception=False)
         else:
-            _logger.info('send mail using context: ' + str(context))
+            _logger.debug('send mail using context: ' + str(context))
             mail_id = templateObj.with_context(context).send_mail(self.id, force_send=True, raise_exception=False)
-
-        _logger.info("Mail sent: " + str(mail_id))
