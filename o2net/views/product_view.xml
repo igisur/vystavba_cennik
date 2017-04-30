@@ -20,7 +20,7 @@
                             <field name="code"/>
                             <field name="intern_code"/>
                             <field name="intern_id"/>
-                            <field name="measure_unit"/>
+                            <field name="unit_of_measure"/>
                         </group>
                         <group>
                             <field name="is_package" string="Package"/>
@@ -47,7 +47,7 @@
                 <field name="code"/>
                 <field name="name"/>
                 <field name="description"/>
-                <field name="measure_unit" string="Measure unit"/>
+                <field name="unit_of_measure" string="Measure unit"/>
                 <field name="intern_code"/>
             </tree>
             </field>

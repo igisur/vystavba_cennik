@@ -20,11 +20,11 @@
                     <!--<table>
                         <tr>
                             <td t-if="d.financny_kod">Finančný kód: <strong><span t-field="d.financny_kod"/></strong></td>
-                            <td t-if="d.cislo">Číslo projektu PSID: <strong><span t-field="d.cislo"/></strong></td>
+                            <td t-if="d.project_number">Číslo projektu PSID: <strong><span t-field="d.project_number"/></strong></td>
                             <td>&nbsp;</td>
                         </tr>
                         <tr>
-                            <td t-if="d.skratka">Skratka: <strong><span t-field="d.skratka"/></strong></td>
+                            <td t-if="d.shortname">Skratka: <strong><span t-field="d.shortname"/></strong></td>
                             <td t-if="d.datum_zaciatok">Dátum zahájenia: <strong><span t-field="d.datum_zaciatok"/></strong></td>
                             <td>Celková cena:</td>
                         </tr>
@@ -41,9 +41,9 @@
                     </table>-->
 
                     <div class="row mt32 mb32">
-                        <div t-if="d.skratka" class="col-xs-3">
+                        <div t-if="d.shortname" class="col-xs-3">
                             <strong>Short name:</strong>
-                            <p t-field="d.skratka"/>
+                            <p t-field="d.shortname"/>
                         </div>
                         <div t-if="d.financny_kod" class="col-xs-3">
                             <strong>Financial code:</strong>
@@ -60,9 +60,9 @@
                     </div>
 
                     <div class="row mt32 xs_32">
-                        <div t-if="d.dodavatel_id.name" class="col-xs-3">
+                        <div t-if="d.vendor_id.name" class="col-xs-3">
                             <strong>Vendor:</strong>
-                            <p t-field="d.dodavatel_id.name"/>
+                            <p t-field="d.vendor_id.name"/>
                         </div>
                         <div t-if="d.pc_id.name" class="col-xs-3">
                             <strong>PC:</strong>
@@ -90,8 +90,8 @@
                         </div>
                         <div class="row2">
                             <td t-if="d.financny_kod">Finančný kód: <strong><span t-field="d.financny_kod"/></strong></td>
-                            <td t-if="d.skratka">Skratka: <strong><span t-field="d.skratka"/></strong></td>
-                            <td t-if="d.cislo">Číslo projektu PSID: <strong><span t-field="d.cislo"/></strong></td>
+                            <td t-if="d.shortname">Skratka: <strong><span t-field="d.shortname"/></strong></td>
+                            <td t-if="d.project_number">Číslo projektu PSID: <strong><span t-field="d.project_number"/></strong></td>
                         </div>
                         <div class="row3">
                             <td t-if="d.pc_id.name">PC: <strong><span t-field="d.pc_id.name"/></strong></td>
@@ -102,7 +102,7 @@
                             <td t-if="d.datum_koniec">Dátum ukončenia: <strong><span t-field="d.datum_koniec"/></strong></td>
                         </div>
                         <div class="row5">
-                            <p t-if="d.poznamka">Poznámka: <strong><span t-field="d.poznamka"/></strong></p>
+                            <p t-if="d.note">Poznámka: <strong><span t-field="d.note"/></strong></p>
                         </div>
                         <div class="row6">
                             <p t-if="d.celkova_cena">Celková cena: <h4><span t-field="d.celkova_cena"/></h4></p>
@@ -256,10 +256,10 @@
                 <t t-foreach="docs" t-as="doc">
 
                     <!--<t t-call="o2net.layout_header" />-->
-                    <!--<t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.dodavatel_id.lang"/>-->
+                    <!--<t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.vendor_id.lang"/>-->
                     <!--<t t-call="o2net.layout_footer" />-->
                     <t t-call="o2net.report_cenova_ponuka_pdf_document"/>
-                    <!--<t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.dodavatel_id.lang"/>-->
+                    <!--<t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.vendor_id.lang"/>-->
                 </t>
                  <div class="footer">
                      <div class="row">Printed: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>

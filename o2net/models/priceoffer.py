@@ -80,7 +80,7 @@ class PriceOffer(models.Model):
 
     @api.one
     def action_exportSAP(self):
-        export_file_name = 'sap_export_' + self.cislo + '_' + str(datetime.date.today()) + '.txt'
+        export_file_name = 'sap_export_' + self.project_number + '_' + str(datetime.date.today()) + '.txt'
         self.sap_export_file_name = export_file_name
         self.sap_export_content = self._get_sap_export_content()
         self.sap_export_file_binary = base64.encodestring(self.sap_export_content)
@@ -89,16 +89,16 @@ class PriceOffer(models.Model):
     @api.multi
     def _get_sap_export_content(self):
         data = []
-        if self.cislo:
-            data.append('[PSPID]'+chr(9)+self.cislo)
+        if self.project_number:
+            data.append('[PSPID]' + chr(9) + self.project_number)
         if self.pc_id.code:
             data.append('[WEMPF]'+chr(9)+self.pc_id.code)
         else:
             data.append('[WEMPF]' + chr(9) + '???')
-        if self.dodavatel_id.code:
-            data.append('[MSTRT]'+chr(9)+self.dodavatel_id.code)
-        if self.datum_koniec:
-            dt_obj = datetime.datetime.strptime(self.datum_koniec, DEFAULT_SERVER_DATE_FORMAT)
+        if self.vendor_id.code:
+            data.append('[MSTRT]' + chr(9) + self.vendor_id.code)
+        if self.end_date:
+            dt_obj = datetime.datetime.strptime(self.end_date, DEFAULT_SERVER_DATE_FORMAT)
             dt_str = datetime.date.strftime(dt_obj, '%d.%m.%Y')
             _logger.debug("datum koniec: " + dt_str)
             data.append('[MSCDT]' + chr(9) + dt_str)
@@ -110,15 +110,15 @@ class PriceOffer(models.Model):
                         CHR(9),
                         'JV',
                         CHR(9),
-                        zdroj.cislo,
+                        zdroj.project_number,
                         CHR(9),
                         case
                             when zdroj.druh = '1T' then
-                                concat(cp.cislo, '.', o.name)
+                                concat(cp.project_number, '.', o.name)
                             when zdroj.druh = '2A' then
-                                concat(cp.cislo, '.', o.name)
+                                concat(cp.project_number, '.', o.name)
                         else
-                            cp.cislo
+                            cp.project_number
                         end,
                         CHR(9),
                         to_char(cp.datum_koniec, 'DD.MM.YYYY')) as vystup
@@ -126,7 +126,7 @@ class PriceOffer(models.Model):
                         (   select
                                 '1T' as druh,
                          		max(p.intern_kod) as kod,
-                                sum(price_celkom) as cislo,
+                                sum(price_celkom) as project_number,
                                 p.oddiel_id as oddiel_id,
                                 max(cpp.cenova_ponuka_id) as cenova_ponuka_id
                             from o2net_cenova_ponuka_polozka cpp
@@ -202,33 +202,33 @@ class PriceOffer(models.Model):
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         return [('id', 'in', partner_ids)]
 
-    @api.depends('cp_polozka_ids.total_price','cp_polozka_balicek_ids.total_price','cp_polozka_atyp_ids.price')
+    @api.depends('priceoffer_item_ids.total_price','priceoffer_item_package_ids.total_price','priceoffer_item_atyp_ids.price')
     def _compute_amount_all(self):
         for cp in self:
             cp_total_price = 0.0
-            for line in cp.cp_polozka_ids:
+            for line in cp.priceoffer_item_ids:
                 cp_total_price += line.total_price
 
-            for line in cp.cp_polozka_balicek_ids:
+            for line in cp.priceoffer_item_package_ids:
                 cp_total_price += line.total_price
 
-            for lineAtyp in cp.cp_polozka_atyp_ids:
+            for lineAtyp in cp.priceoffer_item_atyp_ids:
                 cp_total_price += lineAtyp.price
 
             cp.update({'total_price': cp_total_price})
 
     @api.one
-    @api.depends('dodavatel_id','osoba_priradena_ids')
+    @api.depends('vendor_id','assigned_persons_ids')
     def _compute_ro_datumoddo(self):
-        if self.osoba_priradena_ids:
-            self.ro_datumoddo = not self.dodavatel_id.id in self.osoba_priradena_ids.ids
+        if self.assigned_persons_ids:
+            self.ro_datumoddo = not self.vendor_id.id in self.assigned_persons_ids.ids
 
     def _compute_is_user_assigned(self):
-        ret = self.env.user.partner_id.id in self.osoba_priradena_ids.ids
+        ret = self.env.user.partner_id.id in self.assigned_persons_ids.ids
         self.is_user_assigned = ret
         return ret
 
-    @api.depends('osoba_priradena_ids')
+    @api.depends('assigned_persons_ids')
     def _compute_can_user_exec_wf(self):
         ret = self.is_user_assigned or self.env.user.id == SUPERUSER_ID
         return ret
@@ -449,7 +449,7 @@ class PriceOffer(models.Model):
                             mj as mj,
                             pocet as pocet,
                             price_celkom as price_celkom,
-                            cp.cislo as cislo
+                            cp.project_number as project_number
                             from
                             (
                             select  '1t' as typorder,
@@ -522,33 +522,33 @@ class PriceOffer(models.Model):
 
         return ret
 
-    def _get_cp_polozka_ids(self):
-        _logger.debug('_get_polozka_ids')
-        for record in self:
-            _logger.debug('record:' + str(record))
-            record.cp_polozka_ids = self.env['o2net.cenova_ponuka.polozka'].search([('price_offer_id', '=', record.id), ('pricelist_item_id.is_package', '!=', True)])
+    #def _get_priceoffer_item_ids(self):
+    #    _logger.debug('_get_priceoffer_item_ids')
+    #    for record in self:
+    #        _logger.debug('record:' + str(record))
+    #        record.priceoffer_item_ids = self.env['o2net.cenova_ponuka.polozka'].search([('price_offer_id', '=', record.id), ('pricelist_item_id.is_package', '!=', True)])
 
-    def _get_cp_polozka_balicek_ids(self):
-        _logger.debug('_get_polozka_balicek_ids')
-        for record in self:
-            _logger.debug('record:' + str(record))
-            record.cp_polozka_balicek_ids = self.env['o2net.cenova_ponuka.polozka'].search([('price_offer_id', '=', record.id), ('pricelist_item_id.is_package', '=', True)])
+    #def _get_priceoffer_item_package_ids(self):
+    #    _logger.debug('_get_priceoffer_item_package_ids')
+    #    for record in self:
+    #        _logger.debug('record:' + str(record))
+    #        record.priceoffer_item_package_ids = self.env['o2net.cenova_ponuka.polozka'].search([('price_offer_id', '=', record.id), ('pricelist_item_id.is_package', '=', True)])
 
-    def _set_polozka_ids(self):
-        self.ensure_one()
-        _logger.debug('_set_polozka_balicek_ids')
-        _logger.debug('polozky: ' + str(self.polozka_ids))
-        #self.write({'polozka_ids': [(6, 0, [self.dodavatel_id.id])]})
+    #def _set_item_ids(self):
+    #    self.ensure_one()
+    #    _logger.debug('_set_item_ids')
+    #    _logger.debug('polozky: ' + str(self.polozka_ids))
+        #self.write({'polozka_ids': [(6, 0, [self.vendor_id.id])]})
 
-        for record in self.cp_polozka_ids:
-            _logger.debug('polozka: ' + str(record))
-            self.polozka_ids = record
+    #    for record in self.priceoffer_item_ids:
+    #        _logger.debug('polozka: ' + str(record))
+    #        self.polozka_ids = record
 
-        for record in self.cp_polozka_balicek_ids:
-            _logger.debug('balicek: ' + str(record))
-            self.polozka_ids = record
+    #    for record in self.priceoffer_item_package_ids:
+    #        _logger.debug('balicek: ' + str(record))
+    #        self.polozka_ids = record
 
-        _logger.debug('polozky: ' + str(self.polozka_ids))
+    #    _logger.debug('polozky: ' + str(self.polozka_ids))
 
     # FIELDS
     # computed fields
@@ -557,28 +557,28 @@ class PriceOffer(models.Model):
     is_user_assigned = fields.Boolean(string="Is current user assigned", compute=_compute_is_user_assigned)
 
     name = fields.Char(required=True, string="Name", size=50, copy=True)
-    cislo = fields.Char(string="Project number (PSID)", required=True, copy=True);
-    financny_kod = fields.Char(string="Financial code", size=10, required=True, copy=True)
-    skratka = fields.Char(string="Short name", required=True, copy=True)
-    datum_zaciatok = fields.Date(string="Start date", default=datetime.date.today(), copy=False);
-    datum_koniec = fields.Date(string="End date", copy=False);
-    poznamka = fields.Text(string="Note", track_visibility='onchange', copy=False)
-    wf_dovod = fields.Text(string='Workflow reason', copy=False, help='Enter workflow reason mainly for actions "Return for repair" and "Cancel"')
+    project_number = fields.Char(string="Project number (PSID)", required=True, copy=True);
+    financial_code = fields.Char(string="Financial code", size=10, required=True, copy=True)
+    shortname = fields.Char(string="Short name", required=True, copy=True)
+    start_date = fields.Date(string="Start date", default=datetime.date.today(), copy=False);
+    end_date = fields.Date(string="End date", copy=False);
+    note = fields.Text(string="Note", track_visibility='onchange', copy=False)
+    workflow_reason = fields.Text(string='Workflow reason', copy=False, help='Enter workflow reason mainly for actions "Return for repair" and "Cancel"')
     total_price = fields.Float(compute=_compute_amount_all, string='Total price', store=True, digits=(10, 2), track_visibility='onchange', copy=False)
-    dodavatel_id = fields.Many2one('res.partner', required=True, string='Vendor', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
+    vendor_id = fields.Many2one('res.partner', required=True, string='Vendor', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
     pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True, default=lambda self: self._get_default_pc())
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm, copy=True)
     manager_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_manager_rel", string='Manager', domain=partners_in_group_manager, copy=False)
-    osoba_priradena_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_assigned_rel", string='Assigned persons', copy=False, default = lambda self: [(4,self.env.user.partner_id.id)])
+    assigned_persons_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_assigned_rel", string='Assigned persons', copy=False, default = lambda self: [(4, self.env.user.partner_id.id)])
 
     state = fields.Selection(State, string='State', readonly=True, default='draft', track_visibility='onchange', copy=False)
     state_date = fields.Date(string="date state", default=datetime.date.today(), copy=False);
     price_list_id = fields.Many2one('o2net.cennik', string='Price list', copy=True)
     currency_id = fields.Many2one(related='price_list_id.currency_id', string="Currency", copy=True)
 
-    cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'price_offer_id', string='Items', track_visibility='onchange', copy=True)
-    cp_polozka_balicek_ids = fields.One2many('o2net.cenova_ponuka.polozka_balicek', 'price_offer_id', string='Packages', track_visibility='onchange', copy=True)
-    cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'price_offer_id', string='Atypical items', track_visibility='onchange', copy=True)
+    priceoffer_item_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'price_offer_id', string='Items', track_visibility='onchange', copy=True)
+    priceoffer_item_package_ids = fields.One2many('o2net.cenova_ponuka.polozka_balicek', 'price_offer_id', string='Packages', track_visibility='onchange', copy=True)
+    priceoffer_item_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'price_offer_id', string='Atypical items', track_visibility='onchange', copy=True)
 
     sap_export_content = fields.Text(string="Export for SAP", default='ABCDEFGH', copy=False)
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
@@ -591,10 +591,10 @@ class PriceOffer(models.Model):
         self.ensure_one()
 
         # log changes in Quotation's items
-        if 'cp_polozka_ids' in vals:
+        if 'priceoffer_item_ids' in vals:
             record_history_tmpl = "<li><b>%s</b> %s</li>"
             msg = ""
-            for record in vals.get('cp_polozka_ids'):
+            for record in vals.get('priceoffer_item_ids'):
                 _logger.debug("record " + str(record))
                 action_id = record[0]
                 if action_id == 0:
@@ -615,7 +615,7 @@ class PriceOffer(models.Model):
             return res
 
         # ak je prihlaseny Dodavatel, je mu priradena CP a je v stave ASSIGNED tak pri save zmenime stav na IN_PROGRESS
-        if self.dodavatel_id.id in self.osoba_priradena_ids.ids:
+        if self.vendor_id.id in self.assigned_persons_ids.ids:
             _logger.debug("CP je priradena dodavatelovy")
             if self.state == self.ASSIGNED:
                 _logger.debug("CP je v stave ASSIGNED > stav sa automaticky meni na IN_PROGRESS")
@@ -640,16 +640,16 @@ class PriceOffer(models.Model):
         if not self.state == self.DRAFT:
             raise AccessError("Cenovú ponuku je možné zmazať len pokiaľ je v stave 'Návrh'. V ostatnom prípade použite workflow akciu 'Zrušiť'")
 
-    @api.onchange('dodavatel_id')
+    @api.onchange('vendor_id')
     def _find_cennik(self):
         result = {}
-        if not self.dodavatel_id:
+        if not self.vendor_id:
             return result
 
-        _logger.debug("Looking for supplier's valid pricelist " + str(self.dodavatel_id.name))
-        cennik_ids = self.env['o2net.cennik'].search([('dodavatel_id', '=', self.dodavatel_id.id),
-                                                         ('platny_od', '<=', datetime.date.today()),
-                                                         ('platny_do', '>', datetime.date.today())], limit = 1)
+        _logger.debug("Looking for supplier's valid pricelist " + str(self.vendor_id.name))
+        cennik_ids = self.env['o2net.cennik'].search([('vendor_id', '=', self.vendor_id.id),
+                                                         ('valid_from', '<=', datetime.date.today()),
+                                                         ('valid_to', '>', datetime.date.today())], limit = 1)
 
         for rec in cennik_ids:
             _logger.debug(rec.name)
@@ -660,7 +660,7 @@ class PriceOffer(models.Model):
             self.price_list_id = ''
 
         # pri zmene dodavatela a tym padol aj cennika zmaz vsetky polozky
-        self.cp_polozka_ids = None;
+        self.priceoffer_item_ids = None;
 
         result = {'price_list_id': self.price_list_id}
         self.write(result)
@@ -698,7 +698,7 @@ class PriceOffer(models.Model):
     @api.multi
     def wf_assign_check(self):
         self.ensure_one()
-        if self.dodavatel_id is False:
+        if self.vendor_id is False:
             raise AccessError(_("Price offer does not have vendor assigned"))
 
         return True
@@ -718,21 +718,21 @@ class PriceOffer(models.Model):
     def wf_assign(self):
         _logger.debug("workflow action to ASSIGN")
         self.ensure_one()
-        if self.wf_dovod:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
+        if self.workflow_reason:
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
-        self.sudo().write({'state': self.ASSIGNED, 'osoba_priradena_ids': [(6,0,[self.dodavatel_id.id])], 'wf_dovod': ''})
-        self.sudo().send_mail([self.dodavatel_id])
+        self.sudo().write({'state': self.ASSIGNED, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'wf_dovod': ''})
+        self.sudo().send_mail([self.vendor_id])
         return True
 
     @api.one
     def wf_in_progress(self):
         _logger.debug("workflow action to IN_PROGRESS")
         self.ensure_one()
-        if self.wf_dovod:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
+        if self.workflow_reason:
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
-        self.sudo().write({'state': self.IN_PROGRESS, 'osoba_priradena_ids': [(6,0,[self.dodavatel_id.id])], 'wf_dovod': ''})
+        self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'wf_dovod': ''})
         # notify PC via email that supplier starts working on CP
         self.sudo().send_mail([self.pc_id], template_name='mail_cp_in_progress')
         return True
@@ -743,28 +743,28 @@ class PriceOffer(models.Model):
         _logger.debug("workflow action to APPROVE")
 
         # do historie pridame 'wf_dovod'
-        if self.wf_dovod:
+        if self.workflow_reason:
             # add to tracking values
-            self.message_post(body='<ul class="o_mail_thread_message_tracking"><li>Workflow reason: ' + self.wf_dovod + '</li></ul>')
+            self.message_post(body='<ul class="o_mail_thread_message_tracking"><li>Workflow reason: ' + self.workflow_reason + '</li></ul>')
 
         # Dodavatel poslal na schvalenie PC
-        if self.dodavatel_id.id in self.osoba_priradena_ids.ids:
+        if self.vendor_id.id in self.assigned_persons_ids.ids:
             _logger.debug("Supplier sent to approve by PC")
-            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
+            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
             self.sudo().send_mail([self.pc_id])
 
         # PC poslal na schvalenie PM
-        elif self.pc_id.id in self.osoba_priradena_ids.ids:
+        elif self.pc_id.id in self.assigned_persons_ids.ids:
             _logger.debug("PC sent to approve by PM")
-            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pm_id.id])], 'wf_dovod': ''})
+            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pm_id.id])], 'wf_dovod': ''})
             self.sudo().send_mail([self.pm_id])
 
         # PM poslal na schvalenie Managerovy
-        elif self.pm_id.id in self.osoba_priradena_ids.ids:
+        elif self.pm_id.id in self.assigned_persons_ids.ids:
             _logger.debug("PM sent to approve by Manager")
             manager_ids = self._find_managers()
             if manager_ids:
-                self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,manager_ids.ids)], 'manager_ids': [(6,0,manager_ids.ids)], 'wf_dovod': ''})
+                self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,manager_ids.ids)], 'manager_ids': [(6,0,manager_ids.ids)], 'wf_dovod': ''})
                 # Nemozem pouzit current-user, pretoze mail sa posiela cez konto Admina!!!
                 self.sudo().send_mail(manager_ids)
             else:
@@ -775,7 +775,7 @@ class PriceOffer(models.Model):
         elif self.env.user.partner_id.id in self.manager_ids.ids:
             if self.is_user_assigned:
                 _logger.debug("Manager '" + self.env.user.partner_id.display_name + "' approved")
-                self.sudo().write({'osoba_priradena_ids': [(3,self.env.user.partner_id.id)], 'wf_dovod': ''})
+                self.sudo().write({'assigned_persons_ids': [(3,self.env.user.partner_id.id)], 'wf_dovod': ''})
 
                 # posleme email PC, aby vedel, ze manager schvalil
                 context = {'manager_name': self.env.user.partner_id.display_name}
@@ -784,10 +784,10 @@ class PriceOffer(models.Model):
         # aktualny uzivatel je medzi priradenymi managermi
         if self.env.user.partner_id.id in self.manager_ids.ids:
             # vsetci managery schvalili
-            if not self.osoba_priradena_ids.ids:
+            if not self.assigned_persons_ids.ids:
                 _logger.debug("ALL managers approved")
-                self.sudo().write({'state': self.APPROVED, 'osoba_priradena_ids': [(5)], 'wf_dovod': ''})
-                self.sudo().send_mail([self.dodavatel_id, self.pc_id], template_name='mail_cp_approved')
+                self.sudo().write({'state': self.APPROVED, 'assigned_persons_ids': [(5)], 'wf_dovod': ''})
+                self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
                 self.sudo().action_exportSAP()
 
 
@@ -800,21 +800,21 @@ class PriceOffer(models.Model):
 
         self.wf_can_user_workflow()
 
-        if self.wf_dovod:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
+        if self.workflow_reason:
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
         # PC signals 'not complete' - CP should be 'in_progress' and assigned to Supplier
-        if self.pc_id.id in self.osoba_priradena_ids.ids:
+        if self.pc_id.id in self.assigned_persons_ids.ids:
             _logger.debug("workflow action to IN_PROGRESS")
-            self.sudo().write({'state': self.IN_PROGRESS, 'osoba_priradena_ids': [(6,0,[self.dodavatel_id.id])], 'wf_dovod': ''})
-            self.sudo().send_mail([self.dodavatel_id])
+            self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'wf_dovod': ''})
+            self.sudo().send_mail([self.vendor_id])
             self.sudo().signal_workflow('not_complete')
             # call WF: signal "not complete". som v stave "to_approve". potrebujem ist do in_progers
 
         # PM signals 'not complete' - CP should be 'to_approve' and assigned to PC
-        elif self.pm_id.id in self.osoba_priradena_ids.ids:
+        elif self.pm_id.id in self.assigned_persons_ids.ids:
             _logger.debug("workflow action to TO_APPROVE")
-            self.sudo().write({'state': self.TO_APPROVE, 'osoba_priradena_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
+            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
             self.sudo().send_mail([self.pc_id])
 
         return True
@@ -824,11 +824,11 @@ class PriceOffer(models.Model):
         _logger.debug("workflow action to CANCEL")
         self.ensure_one()
 
-        if self.wf_dovod:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.wf_dovod + "</li></ul>")
+        if self.workflow_reason:
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
-        self.sudo().write({'state': self.CANCEL, 'osoba_priradena_ids': [(5)], 'wf_dovod': ''})
-        self.sudo().send_mail([self.dodavatel_id, self.pc_id], template_name='mail_cp_canceled')
+        self.sudo().write({'state': self.CANCEL, 'assigned_persons_ids': [(5)], 'wf_dovod': ''})
+        self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_canceled')
         return True
 
     @api.one

@@ -20,14 +20,14 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     def _compute_unit_price(self):
         _logger.info("_compute_unit_price: " + str(len(self)))
         for line in self:
-            line.unit_price = line.cennik_polozka_id.price
+            line.unit_price = line.pricelist_item_id.price
 
     unit_price = fields.Float(compute=_compute_unit_price, string='Unit price', store=True, digits=(10, 2))
     total_price = fields.Float(compute=_compute_total_price, string='Total price', store=True, digits=(10,2))
     quantity = fields.Float(string='Quantity', digits=(5,2), required=True)
     price_offer_id = fields.Many2one('o2net.cenova_ponuka', string='Price offer', required=True, ondelete='cascade')
     pricelist_item_id = fields.Many2one('o2net.cennik.polozka', string='Price list item', required=True, domain="[('price_list_id', '=', parent.price_list_id)]")
-    item_measure_unit = fields.Selection(related='pricelist_item_id.measure_unit', string='Measure unit', stored=False)
+    item_unit_of_measure = fields.Selection(related='pricelist_item_id.unit_of_measure', string='Measure unit', stored=False)
     item_description = fields.Text(related='pricelist_item_id.description', string='Description', stored=False)
     item_is_package = fields.Boolean(related='pricelist_item_id.is_package', string='Package', stored=True)
     name = fields.Char(related='pricelist_item_id.name', string='Name')

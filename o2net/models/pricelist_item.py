@@ -13,6 +13,6 @@ class VystavbaCennikPolozka(models.Model):
     name = fields.Char(related='item_id.name', string='Name')
     code = fields.Char(related='item_id.code', string='Code')
     is_package = fields.Boolean(related='item_id.is_package', string='Package')
-    measure_unit = fields.Selection(related='item_id.measure_unit', string='Measure unit')
+    unit_of_measure = fields.Selection(related='item_id.unit_of_measure', string='Measure unit')
     description = fields.Text(related='item_id.description', string='Description')
     currency_id = fields.Many2one(related='price_list_id.currency_id', string='Currency')

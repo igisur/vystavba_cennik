@@ -22,7 +22,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            ${ctx.get('manager_name')} has approved price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
+"            ${ctx.get('manager_name')} has approved price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -37,7 +37,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a> has been canceled.<br/>\n"
+"            Price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a> has been canceled.<br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -52,7 +52,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a> is approved.<br/>\n"
+"            Price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a> is approved.<br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -67,7 +67,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Vendor \"${object.dodavatel_id.display_name}\" has unfinished price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
+"            Vendor \"${object.vendor_id.display_name}\" has unfinished price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -82,7 +82,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Warning awaiting approval for price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
+"            Warning awaiting approval for price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -97,7 +97,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            You've been assigned to price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})</a><br/>\n"
+"            You've been assigned to price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -183,7 +183,7 @@ msgid "Assigned"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_osoba_priradena_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_assigned_persons_ids
 msgid "Assigned persons"
 msgstr ""
 
@@ -831,12 +831,12 @@ msgstr ""
 #: model:mail.template,subject:o2net.mail_cp_canceled
 #: model:mail.template,subject:o2net.mail_cp_in_progress
 #: model:mail.template,subject:o2net.mail_cp_manager_approved
-msgid "Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name})"
+msgid "Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})"
 msgstr ""
 
 #. module: o2net
 #: model:mail.template,subject:o2net.mail_manager_warning
-msgid "Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.dodavatel_id.display_name}) is awaiting approval"
+msgid "Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name}) is awaiting approval"
 msgstr ""
 
 #. module: o2net
@@ -1040,8 +1040,8 @@ msgid "Valid to"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_dodavatel_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_dodavatel_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_vendor_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_vendor_id
 #: model:ir.ui.menu,name:o2net.menu_cennik
 #: model:res.groups,name:o2net.group_vystavba_supplier
 msgid "Vendor"
