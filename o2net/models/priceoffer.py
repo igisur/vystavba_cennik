@@ -10,7 +10,7 @@ import base64
 
 _logger = logging.getLogger(__name__)
 
-class VystavbaCenovaPonuka(models.Model):
+class PriceOffer(models.Model):
     _name = 'o2net.cenova_ponuka'
     _description = "o2net - price offer"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
@@ -608,7 +608,7 @@ class VystavbaCenovaPonuka(models.Model):
 
             self.message_post(body="<ul class =""o_mail_thread_message_tracking"">%s</ul>" % msg, message_type="notification")
 
-        res = super(VystavbaCenovaPonuka, self).write(vals)
+        res = super(PriceOffer, self).write(vals)
 
         # ak zapisujeme stav prisli sme sem z WF akcie, a preto koncime. automaticka zmena stavu WF je len v pripade akcie SAVE kde sa 'state' nemeni!
         if not vals.get('state') == None:
@@ -630,7 +630,7 @@ class VystavbaCenovaPonuka(models.Model):
         default = {'name': self.name + " [KOPIA]"}
         # ! treba zistit ci cennik_id je platny a prejst prilinokvane polozky a updatnut cenu !!!
         _logger.debug("copy (duplicate): " + str(default))
-        new_cp = super(VystavbaCenovaPonuka, self).copy(default=default)
+        new_cp = super(PriceOffer, self).copy(default=default)
 
         return new_cp
 

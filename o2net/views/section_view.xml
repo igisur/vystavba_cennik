@@ -2,7 +2,7 @@
 <openerp>
     <data>
         <record model="ir.ui.view" id="view_tree_oddiel">
-            <field name="name">Package</field>
+            <field name="name">Section</field>
             <field name="model">o2net.oddiel</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
@@ -14,7 +14,7 @@
         </record>
 
         <record model="ir.ui.view" id="view_form_oddiel">
-            <field name="name">Package</field>
+            <field name="name">Section</field>
             <field name="model">o2net.oddiel</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -32,13 +32,13 @@
         </record>
 
         <record model="ir.actions.act_window" id="action_window_section">
-            <field name="name">Package</field>
+            <field name="name">Section</field>
             <field name="res_model">o2net.oddiel</field>
             <field name="view_id" ref="view_tree_oddiel"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Clik for establishment of new section.</p>
+                <p class="oe_view_nocontent_create">Click for establishment of new section.</p>
                 <p>Here you can find list of section.</p>
             </field>
         </record>
