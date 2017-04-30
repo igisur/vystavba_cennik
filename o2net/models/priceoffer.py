@@ -74,7 +74,7 @@ class VystavbaCenovaPonuka(models.Model):
         ret = {}
 
         # najdeme posledny mail odoslany partnerovy
-        mail_ids = self.env['mail.mail'].search([('', '=', partner_id)], order = "cp_celkova_cena_limit desc", limit=1)
+        mail_ids = self.env['mail.mail'].search([('', '=', partner_id)], order = "po_total_price_limit desc", limit=1)
 
         return ret;
 
@@ -91,12 +91,12 @@ class VystavbaCenovaPonuka(models.Model):
         data = []
         if self.cislo:
             data.append('[PSPID]'+chr(9)+self.cislo)
-        if self.pc_id.kod:
-            data.append('[WEMPF]'+chr(9)+self.pc_id.kod)
+        if self.pc_id.code:
+            data.append('[WEMPF]'+chr(9)+self.pc_id.code)
         else:
             data.append('[WEMPF]' + chr(9) + '???')
-        if self.dodavatel_id.kod:
-            data.append('[MSTRT]'+chr(9)+self.dodavatel_id.kod)
+        if self.dodavatel_id.code:
+            data.append('[MSTRT]'+chr(9)+self.dodavatel_id.code)
         if self.datum_koniec:
             dt_obj = datetime.datetime.strptime(self.datum_koniec, DEFAULT_SERVER_DATE_FORMAT)
             dt_str = datetime.date.strftime(dt_obj, '%d.%m.%Y')
@@ -126,7 +126,7 @@ class VystavbaCenovaPonuka(models.Model):
                         (   select
                                 '1T' as druh,
                          		max(p.intern_kod) as kod,
-                                sum(cena_celkom) as cislo,
+                                sum(price_celkom) as cislo,
                                 p.oddiel_id as oddiel_id,
                                 max(cpp.cenova_ponuka_id) as cenova_ponuka_id
                             from o2net_cenova_ponuka_polozka cpp
@@ -140,7 +140,7 @@ class VystavbaCenovaPonuka(models.Model):
                          	select
                          		'2A',
                          		(select atypsluzba from o2net_oddiel where id = atyp.oddiel_id),
-                         		sum(cena),
+                         		sum(price),
                           		atyp.oddiel_id,
                                 max(atyp.cenova_ponuka_id)
                             from o2net_cenova_ponuka_polozka_atyp atyp
@@ -202,20 +202,20 @@ class VystavbaCenovaPonuka(models.Model):
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         return [('id', 'in', partner_ids)]
 
-    @api.depends('cp_polozka_ids.cena_celkom','cp_polozka_balicek_ids.cena_celkom','cp_polozka_atyp_ids.cena')
+    @api.depends('cp_polozka_ids.total_price','cp_polozka_balicek_ids.total_price','cp_polozka_atyp_ids.price')
     def _compute_amount_all(self):
         for cp in self:
-            cp_celkova_cena = 0.0
+            cp_total_price = 0.0
             for line in cp.cp_polozka_ids:
-                cp_celkova_cena += line.cena_celkom
+                cp_total_price += line.total_price
 
             for line in cp.cp_polozka_balicek_ids:
-                cp_celkova_cena += line.cena_celkom
+                cp_total_price += line.total_price
 
             for lineAtyp in cp.cp_polozka_atyp_ids:
-                cp_celkova_cena += lineAtyp.cena
+                cp_total_price += lineAtyp.price
 
-            cp.update({'celkova_cena': cp_celkova_cena})
+            cp.update({'total_price': cp_total_price})
 
     @api.one
     @api.depends('dodavatel_id','osoba_priradena_ids')
@@ -287,8 +287,8 @@ class VystavbaCenovaPonuka(models.Model):
                             p.name as polozka,
                             p.mj as mj,
                             cpp.mnozstvo as pocet,
-                            cpp.cena_jednotkova as cena_jednotkova,
-                            cpp.cena_celkom as cena_celkom
+                            cpp.price_jednotkova as price_jednotkova,
+                            cpp.price_celkom as price_celkom
                     from o2net_cenova_ponuka_polozka cpp
                         join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
                         join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = false
@@ -308,7 +308,7 @@ class VystavbaCenovaPonuka(models.Model):
         query = """ select  cppa.cenova_ponuka_id as cp_id,
                             o.name as oddiel,
                             cppa.name as polozka,
-                            cppa.cena as cena_celkom
+                            cppa.price as price_celkom
                     from o2net_cenova_ponuka_polozka_atyp cppa
                     join o2net_oddiel o on cppa.oddiel_id = o.id
                     where cppa.cenova_ponuka_id = %s
@@ -328,9 +328,9 @@ class VystavbaCenovaPonuka(models.Model):
                             p.kod as kod,
                             p.name as polozka,
                             p.mj as mj,
-                            cpp.cena_jednotkova,
+                            cpp.price_jednotkova,
                             cpp.mnozstvo as pocet,
-                            cpp.cena_celkom as cena_celkom
+                            cpp.price_celkom as price_celkom
                     from o2net_cenova_ponuka_polozka_balicek cpp
                             join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
                             join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = true
@@ -344,23 +344,23 @@ class VystavbaCenovaPonuka(models.Model):
     @api.one
     def _get_price_oddiel(self, cp_id, oddiel_id):
     # -------------------------------------------------------------
-    # celkova cena pre cenovu ponuku a oddiel
+    # celkova price pre cenovu ponuku a oddiel
     # pocitaju sa polozky typove a atypove spolu podla oddielu
     # -------------------------------------------------------------
 
-        cena = 0
+        price = 0
         _logger.debug("_get_price_oddiel cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id))
 
-        query = """select sum(zdroj.cena)
+        query = """select sum(zdroj.price)
                     from
-                    (   select sum(cppa.cena) as cena
+                    (   select sum(cppa.price) as price
                         from o2net_cenova_ponuka cp
                         join o2net_cenova_ponuka_polozka_atyp cppa on cp.id = cppa.cenova_ponuka_id
                         join o2net_oddiel o on cppa.oddiel_id = o.id
                         where cp.id = %s
                         and o.id = %s
                         union all
-                        select sum(cpp.cena_celkom)
+                        select sum(cpp.price_celkom)
                         from o2net_cenova_ponuka cp
                         join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
                         join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
@@ -370,23 +370,23 @@ class VystavbaCenovaPonuka(models.Model):
                         and p.is_balicek = false ) zdroj;"""
 
         self.env.cr.execute(query, (cp_id, oddiel_id, cp_id, oddiel_id))
-        cena = self.env.cr.fetchone()[0]
-        _logger.debug("_get_price_oddiel cena=" + str(cena))
+        price = self.env.cr.fetchone()[0]
+        _logger.debug("_get_price_oddiel price=" + str(price))
 
-        return cena
+        return price
 
     @api.one
     def _get_price_oddiel_atyp(self, cp_id, oddiel_id, atyp):
     # --------------------------------------------------------------------------
-    # celkova cena pre cenovu ponuku a oddiel a typ/atyp
+    # celkova price pre cenovu ponuku a oddiel a typ/atyp
     # pocita as suma pre cp a oddiel a polozky typove resp. atypove polozky
     # --------------------------------------------------------------------------
-        cena = 0
+        price = 0
         _logger.debug("_get_price_oddiel_atyp cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id)+ " atyp=" + str(atyp))
 
         if atyp==1:
             #1 atypove polozky
-            query = """select sum(cppa.cena)
+            query = """select sum(cppa.price)
                         from o2net_cenova_ponuka cp
                         join o2net_cenova_ponuka_polozka_atyp cppa on cp.id = cppa.cenova_ponuka_id
                         join o2net_oddiel o on cppa.oddiel_id = o.id
@@ -395,10 +395,10 @@ class VystavbaCenovaPonuka(models.Model):
                             and o.id = %s;"""
 
             self.env.cr.execute(query, (cp_id, oddiel_id))
-            cena = self.env.cr.fetchone()[0]
+            price = self.env.cr.fetchone()[0]
 
         if atyp==0:
-            query = """select sum(cpp.cena_celkom)
+            query = """select sum(cpp.price_celkom)
                         from o2net_cenova_ponuka cp
                         join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
                         join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
@@ -408,20 +408,20 @@ class VystavbaCenovaPonuka(models.Model):
                         and p.is_balicek = false;"""
 
             self.env.cr.execute(query, (cp_id, oddiel_id))
-            cena = self.env.cr.fetchone()[0]
+            price = self.env.cr.fetchone()[0]
 
-        _logger.debug("_get_price_oddiel_atyp cena=" + str(cena))
-        return cena
+        _logger.debug("_get_price_oddiel_atyp price=" + str(price))
+        return price
 
     @api.one
     def _get_price_balicky(self, cp_id):
     # ---------------------------------------------
-    # celkova cena pre cenovu ponuku a balicky
+    # celkova price pre cenovu ponuku a balicky
     # ---------------------------------------------
-        cena = 0
+        price = 0
         _logger.debug("_get_price_balicky cp_id=" + str(cp_id))
 
-        query = """select sum(cpp.cena_celkom)
+        query = """select sum(cpp.price_celkom)
                     from o2net_cenova_ponuka cp
                     join o2net_cenova_ponuka_polozka_balicek cpp on cp.id = cpp.cenova_ponuka_id
                     join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
@@ -430,8 +430,8 @@ class VystavbaCenovaPonuka(models.Model):
                     and p.is_balicek = true;"""
 
         self.env.cr.execute(query, ([cp_id]))
-        cena = self.env.cr.fetchone()[0]
-        return cena
+        price = self.env.cr.fetchone()[0]
+        return price
 
     @api.one
     def _get_rows(self, cp_id):
@@ -445,10 +445,10 @@ class VystavbaCenovaPonuka(models.Model):
                             oddiel as oddiel,
                             ksz as ksz,
                             polozka as polozka,
-                            cena_jednotkova as cena_jednotkova,
+                            price_jednotkova as price_jednotkova,
                             mj as mj,
                             pocet as pocet,
-                            cena_celkom as cena_celkom,
+                            price_celkom as price_celkom,
                             cp.cislo as cislo
                             from
                             (
@@ -459,10 +459,10 @@ class VystavbaCenovaPonuka(models.Model):
                                     o.name as oddiel,
                                     p.intern_kod as ksz,
                                     p.name as polozka,
-                                    cpp.cena_jednotkova as cena_jednotkova,
+                                    cpp.price_jednotkova as price_jednotkova,
                                     p.mj as mj,
                                     cpp.mnozstvo as pocet,
-                                    cpp.cena_celkom as cena_celkom
+                                    cpp.price_celkom as price_celkom
                             from o2net_cenova_ponuka_polozka cpp
                             join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
                             join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = false
@@ -479,7 +479,7 @@ class VystavbaCenovaPonuka(models.Model):
                                     null,
                                     null,
                                     null,
-                                    cppa.cena
+                                    cppa.price
                             from o2net_cenova_ponuka_polozka_atyp cppa
                             join o2net_oddiel o on cppa.oddiel_id = o.id
                             where cppa.cenova_ponuka_id = %s
@@ -491,10 +491,10 @@ class VystavbaCenovaPonuka(models.Model):
                                     o.name,
                                     p.kod,
                                     p.name,
-                                    cpp.cena_jednotkova,
+                                    cpp.price_jednotkova,
                                     p.mj,
                                     cpp.mnozstvo,
-                                    cpp.cena_celkom
+                                    cpp.price_celkom
                             from o2net_cenova_ponuka_polozka_balicek cpp
                             join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
                             join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = true
@@ -526,13 +526,13 @@ class VystavbaCenovaPonuka(models.Model):
         _logger.debug('_get_polozka_ids')
         for record in self:
             _logger.debug('record:' + str(record))
-            record.cp_polozka_ids = self.env['o2net.cenova_ponuka.polozka'].search([('cenova_ponuka_id', '=', record.id), ('cennik_polozka_id.is_balicek', '!=', True)])
+            record.cp_polozka_ids = self.env['o2net.cenova_ponuka.polozka'].search([('price_offer_id', '=', record.id), ('pricelist_item_id.is_package', '!=', True)])
 
     def _get_cp_polozka_balicek_ids(self):
         _logger.debug('_get_polozka_balicek_ids')
         for record in self:
             _logger.debug('record:' + str(record))
-            record.cp_polozka_balicek_ids = self.env['o2net.cenova_ponuka.polozka'].search([('cenova_ponuka_id', '=', record.id), ('cennik_polozka_id.is_balicek', '=', True)])
+            record.cp_polozka_balicek_ids = self.env['o2net.cenova_ponuka.polozka'].search([('price_offer_id', '=', record.id), ('pricelist_item_id.is_package', '=', True)])
 
     def _set_polozka_ids(self):
         self.ensure_one()
@@ -564,7 +564,7 @@ class VystavbaCenovaPonuka(models.Model):
     datum_koniec = fields.Date(string="End date", copy=False);
     poznamka = fields.Text(string="Note", track_visibility='onchange', copy=False)
     wf_dovod = fields.Text(string='Workflow reason', copy=False, help='Enter workflow reason mainly for actions "Return for repair" and "Cancel"')
-    celkova_cena = fields.Float(compute=_compute_amount_all, string='Total price', store=True, digits=(10, 2), track_visibility='onchange', copy=False)
+    total_price = fields.Float(compute=_compute_amount_all, string='Total price', store=True, digits=(10, 2), track_visibility='onchange', copy=False)
     dodavatel_id = fields.Many2one('res.partner', required=True, string='Vendor', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
     pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True, default=lambda self: self._get_default_pc())
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm, copy=True)
@@ -573,12 +573,12 @@ class VystavbaCenovaPonuka(models.Model):
 
     state = fields.Selection(State, string='State', readonly=True, default='draft', track_visibility='onchange', copy=False)
     state_date = fields.Date(string="date state", default=datetime.date.today(), copy=False);
-    cennik_id = fields.Many2one('o2net.cennik', string='Price list', copy=True)
-    currency_id = fields.Many2one(related='cennik_id.currency_id', string="Currency", copy=True)
+    price_list_id = fields.Many2one('o2net.cennik', string='Price list', copy=True)
+    currency_id = fields.Many2one(related='price_list_id.currency_id', string="Currency", copy=True)
 
-    cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'cenova_ponuka_id', string='Items', track_visibility='onchange', copy=True)
-    cp_polozka_balicek_ids = fields.One2many('o2net.cenova_ponuka.polozka_balicek', 'cenova_ponuka_id', string='Packages', track_visibility='onchange', copy=True)
-    cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'cenova_ponuka_id', string='Atypical items', track_visibility='onchange', copy=True)
+    cp_polozka_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'price_offer_id', string='Items', track_visibility='onchange', copy=True)
+    cp_polozka_balicek_ids = fields.One2many('o2net.cenova_ponuka.polozka_balicek', 'price_offer_id', string='Packages', track_visibility='onchange', copy=True)
+    cp_polozka_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'price_offer_id', string='Atypical items', track_visibility='onchange', copy=True)
 
     sap_export_content = fields.Text(string="Export for SAP", default='ABCDEFGH', copy=False)
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
@@ -598,7 +598,7 @@ class VystavbaCenovaPonuka(models.Model):
                 _logger.debug("record " + str(record))
                 action_id = record[0]
                 if action_id == 0:
-                    id = record[2].get('cennik_polozka_id')
+                    id = record[2].get('pricelist_item_id')
                     name = self.env['o2net.cennik.polozka'].browse(id).name
                     msg += record_history_tmpl % ('+++', name)
                 elif action_id == 2:
@@ -655,14 +655,14 @@ class VystavbaCenovaPonuka(models.Model):
             _logger.debug(rec.name)
 
         if cennik_ids:
-            self.cennik_id = cennik_ids[0]
+            self.price_list_id = cennik_ids[0]
         else:
-            self.cennik_id = ''
+            self.price_list_id = ''
 
         # pri zmene dodavatela a tym padol aj cennika zmaz vsetky polozky
         self.cp_polozka_ids = None;
 
-        result = {'cennik_id': self.cennik_id}
+        result = {'price_list_id': self.price_list_id}
         self.write(result)
         return result
 
@@ -677,11 +677,11 @@ class VystavbaCenovaPonuka(models.Model):
             raise ValidationError("Cenová ponuka s rovnakým názvom už existuje. Prosím zvolte iný názov, ktorý bude unikátny.")
 
     # Workflow
-    # najdi partnera v skupine 'Manager', ktoreho field 'cena_na_schvalenie' je vacsia ako celkova cena CP
+    # najdi partnera v skupine 'Manager', ktoreho field 'price_na_schvalenie' je vacsia ako celkova price CP
     def _find_managers(self):
-        _logger.debug("Looking for manager to approve order of price " + str(self.celkova_cena))
+        _logger.debug("Looking for manager to approve order of price " + str(self.total_price))
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
-        manager_ids = self.env['res.partner'].search([('id', 'in', partner_ids),('cp_celkova_cena_limit', '<=', self.celkova_cena)], order = "cp_celkova_cena_limit desc")
+        manager_ids = self.env['res.partner'].search([('id', 'in', partner_ids),('po_total_price_limit', '<=', self.total_price)], order = "cp_total_price_limit desc")
 
         _logger.debug("Found managers: " + str(manager_ids.ids))
         for man in manager_ids:

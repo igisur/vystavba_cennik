@@ -18,20 +18,20 @@
                             </h1>
                         </div>
                         <group>
-                            <field name="dodavatel_id"/> <!-- musi byt firma - dodavatel -->
-                            <field name="platny_od"/>
-                            <field name="platny_do"/>
+                            <field name="vendor_id"/> <!-- musi byt firma - dodavatel -->
+                            <field name="valid_from"/>
+                            <field name="valid_to"/>
                             <field name="currency_id"/>
                         </group>
 
                         <notebook>
                             <page string="Items">
-                                <field name="cennik_polozka_ids">
+                                <field name="pricelist_item_ids">
                                     <tree string="Price list items" editable="bottom">
-                                        <field name="polozka_id" />
-                                        <field name="cena" />
-                                        <field name="mj"/>
-                                        <field name="is_balicek" readonly="True"/>
+                                        <field name="item_id" />
+                                        <field name="price" />
+                                        <field name="measure_unit"/>
+                                        <field name="is_package" readonly="True"/>
                                     </tree>
                                 </field>
                             </page>
@@ -61,16 +61,16 @@
                         </h1>
                     </div>
                     <group>
-                        <field name="kod" readonly="1"/>
-                        <field name="mj" readonly="1" string="MJ"/>
+                        <field name="code" readonly="1"/>
+                        <field name="measure_unit" readonly="1" string="Measure unit"/>
                         <field name="currency_id" invisible="1"/>
-                        <field name="cena" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+                        <field name="price" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
                     </group>
 
                     <div class="oe_clear"/>
 
-                    <label for="popis"/>
-                    <field name="popis" readonly="1"/>
+                    <label for="description"/>
+                    <field name="description" readonly="1"/>
                 </form>
             </field>
         </record>
@@ -82,10 +82,10 @@
            <field name="arch" type="xml">
                <tree>
                    <field name="name"/>
-                   <field name="kod"/>
-                   <field name="mj"/>
-                   <field name="popis"/>
-                   <field name="cena"/>
+                   <field name="code"/>
+                   <field name="measure_unit"/>
+                   <field name="description"/>
+                   <field name="price"/>
                </tree>
             </field>
        </record>
@@ -98,14 +98,14 @@
             <tree>
                 <field name="name"/>
                 <field name="description"/>
-                <field name="platny_od"/>
-                <field name="platny_do"/>
-                <field name="dodavatel_id"/>
+                <field name="valid_from"/>
+                <field name="valid_to"/>
+                <field name="vendor_id"/>
             </tree>
             </field>
        </record>
 
-       <record model="ir.actions.act_window" id="action_window_cennik_dodavatel">
+       <record model="ir.actions.act_window" id="action_window_pricelist_vendor">
            <field name="name">Vendor's price list</field>
            <field name="res_model">o2net.cennik</field>
            <field name="view_id" ref="view_tree_cennik_dodavatel"/>
@@ -113,7 +113,7 @@
            <field name="view_mode">tree,form</field>
        </record>
 
-       <record model="ir.actions.act_window" id="action_window_cennik_cennik">
+       <record model="ir.actions.act_window" id="action_window_pricelist_pricelist">
            <field name="name">Vendor's price list</field>
            <field name="res_model">o2net.cennik.polozka</field>
            <field name="view_id" ref="view_tree_cennik_polozky"/>
@@ -121,23 +121,23 @@
            <field name="view_mode">tree</field>
        </record>
 
-       <menuitem id="menu_cennik_root"
+       <menuitem id="menu_pricelist_root"
                 name="Price list"
                 sequence="30"
                 parent="menu_root"
                 groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
 
-       <menuitem id="menu_cennik"
+       <menuitem id="menu_pricelist_vendor"
                  name="Vendor"
-                 parent="menu_cennik_root"
+                 parent="menu_pricelist_root"
                  sequence="31"
-                 action="action_window_cennik_dodavatel"/>
+                 action="action_window_pricelist_vendor"/>
 
-       <menuitem id="menu_cennik_cennik"
+       <menuitem id="menu_pricelist_pricelist"
                  name="Price list"
-                 parent="menu_cennik_root"
+                 parent="menu_pricelist_root"
                  sequence="32"
-                 action="action_window_cennik_cennik"
+                 action="action_window_pricelist_pricelist"
                  groups="o2net.group_vystavba_admin"/>
     </data>
 </openerp>

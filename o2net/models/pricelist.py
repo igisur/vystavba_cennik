@@ -10,12 +10,12 @@ class VystavbaCennik(models.Model):
 
     name = fields.Char(required=True, string="Code", size=30, help="Price list code")
     description = fields.Text(string="Description")
-    platny_od = fields.Date(string="Valid from", required=True)
-    platny_do = fields.Date(string="Valid to", required=True)
-    dodavatel_id = fields.Many2one('res.partner', string='Vendor', required=True)
+    valid_from = fields.Date(string="Valid from", required=True)
+    valid_to = fields.Date(string="Valid to", required=True)
+    vendor_id = fields.Many2one('res.partner', string='Vendor', required=True)
     currency_id = fields.Many2one('res.currency', string="Currency", required=True)
 
-    cennik_polozka_ids = fields.One2many('o2net.cennik.polozka', 'cennik_id', string='Items', copy=True)
+    pricelist_item_ids = fields.One2many('o2net.cennik.polozka', 'price_list_id', string='Items', copy=True)
 
     @api.constrains('name')
     def _check_unique_constraint(self):

@@ -15,16 +15,16 @@
                         </h1>
                     </div>
                     <group>
-                        <field name="kod" readonly="1"/>
-                        <field name="polozka_mj" readonly="1" string="Measure unit"/>
+                        <field name="code" readonly="1"/>
+                        <field name="item_measure_unit" readonly="1" string="Measure unit"/>
                         <field name="currency_id" invisible="1"/>
-                        <field name="cena_jednotkova" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+                        <field name="unit_price" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
                     </group>
 
                     <div class="oe_clear"/>
 
-                    <label for="polozka_popis"/>
-                    <field name="polozka_popis" readonly="1"/>
+                    <label for="item_description"/>
+                    <field name="item_description" readonly="1"/>
                 </form>
             </field>
         </record>
@@ -77,7 +77,7 @@
                                 <!--<field name="osoba_priradena_id" readonly="True"/>-->
                                 <field name="manager_ids" readonly="True" options="{'no_create': True}" widget="many2many_tags"/>
                                 <field name="osoba_priradena_ids" readonly="True" options="{'no_create_edit': True}" widget="many2many_tags"/>
-                                <field name="cennik_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" class="oe_read_only"/>
+                                <field name="price_list_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" class="oe_read_only"/>
                                 <field name="currency_id" invisible="1" class="oe_read_only"/>
                             </group>
 
@@ -87,33 +87,31 @@
                             <page string="Items">
                                 <field name="cp_polozka_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Price list items" editable="bottom">
-                                        <!--<field name="cennik_polozka_id" string="Položky" options="{'no_create': True}"/>-->
-                                        <field name="cennik_polozka_id" string="Items" options="{'no_create': True}" domain="[('polozka_id.is_balicek','!=','True')]"/>
-                                        <field name="polozka_mj" readonly="1" string="Measure unit"/>
-                                        <field name="cena_jednotkova" string="Unit price"/>
-                                        <field name="mnozstvo"  string="Quantity"/>
-                                        <field name="cena_celkom" string="Total price"/>
+                                        <field name="pricelist_item_id" string="Items" options="{'no_create': True}" domain="[('polozka_id.is_package','!=','True')]"/>
+                                        <field name="item_measure_unit" readonly="1" string="Measure unit"/>
+                                        <field name="unit_price" string="Unit price"/>
+                                        <field name="quantity"  string="Quantity"/>
+                                        <field name="total_price" string="Total price"/>
                                     </tree>
                                 </field>
                             </page>
                             <page string="Packages">
                                 <field name="cp_polozka_balicek_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Packages" editable="bottom">
-                                        <!--<field name="cennik_polozka_id" string="Balíčky" options="{'no_create': True}"/>-->
-                                        <field name="cennik_polozka_id" string="Packages" options="{'no_create': True}" domain="[('polozka_id.is_balicek','=','True')]"/>
-                                        <field name="polozka_mj" readonly="1" string="Measure unit"/>
-                                        <field name="cena_jednotkova"/>
-                                        <field name="mnozstvo"  string="Quantity"/>
-                                        <field name="cena_celkom" string="Total price"/>
+                                        <field name="pricelist_item_id" string="Packages" options="{'no_create': True}" domain="[('polozka_id.is_package','=','True')]"/>
+                                        <field name="item_measure_unit" readonly="1" string="Measure unit"/>
+                                        <field name="unit_price"/>
+                                        <field name="quantity"  string="Quantity"/>
+                                        <field name="total_price" string="Total price"/>
                                     </tree>
                                 </field>
                             </page>
                             <page string="Atypical items" attrs="{'readonly':[('state','in',['approved'])]}">
                                 <field name="cp_polozka_atyp_ids">
                                     <tree string="Atypical items" editable="bottom">
-                                        <field name="oddiel_id" string="Section" options="{'no_create': True}"/>
+                                        <field name="section_id" string="Section" options="{'no_create': True}"/>
                                         <field name="name"  string="Item"/>
-                                        <field name="cena" string="Price"/>
+                                        <field name="price" string="Price"/>
                                     </tree>
                                 </field>
                             </page>
@@ -121,9 +119,9 @@
 
                         <group class="oe_subtotal_footer oe_right">
                             <div class="oe_subtotal_footer_separator oe_inline">
-                                <label for="celkova_cena"/>
+                                <label for="total_price"/>
                             </div>
-                            <field name="celkova_cena" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="total_price" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         </group>
                         <div class="oe_clear"/>
 
@@ -157,7 +155,7 @@
                     <field name="datum_zaciatok"/>
                     <field name="datum_koniec"/>
                     <field name="currency_id" invisible="1"/>
-                    <field name="celkova_cena" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="total_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                     <field name="dodavatel_id"/>
                     <field name="osoba_priradena_ids" string="Assigned" widget="one2many_list"/>
                 </tree>
@@ -200,7 +198,7 @@
                     <field name="datum_zaciatok" string="Start date"/>
                     <field name="datum_koniec" string="End date"/>
                     <field name="currency_id" invisible="1"/>
-                    <field name="celkova_cena"  string="Price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="total_price"  string="Price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                     <field name="dodavatel_id"/>
                     <field name="osoba_priradena_ids" string="Assigned" widget="one2many_list"/>
                 </tree>

@@ -9,28 +9,28 @@ class VystavbaCenovaPonukaPolozka(models.Model):
     _name = 'o2net.cenova_ponuka.polozka'
     _description = "o2net - price offer item"
 
-    @api.depends('cena_jednotkova', 'mnozstvo')
-    def _compute_cena_celkom(self):
-        _logger.info("_compute_cena_celkom: " + str(len(self)))
+    @api.depends('unit_price', 'quantity')
+    def _compute_total_price(self):
+        _logger.info("_compute_total_price: " + str(len(self)))
         for line in self:
-            if line.mnozstvo:
-                line.cena_celkom = line.cena_jednotkova * line.mnozstvo
+            if line.quantity:
+                line.total_price = line.unit_price * line.quantity
 
-    @api.depends('cennik_polozka_id')
-    def _compute_cena_jednotkova(self):
-        _logger.info("_compute_cena_jednotkova: " + str(len(self)))
+    @api.depends('pricelist_item_id')
+    def _compute_unit_price(self):
+        _logger.info("_compute_unit_price: " + str(len(self)))
         for line in self:
-            line.cena_jednotkova = line.cennik_polozka_id.cena
+            line.unit_price = line.cennik_polozka_id.price
 
-    cena_jednotkova = fields.Float(compute=_compute_cena_jednotkova, string='Unit price', store=True, digits=(10, 2))
-    cena_celkom = fields.Float(compute=_compute_cena_celkom, string='Total price', store=True, digits=(10,2))
-    mnozstvo = fields.Float(string='Quantity', digits=(5,2), required=True)
-    cenova_ponuka_id = fields.Many2one('o2net.cenova_ponuka', string='Price offer', required=True, ondelete='cascade')
-    cennik_polozka_id = fields.Many2one('o2net.cennik.polozka', string='Price list item', required=True, domain="[('cennik_id', '=', parent.cennik_id)]")
-    polozka_mj = fields.Selection(related='cennik_polozka_id.mj', string='Measure unit', stored=False)
-    polozka_popis = fields.Text(related='cennik_polozka_id.popis', string='Description', stored=False)
-    polozka_isbalicek = fields.Boolean(related='cennik_polozka_id.is_balicek', string='Package', stored=True)
-    name = fields.Char(related='cennik_polozka_id.name', string='Name')
-    kod = fields.Char(related='cennik_polozka_id.kod', string='Code')
-    currency_id = fields.Many2one(related='cenova_ponuka_id.currency_id', string="Currency")
+    unit_price = fields.Float(compute=_compute_unit_price, string='Unit price', store=True, digits=(10, 2))
+    total_price = fields.Float(compute=_compute_total_price, string='Total price', store=True, digits=(10,2))
+    quantity = fields.Float(string='Quantity', digits=(5,2), required=True)
+    price_offer_id = fields.Many2one('o2net.cenova_ponuka', string='Price offer', required=True, ondelete='cascade')
+    pricelist_item_id = fields.Many2one('o2net.cennik.polozka', string='Price list item', required=True, domain="[('price_list_id', '=', parent.price_list_id)]")
+    item_measure_unit = fields.Selection(related='pricelist_item_id.measure_unit', string='Measure unit', stored=False)
+    item_description = fields.Text(related='pricelist_item_id.description', string='Description', stored=False)
+    item_is_package = fields.Boolean(related='pricelist_item_id.is_package', string='Package', stored=True)
+    name = fields.Char(related='pricelist_item_id.name', string='Name')
+    code = fields.Char(related='pricelist_item_id.code', string='Code')
+    currency_id = fields.Many2one(related='pricelist_item_id.currency_id', string="Currency")
 

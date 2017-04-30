@@ -24,14 +24,14 @@
                         <field name="name"/>
                         <label for="description" string="Description"/>
                         <field name="description"/>
-                        <label for="atypsluzba" string="KSZ"/>
-                        <field name="atypsluzba"/>
+                        <label for="atypservice" string="KSZ"/>
+                        <field name="atypservice"/>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="action_window_oddiel">
+        <record model="ir.actions.act_window" id="action_window_section">
             <field name="name">Package</field>
             <field name="res_model">o2net.oddiel</field>
             <field name="view_id" ref="view_tree_oddiel"/>
@@ -44,10 +44,10 @@
         </record>
 
         <!-- Menu item to open To-do Task list -->
-        <menuitem id="menu_oddiel"
+        <menuitem id="menu_section"
             name="Package"
-            parent="menu_cennik_root"
+            parent="menu_pricelist_root"
             sequence="50"
-            action="action_window_oddiel"/>
+            action="action_window_section"/>
         </data>
 </openerp>

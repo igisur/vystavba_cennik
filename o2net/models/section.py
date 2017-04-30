@@ -8,5 +8,5 @@ class VystavbaOddiel(models.Model):
 
     name = fields.Char(required=True, string="Code", size=30, help="Code")
     description = fields.Text(string="Description")
-    atypsluzba = fields.Char(string="KSZ", size=30)
+    atypservice = fields.Char(string="KSZ", size=30)
 

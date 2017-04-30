@@ -16,14 +16,14 @@
                             </h1>
                         </div>
                         <group>
-                            <field name="oddiel_id"/>
-                            <field name="kod"/>
-                            <field name="intern_kod"/>
+                            <field name="section_id"/>
+                            <field name="code"/>
+                            <field name="intern_code"/>
                             <field name="intern_id"/>
-                            <field name="mj"/>
+                            <field name="measure_unit"/>
                         </group>
                         <group>
-                            <field name="is_balicek" string="Package"/>
+                            <field name="is_package" string="Package"/>
                         </group>
                         <label for="description"/>
                         <field name="description"/>
@@ -44,48 +44,48 @@
             <tree string="Item">
                 <field name="id"/>
                 <field name="intern_id"/>
-                <field name="kod"/>
+                <field name="code"/>
                 <field name="name"/>
                 <field name="description"/>
-                <field name="mj" string="MJ"/>
-                <field name="intern_kod"/>
+                <field name="measure_unit" string="Measure unit"/>
+                <field name="intern_code"/>
             </tree>
             </field>
        </record>
 
-       <record model="ir.actions.act_window" id="action_window_balicek">
+       <record model="ir.actions.act_window" id="action_window_packages">
            <field name="name">Packages</field>
            <field name="res_model">o2net.polozka</field>
            <field name="view_id" ref="view_tree_polozka"/>
            <field name="view_type">form</field>
            <field name="view_mode">tree,form</field>
-           <field name="domain"> [('is_balicek','=','True')]</field>
+           <field name="domain"> [('is_package','=','True')]</field>
            <field name="help" type="html">
                <p class="oe_view_nocontent_create">Click to create a new package.</p>
                <p>Here is the list of price lists's packages.</p>
            </field>
         </record>
 
-       <record model="ir.actions.act_window" id="action_window_polozka">
+       <record model="ir.actions.act_window" id="action_window_items">
            <field name="name">Items</field>
            <field name="res_model">o2net.polozka</field>
            <field name="view_id" ref="view_tree_polozka"/>
            <field name="view_type">form</field>
            <field name="view_mode">tree,form</field>
-           <field name="domain"> [('is_balicek','!=','True')]</field>
+           <field name="domain"> [('is_package','!=','True')]</field>
        </record>
 
-        <menuitem id="menu_balicek"
+        <menuitem id="menu_packages"
                   name="Packages"
                   sequence="40"
-                  parent="menu_cennik_root"
-                  action="action_window_balicek"/>
+                  parent="menu_pricelist_root"
+                  action="action_window_packages"/>
 
-        <menuitem id="menu_polozka"
+        <menuitem id="menu_items"
                   name="Items"
                   sequence="41"
-                  parent="menu_cennik_root"
-                  action="action_window_polozka"/>
+                  parent="menu_pricelist_root"
+                  action="action_window_items"/>
 
     </data>
 </openerp>
