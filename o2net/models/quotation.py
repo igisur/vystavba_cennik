@@ -338,14 +338,14 @@ class Quotation(models.Model):
         return data
 
     @api.one
-    def _get_price_oddiel(self, cp_id, oddiel_id):
+    def _get_price_section(self, quotation_id, section_id):
     # -------------------------------------------------------------
     # celkova price pre cenovu ponuku a oddiel
     # pocitaju sa polozky typove a atypove spolu podla oddielu
     # -------------------------------------------------------------
 
         price = 0
-        _logger.debug("_get_price_oddiel cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id))
+        _logger.debug("_get_price_oddiel cp_id=" + str(quotation_id) + " oodiel_id=" + str(section_id))
 
         query = """select sum(zdroj.price)
                     from
@@ -365,7 +365,7 @@ class Quotation(models.Model):
                         and p.oddiel_id = %s
                         and p.is_balicek = false ) zdroj;"""
 
-        self.env.cr.execute(query, (cp_id, oddiel_id, cp_id, oddiel_id))
+        self.env.cr.execute(query, (quotation_id, section_id, quotation_id, section_id))
         price = self.env.cr.fetchone()[0]
         _logger.debug("_get_price_oddiel price=" + str(price))
 

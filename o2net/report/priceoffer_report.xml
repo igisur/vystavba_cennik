@@ -2,9 +2,9 @@
 <openerp>
     <data>
 
-        <template id="report_quotation_pdf_document_oddiel">
+        <template id="report_quotation_pdf_document_section">
             <t t-call="report.internal_layout">
-                <t t-set="o" t-value="oddiel" />
+                <t t-set="o" t-value="section" />
                 <div class="page">
                     <h2>sub page Cenova ponuka</h2>
                     <h1>sub page IDecko</h1>
@@ -62,46 +62,22 @@
                         </div>
                     </div>
 
-                    <!--<div class="hlavicka">
-                        <div class="row1">
-                            <p t-if="d.name">Názov: <h3><span t-field="d.name"/></h3></p>
-                        </div>
-                        <div class="row2">
-                            <td t-if="d.financny_kod">Finančný kód: <strong><span t-field="d.financny_kod"/></strong></td>
-                            <td t-if="d.shortname">Skratka: <strong><span t-field="d.shortname"/></strong></td>
-                            <td t-if="d.project_number">Číslo projektu PSID: <strong><span t-field="d.project_number"/></strong></td>
-                        </div>
-                        <div class="row3">
-                            <td t-if="d.pc_id.name">PC: <strong><span t-field="d.pc_id.name"/></strong></td>
-                            <td t-if="d.pm_id.name">PM: <strong><span t-field="d.pm_id.name"/></strong></td>
-                        </div>
-                        <div class="row4">
-                            <td t-if="d.datum_zaciatok">Dátum zahájenia: <strong><span t-field="d.datum_zaciatok"/></strong></td>
-                            <td t-if="d.datum_koniec">Dátum ukončenia: <strong><span t-field="d.datum_koniec"/></strong></td>
-                        </div>
-                        <div class="row5">
-                            <p t-if="d.note">Poznámka: <strong><span t-field="d.note"/></strong></p>
-                        </div>
-                        <div class="row6">
-                            <p t-if="d.celkova_cena">Celková cena: <h4><span t-field="d.celkova_cena"/></h4></p>
-                        </div>
-                    </div>-->
                     <t t-set="rows" t-value="d._get_section(d.id)"/>
-                    <t t-set="oddiels" t-value="d._get_section(d.id)"/>
+                    <t t-set="sections" t-value="d._get_section(d.id)"/>
                     <section>
                         <h3>MONTAGE</h3>
-                        <t t-foreach="oddiels[0]" t-as="oddiel">
+                        <t t-foreach="sections[0]" t-as="section">
                             <div>
                                 <table width="100%" style="margin-top:20px;margin-bottom:20px">
                                     <tr>
-                                        <td style="font-size:18px;width:50%;" t-esc="oddiel['oddiel']"/>
-                                        <td style="font-size:18px;width:50%;text-align:right;" t-esc="d._get_price_oddiel(d.id, oddiel['id'])[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/>
+                                        <td style="font-size:18px;width:50%;" t-esc="section['section']"/>
+                                        <td style="font-size:18px;width:50%;text-align:right;" t-esc="d._get_price_section(d.id, section['id'])[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/>
                                     </tr>
                                 </table>
                                 <table>
                                     <tr>
                                         <table width="100%">
-                                            <t t-set="rowstyp" t-value="d._get_rows_section_typ(d.id,oddiel['id'])"/>
+                                            <t t-set="rowstyp" t-value="d._get_rows_section_typ(d.id,section['id'])"/>
                                             <t t-set="index" t-value="0"/>
                                             <tr t-foreach="rowstyp[0]" t-as="rowtyp">
                                                 <td>
