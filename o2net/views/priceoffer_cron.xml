@@ -10,7 +10,7 @@
             <field name="interval_type">minutes</field>
             <field name="numbercall">-1</field>
             <field name="doall" eval="False"/>
-            <field name="model" eval="'o2net.cenova_ponuka'"/>
+            <field name="model" eval="'o2net.quotation'"/>
             <field name="function" eval="'do_check_approve'"/>
             <field name="args" eval="'()'"/>
         </record>

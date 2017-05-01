@@ -2,15 +2,15 @@
 
 from openerp import models, fields, api
 
-class VystavbaPolozka(models.Model):
-    _name = 'o2net.polozka'
+class o2netProduct(models.Model):
+    _name = 'o2net.product'
     _description = "o2net - item"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     name = fields.Char(required=True, string="Name", size=1000)
     code = fields.Char(required=True, string="Code", size=30)
     description = fields.Text(string="Description", size=2000, default="")
-    section_id = fields.Many2one('o2net.oddiel', string='Section', required=False)
+    section_id = fields.Many2one('o2net.section', string='Section', required=False)
     unit_of_measure = fields.Selection([
         ('_', 'Not given'),
         ('kg', 'Kilogram'),

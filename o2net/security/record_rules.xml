@@ -6,7 +6,7 @@
         <!-- Supplier -->
         <record model="ir.rule" id="rule_supplier_read">
             <field name="name">supplier can read purchase order where is supplier</field>
-            <field name="model_id" ref="model_o2net_cenova_ponuka"/>
+            <field name="model_id" ref="model_o2net_quotation"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_supplier'))]"/>
             <field name="domain_force">[('vendor_id.id','=',user.partner_id.id)]</field>
             <field name="perm_read" eval="True"/>
@@ -17,7 +17,7 @@
 
         <record model="ir.rule" id="rule_supplier_write">
             <field name="name">supplier can write purchase order where is assigned</field>
-            <field name="model_id" ref="model_o2net_cenova_ponuka"/>
+            <field name="model_id" ref="model_o2net_quotation"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_supplier'))]"/>
             <field name="domain_force">[('assigned_persons_ids', 'in', [user.partner_id.id])]</field>
             <field name="perm_read" eval="False"/>
@@ -30,7 +30,7 @@
         <!-- Project coordinator (PC) -->
         <record model="ir.rule" id="rule_pc_read">
             <field name="name">project coordinator can read purchase order where is PC</field>
-            <field name="model_id" ref="model_o2net_cenova_ponuka"/>
+            <field name="model_id" ref="model_o2net_quotation"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_pc'))]"/>
             <field name="domain_force">[('pc_id.id','=',user.partner_id.id)]</field>
             <field name="perm_read" eval="True"/>
@@ -41,7 +41,7 @@
 
         <record model="ir.rule" id="rule_pc_write">
             <field name="name">project coordinator can write/unlink purchase order where is assigned</field>
-            <field name="model_id" ref="model_o2net_cenova_ponuka"/>
+            <field name="model_id" ref="model_o2net_quotation"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_pc'))]"/>
             <field name="domain_force">[('assigned_persons_ids', 'in', [user.partner_id.id])]</field>
             <field name="perm_read" eval="False"/>
@@ -54,7 +54,7 @@
         <!-- Project manager (PM) -->
         <record model="ir.rule" id="rule_pm_read">
             <field name="name">project manager can read purchase order where is PM</field>
-            <field name="model_id" ref="model_o2net_cenova_ponuka"/>
+            <field name="model_id" ref="model_o2net_quotation"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_pm'))]"/>
             <field name="domain_force">[('pm_id.id','=',user.partner_id.id)]</field>
             <field name="perm_read" eval="True"/>
@@ -65,7 +65,7 @@
 
         <record model="ir.rule" id="rule_pm_write">
             <field name="name">project manager can read purchase order where is assigned</field>
-            <field name="model_id" ref="model_o2net_cenova_ponuka"/>
+            <field name="model_id" ref="model_o2net_quotation"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_pm'))]"/>
             <field name="domain_force">[('assigned_persons_ids', 'in', [user.partner_id.id])]</field>
             <field name="perm_read" eval="False"/>
@@ -78,7 +78,7 @@
         <!-- Manager -->
         <record model="ir.rule" id="rule_manager_read">
             <field name="name">manager can read purchase order where is Manager</field>
-            <field name="model_id" ref="model_o2net_cenova_ponuka"/>
+            <field name="model_id" ref="model_o2net_quotation"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_manager'))]"/>
             <field name="domain_force">[('manager_id.id','=',user.partner_id.id)]</field>
             <field name="perm_read" eval="True"/>
@@ -89,7 +89,7 @@
 
         <record model="ir.rule" id="rule_manager_write">
             <field name="name">manager can read purchase order where is assigned</field>
-            <field name="model_id" ref="model_o2net_cenova_ponuka"/>
+            <field name="model_id" ref="model_o2net_quotation"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_manager'))]"/>
             <field name="domain_force">[('assigned_persons_ids', 'in', [user.partner_id.id])]</field>
             <field name="perm_read" eval="False"/>

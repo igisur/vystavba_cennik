@@ -2,8 +2,8 @@
 
 from openerp import models, fields, api
 
-class VystavbaOddiel(models.Model):
-    _name = 'o2net.oddiel'
+class o2netSection(models.Model):
+    _name = 'o2net.section'
     _description = "o2net - section"
 
     name = fields.Char(required=True, string="Code", size=30, help="Code")

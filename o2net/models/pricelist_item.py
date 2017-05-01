@@ -2,12 +2,12 @@
 
 from openerp import models, fields, api
 
-class VystavbaCennikPolozka(models.Model):
-    _name = 'o2net.cennik.polozka'
+class o2netPricelistItem(models.Model):
+    _name = 'o2net.pricelist.item'
     _description = "o2net - price list item"
 
-    price_list_id = fields.Many2one('o2net.cennik', string='Price list', required=True, ondelete='cascade')
-    item_id = fields.Many2one('o2net.polozka', string='Item', required=True)
+    price_list_id = fields.Many2one('o2net.pricelist', string='Price list', required=True, ondelete='cascade')
+    item_id = fields.Many2one('o2net.product', string='Item', required=True)
     price = fields.Float(required=True, digits=(10, 2), string="Price")
 
     name = fields.Char(related='item_id.name', string='Name')

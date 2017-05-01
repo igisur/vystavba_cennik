@@ -3,8 +3,8 @@
 from openerp import models, fields, api
 from openerp.exceptions import UserError, AccessError, ValidationError
 
-class VystavbaCennik(models.Model):
-    _name = 'o2net.cennik'
+class o2netPricelist(models.Model):
+    _name = 'o2net.pricelist'
     _description = "o2net - price list"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
@@ -15,7 +15,7 @@ class VystavbaCennik(models.Model):
     vendor_id = fields.Many2one('res.partner', string='Vendor', required=True)
     currency_id = fields.Many2one('res.currency', string="Currency", required=True)
 
-    pricelist_item_ids = fields.One2many('o2net.cennik.polozka', 'price_list_id', string='Items', copy=True)
+    pricelist_item_ids = fields.One2many('o2net.pricelist.item', 'price_list_id', string='Items', copy=True)
 
     @api.constrains('name')
     def _check_unique_constraint(self):

@@ -4,7 +4,7 @@
 
         <record id="cp_workflow" model="workflow">
             <field name="name">cenova_ponuka_workflow</field>
-            <field name="osv">o2net.cenova_ponuka</field>
+            <field name="osv">o2net.quotation</field>
             <field name="on_create">True</field>
         </record>
 

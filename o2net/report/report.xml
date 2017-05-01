@@ -3,7 +3,7 @@
     <!-- report's id is used in mail_template.xml -->
     <report
             id="report_cenova_ponuka"
-            model = "o2net.cenova_ponuka"
+            model = "o2net.quotation"
             string="Cenova ponuka (PDF)"
             name="o2net.report_cenova_ponuka_pdf"
             file="report_cenova_ponuka"

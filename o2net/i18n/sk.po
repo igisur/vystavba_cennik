@@ -25,7 +25,7 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            ${ctx.get('manager_name')} has approved price offer <a href=\"${object.base_url}\">"
+"            ${ctx.get('manager_name')} has approved Quotation <a href=\"${object.base_url}\">"
 "${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</"
 "a><br/>\n"
 "            </p>\n"
@@ -56,7 +56,7 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/"
+"            Quotation <a href=\"${object.base_url}\">${object.name}/${object.skratka}/"
 "${object.financny_kod} (${object.vendor_id.display_name})</a> has been canceled.<br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
@@ -85,7 +85,7 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Price offer <a href=\"${object.base_url}\">${object.name}/${object.skratka}/"
+"            Quotation <a href=\"${object.base_url}\">${object.name}/${object.skratka}/"
 "${object.financny_kod} (${object.vendor_id.display_name})</a> is approved.<br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
@@ -114,7 +114,7 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Vendor \"${object.vendor_id.display_name}\" has unfinished price offer <a href="
+"            Vendor \"${object.vendor_id.display_name}\" has unfinished Quotation <a href="
 "\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object."
 "vendor_id.display_name})</a><br/>\n"
 "            </p>\n"
@@ -145,7 +145,7 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Warning awaiting approval for price offer <a href=\"${object.base_url}\">${object."
+"            Warning awaiting approval for Quotation <a href=\"${object.base_url}\">${object."
 "name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
@@ -174,7 +174,7 @@ msgid ""
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            You've been assigned to price offer <a href=\"${object.base_url}\">${object.name}/"
+"            You've been assigned to Quotation <a href=\"${object.base_url}\">${object.name}/"
 "${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
@@ -255,7 +255,7 @@ msgstr "Schválené"
 
 #. module: o2net
 #: model:ir.actions.act_window,name:o2net.action_window_cp_approved
-msgid "Approved price offers"
+msgid "Approved Quotations"
 msgstr "Schválené cenové ponuky"
 
 #. module: o2net
@@ -279,7 +279,7 @@ msgstr "Priradená osoba"
 
 #. module: o2net
 #: model:ir.actions.act_window,name:o2net.action_window_cp_assigned
-msgid "Assigned price offers"
+msgid "Assigned Quotations"
 msgstr "Priradené cenové ponuky"
 
 #. module: o2net
@@ -311,7 +311,7 @@ msgstr "Zrušené"
 
 #. module: o2net
 #: model:ir.actions.act_window,name:o2net.action_window_cp_cancel
-msgid "Canceled price offers"
+msgid "Canceled Quotations"
 msgstr "Zrušené cenové ponuky"
 
 #. module: o2net
@@ -326,7 +326,7 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_draft
-msgid "Click here for establishment of new price offer header."
+msgid "Click here for establishment of new Quotation header."
 msgstr "Sem kliknite pre založenie hlavičky cenovej ponuky."
 
 #. module: o2net
@@ -491,24 +491,24 @@ msgstr "Zoznam balíčkov cenovej ponuky"
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_preview
-msgid "Here you can find all price offers, which are assigned to you or you are thier vendor."
+msgid "Here you can find all Quotations, which are assigned to you or you are thier vendor."
 msgstr "Tu nájdete schválené cenové ponuky, ktoré vám boli priradené alebo ste ich dodávateľ."
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_approved
 msgid ""
-"Here you can find approved price offers, which are assigned to you or you are thier vendor."
+"Here you can find approved Quotations, which are assigned to you or you are thier vendor."
 msgstr "Tu nájdete schválené cenové ponuky, ktoré sú vám priradené alebo ste ich dodávateľ."
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_cancel
 msgid ""
-"Here you can find canceled price offers, which are assigned to you or you are thier vendor."
+"Here you can find canceled Quotations, which are assigned to you or you are thier vendor."
 msgstr "Tu nájdete zrušené cenové ponuky, ktoré vám boli priradené alebo ste ich dodávateľ."
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_draft
-msgid "Here you can find founded price offers."
+msgid "Here you can find founded Quotations."
 msgstr "Tu nájdete založené cenové ponuky."
 
 #. module: o2net
@@ -518,18 +518,18 @@ msgstr "Tu nájdete zoznam oddielov."
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_assigned
-msgid "Here you can find price offers assigned to vendor."
+msgid "Here you can find Quotations assigned to vendor."
 msgstr "Tu nájdete cenové ponuky, ktoré sú priradené na dodávateľa."
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_in_progress
-msgid "Here you can find price offers in progress, where you are the vendor."
+msgid "Here you can find Quotations in progress, where you are the vendor."
 msgstr "Tu nájdete rozpracované cenové ponuky, kde ste ich dodávateľ."
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_cp_to_approve
 msgid ""
-"Here you can find price offers waiting for approval, which are assigned to you or you are "
+"Here you can find Quotations waiting for approval, which are assigned to you or you are "
 "thier vendor."
 msgstr ""
 "Tu nájdete cenové ponuky čakajúce na schválenie, ktoré sú vám priradené alebo ste ich "
@@ -568,7 +568,7 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,help:o2net.field_res_partner_cp_celkova_cena_limit
-msgid "In case the price limit is exceeded, price offer must be approved by a given person"
+msgid "In case the price limit is exceeded, Quotation must be approved by a given person"
 msgstr ""
 
 #. module: o2net
@@ -792,7 +792,7 @@ msgstr "Prehľad"
 
 #. module: o2net
 #: model:ir.actions.act_window,name:o2net.action_window_cp_preview
-msgid "Overview price offers"
+msgid "Overview Quotations"
 msgstr "Prehľad cenových ponúk"
 
 #. module: o2net
@@ -855,7 +855,7 @@ msgstr "Partneri"
 #. module: o2net
 #: model:ir.actions.act_window,name:o2net.act_res_partner_vystavba
 msgid "Person"
-msgstr "Osoba"
+msgstr "Partner"
 
 #. module: o2net
 #: selection:o2net.polozka,mj:0
@@ -913,7 +913,7 @@ msgstr "Cenník s rovnakým názvom už existuje. Prosím zvoľte iný názov, k
 #: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_root
 #: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
 #: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka
-msgid "Price offer"
+msgid "Quotation"
 msgstr "Cenová ponuka"
 
 #. module: o2net
@@ -923,36 +923,36 @@ msgstr "Cenová ponuka"
 #: model:mail.template,subject:o2net.mail_cp_in_progress
 #: model:mail.template,subject:o2net.mail_cp_manager_approved
 msgid ""
-"Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id."
+"Quotation ${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id."
 "display_name})"
 msgstr ""
 
 #. module: o2net
 #: model:mail.template,subject:o2net.mail_manager_warning
 msgid ""
-"Price offer ${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id."
+"Quotation ${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id."
 "display_name}) is awaiting approval"
 msgstr ""
 
 #. module: o2net
 #: code:addons/o2net/models/cenova_ponuka.py:742
 #, python-format
-msgid "Price offer does not have vendor assigned"
+msgid "Quotation does not have vendor assigned"
 msgstr "Cenová ponuka nemá priradeného dodávateľa"
 
 #. module: o2net
 #: model:ir.actions.act_window,name:o2net.action_window_cp_draft
-msgid "Price offer draft"
+msgid "Quotation draft"
 msgstr "Návrh cenovej ponuky"
 
 #. module: o2net
 #: model:ir.actions.act_window,name:o2net.action_window_cp_in_progress
-msgid "Price offers in progres"
+msgid "Quotations in progres"
 msgstr "Rozpracované cenové ponuky"
 
 #. module: o2net
 #: model:ir.actions.act_window,name:o2net.action_window_cp_to_approve
-msgid "Price offers waiting for approval"
+msgid "Quotations waiting for approval"
 msgstr "Cenové ponuky čakajúce na schválenie"
 
 #. module: o2net

@@ -3,8 +3,8 @@
     <data>
 
         <record model="ir.ui.view" id="view_form_cenova_ponuka_polozka">
-            <field name="name">Price offer item</field>
-            <field name="model">o2net.cenova_ponuka.polozka</field>
+            <field name="name">Quotation item</field>
+            <field name="model">o2net.quotation.item</field>
             <field name="priority" eval="5"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -31,8 +31,8 @@
 
         <!-- VIEWS -->
         <record model="ir.ui.view" id="view_form_cenova_ponuka">
-            <field name="name">Price offer</field>
-            <field name="model">o2net.cenova_ponuka</field>
+            <field name="name">Quotation</field>
+            <field name="model">o2net.quotation</field>
             <field name="priority" eval="5"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -53,7 +53,7 @@
                         </div>
                         <div class="oe_title">
                             <h1>
-                                <label string="Price offer"/>
+                                <label string="Quotation"/>
                                 <field name="id" invisible="True"/>
                                 <field name="name" attrs="{'readonly':[('state','in',['approved'])]}"/>
                                 <field name="ro_datumoddo" invisible="True"/>
@@ -142,13 +142,13 @@
         <!-- zobrazenie pre vsetky stavy okrem 'draft'
         -->
         <record model="ir.ui.view" id="view_tree_cenova_ponuka">
-            <field name="name">Price offer</field>
-            <field name="model">o2net.cenova_ponuka</field>
+            <field name="name">Quotation</field>
+            <field name="model">o2net.quotation</field>
             <field name="priority" eval="5"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
 
-                <tree string="Price offer" edit="false" create="false" delete="false">
+                <tree string="Quotation" edit="false" create="false" delete="false">
                     <field name="name"/>
                     <field name="project_number"/>
                     <field name="financial_code"/>
@@ -166,8 +166,8 @@
             nepotrebujeme: priradenu osobu, celkovu cenu
         -->
         <record model="ir.ui.view" id="view_tree_cenova_ponuka_draft">
-            <field name="name">Price offer</field>
-            <field name="model">o2net.cenova_ponuka</field>
+            <field name="name">Quotation</field>
+            <field name="model">o2net.quotation</field>
             <field name="priority" eval="5"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
@@ -184,8 +184,8 @@
 
         <!-- zobrazenie pre vsetky cenove ponuky podla stavu -->
         <record model="ir.ui.view" id="view_tree_cenova_ponuka_preview">
-            <field name="name">Price offer</field>
-            <field name="model">o2net.cenova_ponuka</field>
+            <field name="name">Quotation</field>
+            <field name="model">o2net.quotation</field>
             <field name="priority" eval="6"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
@@ -208,95 +208,95 @@
         <!-- ACTIONS -->
        <!-- PC: vytvorenie a zoznam vytvorenych navrhov CP -->
         <record model="ir.actions.act_window" id="action_window_cp_draft">
-            <field name="name">Price offer draft</field>
-            <field name="res_model">o2net.cenova_ponuka</field>
+            <field name="name">Quotation draft</field>
+            <field name="res_model">o2net.quotation</field>
             <field name="view_id" ref="view_tree_cenova_ponuka_draft"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('state','=','draft')]</field>
             <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Click here for establishment of new price offer header.</p>
-                <p>Here you can find founded price offers.</p>
+                <p class="oe_view_nocontent_create">Click here for establishment of new Quotation header.</p>
+                <p>Here you can find founded Quotations.</p>
             </field>
         </record>
 
         <!-- Dodavatel: zoznam priradenych navrhov CP. to-do pool navrhov CP, ktoré su priradene dodavatelovy. ak ich zedituje stavaju sa "rozpracované" -->
         <record model="ir.actions.act_window" id="action_window_cp_assigned">
-            <field name="name">Assigned price offers</field>
-            <field name="res_model">o2net.cenova_ponuka</field>
+            <field name="name">Assigned Quotations</field>
+            <field name="res_model">o2net.quotation</field>
             <field name="view_id" ref="view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','assigned')]</field>
             <field name="help" type="html">
-                <p>Here you can find price offers assigned to vendor.</p>
+                <p>Here you can find Quotations assigned to vendor.</p>
             </field>
         </record>
 
         <!-- Dodavatel: zoznam rozpracovanych CP. to-do pool navrhov CP, ktoré treba dospecifikovat a posunut ich na schvalenie -->
         <record model="ir.actions.act_window" id="action_window_cp_in_progress">
-            <field name="name">Price offers in progres</field>
-            <field name="res_model">o2net.cenova_ponuka</field>
+            <field name="name">Quotations in progres</field>
+            <field name="res_model">o2net.quotation</field>
             <field name="view_id" ref="view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','in_progress')]</field>
             <field name="help" type="html">
-                <p>Here you can find price offers in progress, where you are the vendor.</p>
+                <p>Here you can find Quotations in progress, where you are the vendor.</p>
             </field>
         </record>
 
         <record model="ir.actions.act_window" id="action_window_cp_to_approve">
-            <field name="name">Price offers waiting for approval</field>
-            <field name="res_model">o2net.cenova_ponuka</field>
+            <field name="name">Quotations waiting for approval</field>
+            <field name="res_model">o2net.quotation</field>
             <field name="view_id" ref="view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','to_approve')]</field>
             <field name="help" type="html">
-                <p>Here you can find price offers waiting for approval, which are assigned to you or you are thier vendor.</p>
+                <p>Here you can find Quotations waiting for approval, which are assigned to you or you are thier vendor.</p>
             </field>
         </record>
 
         <!-- Dodavatel / PC / PM / Manager: zoznam schvalenych CP (v podstate historia CP) READ ONLY -->
         <record model="ir.actions.act_window" id="action_window_cp_approved">
-            <field name="name">Approved price offers</field>
-            <field name="res_model">o2net.cenova_ponuka</field>
+            <field name="name">Approved Quotations</field>
+            <field name="res_model">o2net.quotation</field>
             <field name="view_id" ref="view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','approved')]</field>
             <field name="help" type="html">
-                <p>Here you can find approved price offers, which are assigned to you or you are thier vendor.</p>
+                <p>Here you can find approved Quotations, which are assigned to you or you are thier vendor.</p>
             </field>
         </record>
 
         <record model="ir.actions.act_window" id="action_window_cp_cancel">
-            <field name="name">Canceled price offers</field>
-            <field name="res_model">o2net.cenova_ponuka</field>
+            <field name="name">Canceled Quotations</field>
+            <field name="res_model">o2net.quotation</field>
             <field name="view_id" ref="view_tree_cenova_ponuka"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','cancel')]</field>
             <field name="help" type="html">
-                <p>Here you can find canceled price offers, which are assigned to you or you are thier vendor.</p>
+                <p>Here you can find canceled Quotations, which are assigned to you or you are thier vendor.</p>
             </field>
         </record>
 
         <record model="ir.actions.act_window" id="action_window_cp_preview">
-            <field name="name">Overview price offers</field>
-            <field name="res_model">o2net.cenova_ponuka</field>
+            <field name="name">Overview Quotations</field>
+            <field name="res_model">o2net.quotation</field>
             <field name="view_id" ref="view_tree_cenova_ponuka_preview"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
-                <p>Here you can find all price offers, which are assigned to you or you are thier vendor.</p>
+                <p>Here you can find all Quotations, which are assigned to you or you are thier vendor.</p>
             </field>
         </record>
 
         <!-- MENU -->
         <menuitem id="menu_cenova_ponuka_root"
-                  name="Price offer"
+                  name="Quotation"
                   sequence="10"
                   parent="menu_root"/>
 

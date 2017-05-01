@@ -10,9 +10,9 @@ import base64
 
 _logger = logging.getLogger(__name__)
 
-class PriceOffer(models.Model):
-    _name = 'o2net.cenova_ponuka'
-    _description = "o2net - price offer"
+class Quotation(models.Model):
+    _name = 'o2net.quotation'
+    _description = "o2net - Quotation"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     DRAFT = 'draft'
@@ -202,17 +202,17 @@ class PriceOffer(models.Model):
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         return [('id', 'in', partner_ids)]
 
-    @api.depends('priceoffer_item_ids.total_price','priceoffer_item_package_ids.total_price','priceoffer_item_atyp_ids.price')
+    @api.depends('quotation_item_ids.total_price','quotation_item_package_ids.total_price','quotation_item_atyp_ids.price')
     def _compute_amount_all(self):
         for cp in self:
             cp_total_price = 0.0
-            for line in cp.priceoffer_item_ids:
+            for line in cp.quotation_item_ids:
                 cp_total_price += line.total_price
 
-            for line in cp.priceoffer_item_package_ids:
+            for line in cp.quotation_item_package_ids:
                 cp_total_price += line.total_price
 
-            for lineAtyp in cp.priceoffer_item_atyp_ids:
+            for lineAtyp in cp.quotation_item_atyp_ids:
                 cp_total_price += lineAtyp.price
 
             cp.update({'total_price': cp_total_price})
@@ -240,7 +240,7 @@ class PriceOffer(models.Model):
         ir_model_data = self.env['ir.model.data']
         menu_id = ir_model_data.get_object_reference('o2net', 'menu_cenova_ponuka_preview')[1]
         action_id = ir_model_data.get_object_reference('o2net', 'action_window_cp_preview')[1]
-        url = "%s/web#id=%s&view_type=form&model=o2net.cenova_ponuka&menu_id=%s&action=%s" % (base, id, menu_id, action_id)
+        url = "%s/web#id=%s&view_type=form&model=o2net.quotation&menu_id=%s&action=%s" % (base, id, menu_id, action_id)
         _logger.debug("URL: " + url)
         self.base_url = url
 
@@ -522,34 +522,6 @@ class PriceOffer(models.Model):
 
         return ret
 
-    #def _get_priceoffer_item_ids(self):
-    #    _logger.debug('_get_priceoffer_item_ids')
-    #    for record in self:
-    #        _logger.debug('record:' + str(record))
-    #        record.priceoffer_item_ids = self.env['o2net.cenova_ponuka.polozka'].search([('price_offer_id', '=', record.id), ('pricelist_item_id.is_package', '!=', True)])
-
-    #def _get_priceoffer_item_package_ids(self):
-    #    _logger.debug('_get_priceoffer_item_package_ids')
-    #    for record in self:
-    #        _logger.debug('record:' + str(record))
-    #        record.priceoffer_item_package_ids = self.env['o2net.cenova_ponuka.polozka'].search([('price_offer_id', '=', record.id), ('pricelist_item_id.is_package', '=', True)])
-
-    #def _set_item_ids(self):
-    #    self.ensure_one()
-    #    _logger.debug('_set_item_ids')
-    #    _logger.debug('polozky: ' + str(self.polozka_ids))
-        #self.write({'polozka_ids': [(6, 0, [self.vendor_id.id])]})
-
-    #    for record in self.priceoffer_item_ids:
-    #        _logger.debug('polozka: ' + str(record))
-    #        self.polozka_ids = record
-
-    #    for record in self.priceoffer_item_package_ids:
-    #        _logger.debug('balicek: ' + str(record))
-    #        self.polozka_ids = record
-
-    #    _logger.debug('polozky: ' + str(self.polozka_ids))
-
     # FIELDS
     # computed fields
     ro_datumoddo = fields.Boolean(string="RO date From To", compute=_compute_ro_datumoddo, store=False, copy=False)
@@ -573,12 +545,12 @@ class PriceOffer(models.Model):
 
     state = fields.Selection(State, string='State', readonly=True, default='draft', track_visibility='onchange', copy=False)
     state_date = fields.Date(string="date state", default=datetime.date.today(), copy=False);
-    price_list_id = fields.Many2one('o2net.cennik', string='Price list', copy=True)
+    price_list_id = fields.Many2one('o2net.pricelist', string='Price list', copy=True)
     currency_id = fields.Many2one(related='price_list_id.currency_id', string="Currency", copy=True)
 
-    priceoffer_item_ids = fields.One2many('o2net.cenova_ponuka.polozka', 'price_offer_id', string='Items', track_visibility='onchange', copy=True)
-    priceoffer_item_package_ids = fields.One2many('o2net.cenova_ponuka.polozka_balicek', 'price_offer_id', string='Packages', track_visibility='onchange', copy=True)
-    priceoffer_item_atyp_ids = fields.One2many('o2net.cenova_ponuka.polozka_atyp', 'price_offer_id', string='Atypical items', track_visibility='onchange', copy=True)
+    quotation_item_ids = fields.One2many('o2net.quotation.item', 'quotation_id', string='Items', track_visibility='onchange', copy=True)
+    quotation_item_package_ids = fields.One2many('o2net.quotation.item_package', 'quotation_id', string='Packages', track_visibility='onchange', copy=True)
+    quotation_item_atyp_ids = fields.One2many('o2net.quotation.item_atyp', 'quotation_id', string='Atypical items', track_visibility='onchange', copy=True)
 
     sap_export_content = fields.Text(string="Export for SAP", default='ABCDEFGH', copy=False)
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
@@ -591,19 +563,19 @@ class PriceOffer(models.Model):
         self.ensure_one()
 
         # log changes in Quotation's items
-        if 'priceoffer_item_ids' in vals:
+        if 'quotation_item_ids' in vals:
             record_history_tmpl = "<li><b>%s</b> %s</li>"
             msg = ""
-            for record in vals.get('priceoffer_item_ids'):
+            for record in vals.get('quotation_item_ids'):
                 _logger.debug("record " + str(record))
                 action_id = record[0]
                 if action_id == 0:
                     id = record[2].get('pricelist_item_id')
-                    name = self.env['o2net.cennik.polozka'].browse(id).name
+                    name = self.env['o2net.pricelist.item'].browse(id).name
                     msg += record_history_tmpl % ('+++', name)
                 elif action_id == 2:
                     id = record[1]
-                    name = self.env['o2net.cenova_ponuka.polozka'].browse(id).name
+                    name = self.env['o2net.quotation.item'].browse(id).name
                     msg += record_history_tmpl % ('---', name)
 
             self.message_post(body="<ul class =""o_mail_thread_message_tracking"">%s</ul>" % msg, message_type="notification")
@@ -647,7 +619,7 @@ class PriceOffer(models.Model):
             return result
 
         _logger.debug("Looking for supplier's valid pricelist " + str(self.vendor_id.name))
-        cennik_ids = self.env['o2net.cennik'].search([('vendor_id', '=', self.vendor_id.id),
+        cennik_ids = self.env['o2net.pricelist'].search([('vendor_id', '=', self.vendor_id.id),
                                                          ('valid_from', '<=', datetime.date.today()),
                                                          ('valid_to', '>', datetime.date.today())], limit = 1)
 
@@ -660,7 +632,7 @@ class PriceOffer(models.Model):
             self.price_list_id = ''
 
         # pri zmene dodavatela a tym padol aj cennika zmaz vsetky polozky
-        self.priceoffer_item_ids = None;
+        self.quotation_item_ids = None;
 
         result = {'price_list_id': self.price_list_id}
         self.write(result)
@@ -699,7 +671,7 @@ class PriceOffer(models.Model):
     def wf_assign_check(self):
         self.ensure_one()
         if self.vendor_id is False:
-            raise AccessError(_("Price offer does not have vendor assigned"))
+            raise AccessError(_("Quotation does not have vendor assigned"))
 
         return True
 

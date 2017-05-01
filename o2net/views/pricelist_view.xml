@@ -2,9 +2,9 @@
 <openerp>
     <data>
 
-        <record model="ir.ui.view" id="view_form_cennik_dodavatel">
-            <field name="name">cennik dodavatela</field>
-            <field name="model">o2net.cennik</field>
+        <record model="ir.ui.view" id="view_form_pricelist_vendor">
+            <field name="name">vendor pricelist</field>
+            <field name="model">o2net.pricelist</field>
             <field name="priority" eval="5"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -48,9 +48,9 @@
         </record>
 
 
-        <record model="ir.ui.view" id="view_form_cennik_polozka">
+        <record model="ir.ui.view" id="view_form_pricelist_item">
             <field name="name">cennik polozka</field>
-            <field name="model">o2net.cennik.polozka</field>
+            <field name="model">o2net.pricelist.item</field>
             <field name="priority" eval="5"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
@@ -75,9 +75,9 @@
             </field>
         </record>
 
-       <record model="ir.ui.view" id="view_tree_cennik_polozky">
-           <field name="name">Cenník s polozkami</field>
-           <field name="model">o2net.cennik.polozka</field>
+       <record model="ir.ui.view" id="view_tree_pricelist_item">
+           <field name="name">Pricelist with items</field>
+           <field name="model">o2net.pricelist.item</field>
            <field name="type">tree</field>
            <field name="arch" type="xml">
                <tree>
@@ -90,9 +90,9 @@
             </field>
        </record>
 
-       <record model="ir.ui.view" id="view_tree_cennik_dodavatel">
-            <field name="name">Vendor's price list</field>
-            <field name="model">o2net.cennik</field>
+       <record model="ir.ui.view" id="view_tree_pricelist_vendor">
+            <field name="name">Vendor's pricelist</field>
+            <field name="model">o2net.pricelist</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
             <tree>
@@ -106,23 +106,23 @@
        </record>
 
        <record model="ir.actions.act_window" id="action_window_pricelist_vendor">
-           <field name="name">Vendor's price list</field>
-           <field name="res_model">o2net.cennik</field>
-           <field name="view_id" ref="view_tree_cennik_dodavatel"/>
+           <field name="name">Vendor's pricelist</field>
+           <field name="res_model">o2net.pricelist</field>
+           <field name="view_id" ref="view_tree_pricelist_vendor"/>
            <field name="view_type">form</field>
            <field name="view_mode">tree,form</field>
        </record>
 
        <record model="ir.actions.act_window" id="action_window_pricelist_pricelist">
-           <field name="name">Vendor's price list</field>
-           <field name="res_model">o2net.cennik.polozka</field>
-           <field name="view_id" ref="view_tree_cennik_polozky"/>
+           <field name="name">Vendor's pricelist</field>
+           <field name="res_model">o2net.pricelist.item</field>
+           <field name="view_id" ref="view_tree_pricelist_item"/>
            <field name="view_type">form</field>
            <field name="view_mode">tree</field>
        </record>
 
        <menuitem id="menu_pricelist_root"
-                name="Price list"
+                name="Pricelist"
                 sequence="30"
                 parent="menu_root"
                 groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
@@ -134,7 +134,7 @@
                  action="action_window_pricelist_vendor"/>
 
        <menuitem id="menu_pricelist_pricelist"
-                 name="Price list"
+                 name="Pricelist"
                  parent="menu_pricelist_root"
                  sequence="32"
                  action="action_window_pricelist_pricelist"

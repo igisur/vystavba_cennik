@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-        <record model="ir.ui.view" id="view_tree_oddiel">
+        <record model="ir.ui.view" id="view_tree_section">
             <field name="name">Section</field>
-            <field name="model">o2net.oddiel</field>
+            <field name="model">o2net.section</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
             <tree>
@@ -13,9 +13,9 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="view_form_oddiel">
+        <record model="ir.ui.view" id="view_form_section">
             <field name="name">Section</field>
-            <field name="model">o2net.oddiel</field>
+            <field name="model">o2net.section</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form>
@@ -33,8 +33,8 @@
 
         <record model="ir.actions.act_window" id="action_window_section">
             <field name="name">Section</field>
-            <field name="res_model">o2net.oddiel</field>
-            <field name="view_id" ref="view_tree_oddiel"/>
+            <field name="res_model">o2net.section</field>
+            <field name="view_id" ref="view_tree_section"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">

@@ -3,12 +3,12 @@
     <data noupdate="0">
 
         <record id="mail_cp_assigned" model="mail.template">
-            <field name="name">Price offer - mail_cp_assigned</field>
+            <field name="name">Quotation - mail_cp_assigned</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Price offer ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</field>
+            <field name="subject">Quotation ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
             <field name="report_name">PO_${object.name}/${object.shortname}/${object.financial_code}</field>
@@ -18,7 +18,7 @@
             <p>
             Hello,<br/><br/>
 
-            You've been assigned to price offer <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>
+            You've been assigned to Quotation <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>
             </p>
             best regards,<br/>
                O2 network team
@@ -28,12 +28,12 @@
 
 
         <record id="mail_cp_in_progress" model="mail.template">
-            <field name="name">Price offer - mail_cp_in_progress</field>
+            <field name="name">Quotation - mail_cp_in_progress</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Price offer ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</field>
+            <field name="subject">Quotation ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
             <field name="report_name">PO_${object.name}/${object.shortname}/${object.financial_code}</field>
@@ -43,7 +43,7 @@
             <p>
             Hello,<br/><br/>
 
-            Vendor "${object.vendor_id.display_name}" has unfinished price offer <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>
+            Vendor "${object.vendor_id.display_name}" has unfinished Quotation <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>
             </p>
             best regards,<br/>
                O2 network team
@@ -53,12 +53,12 @@
 
 
         <record id="mail_cp_manager_approved" model="mail.template">
-            <field name="name">Price offer - mail_cp_manager_approved</field>
+            <field name="name">Quotation - mail_cp_manager_approved</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Price offer ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</field>
+            <field name="subject">Quotation ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
             <field name="report_name">PO_${object.name}/${object.shortname}/${object.financial_code}</field>
@@ -68,7 +68,7 @@
             <p>
             Hello,<br/><br/>
 
-            ${ctx.get('manager_name')} has approved price offer <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>
+            ${ctx.get('manager_name')} has approved Quotation <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>
             </p>
             best regards,<br/>
                O2 network team
@@ -78,12 +78,12 @@
 
 
         <record id="mail_cp_approved" model="mail.template">
-            <field name="name">Price offer - mail_cp_approved</field>
+            <field name="name">Quotation - mail_cp_approved</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Price offer ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</field>
+            <field name="subject">Quotation ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
             <field name="report_name">PO_${object.name}/${object.shortname}/${object.financial_code}</field>
@@ -93,7 +93,7 @@
             <p>
             Hello,<br/><br/>
 
-            Price offer <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a> is approved.<br/>
+            Quotation <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a> is approved.<br/>
             </p>
             best regards,<br/>
                O2 network team
@@ -102,12 +102,12 @@
         </record>
 
         <record id="mail_cp_canceled" model="mail.template">
-            <field name="name">Price offer - mail_cp_canceled</field>
+            <field name="name">Quotation - mail_cp_canceled</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Price offer ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</field>
+            <field name="subject">Quotation ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="report_template" ref="report_cenova_ponuka"/>
             <field name="report_name">PO_${object.name}/${object.shortname}/${object.financial_code}</field>
@@ -117,7 +117,7 @@
             <p>
             Hello,<br/><br/>
 
-            Price offer <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a> has been canceled.<br/>
+            Quotation <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a> has been canceled.<br/>
             </p>
             best regards,<br/>
                O2 network team
@@ -126,12 +126,12 @@
         </record>
 
         <record id="mail_manager_warning" model="mail.template">
-            <field name="name">Price offer - mail_manager_warning</field>
+            <field name="name">Quotation - mail_manager_warning</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="email_to"></field>
             <field name="partner_to"></field>
             <field name="lang"></field>
-            <field name="subject">Price offer ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name}) is awaiting approval</field>
+            <field name="subject">Quotation ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name}) is awaiting approval</field>
             <field name="model_id" ref="model_o2net_cenova_ponuka"/>
             <field name="auto_delete" eval="False"/>
             <field name="body_html">
@@ -139,7 +139,7 @@
             <p>
             Hello,<br/><br/>
 
-            Warning awaiting approval for price offer <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>
+            Warning awaiting approval for Quotation <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>
             </p>
             best regards,<br/>
                O2 network team

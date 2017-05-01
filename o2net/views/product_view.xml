@@ -3,7 +3,7 @@
     <data>
         <record model="ir.ui.view" id="view_form_polozka">
             <field name="name">Items</field>
-            <field name="model">o2net.polozka</field>
+            <field name="model">o2net.product</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form>
@@ -38,7 +38,7 @@
 
        <record model="ir.ui.view" id="view_tree_polozka">
             <field name="name">Items</field>
-            <field name="model">o2net.polozka</field>
+            <field name="model">o2net.product</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
             <tree string="Item">
@@ -55,7 +55,7 @@
 
        <record model="ir.actions.act_window" id="action_window_packages">
            <field name="name">Packages</field>
-           <field name="res_model">o2net.polozka</field>
+           <field name="res_model">o2net.product</field>
            <field name="view_id" ref="view_tree_polozka"/>
            <field name="view_type">form</field>
            <field name="view_mode">tree,form</field>
@@ -68,7 +68,7 @@
 
        <record model="ir.actions.act_window" id="action_window_items">
            <field name="name">Items</field>
-           <field name="res_model">o2net.polozka</field>
+           <field name="res_model">o2net.product</field>
            <field name="view_id" ref="view_tree_polozka"/>
            <field name="view_type">form</field>
            <field name="view_mode">tree,form</field>
