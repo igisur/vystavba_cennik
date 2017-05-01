@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-17 20:32+0000\n"
-"PO-Revision-Date: 2017-04-17 20:32+0000\n"
+"POT-Creation-Date: 2017-05-01 22:13+0000\n"
+"PO-Revision-Date: 2017-05-01 22:13+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            ${ctx.get('manager_name')} has approved Quotation <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a><br/>\n"
+"            ${ctx.get('manager_name')} has approved Quotation <a href=\"${object.base_url}\">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -37,7 +37,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Quotation <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a> has been canceled.<br/>\n"
+"            Quotation <a href=\"${object.base_url}\">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a> has been canceled.<br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -52,7 +52,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Quotation <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a> is approved.<br/>\n"
+"            Quotation <a href=\"${object.base_url}\">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a> is approved.<br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -67,7 +67,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Vendor \"${object.vendor_id.display_name}\" has unfinished Quotation <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a><br/>\n"
+"            Vendor \"${object.vendor_id.display_name}\" has unfinished Quotation <a href=\"${object.base_url}\">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -82,7 +82,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            Warning awaiting approval for Quotation <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a><br/>\n"
+"            Warning awaiting approval for Quotation <a href=\"${object.base_url}\">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -97,7 +97,7 @@ msgid "\n"
 "            <p>\n"
 "            Hello,<br/><br/>\n"
 "\n"
-"            You've been assigned to Quotation <a href=\"${object.base_url}\">${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})</a><br/>\n"
+"            You've been assigned to Quotation <a href=\"${object.base_url}\">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>\n"
 "            </p>\n"
 "            best regards,<br/>\n"
 "               O2 network team\n"
@@ -106,44 +106,44 @@ msgid "\n"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "<strong>End date:</strong>"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "<strong>Financial code:</strong>"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "<strong>PC:</strong>"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "<strong>PM:</strong>"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "<strong>Short name:</strong>"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "<strong>Start date:</strong>"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "<strong>Vendor:</strong>"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_message_needaction
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_message_needaction
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_message_needaction
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_needaction
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_message_needaction
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_needaction
 msgid "Action Needed"
 msgstr ""
 
@@ -153,13 +153,13 @@ msgid "Administrator"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_approved
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.ui.menu,name:o2net.menu_quotation_approved
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Approve"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.cenova_ponuka,state:0
+#: selection:o2net.quotation,state:0
 msgid "Approved"
 msgstr ""
 
@@ -169,22 +169,17 @@ msgid "Approved Quotations"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Assign"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_assigned
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_draft
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_preview
-#: selection:o2net.cenova_ponuka,state:0
+#: model:ir.ui.menu,name:o2net.menu_quotation_assigned
+#: model:ir.ui.view,arch_db:o2net.view_tree_quotation
+#: model:ir.ui.view,arch_db:o2net.view_tree_quotation_draft
+#: model:ir.ui.view,arch_db:o2net.view_tree_quotation_preview
+#: selection:o2net.quotation,state:0
 msgid "Assigned"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_assigned_persons_ids
-msgid "Assigned persons"
 msgstr ""
 
 #. module: o2net
@@ -193,9 +188,14 @@ msgid "Assigned Quotations"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cp_polozka_atyp_ids
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_assigned_persons_ids
+msgid "Assigned persons"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_quotation_item_atyp_ids
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Atypical items"
 msgstr ""
 
@@ -205,18 +205,18 @@ msgid "Builders price list"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_can_user_exec_wf
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_can_user_exec_wf
 msgid "Can user execute workflow action"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-#: selection:o2net.cenova_ponuka,state:0
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
+#: selection:o2net.quotation,state:0
 msgid "Cancel"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_cancel
+#: model:ir.ui.menu,name:o2net.menu_quotation_cancel
 msgid "Canceled"
 msgstr ""
 
@@ -226,13 +226,8 @@ msgid "Canceled Quotations"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.report.xml,name:o2net.report_cenova_ponuka
-msgid "Cenova ponuka (PDF)"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_report
-msgid "Cenova ponuka report"
+#: model:ir.actions.act_window,help:o2net.action_window_section
+msgid "Click for establishment of new section."
 msgstr ""
 
 #. module: o2net
@@ -241,164 +236,179 @@ msgid "Click here for establishment of new Quotation header."
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_balicek
+#: model:ir.actions.act_window,help:o2net.action_window_packages
 msgid "Click to create a new package."
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_oddiel
-msgid "Clik for establishment of new section."
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_kod
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_kod
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_kod
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_kod
-#: model:ir.model.fields,field_description:o2net.field_res_partner_kod
-#: model:ir.model.fields,help:o2net.field_o2net_oddiel_name
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_oddiel
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_code
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_code
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_code
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_code
+#: model:ir.model.fields,field_description:o2net.field_o2net_section_name
+#: model:ir.model.fields,field_description:o2net.field_res_partner_code
+#: model:ir.model.fields,help:o2net.field_o2net_section_name
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+#: model:ir.ui.view,arch_db:o2net.view_form_section
 msgid "Code"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_polozka_atyp_name
+#: model:ir.model.fields,help:o2net.field_o2net_quotation_item_atyp_name
 msgid "Code item"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_create_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_create_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_create_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_create_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_create_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_create_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_create_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_create_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_create_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_create_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_create_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_create_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_create_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_create_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_create_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_section_create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_create_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_create_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_create_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_create_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_create_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_create_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_create_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_create_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_create_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_create_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_create_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_create_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_create_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_create_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_create_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_section_create_date
 msgid "Created on"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
+#: selection:o2net.product,unit_of_measure:0
 msgid "Cubic meter"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_currency_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_currency_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_currency_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_currency_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_currency_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_currency_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_currency_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_currency_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_currency_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_currency_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_currency_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_currency_id
 msgid "Currency"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,help:o2net.field_o2net_cennik_message_last_post
-#: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_message_last_post
-#: model:ir.model.fields,help:o2net.field_o2net_polozka_message_last_post
+#: model:ir.model.fields,help:o2net.field_o2net_pricelist_message_last_post
+#: model:ir.model.fields,help:o2net.field_o2net_product_message_last_post
+#: model:ir.model.fields,help:o2net.field_o2net_quotation_message_last_post
 msgid "Date of the last message posted on the record."
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_description
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_popis
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_polozka_popis
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_polozka_popis
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_description
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_description
-#: model:ir.ui.view,arch_db:o2net.view_form_oddiel
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_description
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_description
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_description
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_item_description
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_item_description
+#: model:ir.model.fields,field_description:o2net.field_o2net_section_description
+#: model:ir.ui.view,arch_db:o2net.view_form_section
 msgid "Description"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_display_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_display_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_display_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_display_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_display_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_display_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_display_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_display_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_display_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_display_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_display_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_display_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_display_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_display_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_display_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_section_display_name
 msgid "Display Name"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_draft
-#: selection:o2net.cenova_ponuka,state:0
+#: model:ir.ui.menu,name:o2net.menu_quotation_draft
+#: selection:o2net.quotation,state:0
 msgid "Draft"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_datum_koniec
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_preview
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_end_date
+#: model:ir.ui.view,arch_db:o2net.view_tree_quotation_preview
 msgid "End date"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_sap_export_file_binary
+#: model:ir.model.fields,help:o2net.field_o2net_quotation_workflow_reason
+msgid "Enter workflow reason mainly for actions \"Return for repair\" and \"Cancel\""
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_sap_export_file_binary
 msgid "Export file"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_sap_export_file_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_sap_export_file_name
 msgid "Export file name"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_sap_export_content
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_sap_export_content
 msgid "Export for SAP"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Export to SAP"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_financny_kod
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_financial_code
 msgid "Financial code"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_message_follower_ids
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_message_follower_ids
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_message_follower_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_follower_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_message_follower_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_follower_ids
 msgid "Followers"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_message_channel_ids
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_message_channel_ids
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_message_channel_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_channel_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_message_channel_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_channel_ids
 msgid "Followers (Channels)"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_message_partner_ids
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_message_partner_ids
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_message_partner_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_partner_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_message_partner_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_partner_ids
 msgid "Followers (Partners)"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_balicek
+#: model:ir.actions.act_window,help:o2net.action_window_packages
 msgid "Here is the list of price lists's packages."
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_cp_assigned
+msgid "Here you can find Quotations assigned to vendor."
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_cp_in_progress
+msgid "Here you can find Quotations in progress, where you are the vendor."
+msgstr ""
+
+#. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_cp_to_approve
+msgid "Here you can find Quotations waiting for approval, which are assigned to you or you are thier vendor."
 msgstr ""
 
 #. module: o2net
@@ -422,235 +432,209 @@ msgid "Here you can find founded Quotations."
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_oddiel
+#: model:ir.actions.act_window,help:o2net.action_window_section
 msgid "Here you can find list of section."
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_cp_assigned
-msgid "Here you can find Quotations assigned to vendor."
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_cp_in_progress
-msgid "Here you can find Quotations in progress, where you are the vendor."
-msgstr ""
-
-#. module: o2net
-#: model:ir.actions.act_window,help:o2net.action_window_cp_to_approve
-msgid "Here you can find Quotations waiting for approval, which are assigned to you or you are thier vendor."
-msgstr ""
-
-#. module: o2net
-#: selection:o2net.polozka,mj:0
+#: selection:o2net.product,unit_of_measure:0
 msgid "Hour"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_section_id
 msgid "ID"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,help:o2net.field_o2net_cennik_message_unread
-#: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_message_unread
-#: model:ir.model.fields,help:o2net.field_o2net_polozka_message_unread
+#: model:ir.model.fields,help:o2net.field_o2net_pricelist_message_unread
+#: model:ir.model.fields,help:o2net.field_o2net_product_message_unread
+#: model:ir.model.fields,help:o2net.field_o2net_quotation_message_unread
 msgid "If checked new messages require your attention."
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,help:o2net.field_o2net_cennik_message_needaction
-#: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_message_needaction
-#: model:ir.model.fields,help:o2net.field_o2net_polozka_message_needaction
+#: model:ir.model.fields,help:o2net.field_o2net_pricelist_message_needaction
+#: model:ir.model.fields,help:o2net.field_o2net_product_message_needaction
+#: model:ir.model.fields,help:o2net.field_o2net_quotation_message_needaction
 msgid "If checked, new messages require your attention."
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,help:o2net.field_res_partner_cp_celkova_cena_limit
+#: model:ir.model.fields,help:o2net.field_res_partner_po_total_price_limit
 msgid "In case the price limit is exceeded, Quotation must be approved by a given person"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_in_progress
-#: selection:o2net.cenova_ponuka,state:0
+#: model:ir.ui.menu,name:o2net.menu_quotation_in_progress
+#: selection:o2net.quotation,state:0
 msgid "In progress"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_intern_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_intern_id
 msgid "Internal ID"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_intern_kod
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_intern_code
 msgid "Internal code"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_message_is_follower
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_message_is_follower
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_message_is_follower
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_is_follower
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_message_is_follower
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_is_follower
 msgid "Is Follower"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_is_user_assigned
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_is_user_assigned
 msgid "Is current user assigned"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_polozka_id
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_item_id
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 #: model:ir.ui.view,arch_db:o2net.view_form_polozka
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 #: model:ir.ui.view,arch_db:o2net.view_tree_polozka
 msgid "Item"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_polozka
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_cennik_polozka_ids
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cp_polozka_ids
-#: model:ir.ui.menu,name:o2net.menu_polozka
-#: model:ir.ui.view,arch_db:o2net.view_form_cennik_dodavatel
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.actions.act_window,name:o2net.action_window_items
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_pricelist_item_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_quotation_item_ids
+#: model:ir.ui.menu,name:o2net.menu_items
+#: model:ir.ui.view,arch_db:o2net.view_form_pricelist_vendor
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Items"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_atypsluzba
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_oddiel
+#: model:ir.model.fields,field_description:o2net.field_o2net_section_atypservice
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+#: model:ir.ui.view,arch_db:o2net.view_form_section
 msgid "KSZ"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
+#: selection:o2net.product,unit_of_measure:0
 msgid "Kilogram"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
+#: selection:o2net.product,unit_of_measure:0
 msgid "Kilometer"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.act_res_partner_vystavba
-msgid "Klikni pre založenie novej osoby resp. partnera."
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_message_last_post
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_message_last_post
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_message_last_post
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_last_post
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_message_last_post
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_last_post
 msgid "Last Message Date"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik___last_update
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka___last_update
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka___last_update
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka___last_update
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp___last_update
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek___last_update
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel___last_update
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka___last_update
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist___last_update
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item___last_update
+#: model:ir.model.fields,field_description:o2net.field_o2net_product___last_update
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation___last_update
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item___last_update
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp___last_update
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package___last_update
+#: model:ir.model.fields,field_description:o2net.field_o2net_section___last_update
 msgid "Last Modified on"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_write_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_write_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_write_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_write_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_write_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_write_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_write_uid
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_write_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_write_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_write_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_write_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_write_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_write_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_write_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_write_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_section_write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_write_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_write_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_write_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_write_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_write_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_write_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_oddiel_write_date
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_write_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_write_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_write_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_write_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_write_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_write_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_write_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_write_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_section_write_date
 msgid "Last Updated on"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_base_url
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_base_url
 msgid "Link"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cennik_polozka
-#: model:ir.ui.view,arch_db:o2net.view_tree_polozka
-msgid "MJ"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "MONTAGE"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_manager_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_manager_ids
 #: model:res.groups,name:o2net.group_vystavba_manager
 msgid "Manager"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_mj
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_polozka_mj
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_polozka_mj
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_mj
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka_polozka
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_unit_of_measure
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_item_unit_of_measure
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_item_unit_of_measure
+#: model:ir.ui.view,arch_db:o2net.view_form_pricelist_item
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation_polozka
+#: model:ir.ui.view,arch_db:o2net.view_tree_polozka
 msgid "Measure unit"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_message_ids
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_message_ids
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_message_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_message_ids
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_ids
 msgid "Messages"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
+#: selection:o2net.product,unit_of_measure:0
 msgid "Meter"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_name
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_name
 msgid "Name"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
+#: selection:o2net.product,unit_of_measure:0
 msgid "Not given"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_poznamka
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_note
 msgid "Note"
 msgstr ""
 
@@ -660,9 +644,9 @@ msgid "Notification interval"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_message_needaction_counter
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_message_needaction_counter
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_message_needaction_counter
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_needaction_counter
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_message_needaction_counter
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_needaction_counter
 msgid "Number of Actions"
 msgstr ""
 
@@ -672,16 +656,16 @@ msgid "Number of days, after which the notification will be send (email)"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,help:o2net.field_o2net_cennik_message_needaction_counter
-#: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_message_needaction_counter
-#: model:ir.model.fields,help:o2net.field_o2net_polozka_message_needaction_counter
+#: model:ir.model.fields,help:o2net.field_o2net_pricelist_message_needaction_counter
+#: model:ir.model.fields,help:o2net.field_o2net_product_message_needaction_counter
+#: model:ir.model.fields,help:o2net.field_o2net_quotation_message_needaction_counter
 msgid "Number of messages which requires an action"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,help:o2net.field_o2net_cennik_message_unread_counter
-#: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_message_unread_counter
-#: model:ir.model.fields,help:o2net.field_o2net_polozka_message_unread_counter
+#: model:ir.model.fields,help:o2net.field_o2net_pricelist_message_unread_counter
+#: model:ir.model.fields,help:o2net.field_o2net_product_message_unread_counter
+#: model:ir.model.fields,help:o2net.field_o2net_quotation_message_unread_counter
 msgid "Number of unread messages"
 msgstr ""
 
@@ -692,7 +676,7 @@ msgid "O2 Network"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_preview
+#: model:ir.ui.menu,name:o2net.menu_quotation_preview
 msgid "Overview"
 msgstr ""
 
@@ -702,17 +686,17 @@ msgid "Overview Quotations"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "PACKAGES"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_pc_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_pc_id
 msgid "PC"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_pm_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_pm_id
 msgid "PM"
 msgstr ""
 
@@ -722,30 +706,28 @@ msgstr ""
 #: model:mail.template,report_name:o2net.mail_cp_canceled
 #: model:mail.template,report_name:o2net.mail_cp_in_progress
 #: model:mail.template,report_name:o2net.mail_cp_manager_approved
-msgid "PO_${object.name}/${object.skratka}/${object.financny_kod}"
+msgid "PO_${object.name}/${object.shortname}/${object.financial_code}"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_oddiel
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_is_balicek
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_polozka_isbalicek
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_polozka_isbalicek
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_is_balicek
-#: model:ir.ui.menu,name:o2net.menu_oddiel
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_is_package
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_is_package
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_item_is_package
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_item_is_package
 #: model:ir.ui.view,arch_db:o2net.view_form_polozka
 msgid "Package"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_balicek
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cp_polozka_balicek_ids
-#: model:ir.ui.menu,name:o2net.menu_balicek
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.actions.act_window,name:o2net.action_window_packages
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_quotation_item_package_ids
+#: model:ir.ui.menu,name:o2net.menu_packages
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Packages"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "Packages total"
 msgstr ""
 
@@ -766,62 +748,94 @@ msgid "Person"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
+#: selection:o2net.product,unit_of_measure:0
 msgid "Piece"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_cena
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_cena
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_preview
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_price
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_price
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
+#: model:ir.ui.view,arch_db:o2net.view_tree_quotation_preview
 msgid "Price"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_res_partner_cp_celkova_cena_limit
+#: model:ir.model.fields,field_description:o2net.field_res_partner_po_total_price_limit
 msgid "Price limit"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_polozka_cennik_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cennik_id
-#: model:ir.ui.menu,name:o2net.menu_cennik_cennik
-#: model:ir.ui.menu,name:o2net.menu_cennik_root
-#: model:ir.ui.view,arch_db:o2net.view_form_cennik_dodavatel
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_price_list_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_price_list_id
+#: model:ir.ui.view,arch_db:o2net.view_form_pricelist_vendor
 msgid "Price list"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,help:o2net.field_o2net_cennik_name
+#: model:ir.model.fields,help:o2net.field_o2net_pricelist_name
 msgid "Price list code"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cennik_polozka_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cennik_polozka_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_pricelist_item_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_pricelist_item_id
 msgid "Price list item"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cennik_dodavatel
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.ui.view,arch_db:o2net.view_form_pricelist_vendor
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Price list items"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/cennik.py:23
+#: code:addons/o2net/models/pricelist.py:23
 #, python-format
 msgid "Price list with the same name already exists. Please choose an unique name."
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_cenova_ponuka_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cenova_ponuka_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cenova_ponuka_id
+#: model:ir.ui.menu,name:o2net.menu_pricelist_pricelist
+#: model:ir.ui.menu,name:o2net.menu_pricelist_root
+msgid "Pricelist"
+msgstr ""
+
+#. module: o2net
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf
+msgid "Printed:"
+msgstr ""
+
+#. module: o2net
+#: model:res.groups,name:o2net.group_vystavba_pc
+msgid "Project coordinator (PC)"
+msgstr ""
+
+#. module: o2net
+#: model:res.groups,name:o2net.group_vystavba_pm
+msgid "Project manager (PM)"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_project_number
+msgid "Project number (PSID)"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_quantity
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_quantity
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
+msgid "Quantity"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_quotation_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_quotation_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_quotation_id
 #: model:ir.ui.menu,name:o2net.menu_quotation_root
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
+#: model:ir.ui.view,arch_db:o2net.view_tree_quotation
 msgid "Quotation"
 msgstr ""
 
@@ -831,16 +845,21 @@ msgstr ""
 #: model:mail.template,subject:o2net.mail_cp_canceled
 #: model:mail.template,subject:o2net.mail_cp_in_progress
 #: model:mail.template,subject:o2net.mail_cp_manager_approved
-msgid "Quotation ${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name})"
+msgid "Quotation ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})"
 msgstr ""
 
 #. module: o2net
 #: model:mail.template,subject:o2net.mail_manager_warning
-msgid "Quotation ${object.name}/${object.skratka}/${object.financny_kod} (${object.vendor_id.display_name}) is awaiting approval"
+msgid "Quotation ${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name}) is awaiting approval"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/cenova_ponuka.py:742
+#: model:ir.actions.report.xml,name:o2net.report_quotation
+msgid "Quotation (PDF)"
+msgstr ""
+
+#. module: o2net
+#: code:addons/o2net/models/quotation.py:667
 #, python-format
 msgid "Quotation does not have vendor assigned"
 msgstr ""
@@ -861,226 +880,231 @@ msgid "Quotations waiting for approval"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf
-msgid "Printed:"
-msgstr ""
-
-#. module: o2net
-#: model:res.groups,name:o2net.group_vystavba_pc
-msgid "Project coordinator (PC)"
-msgstr ""
-
-#. module: o2net
-#: model:res.groups,name:o2net.group_vystavba_pm
-msgid "Project manager (PM)"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_cislo
-msgid "Project number (PSID)"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_mnozstvo
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_mnozstvo
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
-msgid "Quantity"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_ro_datumoddo
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_ro_datumoddo
 msgid "RO date From To"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Return to correct"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_oddiel_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_oddiel_id
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.actions.act_window,name:o2net.action_window_section
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_section_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_section_id
+#: model:ir.ui.menu,name:o2net.menu_section
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Section"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Send to approve"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
+#: selection:o2net.product,unit_of_measure:0
 msgid "Set"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_skratka
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_shortname
 msgid "Short name"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
+#: selection:o2net.product,unit_of_measure:0
 msgid "Square meter"
 msgstr ""
 
 #. module: o2net
-#: selection:o2net.polozka,mj:0
+#: selection:o2net.product,unit_of_measure:0
 msgid "Standard meter"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_datum_zaciatok
-#: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka_preview
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_start_date
+#: model:ir.ui.view,arch_db:o2net.view_tree_quotation_preview
 msgid "Start date"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_state
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_state
 msgid "State"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_to_approve
-#: selection:o2net.cenova_ponuka,state:0
+#: model:ir.ui.menu,name:o2net.menu_quotation_to_approve
+#: selection:o2net.quotation,state:0
 msgid "To approve"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "To progress"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "Total atypical items"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_celkova_cena
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cena_celkom
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cena_celkom
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_total_price
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_total_price
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_total_price
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Total price"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "Total price:"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "Total typical items"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "Totaly price"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,help:o2net.act_res_partner_vystavba
-msgid "Tu nájdete zoznam osôb a partnerov."
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "Type item"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cena_jednotkova
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cena_jednotkova
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
-#: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_unit_of_measure
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+msgid "Unit of measure"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_unit_price
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_unit_price
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Unit price"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "Unite price"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_message_unread
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_message_unread
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_message_unread
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_unread
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_message_unread
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_unread
 msgid "Unread Messages"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_message_unread_counter
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_message_unread_counter
-#: model:ir.model.fields,field_description:o2net.field_o2net_polozka_message_unread_counter
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_unread_counter
+#: model:ir.model.fields,field_description:o2net.field_o2net_product_message_unread_counter
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_unread_counter
 msgid "Unread Messages Counter"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,help:o2net.field_o2net_cenova_ponuka_wf_dovod
-msgid "Enter workflow reason mainly for actions \"Return for repair\" and \"Cancel\""
-msgstr ""
-
-#. module: o2net
-#: selection:o2net.polozka,mj:0
+#: selection:o2net.product,unit_of_measure:0
 msgid "VL"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_platny_od
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_valid_from
 msgid "Valid from"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_platny_do
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_valid_to
 msgid "Valid to"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cennik_vendor_id
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_vendor_id
-#: model:ir.ui.menu,name:o2net.menu_cennik
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_vendor_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_vendor_id
+#: model:ir.ui.menu,name:o2net.menu_pricelist_vendor
 #: model:res.groups,name:o2net.group_vystavba_supplier
 msgid "Vendor"
 msgstr ""
 
 #. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_cennik_cennik
-#: model:ir.actions.act_window,name:o2net.action_window_cennik_dodavatel
-msgid "Vendor's price list"
+#: model:ir.actions.act_window,name:o2net.action_window_pricelist_pricelist
+#: model:ir.actions.act_window,name:o2net.action_window_pricelist_vendor
+msgid "Vendor's pricelist"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_wf_dovod
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_workflow_reason
 msgid "Workflow reason"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/cenova_ponuka.py:753
+#: code:addons/o2net/models/quotation.py:678
 #, python-format
 msgid "You do not have permission for workflow action"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_state_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_state_date
 msgid "date state"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model,name:o2net.model_report_o2net_report_cenova_ponuka_pdf
-msgid "report.o2net.report_cenova_ponuka_pdf"
+#: model:ir.model,name:o2net.model_o2net_product
+msgid "o2net - item"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document_oddiel
+#: model:ir.model,name:o2net.model_o2net_pricelist
+msgid "o2net - price list"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_pricelist_item
+msgid "o2net - price list item"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation
+msgid "o2net - price offer"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item_atyp
+msgid "o2net - price offer atypical"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item
+msgid "o2net - price offer item"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item_package
+msgid "o2net - price offer package"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_section
+msgid "o2net - section"
+msgstr ""
+
+#. module: o2net
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document_oddiel
 msgid "sub page Cenova ponuka"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_cenova_ponuka_pdf_document_oddiel
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document_oddiel
 msgid "sub page IDecko"
 msgstr ""
 
@@ -1090,7 +1114,6 @@ msgid "vystavba - atyp polozka cenovej ponuky"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_balicek
 #: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka_balicek
 msgid "vystavba - balicek cenovej ponuky"
 msgstr ""

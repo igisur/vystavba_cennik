@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <template id="report_cenova_ponuka_pdf_document_oddiel">
+        <template id="report_quotation_pdf_document_oddiel">
             <t t-call="report.internal_layout">
                 <t t-set="o" t-value="oddiel" />
                 <div class="page">
@@ -12,50 +12,28 @@
             </t>
         </template>
 
-        <template id="report_cenova_ponuka_pdf_document">
+        <template id="report_quotation_pdf_document">
              <t t-call="report.internal_layout">
                 <div class="page">
                     <t t-set="d" t-value="doc" />
                     <t t-if="d.name"><h2><span t-field="d.name"/></h2></t>
-                    <!--<table>
-                        <tr>
-                            <td t-if="d.financny_kod">Finančný kód: <strong><span t-field="d.financny_kod"/></strong></td>
-                            <td t-if="d.project_number">Číslo projektu PSID: <strong><span t-field="d.project_number"/></strong></td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td t-if="d.shortname">Skratka: <strong><span t-field="d.shortname"/></strong></td>
-                            <td t-if="d.datum_zaciatok">Dátum zahájenia: <strong><span t-field="d.datum_zaciatok"/></strong></td>
-                            <td>Celková cena:</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td t-if="d.datum_koniec">Dátum ukončenia: <strong><span t-field="d.datum_koniec"/></strong></td>
-                            <td t-if="d.celkova_cena"><span t-field="d.celkova_cena"/></td>
-                        </tr>
-                        <tr>
-                            <td t-if="d.pc_id.name">PC: <strong><span t-field="d.pc_id.name"/></strong></td>
-                            <td t-if="d.pc_id.name">PC: <strong><span t-field="d.pc_id.name"/></strong></td>
-                            <td t-if="d.pm_id.name">PM: <strong><span t-field="d.pc_id.name"/></strong></td>
-                        </tr>
-                    </table>-->
 
                     <div class="row mt32 mb32">
                         <div t-if="d.shortname" class="col-xs-3">
                             <strong>Short name:</strong>
                             <p t-field="d.shortname"/>
                         </div>
-                        <div t-if="d.financny_kod" class="col-xs-3">
+                        <div t-if="d.financial_code" class="col-xs-3">
                             <strong>Financial code:</strong>
-                            <p t-field="d.financny_kod"/>
+                            <p t-field="d.financial_code"/>
                         </div>
-                        <div t-if="d.datum_zaciatok" class="col-xs-3">
+                        <div t-if="d.start_date" class="col-xs-3">
                             <strong>Start date:</strong>
-                            <p t-field="d.datum_zaciatok" t-field-options='{"format": "dd.MM.yyyy"}'/>
+                            <p t-field="d.start_date" t-field-options='{"format": "dd.MM.yyyy"}'/>
                         </div>
-                        <div t-if="d.datum_koniec" class="col-xs-3">
+                        <div t-if="d.end_date" class="col-xs-3">
                             <strong>End date:</strong>
-                            <p t-field="d.datum_koniec" t-field-options='{"format": "dd.MM.yyyy"}'/>
+                            <p t-field="d.end_date" t-field-options='{"format": "dd.MM.yyyy"}'/>
                         </div>
                     </div>
 
@@ -72,13 +50,13 @@
                             <strong>PM:</strong>
                             <p t-field="d.pm_id.display_name"/>
                         </div>
-                        <div t-if="d.celkova_cena">
+                        <div t-if="d.total_price">
                             <table width="100%">
                                 <tr>
                                     <td style="font-size:20px;text-align:right;font-weight: bold;">Total price:</td>
                                 </tr>
                                 <tr>
-                                    <td style="font-size:20px;text-align:right;font-weight: bold;"><span t-esc="d.celkova_cena" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                    <td style="font-size:20px;text-align:right;font-weight: bold;"><span t-esc="d.total_price" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                                 </tr>
                             </table>
                         </div>
@@ -108,8 +86,8 @@
                             <p t-if="d.celkova_cena">Celková cena: <h4><span t-field="d.celkova_cena"/></h4></p>
                         </div>
                     </div>-->
-                    <t t-set="rows" t-value="d._get_oddiel(d.id)"/>
-                    <t t-set="oddiels" t-value="d._get_oddiel(d.id)"/>
+                    <t t-set="rows" t-value="d._get_section(d.id)"/>
+                    <t t-set="oddiels" t-value="d._get_section(d.id)"/>
                     <section>
                         <h3>MONTAGE</h3>
                         <t t-foreach="oddiels[0]" t-as="oddiel">
@@ -123,7 +101,7 @@
                                 <table>
                                     <tr>
                                         <table width="100%">
-                                            <t t-set="rowstyp" t-value="d._get_rows_oddiel_typ(d.id,oddiel['id'])"/>
+                                            <t t-set="rowstyp" t-value="d._get_rows_section_typ(d.id,oddiel['id'])"/>
                                             <t t-set="index" t-value="0"/>
                                             <tr t-foreach="rowstyp[0]" t-as="rowtyp">
                                                 <td>
@@ -138,7 +116,7 @@
                                                                         <th style="width:10%;text-align:left">Section</th>
                                                                         <th style="width:10%;text-align:left">KSZ</th>
                                                                         <th style="width:45%;text-align:left">Item</th>
-                                                                        <th style="width:5%;text-align:left">Measure unit</th>
+                                                                        <th style="width:5%;text-align:left">Unit of measure</th>
                                                                         <th style="width:15%;text-align:right">Unite price</th>
                                                                         <th style="width:15%;text-align:right">Totaly price</th>
                                                                     </tr>
@@ -146,12 +124,12 @@
                                                             </t>
                                                             <tbody>
                                                                 <tr>
-                                                                    <td style="width:10%;text-align:left"><span t-esc="rowtyp['oddiel']"/></td>
+                                                                    <td style="width:10%;text-align:left"><span t-esc="rowtyp['section']"/></td>
                                                                     <td style="width:10%;text-align:left"><span t-esc="rowtyp['ksz']"/></td>
-                                                                    <td style="width:45%;text-align:left"><span t-esc="rowtyp['polozka']"/></td>
-                                                                    <td style="width:5%;text-align:left"><span t-esc="rowtyp['mj']"/></td>
-                                                                    <td style="width:15%;text-align:right"><span t-esc="rowtyp['cena_jednotkova']"/></td>
-                                                                    <td style="width:15%;text-align:right"><span t-esc="rowtyp['cena_celkom']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                                                    <td style="width:45%;text-align:left"><span t-esc="rowtyp['item']"/></td>
+                                                                    <td style="width:5%;text-align:left"><span t-esc="rowtyp['uom']"/></td>
+                                                                    <td style="width:15%;text-align:right"><span t-esc="rowtyp['unit_price']"/></td>
+                                                                    <td style="width:15%;text-align:right"><span t-esc="rowtyp['total_price']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -161,7 +139,7 @@
                                         <table width="100%" style="margin-top:10px" t-if="index>0">
                                             <tr>
                                                 <td width="75%" style="font-size:16px;text-align:right;font-weight:bold;">Total typical items</td>
-                                                <td width="25%" style="font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._get_price_oddiel_atyp(d.id, oddiel['id'], 0)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                                <td width="25%" style="font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._get_price_section_atyp(d.id, oddiel['id'], 0)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                                             </tr>
                                         </table>
                                     </tr>
@@ -169,7 +147,7 @@
                                 <table width="100%">
                                     <tr>
                                         <table width="100%">
-                                            <t t-set="rowsatyp" t-value="d._get_rows_oddiel_atyp(d.id,oddiel['id'])"/>
+                                            <t t-set="rowsatyp" t-value="d._get_rows_section_atyp(d.id,section['id'])"/>
                                             <t t-set="indexatyp" t-value="0" />
                                             <tr t-foreach="rowsatyp[0]" t-as="rowatyp">
                                                 <td>
@@ -189,7 +167,7 @@
                                                         </t>
                                                         <tbody>
                                                             <tr>
-                                                                <td style="width:20%;text-align:left"><span t-esc="rowatyp['oddiel']"/></td>
+                                                                <td style="width:20%;text-align:left"><span t-esc="rowatyp['section']"/></td>
                                                                 <td style="width:65%;text-align:left"><span t-esc="rowatyp['polozka']"/></td>
                                                                 <td style="width:20%;text-align:right"><span t-esc="rowatyp['cena_celkom']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                                                             </tr>
@@ -201,7 +179,7 @@
                                         <table width="100%" style="margin-top:10px" t-if="indexatyp>0">
                                             <tr>
                                                 <td style="font-size:16px;width:75%;text-align:right;font-weight:bold;">Total atypical items</td>
-                                                <td style="font-size:16px;width:25%;text-align:right;font-weight:bold;"><span t-esc="d._get_price_oddiel_atyp(d.id, oddiel['id'], 1)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                                <td style="font-size:16px;width:25%;text-align:right;font-weight:bold;"><span t-esc="d._get_price_section_atyp(d.id, section['id'], 1)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                                             </tr>
                                         </table>
                                     </tr>
@@ -212,9 +190,9 @@
                     <section>
                         <h3>PACKAGES</h3>
                         <table width="100%">
-                            <t t-set="rowsbalicek" t-value="d._get_rows_oddiel_balicek(d.id)"/>
+                            <t t-set="rowspackage" t-value="d._get_rows_section_package(d.id)"/>
                             <t t-set="index" t-value="0" />
-                            <tr t-foreach="rowsbalicek[0]" t-as="rowbalicek">
+                            <tr t-foreach="rowspackage[0]" t-as="rowpackage">
                                 <td>
                                     <t t-set="index" t-value="index+1" />
                                     <table style="width:100%">
@@ -229,11 +207,11 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <td><span t-esc="rowbalicek['kod']"/></td>
-                                                <td><span t-esc="rowbalicek['polozka']"/></td>
-                                                <td style="width:10%;text-align:right"><span t-esc="rowbalicek['pocet']"/></td>
-                                                <td style="width:20%;text-align:right"><span t-esc="rowbalicek['cena_jednotkova']"/></td>
-                                                <td style="width:20%;text-align:right"><span t-esc="rowbalicek['cena_celkom']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                                <td><span t-esc="rowpackage['code']"/></td>
+                                                <td><span t-esc="rowpackage['item']"/></td>
+                                                <td style="width:10%;text-align:right"><span t-esc="rowpackage['quantity']"/></td>
+                                                <td style="width:20%;text-align:right"><span t-esc="rowpackage['unit_price']"/></td>
+                                                <td style="width:20%;text-align:right"><span t-esc="rowpackage['total_price']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                                             </tbody>
                                         </tr>
                                     </table>
@@ -243,7 +221,7 @@
                         <table width="100%" style="margin-top:10px" t-if="index>0">
                             <tr>
                                 <td style="width:75%;font-size:16px;text-align:right;font-weight:bold;">Packages total</td>
-                                <td style="width:25%;font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._get_price_balicky(d.id)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                <td style="width:25%;font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._get_price_packages(d.id)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                             </tr>
                         </table>
                     </section>
@@ -251,15 +229,10 @@
             </t>
         </template>
 
-        <template id="report_cenova_ponuka_pdf">
+        <template id="report_quotation_pdf">
             <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="doc">
-
-                    <!--<t t-call="o2net.layout_header" />-->
-                    <!--<t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.vendor_id.lang"/>-->
-                    <!--<t t-call="o2net.layout_footer" />-->
-                    <t t-call="o2net.report_cenova_ponuka_pdf_document"/>
-                    <!--<t t-call="o2net.report_cenova_ponuka_pdf_document" t-lang="doc.vendor_id.lang"/>-->
+                    <t t-call="o2net.report_quotation_pdf_document"/>
                 </t>
                  <div class="footer">
                      <div class="row">Printed: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
