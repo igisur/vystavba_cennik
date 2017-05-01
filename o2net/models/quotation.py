@@ -114,57 +114,57 @@ class Quotation(models.Model):
                         CHR(9),
                         case
                             when zdroj.druh = '1T' then
-                                concat(cp.project_number, '.', o.name)
+                                concat(q.project_number, '.', s.name)
                             when zdroj.druh = '2A' then
-                                concat(cp.project_number, '.', o.name)
+                                concat(q.project_number, '.', s.name)
                         else
-                            cp.project_number
+                            q.project_number
                         end,
                         CHR(9),
-                        to_char(cp.datum_koniec, 'DD.MM.YYYY')) as vystup
+                        to_char(q.end_date, 'DD.MM.YYYY')) as vystup
                     from
                         (   select
                                 '1T' as druh,
-                         		max(p.intern_kod) as kod,
-                                sum(price_celkom) as project_number,
-                                p.oddiel_id as oddiel_id,
-                                max(cpp.cenova_ponuka_id) as cenova_ponuka_id
-                            from o2net_cenova_ponuka_polozka cpp
-                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
-                            join o2net_polozka p on cp.polozka_id = p.id
+                         		max(p.intern_code) as kod,
+                                sum(total_price) as project_number,
+                                p.section_id as section_id,
+                                max(qi.quotation_id) as quotation_id
+                            from o2net_quotation_item qi
+                            join o2net_pricelist_item pi on qi.pricelist_item_id = pi.id
+                            join o2net_product p on pi.item_id = p.id
                             where
-                               cenova_ponuka_id = %s
-                               and p.is_balicek = false
-                            group by p.oddiel_id,p.intern_kod
+                               qi.quotation_id = %s
+                               and p.is_package = false
+                            group by p.section_id,p.intern_code
                             union
                          	select
                          		'2A',
-                         		(select atypsluzba from o2net_oddiel where id = atyp.oddiel_id),
+                         		(select atypservice from o2net_section where id = atyp.section_id),
                          		sum(price),
-                          		atyp.oddiel_id,
-                                max(atyp.cenova_ponuka_id)
-                            from o2net_cenova_ponuka_polozka_atyp atyp
-                            where cenova_ponuka_id = %s
-                            group by atyp.oddiel_id
+                          		atyp.section_id,
+                                max(atyp.quotation_id)
+                            from o2net_quotation_item_atyp atyp
+                            where atyp.quotation_id = %s
+                            group by atyp.section_id
                          	union
                             select
                                 '3B',
-                                p.kod,
-                                cpp.mnozstvo,
-                                p.oddiel_id,
-                                cpp.cenova_ponuka_id
-                            from o2net_cenova_ponuka_polozka_balicek cpp
-                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
-                            join o2net_polozka p on cp.polozka_id = p.id
+                                p.code,
+                                qip.quantity,
+                                p.section_id,
+                                qip.quotation_id
+                            from o2net_quotation_item_package qip
+                            join o2net_pricelist_item cp on qip.pricelist_item_id = cp.id
+                            join o2net_product p on cp.item_id = p.id
                             where
-                                cenova_ponuka_id = %s
-                                and p.is_balicek = true
+                                qip.quotation_id = %s
+                                and p.is_package = true
 
                         ) zdroj
+                     join
+                        o2net_section s on zdroj.section_id = s.id
                     join
-                        o2net_oddiel o on zdroj.oddiel_id = o.id
-                    join
-                        o2net_cenova_ponuka cp on zdroj.cenova_ponuka_id = cp.id
+                        o2net_quotation q on zdroj.quotation_id = q.id
                     order by zdroj.druh;"""
 
         self.env.cr.execute(query, (self.id, self.id, self.id))
@@ -245,31 +245,29 @@ class Quotation(models.Model):
         self.base_url = url
 
     @api.one
-    def _get_oddiel(self, cp_id):
+    def _get_section(self, cp_id):
         data = []
-        _logger.debug("_get_oddiel " + str(cp_id))
 
-        query = """select zdroj.id as id, zdroj.oddiel as oddiel
+        query = """select zdroj.id as id, zdroj.section as section
                             from
                             (
-                            select o.ID as id,o.name as oddiel
-                            from o2net_cenova_ponuka_polozka cpp
-                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
-                            join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = false
-                            join o2net_oddiel o on p.oddiel_id = o.id
-                            where cpp.cenova_ponuka_id = %s
-                            union all
-                            select o.ID, o.name
-                            from o2net_cenova_ponuka_polozka_atyp cppa
-                            join o2net_oddiel o on cppa.oddiel_id = o.id
-                            where cppa.cenova_ponuka_id = %s
+                                select s.ID as id,s.name as section
+                                from o2net_quotation_item qi
+                                join o2net_pricelist_item pi on qi.pricelist_item_id = pi.id
+                                join o2net_product p on pi.item_id = p.id and p.is_package = false
+                                join o2net_section s on p.section_id = s.id
+                                where qi.quotation_id = %s
+                                union all
+                                select s.ID, s.name
+                                from o2net_quotation_item_atyp qia
+                                join o2net_section s on qia.section_id = s.id
+                                where qia.quotation_id = %s
                             ) zdroj
-                            group by zdroj.id, zdroj.oddiel
-                            order by zdroj.oddiel;"""
+                            group by zdroj.id, zdroj.section
+                            order by zdroj.section;"""
 
         self.env.cr.execute(query, (cp_id,cp_id))
         data = self.env.cr.dictfetchall()
-        _logger.debug("_get_oddiel data " + str(data))
 
         if data:
             return data
@@ -277,31 +275,30 @@ class Quotation(models.Model):
             return {}
 
     @api.one
-    def _get_rows_oddiel_typ(self, cp_id, oddiel_id):
+    def _get_rows_section_typ(self, cp_id, oddiel_id):
         data = []
-        _logger.debug("_get_rows_oddiel_typ " + str(cp_id) + ", " + str(oddiel_id))
 
-        query = """ select  cpp.cenova_ponuka_id as cp_id,
-                            o.name as oddiel,
-                            p.intern_kod as ksz,
-                            p.name as polozka,
-                            p.mj as mj,
-                            cpp.mnozstvo as pocet,
-                            cpp.price_jednotkova as price_jednotkova,
-                            cpp.price_celkom as price_celkom
-                    from o2net_cenova_ponuka_polozka cpp
-                        join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
-                        join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = false
-                        join o2net_oddiel o on p.oddiel_id = o.id
-                    where cpp.cenova_ponuka_id = %s
-                        and o.id = %s;"""
+        query = """ select  qi.quotation_id as quotation_id,
+                            s.name as section,
+                            p.intern_code as ksz,
+                            p.name as item,
+                            p.unit_of_measure as uom,
+                            qi.quantity as pocet,
+                            qi.unit_price as unit_price,
+                            qi.total_price as total_price
+                    from o2net_quotation_item qi
+                        join o2net_pricelist_item pi on qi.pricelist_item_id = pi.id
+                        join o2net_product p on pi.item_id = p.id and p.is_package = false
+                        join o2net_section s on p.section_id = s.id
+                    where qi.quotation_id = %s
+                        and s.id = %s;"""
 
         self.env.cr.execute(query, (cp_id, oddiel_id))
         data = self.env.cr.dictfetchall()
         return data
 
     @api.one
-    def _get_rows_oddiel_atyp(self, cp_id, oddiel_id):
+    def _get_rows_section_atyp(self, cp_id, oddiel_id):
         data = []
         _logger.debug("_get_rows_oddiel_atyp " + str(cp_id) + ", " + str(oddiel_id))
 
@@ -319,25 +316,24 @@ class Quotation(models.Model):
         return data
 
     @api.one
-    def _get_rows_oddiel_balicek(self, cp_id):
+    def _get_rows_section_package(self, quotation_id):
         data = []
-        _logger.debug("_get_rows_oddiel_balicek " + str(cp_id))
 
-        query = """select   cpp.cenova_ponuka_id as cp_id,
-                            o.name as oddiel,
-                            p.kod as kod,
-                            p.name as polozka,
-                            p.mj as mj,
-                            cpp.price_jednotkova,
-                            cpp.mnozstvo as pocet,
-                            cpp.price_celkom as price_celkom
-                    from o2net_cenova_ponuka_polozka_balicek cpp
-                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
-                            join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = true
-                            join o2net_oddiel o on p.oddiel_id = o.id
-                        where cpp.cenova_ponuka_id = %s   ;"""
+        query = """select   qip.quotation_id as quotation_id,
+                            s.name as section,
+                            p.code as code,
+                            p.name as item,
+                            p.unit_of_measure as uom,
+                            qip.unit_price as unit_price,
+                            qip.quantity as quantity,
+                            qip.total_price as total_price
+                    from o2net_quotation_item_package qip
+                            join o2net_pricelist_item pi on qip.pricelist_item_id = pi.id
+                            join o2net_product p on pi.item_id = p.id and p.is_package = true
+                            join o2net_section s on p.section_id = s.id
+                        where qip.quotation_id = %s;"""
 
-        self.env.cr.execute(query, ([cp_id]))
+        self.env.cr.execute(query, ([quotation_id]))
         data = self.env.cr.dictfetchall()
         return data
 
@@ -376,60 +372,57 @@ class Quotation(models.Model):
         return price
 
     @api.one
-    def _get_price_oddiel_atyp(self, cp_id, oddiel_id, atyp):
+    def _get_price_section_atyp(self, quotation_id, section_id, atyp):
     # --------------------------------------------------------------------------
-    # celkova price pre cenovu ponuku a oddiel a typ/atyp
-    # pocita as suma pre cp a oddiel a polozky typove resp. atypove polozky
+    # total price
     # --------------------------------------------------------------------------
         price = 0
-        _logger.debug("_get_price_oddiel_atyp cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id)+ " atyp=" + str(atyp))
+        _logger.debug("_get_price_oddiel_atyp cp_id=" + str(quotation_id) + " oodiel_id=" + str(section_id) + " atyp=" + str(atyp))
 
         if atyp==1:
-            #1 atypove polozky
-            query = """select sum(cppa.price)
-                        from o2net_cenova_ponuka cp
-                        join o2net_cenova_ponuka_polozka_atyp cppa on cp.id = cppa.cenova_ponuka_id
-                        join o2net_oddiel o on cppa.oddiel_id = o.id
+            query = """select sum(qia.price)
+                        from o2net_quotation q
+                        join o2net_quotation_item_atyp qia on q.id = qia.quotation_id
+                        join o2net_section s on qia.section_id = s.id
                         where
-                            cp.id = %s
-                            and o.id = %s;"""
+                            q.id = %s
+                            and s.id = %s;"""
 
-            self.env.cr.execute(query, (cp_id, oddiel_id))
+            self.env.cr.execute(query, (quotation_id, section_id))
             price = self.env.cr.fetchone()[0]
 
         if atyp==0:
-            query = """select sum(cpp.price_celkom)
-                        from o2net_cenova_ponuka cp
-                        join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
-                        join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
-                        join o2net_polozka p on c.polozka_id = p.id
-                        where cp.id = %s
-                        and p.oddiel_id = %s
-                        and p.is_balicek = false;"""
+            query = """select sum(qi.total_price)
+                        from o2net_quotation q
+                        join o2net_quotation_item qi on q.id = qi.quotation_id
+                        join o2net_pricelist_item pi on qi.pricelist_item_id = pi.id
+                        join o2net_product p on pi.item_id = p.id
+                        where q.id = %s
+                        and p.section_id = %s
+                        and p.is_package = false;"""
 
-            self.env.cr.execute(query, (cp_id, oddiel_id))
+            self.env.cr.execute(query, (quotation_id, section_id))
             price = self.env.cr.fetchone()[0]
 
-        _logger.debug("_get_price_oddiel_atyp price=" + str(price))
         return price
 
     @api.one
-    def _get_price_balicky(self, cp_id):
+    def _get_price_packages(self, quotation_id):
     # ---------------------------------------------
-    # celkova price pre cenovu ponuku a balicky
+    # total price for quotation and packages
     # ---------------------------------------------
         price = 0
-        _logger.debug("_get_price_balicky cp_id=" + str(cp_id))
+        _logger.debug("_get_price_balicky cp_id=" + str(quotation_id))
 
-        query = """select sum(cpp.price_celkom)
-                    from o2net_cenova_ponuka cp
-                    join o2net_cenova_ponuka_polozka_balicek cpp on cp.id = cpp.cenova_ponuka_id
-                    join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
-                    join o2net_polozka p on c.polozka_id = p.id
-                    where cp.id = %s
-                    and p.is_balicek = true;"""
+        query = """select sum(qip.total_price)
+                    from o2net_quotation q
+                    join o2net_quotation_item_package qip on q.id = qip.quotation_id
+                    join o2net_pricelist_item pli on qip.pricelist_item_id = pli.id
+                    join o2net_product p on pli.item_id = p.id
+                    where q.id = %s
+                    and p.is_package = true;"""
 
-        self.env.cr.execute(query, ([cp_id]))
+        self.env.cr.execute(query, ([quotation_id]))
         price = self.env.cr.fetchone()[0]
         return price
 
@@ -440,68 +433,68 @@ class Quotation(models.Model):
 
         query = """ select  typorder as typorder,
                             typ as typ,
-                            oddieltyp as oddieltyp,
-                            cp.id as id,
-                            oddiel as oddiel,
+                            sectiontyp as sectiontyp,
+                            q.id as id,
+                            zdroj.section as section,
                             ksz as ksz,
-                            polozka as polozka,
-                            price_jednotkova as price_jednotkova,
-                            mj as mj,
-                            pocet as pocet,
-                            price_celkom as price_celkom,
-                            cp.project_number as project_number
+                            item as item,
+                            zdroj.unit_price as unit_price,
+                            zdroj.uom as uom,
+                            quantity as quantity,
+                            zdroj.total_price as total_price,
+                            q.project_number as project_number
                             from
                             (
                             select  '1t' as typorder,
                                     't' as typ,
-                                    concat(o.name,'p') as oddieltyp,
-                                    cpp.cenova_ponuka_id as cp_id,
-                                    o.name as oddiel,
-                                    p.intern_kod as ksz,
-                                    p.name as polozka,
-                                    cpp.price_jednotkova as price_jednotkova,
-                                    p.mj as mj,
-                                    cpp.mnozstvo as pocet,
-                                    cpp.price_celkom as price_celkom
-                            from o2net_cenova_ponuka_polozka cpp
-                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
-                            join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = false
-                            join o2net_oddiel o on p.oddiel_id = o.id
-                            where cpp.cenova_ponuka_id = %s
+                                    concat(s.name,'p') as sectiontyp,
+                                    qi.quotation_id as quotation_id,
+                                    s.name as section,
+                                    p.intern_code as ksz,
+                                    p.name as item,
+                                    qi.unit_price as unit_price,
+                                    p.unit_of_measure as uom,
+                                    qi.quantity as quantity,
+                                    qi.total_price as total_price
+                            from o2net_quotation_item qi
+                            join o2net_pricelist_item pi on qi.pricelist_item_id = pi.id
+                            join o2net_product p on pi.item_id = p.id and p.is_package = false
+                            join o2net_section s on p.section_id = s.id
+                            where qi.quotation_id = %s
                             union all
                             select  '2a',
                                     'a',
-                                    concat(o.name,'p'),
-                                    cppa.cenova_ponuka_id,
-                                    o.name,
+                                    concat(s.name,'p'),
+                                    qia.quotation_id,
+                                    s.name,
                                     '',
-                                    cppa.name,
+                                    qia.name,
                                     null,
                                     null,
                                     null,
-                                    cppa.price
-                            from o2net_cenova_ponuka_polozka_atyp cppa
-                            join o2net_oddiel o on cppa.oddiel_id = o.id
-                            where cppa.cenova_ponuka_id = %s
+                                    qia.price
+                            from o2net_quotation_item_atyp qia
+                            join o2net_section s on qia.section_id = s.id
+                            where qia.quotation_id = %s
                             union all
                             select  '3b',
                                     'b',
-                                    concat(o.name,'b'),
-                                    cpp.cenova_ponuka_id,
-                                    o.name,
-                                    p.kod,
+                                    concat(s.name,'b'),
+                                    qip.quotation_id,
+                                    s.name,
+                                    p.code,
                                     p.name,
-                                    cpp.price_jednotkova,
-                                    p.mj,
-                                    cpp.mnozstvo,
-                                    cpp.price_celkom
-                            from o2net_cenova_ponuka_polozka_balicek cpp
-                            join o2net_cennik_polozka cp on cpp.cennik_polozka_id = cp.id
-                            join o2net_polozka p on cp.polozka_id = p.id and p.is_balicek = true
-                            join o2net_oddiel o on p.oddiel_id = o.id
-                            where cpp.cenova_ponuka_id = %s
+                                    qip.unit_price,
+                                    p.unit_of_measure,
+                                    qip.quantity,
+                                    qip.total_price
+                            from o2net_quotation_item_package qip
+                            join o2net_pricelist_item pi on qip.pricelist_item_id = pi.id
+                            join o2net_product p on pi.item_id = p.id and p.is_package = true
+                            join o2net_section s on p.section_id = s.id
+                            where qip.quotation_id = %s
                             ) zdroj
-                            join o2net_cenova_ponuka cp on zdroj.cp_id = cp.id order by typorder;"""
+                            join o2net_quotation q on zdroj.quotation_id = q.id order by typorder;"""
 
         # self.env.cr.execute(query, (self.id, self.id, self.id))
         self.env.cr.execute(query, (cp_id, cp_id, cp_id))
