@@ -349,21 +349,21 @@ class Quotation(models.Model):
 
         query = """select sum(zdroj.price)
                     from
-                    (   select sum(cppa.price) as price
-                        from o2net_cenova_ponuka cp
-                        join o2net_cenova_ponuka_polozka_atyp cppa on cp.id = cppa.cenova_ponuka_id
-                        join o2net_oddiel o on cppa.oddiel_id = o.id
-                        where cp.id = %s
-                        and o.id = %s
+                    (   select sum(qia.price) as price
+                        from o2net_quotation q
+                        join o2net_quotation_item_atyp qia on q.id = qia.quotation_id
+                        join o2net_section s on qia.section_id = s.id
+                        where q.id = %1
+                        and s.id = %1
                         union all
-                        select sum(cpp.price_celkom)
-                        from o2net_cenova_ponuka cp
-                        join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
-                        join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
-                        join o2net_polozka p on c.polozka_id = p.id
-                        where cp.id = %s
-                        and p.oddiel_id = %s
-                        and p.is_balicek = false ) zdroj;"""
+                        select sum(qi.total_price)
+                        from o2net_quotation q
+                        join o2net_quotation_item qi on q.id = qi.quotation_id
+                        join o2net_pricelist_item pi on qi.pricelist_item_id = pi.id
+                        join o2net_product p on pi.item_id = p.id
+                        where q.id = %1
+                        and p.section_id = %1
+                        and p.is_package = false ) zdroj;"""
 
         self.env.cr.execute(query, (quotation_id, section_id, quotation_id, section_id))
         price = self.env.cr.fetchone()[0]
