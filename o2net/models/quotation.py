@@ -540,8 +540,8 @@ class Quotation(models.Model):
     vendor_id = fields.Many2one('res.partner', required=True, string='Vendor', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
     pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True, default=lambda self: self._get_default_pc())
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm, copy=True)
-    manager_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_manager_rel", string='Manager', domain=partners_in_group_manager, copy=False)
-    assigned_persons_ids = fields.Many2many('res.partner', relation="o2net_cenova_ponuka_assigned_rel", string='Assigned persons', copy=False, default = lambda self: [(4, self.env.user.partner_id.id)])
+    manager_ids = fields.Many2many('res.partner', relation="o2net_quotation_manager_rel", string='Manager', domain=partners_in_group_manager, copy=False)
+    assigned_persons_ids = fields.Many2many('res.partner', relation="o2net_qoutation_assigned_rel", string='Assigned persons', copy=False, default = lambda self: [(4, self.env.user.partner_id.id)])
 
     state = fields.Selection(State, string='State', readonly=True, default='draft', track_visibility='onchange', copy=False)
     state_date = fields.Date(string="date state", default=datetime.date.today(), copy=False);
