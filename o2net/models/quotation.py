@@ -238,8 +238,8 @@ class Quotation(models.Model):
         base = self.env['ir.config_parameter'].get_param('web.base.url')
         id = self.id
         ir_model_data = self.env['ir.model.data']
-        menu_id = ir_model_data.get_object_reference('o2net', 'menu_cenova_ponuka_preview')[1]
-        action_id = ir_model_data.get_object_reference('o2net', 'action_window_cp_preview')[1]
+        menu_id = ir_model_data.get_object_reference('o2net', 'menu_quotation_preview')[1]
+        action_id = ir_model_data.get_object_reference('o2net', 'action_window_qout_preview')[1]
         url = "%s/web#id=%s&view_type=form&model=o2net.quotation&menu_id=%s&action=%s" % (base, id, menu_id, action_id)
         _logger.debug("URL: " + url)
         self.base_url = url

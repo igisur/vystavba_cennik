@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record model="ir.ui.view" id="view_form_cenova_ponuka_polozka">
+        <record model="ir.ui.view" id="view_form_quotation_item">
             <field name="name">Quotation item</field>
             <field name="model">o2net.quotation.item</field>
             <field name="priority" eval="5"/>
@@ -16,7 +16,7 @@
                     </div>
                     <group>
                         <field name="code" readonly="1"/>
-                        <field name="item_unit_of_measure" readonly="1" string="Measure unit"/>
+                        <field name="item_unit_of_measure" readonly="1" string="Unit of measure"/>
                         <field name="currency_id" invisible="1"/>
                         <field name="unit_price" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
                     </group>
@@ -30,7 +30,7 @@
         </record>
 
         <!-- VIEWS -->
-        <record model="ir.ui.view" id="view_form_cenova_ponuka">
+        <record model="ir.ui.view" id="view_form_quotation">
             <field name="name">Quotation</field>
             <field name="model">o2net.quotation</field>
             <field name="priority" eval="5"/>
@@ -73,8 +73,6 @@
                                 <field name="vendor_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" context="{'group_name':'TEST_GROUP'}"/>
                                 <field name="pc_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
                                 <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
-                                <!--<field name="manager_id" readonly="True" options="{'no_create': True}"/>-->
-                                <!--<field name="osoba_priradena_id" readonly="True"/>-->
                                 <field name="manager_ids" readonly="True" options="{'no_create': True}" widget="many2many_tags"/>
                                 <field name="assigned_persons_ids" readonly="True" options="{'no_create_edit': True}" widget="many2many_tags"/>
                                 <field name="price_list_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" class="oe_read_only"/>
@@ -99,7 +97,7 @@
                                 <field name="quotation_item_package_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Packages" editable="bottom">
                                         <field name="pricelist_item_id" string="Packages" options="{'no_create': True}" domain="[('item_id.is_package','=','True')]"/>
-                                        <field name="item_unit_of_measure" readonly="1" string="Measure unit"/>
+                                        <field name="item_unit_of_measure" readonly="1" string="Unit of measure"/>
                                         <field name="unit_price"/>
                                         <field name="quantity"  string="Quantity"/>
                                         <field name="total_price" string="Total price"/>
@@ -123,9 +121,9 @@
                             </div>
                             <field name="total_price" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         </group>
+
                         <div class="oe_clear"/>
 
-                        <!-- class="oe_inline" -->
                         <label for="note"/>
                         <field name="note" attrs="{'readonly':[('state','in',['approved'])]}"/>
                         <label for="workflow_reason"/>
@@ -139,9 +137,7 @@
             </field>
         </record>
 
-        <!-- zobrazenie pre vsetky stavy okrem 'draft'
-        -->
-        <record model="ir.ui.view" id="view_tree_cenova_ponuka">
+        <record model="ir.ui.view" id="view_tree_quotation">
             <field name="name">Quotation</field>
             <field name="model">o2net.quotation</field>
             <field name="priority" eval="5"/>
@@ -162,10 +158,7 @@
             </field>
         </record>
 
-        <!-- zobrazenie pre vsetky cenove ponuky v stave 'draft'
-            nepotrebujeme: priradenu osobu, celkovu cenu
-        -->
-        <record model="ir.ui.view" id="view_tree_cenova_ponuka_draft">
+        <record model="ir.ui.view" id="view_tree_quotation_draft">
             <field name="name">Quotation</field>
             <field name="model">o2net.quotation</field>
             <field name="priority" eval="5"/>
@@ -182,8 +175,7 @@
             </field>
         </record>
 
-        <!-- zobrazenie pre vsetky cenove ponuky podla stavu -->
-        <record model="ir.ui.view" id="view_tree_cenova_ponuka_preview">
+        <record model="ir.ui.view" id="view_tree_quotation_preview">
             <field name="name">Quotation</field>
             <field name="model">o2net.quotation</field>
             <field name="priority" eval="6"/>
@@ -206,11 +198,10 @@
         </record>
 
         <!-- ACTIONS -->
-       <!-- PC: vytvorenie a zoznam vytvorenych navrhov CP -->
-        <record model="ir.actions.act_window" id="action_window_cp_draft">
+        <record model="ir.actions.act_window" id="action_window_qout_draft">
             <field name="name">Quotation draft</field>
             <field name="res_model">o2net.quotation</field>
-            <field name="view_id" ref="view_tree_cenova_ponuka_draft"/>
+            <field name="view_id" ref="view_tree_quotation_draft"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('state','=','draft')]</field>
@@ -220,11 +211,10 @@
             </field>
         </record>
 
-        <!-- Dodavatel: zoznam priradenych navrhov CP. to-do pool navrhov CP, ktoré su priradene dodavatelovy. ak ich zedituje stavaju sa "rozpracované" -->
-        <record model="ir.actions.act_window" id="action_window_cp_assigned">
+        <record model="ir.actions.act_window" id="action_window_qout_assigned">
             <field name="name">Assigned Quotations</field>
             <field name="res_model">o2net.quotation</field>
-            <field name="view_id" ref="view_tree_cenova_ponuka"/>
+            <field name="view_id" ref="view_tree_quotation"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','assigned')]</field>
@@ -233,11 +223,10 @@
             </field>
         </record>
 
-        <!-- Dodavatel: zoznam rozpracovanych CP. to-do pool navrhov CP, ktoré treba dospecifikovat a posunut ich na schvalenie -->
-        <record model="ir.actions.act_window" id="action_window_cp_in_progress">
+        <record model="ir.actions.act_window" id="action_window_qout_in_progress">
             <field name="name">Quotations in progres</field>
             <field name="res_model">o2net.quotation</field>
-            <field name="view_id" ref="view_tree_cenova_ponuka"/>
+            <field name="view_id" ref="view_tree_quotation"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','in_progress')]</field>
@@ -246,10 +235,10 @@
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="action_window_cp_to_approve">
+        <record model="ir.actions.act_window" id="action_window_qout_to_approve">
             <field name="name">Quotations waiting for approval</field>
             <field name="res_model">o2net.quotation</field>
-            <field name="view_id" ref="view_tree_cenova_ponuka"/>
+            <field name="view_id" ref="view_tree_quotation"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','to_approve')]</field>
@@ -258,11 +247,10 @@
             </field>
         </record>
 
-        <!-- Dodavatel / PC / PM / Manager: zoznam schvalenych CP (v podstate historia CP) READ ONLY -->
-        <record model="ir.actions.act_window" id="action_window_cp_approved">
+        <record model="ir.actions.act_window" id="action_window_qout_approved">
             <field name="name">Approved Quotations</field>
             <field name="res_model">o2net.quotation</field>
-            <field name="view_id" ref="view_tree_cenova_ponuka"/>
+            <field name="view_id" ref="view_tree_quotation"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','approved')]</field>
@@ -271,10 +259,10 @@
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="action_window_cp_cancel">
+        <record model="ir.actions.act_window" id="action_window_qout_cancel">
             <field name="name">Canceled Quotations</field>
             <field name="res_model">o2net.quotation</field>
-            <field name="view_id" ref="view_tree_cenova_ponuka"/>
+            <field name="view_id" ref="view_tree_quotation"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','cancel')]</field>
@@ -283,10 +271,10 @@
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="action_window_cp_preview">
+        <record model="ir.actions.act_window" id="action_window_qout_preview">
             <field name="name">Overview Quotations</field>
             <field name="res_model">o2net.quotation</field>
-            <field name="view_id" ref="view_tree_cenova_ponuka_preview"/>
+            <field name="view_id" ref="view_tree_quotation_preview"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
@@ -295,7 +283,7 @@
         </record>
 
         <!-- MENU -->
-        <menuitem id="menu_quotation_root"
+        <menuitem id="menu_quotation"
                   name="Quotation"
                   sequence="10"
                   parent="menu_root"/>
@@ -303,51 +291,46 @@
         <menuitem id="menu_quotation_draft"
                   name="Draft"
                   sequence="11"
-                  parent="menu_quotation_root"
-                  action="action_window_cp_draft"
+                  parent="menu_quotation"
+                  action="action_window_qout_draft"
                   groups="o2net.group_vystavba_supplier,o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
 
-                  <!--groups="base.group_vystavba_pc,base.group_vystavba_pm,base.group_vystavba_admin"/>-->
-
-        <menuitem id="menu_cenova_ponuka_assigned"
+        <menuitem id="menu_quotation_assigned"
                   name="Assigned"
                   sequence="12"
-                  parent="menu_quotation_root"
-                  action="action_window_cp_assigned"
+                  parent="menu_quotation"
+                  action="action_window_qout_assigned"
                   groups="o2net.group_vystavba_supplier,o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
-                  <!--groups="base.group_vystavba_supplier,base.group_vystavba_pc,base.group_vystavba_pm,base.group_vystavba_admin"/>-->
 
-        <menuitem id="menu_cenova_ponuka_in_progress"
+        <menuitem id="menu_quotation_in_progress"
                   name="In progress"
                   sequence="13"
-                  parent="menu_quotation_root"
-                  action="action_window_cp_in_progress"
+                  parent="menu_quotation"
+                  action="action_window_qout_in_progress"
                   groups="o2net.group_vystavba_supplier,o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
-                  <!--groups="base.group_vystavba_supplier,base.group_vystavba_pc,base.group_vystavba_pm,base.group_vystavba_admin"/>-->
 
-        <menuitem id="menu_cenova_ponuka_to_approve"
+        <menuitem id="menu_quotation_to_approve"
                   name="To approve"
                   sequence="14"
-                  parent="menu_quotation_root"
-                  action="action_window_cp_to_approve"/>
-                  <!--groups="base.group_vystavba_pc,base.group_vystavba_pm,base.group_vystavba_admin"/>-->
+                  parent="menu_quotation"
+                  action="action_window_qout_to_approve"/>
 
-        <menuitem id="menu_cenova_ponuka_approved"
+        <menuitem id="menu_quotation_approved"
                   name="Approve"
                   sequence="15"
-                  parent="menu_quotation_root"
-                  action="action_window_cp_approved"/>
+                  parent="menu_quotation"
+                  action="action_window_qout_approved"/>
 
-        <menuitem id="menu_cenova_ponuka_cancel"
+        <menuitem id="menu_quotation_cancel"
                   name="Canceled"
                   sequence="16"
-                  parent="menu_quotation_root"
-                  action="action_window_cp_cancel"/>
+                  parent="menu_quotation"
+                  action="action_window_qout_cancel"/>
 
-        <menuitem id="menu_cenova_ponuka_preview"
+        <menuitem id="menu_quotation_preview"
                   name="Overview"
                   sequence="17"
-                  parent="menu_quotation_root"
-                  action="action_window_cp_preview"/>
+                  parent="menu_quotation"
+                  action="action_window_qout_preview"/>
     </data>
 </openerp>
