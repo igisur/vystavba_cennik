@@ -2,8 +2,8 @@
 <openerp>
     <data>
 
-        <record model="ir.ui.view" id="view_form_osoba">
-            <field name="name">view_osoba_form</field>
+        <record model="ir.ui.view" id="view_form_partner">
+            <field name="name">o2net view form partner</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_simple_form"/>
             <field name="arch" type="xml">
@@ -15,26 +15,26 @@
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="act_res_partner_vystavba">
+        <record model="ir.actions.act_window" id="act_res_partner_o2net">
             <field name="name">Person</field>
             <field name="res_model">res.partner</field>
             <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="view_form_osoba"/>
+            <field name="view_id" ref="view_form_partner"/>
             <field name="view_type">form</field>
         </record>
 
 
 
-         <menuitem id="menu_osoba_root"
+         <menuitem id="menu_partners"
                 name="Partners"
                 sequence="40"
                 parent="menu_root"
                 groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
 
-        <menuitem id="menu_osoba"
+        <menuitem id="menu_partner"
                   name="Partner"
                   sequence="41"
-                  parent="menu_osoba_root"
-                  action="act_res_partner_vystavba"/>
+                  parent="menu_partners"
+                  action="act_res_partner_o2net"/>
     </data>
 </openerp>
