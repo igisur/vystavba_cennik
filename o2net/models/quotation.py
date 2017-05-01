@@ -580,7 +580,7 @@ class Quotation(models.Model):
 
             self.message_post(body="<ul class =""o_mail_thread_message_tracking"">%s</ul>" % msg, message_type="notification")
 
-        res = super(PriceOffer, self).write(vals)
+        res = super(Quotation, self).write(vals)
 
         # ak zapisujeme stav prisli sme sem z WF akcie, a preto koncime. automaticka zmena stavu WF je len v pripade akcie SAVE kde sa 'state' nemeni!
         if not vals.get('state') == None:
@@ -602,7 +602,7 @@ class Quotation(models.Model):
         default = {'name': self.name + " [KOPIA]"}
         # ! treba zistit ci cennik_id je platny a prejst prilinokvane polozky a updatnut cenu !!!
         _logger.debug("copy (duplicate): " + str(default))
-        new_cp = super(PriceOffer, self).copy(default=default)
+        new_cp = super(Quotation, self).copy(default=default)
 
         return new_cp
 
