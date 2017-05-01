@@ -45,7 +45,7 @@
 
         <!-- Menu item to open To-do Task list -->
         <menuitem id="menu_section"
-            name="Package"
+            name="Section"
             parent="menu_pricelist_root"
             sequence="50"
             action="action_window_section"/>

@@ -23,7 +23,7 @@
         'views/priceoffer_view.xml',
         'report/report.xml',
         'views/section_view.xml',
-        'views/mail_template.xml',
+        #'views/email_template.xml'
         'workflows/priceoffer_wf.xml',
         'report/priceoffer_report.xml',
         'views/priceoffer_cron.xml'

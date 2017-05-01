@@ -43,7 +43,7 @@
             <p>
             Hello,<br/><br/>
 
-            Vendor "${object.vendor_id.display_name}" has unfinished price offer <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financny_kod} (${object.vendor_id.display_name})</a><br/>
+            Vendor "${object.vendor_id.display_name}" has unfinished price offer <a href="${object.base_url}">${object.name}/${object.shortname}/${object.financial_code} (${object.vendor_id.display_name})</a><br/>
             </p>
             best regards,<br/>
                O2 network team

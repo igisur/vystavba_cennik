@@ -721,7 +721,7 @@ class PriceOffer(models.Model):
         if self.workflow_reason:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
-        self.sudo().write({'state': self.ASSIGNED, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'wf_dovod': ''})
+        self.sudo().write({'state': self.ASSIGNED, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'workflow_reason': ''})
         self.sudo().send_mail([self.vendor_id])
         return True
 
@@ -732,7 +732,7 @@ class PriceOffer(models.Model):
         if self.workflow_reason:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
-        self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'wf_dovod': ''})
+        self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'workflow_reason': ''})
         # notify PC via email that supplier starts working on CP
         self.sudo().send_mail([self.pc_id], template_name='mail_cp_in_progress')
         return True
@@ -742,7 +742,7 @@ class PriceOffer(models.Model):
         self.ensure_one()
         _logger.debug("workflow action to APPROVE")
 
-        # do historie pridame 'wf_dovod'
+        # do historie pridame 'workflow_reason'
         if self.workflow_reason:
             # add to tracking values
             self.message_post(body='<ul class="o_mail_thread_message_tracking"><li>Workflow reason: ' + self.workflow_reason + '</li></ul>')
@@ -750,13 +750,13 @@ class PriceOffer(models.Model):
         # Dodavatel poslal na schvalenie PC
         if self.vendor_id.id in self.assigned_persons_ids.ids:
             _logger.debug("Supplier sent to approve by PC")
-            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
+            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pc_id.id])], 'workflow_reason': ''})
             self.sudo().send_mail([self.pc_id])
 
         # PC poslal na schvalenie PM
         elif self.pc_id.id in self.assigned_persons_ids.ids:
             _logger.debug("PC sent to approve by PM")
-            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pm_id.id])], 'wf_dovod': ''})
+            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pm_id.id])], 'workflow_reason': ''})
             self.sudo().send_mail([self.pm_id])
 
         # PM poslal na schvalenie Managerovy
@@ -775,7 +775,7 @@ class PriceOffer(models.Model):
         elif self.env.user.partner_id.id in self.manager_ids.ids:
             if self.is_user_assigned:
                 _logger.debug("Manager '" + self.env.user.partner_id.display_name + "' approved")
-                self.sudo().write({'assigned_persons_ids': [(3,self.env.user.partner_id.id)], 'wf_dovod': ''})
+                self.sudo().write({'assigned_persons_ids': [(3,self.env.user.partner_id.id)], 'workflow_reason': ''})
 
                 # posleme email PC, aby vedel, ze manager schvalil
                 context = {'manager_name': self.env.user.partner_id.display_name}
@@ -786,7 +786,7 @@ class PriceOffer(models.Model):
             # vsetci managery schvalili
             if not self.assigned_persons_ids.ids:
                 _logger.debug("ALL managers approved")
-                self.sudo().write({'state': self.APPROVED, 'assigned_persons_ids': [(5)], 'wf_dovod': ''})
+                self.sudo().write({'state': self.APPROVED, 'assigned_persons_ids': [(5)], 'workflow_reason': ''})
                 self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
                 self.sudo().action_exportSAP()
 
@@ -806,7 +806,7 @@ class PriceOffer(models.Model):
         # PC signals 'not complete' - CP should be 'in_progress' and assigned to Supplier
         if self.pc_id.id in self.assigned_persons_ids.ids:
             _logger.debug("workflow action to IN_PROGRESS")
-            self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'wf_dovod': ''})
+            self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'workflow_reason': ''})
             self.sudo().send_mail([self.vendor_id])
             self.sudo().signal_workflow('not_complete')
             # call WF: signal "not complete". som v stave "to_approve". potrebujem ist do in_progers
@@ -814,7 +814,7 @@ class PriceOffer(models.Model):
         # PM signals 'not complete' - CP should be 'to_approve' and assigned to PC
         elif self.pm_id.id in self.assigned_persons_ids.ids:
             _logger.debug("workflow action to TO_APPROVE")
-            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pc_id.id])], 'wf_dovod': ''})
+            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pc_id.id])], 'workflow_reason': ''})
             self.sudo().send_mail([self.pc_id])
 
         return True
@@ -827,7 +827,7 @@ class PriceOffer(models.Model):
         if self.workflow_reason:
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
-        self.sudo().write({'state': self.CANCEL, 'assigned_persons_ids': [(5)], 'wf_dovod': ''})
+        self.sudo().write({'state': self.CANCEL, 'assigned_persons_ids': [(5)], 'workflow_reason': ''})
         self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_canceled')
         return True
 
