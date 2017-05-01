@@ -3,7 +3,7 @@
 
     <data noupdate="0">
         <!-- RECORD RULES -->
-        <!-- Supplier -->
+        <!-- Vendor -->
         <record model="ir.rule" id="rule_supplier_read">
             <field name="name">supplier can read purchase order where is supplier</field>
             <field name="model_id" ref="model_o2net_quotation"/>

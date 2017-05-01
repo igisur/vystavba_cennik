@@ -73,7 +73,7 @@ class Quotation(models.Model):
     def get_last_mail_date(self, partner_id):
         ret = {}
 
-        # najdeme posledny mail odoslany partnerovy
+        # looking for the last mail sent to partner
         mail_ids = self.env['mail.mail'].search([('', '=', partner_id)], order = "po_total_price_limit desc", limit=1)
 
         return ret;
@@ -172,7 +172,6 @@ class Quotation(models.Model):
 
         for row in fetchrows:
             data.append(row.get('vystup').decode('utf8'))
-        # rozparsujem pole do stringu a oddelim enterom
         ret = '\r\n'.join(data)
         return ret
 
@@ -496,7 +495,6 @@ class Quotation(models.Model):
                             ) zdroj
                             join o2net_quotation q on zdroj.quotation_id = q.id order by typorder;"""
 
-        # self.env.cr.execute(query, (self.id, self.id, self.id))
         self.env.cr.execute(query, (cp_id, cp_id, cp_id))
         data = self.env.cr.dictfetchall()
         return data
@@ -504,7 +502,6 @@ class Quotation(models.Model):
     @api.model
     def _get_default_pc(self):
         _logger.debug('_get_default_pc')
-        # PC - ak ativny user je PC, tak ho rovno predvolime
         partners = self._partners_in_group(self.GROUP_PC)
         _logger.debug('partners: ' + str(partners))
 
@@ -575,11 +572,11 @@ class Quotation(models.Model):
 
         res = super(Quotation, self).write(vals)
 
-        # ak zapisujeme stav prisli sme sem z WF akcie, a preto koncime. automaticka zmena stavu WF je len v pripade akcie SAVE kde sa 'state' nemeni!
+        # if STATE is written we came here from Workflow action and therefor we finish here. Automatic STATE change is only case of action 'SAVE'
         if not vals.get('state') == None:
             return res
 
-        # ak je prihlaseny Dodavatel, je mu priradena CP a je v stave ASSIGNED tak pri save zmenime stav na IN_PROGRESS
+        # change to 'IN_PROGRESS' if logged user is aasigned to Quot and this is in state 'ASSIGNED'
         if self.vendor_id.id in self.assigned_persons_ids.ids:
             _logger.debug("CP je priradena dodavatelovy")
             if self.state == self.ASSIGNED:
@@ -591,9 +588,8 @@ class Quotation(models.Model):
     @api.multi
     def copy(self, default=None):
 
-        # meno CP musi byt unikatne, preto pridame prefix. na koniec je lepsie, pretoze pri focuse ma input kurzor na konci -> uzivatel rychlo zmaze
+        # Qout name has to be unique, therefore add prefix [KOPIA]
         default = {'name': self.name + " [KOPIA]"}
-        # ! treba zistit ci cennik_id je platny a prejst prilinokvane polozky a updatnut cenu !!!
         _logger.debug("copy (duplicate): " + str(default))
         new_cp = super(Quotation, self).copy(default=default)
 
@@ -601,7 +597,7 @@ class Quotation(models.Model):
 
     @api.multi
     def unlink(self):
-        # cenova ponuka moze byt zmazane len v stave "DRAFT". potom je mozne ju zrusit cez WF akciu "Cancel"
+        # Quot can be unlink in the state DRAFT, otherway workflow action 'CANCEL' has to be used
         if not self.state == self.DRAFT:
             raise AccessError("Cenovú ponuku je možné zmazať len pokiaľ je v stave 'Návrh'. V ostatnom prípade použite workflow akciu 'Zrušiť'")
 
@@ -624,7 +620,7 @@ class Quotation(models.Model):
         else:
             self.price_list_id = ''
 
-        # pri zmene dodavatela a tym padol aj cennika zmaz vsetky polozky
+        # by Vendor' change delete all pricelist's items
         self.quotation_item_ids = None;
 
         result = {'price_list_id': self.price_list_id}
@@ -642,7 +638,7 @@ class Quotation(models.Model):
             raise ValidationError("Cenová ponuka s rovnakým názvom už existuje. Prosím zvolte iný názov, ktorý bude unikátny.")
 
     # Workflow
-    # najdi partnera v skupine 'Manager', ktoreho field 'price_na_schvalenie' je vacsia ako celkova price CP
+    # looking for manager which 'total_price_limit' is greater than current quot total price
     def _find_managers(self):
         _logger.debug("Looking for manager to approve order of price " + str(self.total_price))
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
@@ -698,7 +694,6 @@ class Quotation(models.Model):
             self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
         self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'workflow_reason': ''})
-        # notify PC via email that supplier starts working on CP
         self.sudo().send_mail([self.pc_id], template_name='mail_cp_in_progress')
         return True
 
@@ -707,24 +702,24 @@ class Quotation(models.Model):
         self.ensure_one()
         _logger.debug("workflow action to APPROVE")
 
-        # do historie pridame 'workflow_reason'
+        # put 'workflow_reason' to history (mail_thread)
         if self.workflow_reason:
             # add to tracking values
             self.message_post(body='<ul class="o_mail_thread_message_tracking"><li>Workflow reason: ' + self.workflow_reason + '</li></ul>')
 
-        # Dodavatel poslal na schvalenie PC
+        # Vendor sent quot to be approved by PC
         if self.vendor_id.id in self.assigned_persons_ids.ids:
             _logger.debug("Supplier sent to approve by PC")
             self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pc_id.id])], 'workflow_reason': ''})
             self.sudo().send_mail([self.pc_id])
 
-        # PC poslal na schvalenie PM
+        # PC sent quot to be approved by PM
         elif self.pc_id.id in self.assigned_persons_ids.ids:
             _logger.debug("PC sent to approve by PM")
             self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pm_id.id])], 'workflow_reason': ''})
             self.sudo().send_mail([self.pm_id])
 
-        # PM poslal na schvalenie Managerovy
+        # PM sent quot to be approved by Manager
         elif self.pm_id.id in self.assigned_persons_ids.ids:
             _logger.debug("PM sent to approve by Manager")
             manager_ids = self._find_managers()
@@ -736,19 +731,19 @@ class Quotation(models.Model):
                 _logger.debug("no managers found")
                 raise UserError('No manager(s) found to assign.')
 
-        # Manager schvalil
+        # Manager approved
         elif self.env.user.partner_id.id in self.manager_ids.ids:
             if self.is_user_assigned:
                 _logger.debug("Manager '" + self.env.user.partner_id.display_name + "' approved")
                 self.sudo().write({'assigned_persons_ids': [(3,self.env.user.partner_id.id)], 'workflow_reason': ''})
 
-                # posleme email PC, aby vedel, ze manager schvalil
+                # send email to PC to let him know that qout has been approved by manager
                 context = {'manager_name': self.env.user.partner_id.display_name}
                 self.sudo().send_mail([self.pc_id], template_name='mail_cp_manager_approved', context=context)
 
-        # aktualny uzivatel je medzi priradenymi managermi
+        # logged user is assigned manager ?
         if self.env.user.partner_id.id in self.manager_ids.ids:
-            # vsetci managery schvalili
+            # all managers already approved ?
             if not self.assigned_persons_ids.ids:
                 _logger.debug("ALL managers approved")
                 self.sudo().write({'state': self.APPROVED, 'assigned_persons_ids': [(5)], 'workflow_reason': ''})
@@ -774,7 +769,7 @@ class Quotation(models.Model):
             self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'workflow_reason': ''})
             self.sudo().send_mail([self.vendor_id])
             self.sudo().signal_workflow('not_complete')
-            # call WF: signal "not complete". som v stave "to_approve". potrebujem ist do in_progers
+            # call WF: signal "not complete"
 
         # PM signals 'not complete' - CP should be 'to_approve' and assigned to PC
         elif self.pm_id.id in self.assigned_persons_ids.ids:
@@ -801,8 +796,7 @@ class Quotation(models.Model):
 
         _logger.debug("send mail to " + str(partner_ids))
 
-        # Find the e-mail template
-        # definovane vo views/mail_template.xml
+        # Find the e-mail template (defined in views/mail_template.xml)
         template = self.env.ref('o2net.' + template_name)
         if not template:
             _logger.debug("unable send mail. template not found. template_name: " + str(template_name))
