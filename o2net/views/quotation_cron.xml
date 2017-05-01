@@ -2,7 +2,7 @@
 <openerp>
     <data noupdate="1">
         <!-- Remove unused user inputs -->
-        <record forcecreate="True" id="o2net_cron_cenova_ponuka" model="ir.cron">
+        <record forcecreate="True" id="o2net_cron_quotation" model="ir.cron">
             <field name="name">Check approve</field>
             <field name="active" eval="True"/>
             <field name="user_id" ref="base.user_root"/>

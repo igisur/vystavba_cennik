@@ -23,10 +23,10 @@
         'views/priceoffer_view.xml',
         'report/report.xml',
         'views/section_view.xml',
-        #'views/email_template.xml'
-        'workflows/priceoffer_wf.xml',
+        'views/mail_template.xml',
+        'workflows/quotation_wf.xml',
         'report/priceoffer_report.xml',
-        'views/priceoffer_cron.xml'
+        'views/quotation_cron.xml'
     ],
     'installable': True,
     'auto_install': False,

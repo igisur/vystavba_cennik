@@ -2,15 +2,15 @@
 <openerp>
     <data>
 
-        <record id="cp_workflow" model="workflow">
-            <field name="name">cenova_ponuka_workflow</field>
+        <record id="quotation_workflow" model="workflow">
+            <field name="name">quotation_workflow</field>
             <field name="osv">o2net.quotation</field>
             <field name="on_create">True</field>
         </record>
 
         <!-- Activities -->
         <record id="draft" model="workflow.activity">
-            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="wkf_id" ref="quotation_workflow"/>
             <field name="flow_start">True</field>
             <field name="name">draft</field>
             <field name="kind">function</field>
@@ -18,28 +18,28 @@
         </record>
 
         <record id="assigned" model="workflow.activity">
-            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="wkf_id" ref="quotation_workflow"/>
             <field name="name">assigned</field>
             <field name="kind">function</field>
             <field name="action">wf_assign()</field>
         </record>
 
         <record id="in_progress" model="workflow.activity">
-            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="wkf_id" ref="quotation_workflow"/>
             <field name="name">in_progress</field>
             <field name="kind">function</field>
             <field name="action">wf_in_progress()</field>
         </record>
 
         <record id="to_approve" model="workflow.activity">
-            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="wkf_id" ref="quotation_workflow"/>
             <field name="name">to_approve</field>
             <field name="kind">function</field>
             <field name="action">wf_approve()</field>
         </record>
 
         <record id="approved" model="workflow.activity">
-            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="wkf_id" ref="quotation_workflow"/>
             <field name="flow_stop">True</field>
             <field name="name">approved</field>
             <field name="kind">dummy</field>
@@ -47,7 +47,7 @@
         </record>
 
         <record id="cancel" model="workflow.activity">
-            <field name="wkf_id" ref="cp_workflow"/>
+            <field name="wkf_id" ref="quotation_workflow"/>
             <field name="flow_stop">True</field>
             <field name="name">cancel</field>
             <field name="kind">function</field>
