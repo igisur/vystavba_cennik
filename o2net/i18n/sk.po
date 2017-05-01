@@ -910,7 +910,7 @@ msgstr "Cenník s rovnakým názvom už existuje. Prosím zvoľte iný názov, k
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_atyp_cenova_ponuka_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_balicek_cenova_ponuka_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_cenova_ponuka_polozka_cenova_ponuka_id
-#: model:ir.ui.menu,name:o2net.menu_cenova_ponuka_root
+#: model:ir.ui.menu,name:o2net.menu_quotation_root
 #: model:ir.ui.view,arch_db:o2net.view_form_cenova_ponuka
 #: model:ir.ui.view,arch_db:o2net.view_tree_cenova_ponuka
 msgid "Quotation"

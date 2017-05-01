@@ -20,7 +20,7 @@
         'views/pricelist_view.xml',
         'views/product_view.xml',
         'views/partner_view.xml',
-        'views/priceoffer_view.xml',
+        'views/quotation_view.xml',
         'report/report.xml',
         'views/section_view.xml',
         'views/mail_template.xml',
