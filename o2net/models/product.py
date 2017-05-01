@@ -2,6 +2,7 @@
 
 from openerp import models, fields, api
 
+
 class o2netProduct(models.Model):
     _name = 'o2net.product'
     _description = "o2net - item"

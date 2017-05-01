@@ -2,6 +2,7 @@
 
 from openerp import models, fields, api
 
+
 class o2netQuotationItemAtyp(models.Model):
     _name = 'o2net.quotation.item_atyp'
     _description = "o2net - Quotation atypical"

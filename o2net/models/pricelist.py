@@ -3,6 +3,7 @@
 from openerp import models, fields, api
 from openerp.exceptions import UserError, AccessError, ValidationError
 
+
 class o2netPricelist(models.Model):
     _name = 'o2net.pricelist'
     _description = "o2net - price list"

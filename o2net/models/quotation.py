@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from openerp import models, fields, api, _, SUPERUSER_ID
-from openerp.tools.misc import DEFAULT_SERVER_DATE_FORMAT
-from openerp.exceptions import UserError, AccessError, ValidationError
-from openerp import http
+import base64
 import datetime
 import logging
-import base64
+
+from openerp import models, fields, api, _, SUPERUSER_ID
+from openerp.exceptions import UserError, AccessError, ValidationError
+from openerp.tools.misc import DEFAULT_SERVER_DATE_FORMAT
 
 _logger = logging.getLogger(__name__)
+
 
 class Quotation(models.Model):
     _name = 'o2net.quotation'
@@ -49,7 +50,7 @@ class Quotation(models.Model):
                 _logger.debug('manager nie je nasetovany !!!!')
                 continue
 
-            _logger.debug('manager = '+str(row.manager_ids))
+            _logger.debug('manager = ' + str(row.manager_ids))
 
             for manager in row.manager_ids:
 
@@ -65,16 +66,17 @@ class Quotation(models.Model):
                 self.env.cr.execute(query, ([manager.id]))
                 fetchrow = self.env.cr.fetchone()
                 rozdiel = abs((today - datetime.datetime.strptime(fetchrow[0], DEFAULT_SERVER_DATE_FORMAT)).days)
-                _logger.debug('rozdiel ' + str(rozdiel) + ' ---- je na schvalenie pocet dni: ' + str(manager.reminder_interval))
-                if rozdiel >  manager.reminder_interval:
-                    #poslem mail
+                _logger.debug(
+                    'rozdiel ' + str(rozdiel) + ' ---- je na schvalenie pocet dni: ' + str(manager.reminder_interval))
+                if rozdiel > manager.reminder_interval:
+                    # poslem mail
                     self.send_mail([manager], template_name='mail_manager_warning')
 
     def get_last_mail_date(self, partner_id):
         ret = {}
 
         # looking for the last mail sent to partner
-        mail_ids = self.env['mail.mail'].search([('', '=', partner_id)], order = "po_total_price_limit desc", limit=1)
+        mail_ids = self.env['mail.mail'].search([('', '=', partner_id)], order="po_total_price_limit desc", limit=1)
 
         return ret;
 
@@ -84,7 +86,8 @@ class Quotation(models.Model):
         self.sap_export_file_name = export_file_name
         self.sap_export_content = self._get_sap_export_content()
         self.sap_export_file_binary = base64.encodestring(self.sap_export_content)
-        self.message_post(body='<ul class ="o_mail_thread_message_tracking"><li>' + 'Subor "' + export_file_name + '" pre SAP bol vygenerovany' + "</li></ul>")
+        self.message_post(
+            body='<ul class ="o_mail_thread_message_tracking"><li>' + 'Subor "' + export_file_name + '" pre SAP bol vygenerovany' + "</li></ul>")
 
     @api.multi
     def _get_sap_export_content(self):
@@ -92,7 +95,7 @@ class Quotation(models.Model):
         if self.project_number:
             data.append('[PSPID]' + chr(9) + self.project_number)
         if self.pc_id.code:
-            data.append('[WEMPF]'+chr(9)+self.pc_id.code)
+            data.append('[WEMPF]' + chr(9) + self.pc_id.code)
         else:
             data.append('[WEMPF]' + chr(9) + '???')
         if self.vendor_id.code:
@@ -201,7 +204,8 @@ class Quotation(models.Model):
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         return [('id', 'in', partner_ids)]
 
-    @api.depends('quotation_item_ids.total_price','quotation_item_package_ids.total_price','quotation_item_atyp_ids.price')
+    @api.depends('quotation_item_ids.total_price', 'quotation_item_package_ids.total_price',
+                 'quotation_item_atyp_ids.price')
     def _compute_amount_all(self):
         for cp in self:
             cp_total_price = 0.0
@@ -217,7 +221,7 @@ class Quotation(models.Model):
             cp.update({'total_price': cp_total_price})
 
     @api.one
-    @api.depends('vendor_id','assigned_persons_ids')
+    @api.depends('vendor_id', 'assigned_persons_ids')
     def _compute_ro_datumoddo(self):
         if self.assigned_persons_ids:
             self.ro_datumoddo = not self.vendor_id.id in self.assigned_persons_ids.ids
@@ -265,7 +269,7 @@ class Quotation(models.Model):
                             group by zdroj.id, zdroj.section
                             order by zdroj.section;"""
 
-        self.env.cr.execute(query, (cp_id,cp_id))
+        self.env.cr.execute(query, (cp_id, cp_id))
         data = self.env.cr.dictfetchall()
 
         if data:
@@ -337,34 +341,34 @@ class Quotation(models.Model):
         return data
 
     @api.one
-    def _get_price_section(self, quotation_id, section_id):
-    # -------------------------------------------------------------
-    # celkova price pre cenovu ponuku a oddiel
-    # pocitaju sa polozky typove a atypove spolu podla oddielu
-    # -------------------------------------------------------------
+    def _get_price_oddiel(self, cp_id, oddiel_id):
+        # -------------------------------------------------------------
+        # celkova price pre cenovu ponuku a oddiel
+        # pocitaju sa polozky typove a atypove spolu podla oddielu
+        # -------------------------------------------------------------
 
         price = 0
-        _logger.debug("_get_price_oddiel cp_id=" + str(quotation_id) + " oodiel_id=" + str(section_id))
+        _logger.debug("_get_price_oddiel cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id))
 
         query = """select sum(zdroj.price)
                     from
-                    (   select sum(qia.price) as price
-                        from o2net_quotation q
-                        join o2net_quotation_item_atyp qia on q.id = qia.quotation_id
-                        join o2net_section s on qia.section_id = s.id
-                        where q.id = %1
-                        and s.id = %1
+                    (   select sum(cppa.price) as price
+                        from o2net_cenova_ponuka cp
+                        join o2net_cenova_ponuka_polozka_atyp cppa on cp.id = cppa.cenova_ponuka_id
+                        join o2net_oddiel o on cppa.oddiel_id = o.id
+                        where cp.id = %s
+                        and o.id = %s
                         union all
-                        select sum(qi.total_price)
-                        from o2net_quotation q
-                        join o2net_quotation_item qi on q.id = qi.quotation_id
-                        join o2net_pricelist_item pi on qi.pricelist_item_id = pi.id
-                        join o2net_product p on pi.item_id = p.id
-                        where q.id = %1
-                        and p.section_id = %1
-                        and p.is_package = false ) zdroj;"""
+                        select sum(cpp.price_celkom)
+                        from o2net_cenova_ponuka cp
+                        join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
+                        join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
+                        join o2net_polozka p on c.polozka_id = p.id
+                        where cp.id = %s
+                        and p.oddiel_id = %s
+                        and p.is_balicek = false ) zdroj;"""
 
-        self.env.cr.execute(query, (quotation_id, section_id, quotation_id, section_id))
+        self.env.cr.execute(query, (cp_id, oddiel_id, cp_id, oddiel_id))
         price = self.env.cr.fetchone()[0]
         _logger.debug("_get_price_oddiel price=" + str(price))
 
@@ -372,13 +376,15 @@ class Quotation(models.Model):
 
     @api.one
     def _get_price_section_atyp(self, quotation_id, section_id, atyp):
-    # --------------------------------------------------------------------------
-    # total price
-    # --------------------------------------------------------------------------
+        # --------------------------------------------------------------------------
+        # total price
+        # --------------------------------------------------------------------------
         price = 0
-        _logger.debug("_get_price_oddiel_atyp cp_id=" + str(quotation_id) + " oodiel_id=" + str(section_id) + " atyp=" + str(atyp))
+        _logger.debug(
+            "_get_price_oddiel_atyp cp_id=" + str(quotation_id) + " oodiel_id=" + str(section_id) + " atyp=" + str(
+                atyp))
 
-        if atyp==1:
+        if atyp == 1:
             query = """select sum(qia.price)
                         from o2net_quotation q
                         join o2net_quotation_item_atyp qia on q.id = qia.quotation_id
@@ -390,7 +396,7 @@ class Quotation(models.Model):
             self.env.cr.execute(query, (quotation_id, section_id))
             price = self.env.cr.fetchone()[0]
 
-        if atyp==0:
+        if atyp == 0:
             query = """select sum(qi.total_price)
                         from o2net_quotation q
                         join o2net_quotation_item qi on q.id = qi.quotation_id
@@ -407,9 +413,9 @@ class Quotation(models.Model):
 
     @api.one
     def _get_price_packages(self, quotation_id):
-    # ---------------------------------------------
-    # total price for quotation and packages
-    # ---------------------------------------------
+        # ---------------------------------------------
+        # total price for quotation and packages
+        # ---------------------------------------------
         price = 0
         _logger.debug("_get_price_balicky cp_id=" + str(quotation_id))
 
@@ -515,7 +521,8 @@ class Quotation(models.Model):
     # FIELDS
     # computed fields
     ro_datumoddo = fields.Boolean(string="RO date From To", compute=_compute_ro_datumoddo, store=False, copy=False)
-    can_user_exec_wf = fields.Boolean(string="Can user execute workflow action", compute=_compute_can_user_exec_wf, store=False, copy=False)
+    can_user_exec_wf = fields.Boolean(string="Can user execute workflow action", compute=_compute_can_user_exec_wf,
+                                      store=False, copy=False)
     is_user_assigned = fields.Boolean(string="Is current user assigned", compute=_compute_is_user_assigned)
 
     name = fields.Char(required=True, string="Name", size=50, copy=True)
@@ -525,22 +532,34 @@ class Quotation(models.Model):
     start_date = fields.Date(string="Start date", default=datetime.date.today(), copy=False);
     end_date = fields.Date(string="End date", copy=False);
     note = fields.Text(string="Note", track_visibility='onchange', copy=False)
-    workflow_reason = fields.Text(string='Workflow reason', copy=False, help='Enter workflow reason mainly for actions "Return for repair" and "Cancel"')
-    total_price = fields.Float(compute=_compute_amount_all, string='Total price', store=True, digits=(10, 2), track_visibility='onchange', copy=False)
-    vendor_id = fields.Many2one('res.partner', required=True, string='Vendor', track_visibility='onchange', domain=partners_in_group_supplier, copy=True)
-    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc, copy=True, default=lambda self: self._get_default_pc())
-    pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm, copy=True)
-    manager_ids = fields.Many2many('res.partner', relation="o2net_quotation_manager_rel", string='Manager', domain=partners_in_group_manager, copy=False)
-    assigned_persons_ids = fields.Many2many('res.partner', relation="o2net_qoutation_assigned_rel", string='Assigned persons', copy=False, default = lambda self: [(4, self.env.user.partner_id.id)])
+    workflow_reason = fields.Text(string='Workflow reason', copy=False,
+                                  help='Enter workflow reason mainly for actions "Return for repair" and "Cancel"')
+    total_price = fields.Float(compute=_compute_amount_all, string='Total price', store=True, digits=(10, 2),
+                               track_visibility='onchange', copy=False)
+    vendor_id = fields.Many2one('res.partner', required=True, string='Vendor', track_visibility='onchange',
+                                domain=partners_in_group_supplier, copy=True)
+    pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc,
+                            copy=True, default=lambda self: self._get_default_pc())
+    pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm,
+                            copy=True)
+    manager_ids = fields.Many2many('res.partner', relation="o2net_quotation_manager_rel", string='Manager',
+                                   domain=partners_in_group_manager, copy=False)
+    assigned_persons_ids = fields.Many2many('res.partner', relation="o2net_qoutation_assigned_rel",
+                                            string='Assigned persons', copy=False,
+                                            default=lambda self: [(4, self.env.user.partner_id.id)])
 
-    state = fields.Selection(State, string='State', readonly=True, default='draft', track_visibility='onchange', copy=False)
+    state = fields.Selection(State, string='State', readonly=True, default='draft', track_visibility='onchange',
+                             copy=False)
     state_date = fields.Date(string="date state", default=datetime.date.today(), copy=False);
     price_list_id = fields.Many2one('o2net.pricelist', string='Price list', copy=True)
     currency_id = fields.Many2one(related='price_list_id.currency_id', string="Currency", copy=True)
 
-    quotation_item_ids = fields.One2many('o2net.quotation.item', 'quotation_id', string='Items', track_visibility='onchange', copy=True)
-    quotation_item_package_ids = fields.One2many('o2net.quotation.item_package', 'quotation_id', string='Packages', track_visibility='onchange', copy=True)
-    quotation_item_atyp_ids = fields.One2many('o2net.quotation.item_atyp', 'quotation_id', string='Atypical items', track_visibility='onchange', copy=True)
+    quotation_item_ids = fields.One2many('o2net.quotation.item', 'quotation_id', string='Items',
+                                         track_visibility='onchange', copy=True)
+    quotation_item_package_ids = fields.One2many('o2net.quotation.item_package', 'quotation_id', string='Packages',
+                                                 track_visibility='onchange', copy=True)
+    quotation_item_atyp_ids = fields.One2many('o2net.quotation.item_atyp', 'quotation_id', string='Atypical items',
+                                              track_visibility='onchange', copy=True)
 
     sap_export_content = fields.Text(string="Export for SAP", default='ABCDEFGH', copy=False)
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
@@ -568,7 +587,8 @@ class Quotation(models.Model):
                     name = self.env['o2net.quotation.item'].browse(id).name
                     msg += record_history_tmpl % ('---', name)
 
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking"">%s</ul>" % msg, message_type="notification")
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking"">%s</ul>" % msg,
+                              message_type="notification")
 
         res = super(Quotation, self).write(vals)
 
@@ -599,7 +619,8 @@ class Quotation(models.Model):
     def unlink(self):
         # Quot can be unlink in the state DRAFT, otherway workflow action 'CANCEL' has to be used
         if not self.state == self.DRAFT:
-            raise AccessError("Cenovú ponuku je možné zmazať len pokiaľ je v stave 'Návrh'. V ostatnom prípade použite workflow akciu 'Zrušiť'")
+            raise AccessError(
+                "Cenovú ponuku je možné zmazať len pokiaľ je v stave 'Návrh'. V ostatnom prípade použite workflow akciu 'Zrušiť'")
 
     @api.onchange('vendor_id')
     def _find_cennik(self):
@@ -610,7 +631,7 @@ class Quotation(models.Model):
         _logger.debug("Looking for supplier's valid pricelist " + str(self.vendor_id.name))
         cennik_ids = self.env['o2net.pricelist'].search([('vendor_id', '=', self.vendor_id.id),
                                                          ('valid_from', '<=', datetime.date.today()),
-                                                         ('valid_to', '>', datetime.date.today())], limit = 1)
+                                                         ('valid_to', '>', datetime.date.today())], limit=1)
 
         for rec in cennik_ids:
             _logger.debug(rec.name)
@@ -634,15 +655,18 @@ class Quotation(models.Model):
     @api.constrains('name')
     def _check_unique_constraint(self):
         if len(self.search([('name', '=', self.name)])) > 1:
-            #raise ValidationError("Cenova ponuka s nazvom "" %s "" uz existuje. Prosim zvolte iny nazov, ktory bude unikatny." % self.name)
-            raise ValidationError("Cenová ponuka s rovnakým názvom už existuje. Prosím zvolte iný názov, ktorý bude unikátny.")
+            # raise ValidationError("Cenova ponuka s nazvom "" %s "" uz existuje. Prosim zvolte iny nazov, ktory bude unikatny." % self.name)
+            raise ValidationError(
+                "Cenová ponuka s rovnakým názvom už existuje. Prosím zvolte iný názov, ktorý bude unikátny.")
 
     # Workflow
     # looking for manager which 'total_price_limit' is greater than current quot total price
     def _find_managers(self):
         _logger.debug("Looking for manager to approve order of price " + str(self.total_price))
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
-        manager_ids = self.env['res.partner'].search([('id', 'in', partner_ids),('po_total_price_limit', '<=', self.total_price)], order = "cp_total_price_limit desc")
+        manager_ids = self.env['res.partner'].search(
+            [('id', 'in', partner_ids), ('po_total_price_limit', '<=', self.total_price)],
+            order="cp_total_price_limit desc")
 
         _logger.debug("Found managers: " + str(manager_ids.ids))
         for man in manager_ids:
@@ -651,7 +675,7 @@ class Quotation(models.Model):
         return manager_ids
 
     @api.multi
-    def wf_draft(self):    # should be create but is set in field definition
+    def wf_draft(self):  # should be create but is set in field definition
         self.ensure_one()
         self.write({'state': self.DRAFT})
         return True
@@ -680,9 +704,11 @@ class Quotation(models.Model):
         _logger.debug("workflow action to ASSIGN")
         self.ensure_one()
         if self.workflow_reason:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
+            self.message_post(
+                body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
-        self.sudo().write({'state': self.ASSIGNED, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'workflow_reason': ''})
+        self.sudo().write(
+            {'state': self.ASSIGNED, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])], 'workflow_reason': ''})
         self.sudo().send_mail([self.vendor_id])
         return True
 
@@ -691,9 +717,11 @@ class Quotation(models.Model):
         _logger.debug("workflow action to IN_PROGRESS")
         self.ensure_one()
         if self.workflow_reason:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
+            self.message_post(
+                body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
-        self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'workflow_reason': ''})
+        self.sudo().write(
+            {'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])], 'workflow_reason': ''})
         self.sudo().send_mail([self.pc_id], template_name='mail_cp_in_progress')
         return True
 
@@ -705,18 +733,21 @@ class Quotation(models.Model):
         # put 'workflow_reason' to history (mail_thread)
         if self.workflow_reason:
             # add to tracking values
-            self.message_post(body='<ul class="o_mail_thread_message_tracking"><li>Workflow reason: ' + self.workflow_reason + '</li></ul>')
+            self.message_post(
+                body='<ul class="o_mail_thread_message_tracking"><li>Workflow reason: ' + self.workflow_reason + '</li></ul>')
 
         # Vendor sent quot to be approved by PC
         if self.vendor_id.id in self.assigned_persons_ids.ids:
             _logger.debug("Supplier sent to approve by PC")
-            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pc_id.id])], 'workflow_reason': ''})
+            self.sudo().write(
+                {'state': self.TO_APPROVE, 'assigned_persons_ids': [(6, 0, [self.pc_id.id])], 'workflow_reason': ''})
             self.sudo().send_mail([self.pc_id])
 
         # PC sent quot to be approved by PM
         elif self.pc_id.id in self.assigned_persons_ids.ids:
             _logger.debug("PC sent to approve by PM")
-            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pm_id.id])], 'workflow_reason': ''})
+            self.sudo().write(
+                {'state': self.TO_APPROVE, 'assigned_persons_ids': [(6, 0, [self.pm_id.id])], 'workflow_reason': ''})
             self.sudo().send_mail([self.pm_id])
 
         # PM sent quot to be approved by Manager
@@ -724,7 +755,8 @@ class Quotation(models.Model):
             _logger.debug("PM sent to approve by Manager")
             manager_ids = self._find_managers()
             if manager_ids:
-                self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,manager_ids.ids)], 'manager_ids': [(6,0,manager_ids.ids)], 'wf_dovod': ''})
+                self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6, 0, manager_ids.ids)],
+                                   'manager_ids': [(6, 0, manager_ids.ids)], 'wf_dovod': ''})
                 # Nemozem pouzit current-user, pretoze mail sa posiela cez konto Admina!!!
                 self.sudo().send_mail(manager_ids)
             else:
@@ -735,7 +767,7 @@ class Quotation(models.Model):
         elif self.env.user.partner_id.id in self.manager_ids.ids:
             if self.is_user_assigned:
                 _logger.debug("Manager '" + self.env.user.partner_id.display_name + "' approved")
-                self.sudo().write({'assigned_persons_ids': [(3,self.env.user.partner_id.id)], 'workflow_reason': ''})
+                self.sudo().write({'assigned_persons_ids': [(3, self.env.user.partner_id.id)], 'workflow_reason': ''})
 
                 # send email to PC to let him know that qout has been approved by manager
                 context = {'manager_name': self.env.user.partner_id.display_name}
@@ -750,7 +782,6 @@ class Quotation(models.Model):
                 self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
                 self.sudo().action_exportSAP()
 
-
         return True
 
     @api.one
@@ -761,12 +792,14 @@ class Quotation(models.Model):
         self.wf_can_user_workflow()
 
         if self.workflow_reason:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
+            self.message_post(
+                body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
         # PC signals 'not complete' - CP should be 'in_progress' and assigned to Supplier
         if self.pc_id.id in self.assigned_persons_ids.ids:
             _logger.debug("workflow action to IN_PROGRESS")
-            self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6,0,[self.vendor_id.id])], 'workflow_reason': ''})
+            self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])],
+                               'workflow_reason': ''})
             self.sudo().send_mail([self.vendor_id])
             self.sudo().signal_workflow('not_complete')
             # call WF: signal "not complete"
@@ -774,7 +807,8 @@ class Quotation(models.Model):
         # PM signals 'not complete' - CP should be 'to_approve' and assigned to PC
         elif self.pm_id.id in self.assigned_persons_ids.ids:
             _logger.debug("workflow action to TO_APPROVE")
-            self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6,0,[self.pc_id.id])], 'workflow_reason': ''})
+            self.sudo().write(
+                {'state': self.TO_APPROVE, 'assigned_persons_ids': [(6, 0, [self.pc_id.id])], 'workflow_reason': ''})
             self.sudo().send_mail([self.pc_id])
 
         return True
@@ -785,7 +819,8 @@ class Quotation(models.Model):
         self.ensure_one()
 
         if self.workflow_reason:
-            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
+            self.message_post(
+                body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
         self.sudo().write({'state': self.CANCEL, 'assigned_persons_ids': [(5)], 'workflow_reason': ''})
         self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_canceled')
@@ -819,7 +854,6 @@ class Quotation(models.Model):
             templateObj.email_to = ",".join(emails)
             templateObj.partner_to = ",".join(partners)
             templateObj.lang = self.env.user.partner_id.lang
-
 
         if context is None:
             _logger.debug('send mail without context')

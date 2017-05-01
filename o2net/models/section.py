@@ -2,6 +2,7 @@
 
 from openerp import models, fields, api
 
+
 class o2netSection(models.Model):
     _name = 'o2net.section'
     _description = "o2net - section"
