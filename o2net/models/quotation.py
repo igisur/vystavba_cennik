@@ -42,15 +42,11 @@ class Quotation(models.Model):
     def do_check_approve(self):
         # validation of waiting for till Quotation is approved
         # called from cron
-        _logger.debug('do_check_approve')
         today = datetime.datetime.now()
         schvalene = self.search([('state', '=', 'to_approve')])
         for row in schvalene:
             if not row.manager_ids:
-                _logger.debug('manager nie je nasetovany !!!!')
                 continue
-
-            _logger.debug('manager = ' + str(row.manager_ids))
 
             for manager in row.manager_ids:
 
@@ -66,18 +62,14 @@ class Quotation(models.Model):
                 self.env.cr.execute(query, ([manager.id]))
                 fetchrow = self.env.cr.fetchone()
                 rozdiel = abs((today - datetime.datetime.strptime(fetchrow[0], DEFAULT_SERVER_DATE_FORMAT)).days)
-                _logger.debug(
-                    'rozdiel ' + str(rozdiel) + ' ---- je na schvalenie pocet dni: ' + str(manager.reminder_interval))
                 if rozdiel > manager.reminder_interval:
-                    # poslem mail
+                    # send mail
                     self.send_mail([manager], template_name='mail_manager_warning')
 
     def get_last_mail_date(self, partner_id):
         ret = {}
-
         # looking for the last mail sent to partner
         mail_ids = self.env['mail.mail'].search([('', '=', partner_id)], order="po_total_price_limit desc", limit=1)
-
         return ret;
 
     @api.one
@@ -248,9 +240,9 @@ class Quotation(models.Model):
         self.base_url = url
 
     @api.one
-    def _get_section(self, cp_id):
+    def _get_section(self, quotation_id):
         data = []
-
+        _logger.debug("_get_section " + str(quotation_id))
         query = """select zdroj.id as id, zdroj.section as section
                             from
                             (
@@ -269,7 +261,7 @@ class Quotation(models.Model):
                             group by zdroj.id, zdroj.section
                             order by zdroj.section;"""
 
-        self.env.cr.execute(query, (cp_id, cp_id))
+        self.env.cr.execute(query, (quotation_id, quotation_id))
         data = self.env.cr.dictfetchall()
 
         if data:
@@ -278,7 +270,7 @@ class Quotation(models.Model):
             return {}
 
     @api.one
-    def _get_rows_section_typ(self, cp_id, oddiel_id):
+    def _get_rows_section_typ(self, quotation_id, section_id):
         data = []
 
         query = """ select  qi.quotation_id as quotation_id,
@@ -296,25 +288,25 @@ class Quotation(models.Model):
                     where qi.quotation_id = %s
                         and s.id = %s;"""
 
-        self.env.cr.execute(query, (cp_id, oddiel_id))
+        self.env.cr.execute(query, (quotation_id, section_id))
         data = self.env.cr.dictfetchall()
         return data
 
     @api.one
-    def _get_rows_section_atyp(self, cp_id, oddiel_id):
+    def _get_rows_section_atyp(self, quotation_id, section_id):
         data = []
-        _logger.debug("_get_rows_oddiel_atyp " + str(cp_id) + ", " + str(oddiel_id))
+        _logger.debug("_get_rows_section_atyp " + str(quotation_id) + ", " + str(section_id))
 
-        query = """ select  cppa.cenova_ponuka_id as cp_id,
-                            o.name as oddiel,
-                            cppa.name as polozka,
-                            cppa.price as price_celkom
-                    from o2net_cenova_ponuka_polozka_atyp cppa
-                    join o2net_oddiel o on cppa.oddiel_id = o.id
-                    where cppa.cenova_ponuka_id = %s
-                        and o.id = %s;"""
+        query = """ select  qia.quotation_id as quotation_id,
+                            s.name as section,
+                            qia.name as item,
+                            qia.price as total_price
+                    from o2net_quotation_item_atyp qia
+                    join o2net_section s on qia.section_id = s.id
+                    where qia.quotation_id = %s
+                        and s.id = %s;"""
 
-        self.env.cr.execute(query, (cp_id, oddiel_id))
+        self.env.cr.execute(query, (quotation_id, section_id))
         data = self.env.cr.dictfetchall()
         return data
 
@@ -341,44 +333,36 @@ class Quotation(models.Model):
         return data
 
     @api.one
-    def _get_price_oddiel(self, cp_id, oddiel_id):
-        # -------------------------------------------------------------
-        # celkova price pre cenovu ponuku a oddiel
-        # pocitaju sa polozky typove a atypove spolu podla oddielu
-        # -------------------------------------------------------------
-
+    def _get_price_section(self, quotation_id, section_id):
         price = 0
-        _logger.debug("_get_price_oddiel cp_id=" + str(cp_id) + " oodiel_id=" + str(oddiel_id))
-
         query = """select sum(zdroj.price)
                     from
-                    (   select sum(cppa.price) as price
-                        from o2net_cenova_ponuka cp
-                        join o2net_cenova_ponuka_polozka_atyp cppa on cp.id = cppa.cenova_ponuka_id
-                        join o2net_oddiel o on cppa.oddiel_id = o.id
-                        where cp.id = %s
-                        and o.id = %s
+                    (   select sum(qia.price) as price
+                        from o2net_quotation q
+                        join o2net_quotation_item_atyp qia on q.id = qia.quotation_id
+                        join o2net_section s on qia.section_id = s.id
+                        where q.id = %s
+                        and s.id = %s
                         union all
-                        select sum(cpp.price_celkom)
-                        from o2net_cenova_ponuka cp
-                        join o2net_cenova_ponuka_polozka cpp on cp.id = cpp.cenova_ponuka_id
-                        join o2net_cennik_polozka c on cpp.cennik_polozka_id = c.id
-                        join o2net_polozka p on c.polozka_id = p.id
-                        where cp.id = %s
-                        and p.oddiel_id = %s
-                        and p.is_balicek = false ) zdroj;"""
+                        select sum(qi.total_price)
+                        from o2net_quotation q
+                        join o2net_quotation_item qi on q.id = qi.quotation_id
+                        join o2net_pricelist_item pi on qi.pricelist_item_id = pi.id
+                        join o2net_product p on pi.item_id = p.id
+                        where q.id = %s
+                        and p.section_id = %s
+                        and p.is_package = false ) zdroj;"""
 
-        self.env.cr.execute(query, (cp_id, oddiel_id, cp_id, oddiel_id))
+        self.env.cr.execute(query, (quotation_id, section_id, quotation_id, section_id))
         price = self.env.cr.fetchone()[0]
-        _logger.debug("_get_price_oddiel price=" + str(price))
 
         return price
 
     @api.one
     def _get_price_section_atyp(self, quotation_id, section_id, atyp):
-        # --------------------------------------------------------------------------
-        # total price
-        # --------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
+    # total price
+    # --------------------------------------------------------------------------
         price = 0
         _logger.debug(
             "_get_price_oddiel_atyp cp_id=" + str(quotation_id) + " oodiel_id=" + str(section_id) + " atyp=" + str(
@@ -413,9 +397,9 @@ class Quotation(models.Model):
 
     @api.one
     def _get_price_packages(self, quotation_id):
-        # ---------------------------------------------
-        # total price for quotation and packages
-        # ---------------------------------------------
+    # ---------------------------------------------
+    # total price for quotation and packages
+    # ---------------------------------------------
         price = 0
         _logger.debug("_get_price_balicky cp_id=" + str(quotation_id))
 
