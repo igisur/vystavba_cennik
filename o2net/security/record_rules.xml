@@ -80,7 +80,7 @@
             <field name="name">manager can read purchase order where is Manager</field>
             <field name="model_id" ref="model_o2net_quotation"/>
             <field name="groups" eval="[(4, ref('o2net.group_vystavba_manager'))]"/>
-            <field name="domain_force">[('manager_id.id','=',user.partner_id.id)]</field>
+            <field name="domain_force">[('manager_ids.id', 'in', [user.partner_id.id])]</field>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_unlink" eval="False"/>

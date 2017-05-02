@@ -528,7 +528,7 @@ class Quotation(models.Model):
                             copy=True)
     manager_ids = fields.Many2many('res.partner', relation="o2net_quotation_manager_rel", string='Manager',
                                    domain=partners_in_group_manager, copy=False)
-    assigned_persons_ids = fields.Many2many('res.partner', relation="o2net_qoutation_assigned_rel",
+    assigned_persons_ids = fields.Many2many('res.partner', relation="o2net_quotation_assigned_rel",
                                             string='Assigned persons', copy=False,
                                             default=lambda self: [(4, self.env.user.partner_id.id)])
 
@@ -650,7 +650,7 @@ class Quotation(models.Model):
         partner_ids = self._partners_in_group(self.GROUP_MANAGER)
         manager_ids = self.env['res.partner'].search(
             [('id', 'in', partner_ids), ('po_total_price_limit', '<=', self.total_price)],
-            order="cp_total_price_limit desc")
+            order="po_total_price_limit desc")
 
         _logger.debug("Found managers: " + str(manager_ids.ids))
         for man in manager_ids:
