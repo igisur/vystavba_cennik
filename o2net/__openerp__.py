@@ -25,7 +25,7 @@
         'views/section_view.xml',
         'views/mail_template.xml',
         'workflows/quotation_wf.xml',
-        'report/priceoffer_report.xml',
+        'report/quotation_report.xml',
         'views/quotation_cron.xml'
     ],
     'installable': True,
