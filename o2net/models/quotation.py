@@ -601,10 +601,8 @@ class Quotation(models.Model):
 
     @api.multi
     def unlink(self):
-        # Quot can be unlink in the state DRAFT, otherway workflow action 'CANCEL' has to be used
         if not self.state == self.DRAFT:
-            raise AccessError(
-                "Cenovú ponuku je možné zmazať len pokiaľ je v stave 'Návrh'. V ostatnom prípade použite workflow akciu 'Zrušiť'")
+            raise AccessError(_("Only quotation in state 'DRAFT' can be unlink. In any other case use workflow action 'CANCEL'"))
 
     @api.onchange('vendor_id')
     def _find_cennik(self):
@@ -639,9 +637,7 @@ class Quotation(models.Model):
     @api.constrains('name')
     def _check_unique_constraint(self):
         if len(self.search([('name', '=', self.name)])) > 1:
-            # raise ValidationError("Cenova ponuka s nazvom "" %s "" uz existuje. Prosim zvolte iny nazov, ktory bude unikatny." % self.name)
-            raise ValidationError(
-                "Cenová ponuka s rovnakým názvom už existuje. Prosím zvolte iný názov, ktorý bude unikátny.")
+            raise ValidationError(_("Quotation with the same name already exists. Please enter an unique name."))
 
     # Workflow
     # looking for manager which 'total_price_limit' is greater than current quot total price
