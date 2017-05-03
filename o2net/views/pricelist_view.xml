@@ -125,7 +125,7 @@
                 name="Pricelist"
                 sequence="30"
                 parent="menu_root"
-                groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
+                groups="o2net.group_pc,o2net.group_pm,o2net.group_admin"/>
 
        <menuitem id="menu_pricelist_vendor"
                  name="Vendor"
@@ -138,6 +138,6 @@
                  parent="menu_pricelist_root"
                  sequence="32"
                  action="action_window_pricelist_pricelist"
-                 groups="o2net.group_vystavba_admin"/>
+                 groups="o2net.group_admin"/>
     </data>
 </openerp>

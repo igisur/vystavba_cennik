@@ -246,7 +246,7 @@ msgid "Action Needed"
 msgstr "Potrebná akcia"
 
 #. module: o2net
-#: model:res.groups,name:o2net.group_vystavba_admin
+#: model:res.groups,name:o2net.group_admin
 msgid "Administrator"
 msgstr "Administrátor"
 
@@ -710,7 +710,7 @@ msgstr "MONTÁŽ"
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_manager_ids
-#: model:res.groups,name:o2net.group_vystavba_manager
+#: model:res.groups,name:o2net.group_manager
 msgid "Manager"
 msgstr "Manažér"
 
@@ -931,12 +931,12 @@ msgid "Printed:"
 msgstr "Vytlačil:"
 
 #. module: o2net
-#: model:res.groups,name:o2net.group_vystavba_pc
+#: model:res.groups,name:o2net.group_pc
 msgid "Project coordinator (PC)"
 msgstr "Projektový koordinátor (PC)"
 
 #. module: o2net
-#: model:res.groups,name:o2net.group_vystavba_pm
+#: model:res.groups,name:o2net.group_pm
 msgid "Project manager (PM)"
 msgstr "Projektový manažér (PM)"
 
@@ -1160,7 +1160,7 @@ msgstr "Platný do"
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_vendor_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_vendor_id
 #: model:ir.ui.menu,name:o2net.menu_pricelist_vendor
-#: model:res.groups,name:o2net.group_vystavba_supplier
+#: model:res.groups,name:o2net.group_vendor
 msgid "Vendor"
 msgstr "Dodávateľ"
 

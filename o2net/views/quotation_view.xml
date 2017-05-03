@@ -39,17 +39,17 @@
                 <form>
                     <header>
                         <!-- use class="oe_highlight" to suggest WF action -->
-                        <button name="assign" type="workflow" string="Assign" class="oe_highlight" states="draft" groups="o2net.group_vystavba_pc,o2net.group_vystavba_admin"/>
-                        <button name="in_progress" type="workflow" string="To progress" class="oe_highlight" states="assigned" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
-                        <button name="to_approve" type="workflow" string="Send to approve" class="oe_highlight" states="in_progress" groups="o2net.group_vystavba_supplier,o2net.group_vystavba_admin"/>
-                        <button name="approve" type="workflow" string="Approve" class="oe_highlight" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
-                        <button name="wf_not_complete" type="object" string="Return to correct" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
-                        <button name="cancel" type="workflow" string="Cancel" states="to_approve" groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
+                        <button name="assign" type="workflow" string="Assign" class="oe_highlight" states="draft" groups="o2net.group_pc,o2net.group_admin"/>
+                        <button name="in_progress" type="workflow" string="To progress" class="oe_highlight" states="assigned" groups="o2net.group_vendor,o2net.group_admin"/>
+                        <button name="to_approve" type="workflow" string="Send to approve" class="oe_highlight" states="in_progress" groups="o2net.group_vendor,o2net.group_admin"/>
+                        <button name="approve" type="workflow" string="Approve" class="oe_highlight" states="to_approve" groups="o2net.group_pc,o2net.group_pm,o2net.group_manager,o2net.group_admin"/>
+                        <button name="wf_not_complete" type="object" string="Return to correct" states="to_approve" groups="o2net.group_pc,o2net.group_pm,o2net.group_admin"/>
+                        <button name="cancel" type="workflow" string="Cancel" states="to_approve" groups="o2net.group_pc,o2net.group_pm,o2net.group_manager,o2net.group_admin"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,assigned,in_progress,to_approve,approved" readonly="1"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button string="Export to SAP" name="action_exportSAP" type="object" icon="fa-file-text-o" groups="o2net.group_vystavba_admin"/>
+                            <button string="Export to SAP" name="action_exportSAP" type="object" icon="fa-file-text-o" groups="o2net.group_admin"/>
                         </div>
                         <div class="oe_title">
                             <h1>
@@ -292,21 +292,21 @@
                   sequence="11"
                   parent="menu_quotation"
                   action="action_window_qout_draft"
-                  groups="o2net.group_vystavba_supplier,o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
+                  groups="o2net.group_vendor,o2net.group_pc,o2net.group_pm,o2net.group_admin"/>
 
         <menuitem id="menu_quotation_assigned"
                   name="Assigned"
                   sequence="12"
                   parent="menu_quotation"
                   action="action_window_qout_assigned"
-                  groups="o2net.group_vystavba_supplier,o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
+                  groups="o2net.group_vendor,o2net.group_pc,o2net.group_pm,o2net.group_admin"/>
 
         <menuitem id="menu_quotation_in_progress"
                   name="In progress"
                   sequence="13"
                   parent="menu_quotation"
                   action="action_window_qout_in_progress"
-                  groups="o2net.group_vystavba_supplier,o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
+                  groups="o2net.group_vendor,o2net.group_pc,o2net.group_pm,o2net.group_admin"/>
 
         <menuitem id="menu_quotation_to_approve"
                   name="To approve"

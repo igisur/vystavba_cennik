@@ -32,11 +32,11 @@ class Quotation(models.Model):
         (CANCEL, 'Cancel')
     )
 
-    GROUP_SUPPLIER = 'o2net.group_vystavba_supplier'
-    GROUP_PC = 'o2net.group_vystavba_pc'
-    GROUP_PM = 'o2net.group_vystavba_pm'
-    GROUP_MANAGER = 'o2net.group_vystavba_manager'
-    GROUP_ADMIN = 'o2net.group_vystavba_admin'
+    GROUP_SUPPLIER = 'o2net.group_vendor'
+    GROUP_PC = 'o2net.group_pc'
+    GROUP_PM = 'o2net.group_pm'
+    GROUP_MANAGER = 'o2net.group_manager'
+    GROUP_ADMIN = 'o2net.group_admin'
 
     @api.model
     def do_check_approve(self):

@@ -5,7 +5,7 @@
     <!-- Top menu item -->
     <menuitem id="menu_root"
               name="O2 Network"
-              groups="o2net.group_vystavba_supplier,o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
+              groups="o2net.group_vendor,o2net.group_pc,o2net.group_pm,o2net.group_manager,o2net.group_admin"/>
 
   </data>
 </openerp>

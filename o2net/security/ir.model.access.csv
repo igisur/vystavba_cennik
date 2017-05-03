@@ -1,51 +1,51 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
-access_o2net_quotation,quotation vendor,model_o2net_quotation,group_vystavba_supplier,1,1,0,0
-access_o2net_quotation_item,quotation item vendor,model_o2net_quotation_item,group_vystavba_supplier,1,1,1,1
-access_o2net_quotation_package,quotation package vendor,model_o2net_quotation_item_package,group_vystavba_supplier,1,1,1,1
-access_o2net_quotation_item_atyp,quotation item atyp vendor,model_o2net_quotation_item_atyp,group_vystavba_supplier,1,1,1,1
-access_o2net_partner,partner vendor,model_res_partner,group_vystavba_supplier,1,0,0,0
-access_o2net_section,section vendor,model_o2net_section,group_vystavba_supplier,1,0,0,0
-access_o2net_product,product vendor,model_o2net_product,group_vystavba_supplier,1,0,0,0
-access_o2net_pricelist,pricelist vendor,model_o2net_pricelist,group_vystavba_supplier,1,0,0,0
-access_o2net_pricelist_item,pricelist item vendor,model_o2net_pricelist_item,group_vystavba_supplier,1,0,0,0
+access_o2net_quotation,quotation vendor,model_o2net_quotation,group_vendor,1,1,0,0
+access_o2net_quotation_item,quotation item vendor,model_o2net_quotation_item,group_vendor,1,1,1,1
+access_o2net_quotation_package,quotation package vendor,model_o2net_quotation_item_package,group_vendor,1,1,1,1
+access_o2net_quotation_item_atyp,quotation item atyp vendor,model_o2net_quotation_item_atyp,group_vendor,1,1,1,1
+access_o2net_partner,partner vendor,model_res_partner,group_vendor,1,0,0,0
+access_o2net_section,section vendor,model_o2net_section,group_vendor,1,0,0,0
+access_o2net_product,product vendor,model_o2net_product,group_vendor,1,0,0,0
+access_o2net_pricelist,pricelist vendor,model_o2net_pricelist,group_vendor,1,0,0,0
+access_o2net_pricelist_item,pricelist item vendor,model_o2net_pricelist_item,group_vendor,1,0,0,0
 
-access_o2net_quotation_pc,quotation pc,model_o2net_quotation,group_vystavba_pc,1,1,1,1
-access_o2net_quotation_item_pc,quotation item pc,model_o2net_quotation_item,group_vystavba_pc,1,1,1,1
-access_o2net_quotation_package_pc,quotation package pc,model_o2net_quotation_item_package,group_vystavba_pc,1,1,1,1
-access_o2net_quotation_item_atyp_pc,quotation item atyp pc,model_o2net_quotation_item_atyp,group_vystavba_pc,1,1,1,1
-access_o2net_partner_pc,partner pc,model_res_partner,group_vystavba_pc,1,1,1,0
-access_o2net_section_pc,section pc,model_o2net_section,group_vystavba_pc,1,1,1,1
-access_o2net_product_pc,product pc,model_o2net_product,group_vystavba_pc,1,1,1,1
-access_o2net_pricelist_pc,pricelist pc,model_o2net_pricelist,group_vystavba_pc,1,1,1,1
-access_o2net_pricelist_item_pc,pricelist item pc,model_o2net_pricelist_item,group_vystavba_pc,1,1,1,1
+access_o2net_quotation_pc,quotation pc,model_o2net_quotation,group_pc,1,1,1,1
+access_o2net_quotation_item_pc,quotation item pc,model_o2net_quotation_item,group_pc,1,1,1,1
+access_o2net_quotation_package_pc,quotation package pc,model_o2net_quotation_item_package,group_pc,1,1,1,1
+access_o2net_quotation_item_atyp_pc,quotation item atyp pc,model_o2net_quotation_item_atyp,group_pc,1,1,1,1
+access_o2net_partner_pc,partner pc,model_res_partner,group_pc,1,1,1,0
+access_o2net_section_pc,section pc,model_o2net_section,group_pc,1,1,1,1
+access_o2net_product_pc,product pc,model_o2net_product,group_pc,1,1,1,1
+access_o2net_pricelist_pc,pricelist pc,model_o2net_pricelist,group_pc,1,1,1,1
+access_o2net_pricelist_item_pc,pricelist item pc,model_o2net_pricelist_item,group_pc,1,1,1,1
 
-access_o2net_quotation_pm,quotation pm,model_o2net_quotation,group_vystavba_pm,1,1,1,1
-access_o2net_quotation_item_pm,quotation item pm,model_o2net_quotation_item,group_vystavba_pm,1,1,1,1
-access_o2net_quotation_package_pm,quotation package pm,model_o2net_quotation_item_package,group_vystavba_pm,1,1,1,1
-access_o2net_quotation_item_atyp_pm,quotation item atyp pm,model_o2net_quotation_item_atyp,group_vystavba_pm,1,1,1,1
-access_o2net_partner_pm,partner pm,model_res_partner,group_vystavba_pm,1,1,1,0
-access_o2net_section_pm,section pm,model_o2net_section,group_vystavba_pm,1,1,1,1
-access_o2net_product_pm,product pm,model_o2net_product,group_vystavba_pm,1,1,1,1
-access_o2net_pricelist_pm,pricelist pm,model_o2net_pricelist,group_vystavba_pm,1,1,1,1
-access_o2net_pricelist_item_pm,pricelist item pm,model_o2net_pricelist_item,group_vystavba_pm,1,1,1,1
+access_o2net_quotation_pm,quotation pm,model_o2net_quotation,group_pm,1,1,1,1
+access_o2net_quotation_item_pm,quotation item pm,model_o2net_quotation_item,group_pm,1,1,1,1
+access_o2net_quotation_package_pm,quotation package pm,model_o2net_quotation_item_package,group_pm,1,1,1,1
+access_o2net_quotation_item_atyp_pm,quotation item atyp pm,model_o2net_quotation_item_atyp,group_pm,1,1,1,1
+access_o2net_partner_pm,partner pm,model_res_partner,group_pm,1,1,1,0
+access_o2net_section_pm,section pm,model_o2net_section,group_pm,1,1,1,1
+access_o2net_product_pm,product pm,model_o2net_product,group_pm,1,1,1,1
+access_o2net_pricelist_pm,pricelist pm,model_o2net_pricelist,group_pm,1,1,1,1
+access_o2net_pricelist_item_pm,pricelist item pm,model_o2net_pricelist_item,group_pm,1,1,1,1
 
-access_o2net_quotation_manager,quotation manager,model_o2net_quotation,group_vystavba_manager,1,1,0,0
-access_o2net_quotation_item_manager,quotation item manager,model_o2net_quotation_item,group_vystavba_manager,1,0,0,0
-access_o2net_quotation_package_manager,quotation package manager,model_o2net_quotation_item_package,group_vystavba_manager,1,0,0,0
-access_o2net_quotation_item_atyp_manager,quotation item atyp manager,model_o2net_quotation_item_atyp,group_vystavba_manager,1,0,0,0
-access_o2net_partner_manager,partner manager,model_res_partner,group_vystavba_manager,1,0,0,0
-access_o2net_section_manager,section manager,model_o2net_section,group_vystavba_manager,1,0,0,0
-access_o2net_product_manager,product manager,model_o2net_product,group_vystavba_manager,1,0,0,0
-access_o2net_pricelist_manager,pricelist manager,model_o2net_pricelist,group_vystavba_manager,1,0,0,0
-access_o2net_pricelist_item_manager,pricelist item manager,model_o2net_pricelist_item,group_vystavba_manager,1,0,0,0
+access_o2net_quotation_manager,quotation manager,model_o2net_quotation,group_manager,1,1,0,0
+access_o2net_quotation_item_manager,quotation item manager,model_o2net_quotation_item,group_manager,1,0,0,0
+access_o2net_quotation_package_manager,quotation package manager,model_o2net_quotation_item_package,group_manager,1,0,0,0
+access_o2net_quotation_item_atyp_manager,quotation item atyp manager,model_o2net_quotation_item_atyp,group_manager,1,0,0,0
+access_o2net_partner_manager,partner manager,model_res_partner,group_manager,1,0,0,0
+access_o2net_section_manager,section manager,model_o2net_section,group_manager,1,0,0,0
+access_o2net_product_manager,product manager,model_o2net_product,group_manager,1,0,0,0
+access_o2net_pricelist_manager,pricelist manager,model_o2net_pricelist,group_manager,1,0,0,0
+access_o2net_pricelist_item_manager,pricelist item manager,model_o2net_pricelist_item,group_manager,1,0,0,0
 
-access_o2net_quotation_admin,quotation admin,model_o2net_quotation,group_vystavba_admin,1,1,1,1
-access_o2net_quotation_item_admin,quotation item admin,model_o2net_quotation_item,group_vystavba_admin,1,1,1,1
-access_o2net_quotation_package_admin,quotation package  admin,model_o2net_quotation_item_package,group_vystavba_admin,1,1,1,1
-access_o2net_quotation_item_atyp_admin,quotation item atyp admin,model_o2net_quotation_item_atyp,group_vystavba_admin,1,1,1,1
-access_o2net_partner_admin,partner admin,model_res_partner,group_vystavba_admin,1,1,1,1
-access_o2net_section_admin,section admin,model_o2net_section,group_vystavba_admin,1,1,1,1
-access_o2net_product_admin,product admin,model_o2net_product,group_vystavba_admin,1,1,1,1
-access_o2net_pricelist_admin,pricelist admin,model_o2net_pricelist,group_vystavba_admin,1,1,1,1
-access_o2net_pricelist_item_admin,pricelist item admin,model_o2net_pricelist_item,group_vystavba_admin,1,1,1,1
+access_o2net_quotation_admin,quotation admin,model_o2net_quotation,group_admin,1,1,1,1
+access_o2net_quotation_item_admin,quotation item admin,model_o2net_quotation_item,group_admin,1,1,1,1
+access_o2net_quotation_package_admin,quotation package  admin,model_o2net_quotation_item_package,group_admin,1,1,1,1
+access_o2net_quotation_item_atyp_admin,quotation item atyp admin,model_o2net_quotation_item_atyp,group_admin,1,1,1,1
+access_o2net_partner_admin,partner admin,model_res_partner,group_admin,1,1,1,1
+access_o2net_section_admin,section admin,model_o2net_section,group_admin,1,1,1,1
+access_o2net_product_admin,product admin,model_o2net_product,group_admin,1,1,1,1
+access_o2net_pricelist_admin,pricelist admin,model_o2net_pricelist,group_admin,1,1,1,1
+access_o2net_pricelist_item_admin,pricelist item admin,model_o2net_pricelist_item,group_admin,1,1,1,1

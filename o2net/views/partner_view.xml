@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <field name="mobile" position="after">
                     <field name="code"/>
-                    <field name="po_total_price_limit" groups="o2net.group_vystavba_manager,o2net.group_vystavba_admin"/>
+                    <field name="po_total_price_limit" groups="o2net.group_manager,o2net.group_admin"/>
                     <field name="reminder_interval"/>
                 </field>
             </field>
@@ -29,7 +29,7 @@
                 name="Partners"
                 sequence="40"
                 parent="menu_root"
-                groups="o2net.group_vystavba_pc,o2net.group_vystavba_pm,o2net.group_vystavba_admin"/>
+                groups="o2net.group_pc,o2net.group_pm,o2net.group_admin"/>
 
         <menuitem id="menu_partner"
                   name="Partner"
