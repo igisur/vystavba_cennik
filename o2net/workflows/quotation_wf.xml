@@ -56,7 +56,7 @@
 
 
         <!-- Transitions -->
-        <record model="workflow.transition" id="qout_draft_to_assigned">
+        <record model="workflow.transition" id="quot_draft_to_assigned">
             <field name="act_from" ref="draft"/>
             <field name="act_to" ref="assigned"/>
             <field name="signal">assign</field>
@@ -66,42 +66,42 @@
             </field>
         </record>
 
-        <record model="workflow.transition" id="qout_assigned_in_progress">
+        <record model="workflow.transition" id="quot_assigned_in_progress">
             <field name="act_from" ref="assigned"/>
             <field name="act_to" ref="in_progress"/>
             <field name="signal">in_progress</field>
             <field name="condition">wf_can_user_workflow()</field>
         </record>
 
-        <record model="workflow.transition" id="qout_in_progress_to_to_approve">
+        <record model="workflow.transition" id="quot_in_progress_to_to_approve">
             <field name="act_from" ref="in_progress"/>
             <field name="act_to" ref="to_approve"/>
             <field name="signal">to_approve</field>
             <field name="condition">wf_can_user_workflow()</field>
         </record>
 
-        <record model="workflow.transition" id="qout_to_approve_to_approve">
+        <record model="workflow.transition" id="quot_to_approve_to_approve">
             <field name="act_from" ref="to_approve"/>
             <field name="act_to" ref="to_approve"/>
             <field name="signal">approve</field>
             <field name="condition">wf_can_user_workflow()</field>
         </record>
 
-        <record model="workflow.transition" id="qout_to_approve_to_approved">
+        <record model="workflow.transition" id="quot_to_approve_to_approved">
             <field name="act_from" ref="to_approve"/>
             <field name="act_to" ref="approved"/>
             <field name="signal">approved</field>
             <field name="condition">wf_can_user_workflow()</field>
         </record>
 
-        <record model="workflow.transition" id="qout_to_approve_to_cancel">
+        <record model="workflow.transition" id="quot_to_approve_to_cancel">
             <field name="act_from" ref="to_approve"/>
             <field name="act_to" ref="cancel"/>
             <field name="signal">cancel</field>
             <field name="condition">wf_can_user_workflow()</field>
         </record>
 
-        <record model="workflow.transition" id="qout_to_approve_to_in_progress">
+        <record model="workflow.transition" id="quot_to_approve_to_in_progress">
             <field name="act_from" ref="to_approve"/>
             <field name="act_to" ref="in_progress"/>
             <field name="signal">not_complete</field>

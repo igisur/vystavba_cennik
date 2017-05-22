@@ -1,13 +1,13 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
-access_o2net_quotation,quotation vendor,model_o2net_quotation,group_vendor,1,1,0,0
+access_o2net_quotation,quotation vendor,model_o2net_quotation,group_vendor,1,1,1,1
 access_o2net_quotation_item,quotation item vendor,model_o2net_quotation_item,group_vendor,1,1,1,1
 access_o2net_quotation_package,quotation package vendor,model_o2net_quotation_item_package,group_vendor,1,1,1,1
 access_o2net_quotation_item_atyp,quotation item atyp vendor,model_o2net_quotation_item_atyp,group_vendor,1,1,1,1
 access_o2net_partner,partner vendor,model_res_partner,group_vendor,1,0,0,0
 access_o2net_section,section vendor,model_o2net_section,group_vendor,1,0,0,0
 access_o2net_product,product vendor,model_o2net_product,group_vendor,1,0,0,0
-access_o2net_pricelist,pricelist vendor,model_o2net_pricelist,group_vendor,1,0,0,0
+access_o2net_pricelist,pricelist vendor,model_o2net_pricelist,group_vendor,1,1,0,0
 access_o2net_pricelist_item,pricelist item vendor,model_o2net_pricelist_item,group_vendor,1,0,0,0
 
 access_o2net_quotation_pc,quotation pc,model_o2net_quotation,group_pc,1,1,1,1
@@ -20,7 +20,7 @@ access_o2net_product_pc,product pc,model_o2net_product,group_pc,1,1,1,1
 access_o2net_pricelist_pc,pricelist pc,model_o2net_pricelist,group_pc,1,1,1,1
 access_o2net_pricelist_item_pc,pricelist item pc,model_o2net_pricelist_item,group_pc,1,1,1,1
 
-access_o2net_quotation_pm,quotation pm,model_o2net_quotation,group_pm,1,1,1,1
+access_o2net_quotation_pm,quotation pm,model_o2net_quotation,group_pm,1,1,0,0
 access_o2net_quotation_item_pm,quotation item pm,model_o2net_quotation_item,group_pm,1,1,1,1
 access_o2net_quotation_package_pm,quotation package pm,model_o2net_quotation_item_package,group_pm,1,1,1,1
 access_o2net_quotation_item_atyp_pm,quotation item atyp pm,model_o2net_quotation_item_atyp,group_pm,1,1,1,1

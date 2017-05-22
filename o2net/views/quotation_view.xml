@@ -39,7 +39,7 @@
                 <form>
                     <header>
                         <!-- use class="oe_highlight" to suggest WF action -->
-                        <button name="assign" type="workflow" string="Assign" class="oe_highlight" states="draft" groups="o2net.group_pc,o2net.group_admin"/>
+                        <button name="assign" type="workflow" string="Assign" class="oe_highlight" states="draft" groups="o2net.group_vendor,o2net.group_pc,o2net.group_admin"/>
                         <button name="in_progress" type="workflow" string="To progress" class="oe_highlight" states="assigned" groups="o2net.group_vendor,o2net.group_admin"/>
                         <button name="to_approve" type="workflow" string="Send to approve" class="oe_highlight" states="in_progress" groups="o2net.group_vendor,o2net.group_admin"/>
                         <button name="approve" type="workflow" string="Approve" class="oe_highlight" states="to_approve" groups="o2net.group_pc,o2net.group_pm,o2net.group_manager,o2net.group_admin"/>
@@ -69,12 +69,12 @@
                                 <field name="sap_export_file_binary" filename="sap_export_file_name" readonly="True" attrs="{'invisible':[('state','not in',['approved'])]}"/>
                             </group>
                             <group>
-                                <field name="vendor_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" context="{'group_name':'TEST_GROUP'}"/>
-                                <field name="pc_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
-                                <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
-                                <field name="manager_ids" readonly="True" options="{'no_create': True}" widget="many2many_tags"/>
-                                <field name="assigned_persons_ids" readonly="True" options="{'no_create_edit': True}" widget="many2many_tags"/>
-                                <field name="price_list_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" class="oe_read_only"/>
+                                <field name="vendor_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="pc_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True, 'no_open': True}" />
+                                <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="manager_ids" readonly="True" options="{'no_create': True, 'no_open': True}" widget="many2many_tags"/>
+                                <field name="assigned_persons_ids" readonly="True" options="{'no_create_edit': True, 'no_open': True}" widget="many2many_tags"/>
+                                <field name="price_list_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True, 'no_open': True}" class="oe_read_only"/>
                                 <field name="currency_id" invisible="1" class="oe_read_only"/>
                             </group>
 

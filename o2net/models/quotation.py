@@ -173,7 +173,8 @@ class Quotation(models.Model):
     # limit partners to specific group
     @api.model
     def _partners_in_group(self, group_name):
-        group = self.env.ref(group_name)
+        group = self.sudo().env.ref(group_name)
+        _logger.info('Group: ' + group.name.encode('ascii','ignore'))
         partner_ids = []
         for user in group.users:
             partner_ids.append(user.partner_id.id)
@@ -181,7 +182,11 @@ class Quotation(models.Model):
 
     @api.model
     def partners_in_group_supplier(self):
-        partner_ids = self._partners_in_group(self.GROUP_SUPPLIER)
+        group = self.sudo().env.ref(self.GROUP_SUPPLIER)
+        partner_ids = []
+        for user in group.users:
+            if user.is_company:
+                partner_ids.append(user.partner_id.id)
         return [('id', 'in', partner_ids)]
 
     def partners_in_group_pc(self):
@@ -219,7 +224,13 @@ class Quotation(models.Model):
             self.ro_datumoddo = not self.vendor_id.id in self.assigned_persons_ids.ids
 
     def _compute_is_user_assigned(self):
-        ret = self.env.user.partner_id.id in self.assigned_persons_ids.ids
+
+        # check if logged user is VENDOR EMPLOYEE
+        if self.env.user.partner_id.parent_id:
+            ret = self.env.user.partner_id.parent_id.id in self.assigned_persons_ids.ids
+        else:
+            ret = self.env.user.partner_id.id in self.assigned_persons_ids.ids
+
         self.is_user_assigned = ret
         return ret
 
@@ -502,6 +513,22 @@ class Quotation(models.Model):
 
         return ret
 
+    @api.model
+    def _get_default_assigned(self):
+        _logger.debug('_get_default_assigned')
+        ret = []
+        partners = self._partners_in_group(self.GROUP_SUPPLIER)
+        if self.env.user.partner_id.id in partners:
+            if self.env.user.partner_id.parent_id:
+                ret.append(self.env.user.partner_id.parent_id.id)
+            else:
+                _logger.debug('logged as VENDOR COMPANY OR IS NOT ASSIGNED TO COMPANY?' + str(self.env.user))
+                ret.append(self.env.user.partner_id.id)
+        else:
+            ret.append(self.env.user.partner_id.id)
+
+        return ret
+
     # FIELDS
     # computed fields
     ro_datumoddo = fields.Boolean(string="RO date From To", compute=_compute_ro_datumoddo, store=False, copy=False)
@@ -530,7 +557,7 @@ class Quotation(models.Model):
                                    domain=partners_in_group_manager, copy=False)
     assigned_persons_ids = fields.Many2many('res.partner', relation="o2net_quotation_assigned_rel",
                                             string='Assigned persons', copy=False,
-                                            default=lambda self: [(4, self.env.user.partner_id.id)])
+                                            default=lambda self: self._get_default_assigned())
 
     state = fields.Selection(State, string='State', readonly=True, default='draft', track_visibility='onchange',
                              copy=False)
@@ -605,12 +632,12 @@ class Quotation(models.Model):
             raise AccessError(_("Only quotation in state 'DRAFT' can be unlink. In any other case use workflow action 'CANCEL'"))
 
     @api.onchange('vendor_id')
-    def _find_cennik(self):
+    def _find_pricelist(self):
         result = {}
         if not self.vendor_id:
             return result
 
-        _logger.debug("Looking for supplier's valid pricelist " + str(self.vendor_id.name))
+        _logger.info("Looking for supplier's valid pricelist " + self.vendor_id.name.encode('ascii','ignore'))
         cennik_ids = self.env['o2net.pricelist'].search([('vendor_id', '=', self.vendor_id.id),
                                                          ('valid_from', '<=', datetime.date.today()),
                                                          ('valid_to', '>', datetime.date.today())], limit=1)
