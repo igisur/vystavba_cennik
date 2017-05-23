@@ -1,17 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-
-        <template id="report_quotation_pdf_document_section">
-            <t t-call="report.internal_layout">
-                <t t-set="o" t-value="section" />
-                <div class="page">
-                    <h2>sub page Cenova ponuka</h2>
-                    <h1>sub page IDecko</h1>
-                </div>
-            </t>
-        </template>
-
         <template id="report_quotation_pdf_document">
              <t t-call="report.internal_layout">
                 <div class="page">
@@ -205,14 +194,20 @@
             </t>
         </template>
 
+        <template id="report_quotation_pdf_document_footer">
+            <t t-call="report.internal_layout">
+                <div class="footer">
+                    <div class="row">Printed: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
+                </div>
+            </t>
+        </template>
+
         <template id="report_quotation_pdf">
             <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="doc">
                     <t t-call="o2net.report_quotation_pdf_document"/>
                 </t>
-                 <div class="footer">
-                     <div class="row">Printed: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
-                 </div>
+                <t t-call="o2net.report_quotation_pdf_document_footer"/>
             </t>
         </template>
 
