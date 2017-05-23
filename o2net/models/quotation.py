@@ -177,7 +177,9 @@ class Quotation(models.Model):
         _logger.info('Group: ' + group.name.encode('ascii','ignore'))
         partner_ids = []
         for user in group.users:
+            _logger.info('user: ' + user.name.encode('ascii', 'ignore'))
             partner_ids.append(user.partner_id.id)
+
         return partner_ids
 
     @api.model
@@ -565,12 +567,9 @@ class Quotation(models.Model):
     price_list_id = fields.Many2one('o2net.pricelist', string='Price list', copy=True)
     currency_id = fields.Many2one(related='price_list_id.currency_id', string="Currency", copy=True)
 
-    quotation_item_ids = fields.One2many('o2net.quotation.item', 'quotation_id', string='Items',
-                                         track_visibility='onchange', copy=True)
-    quotation_item_package_ids = fields.One2many('o2net.quotation.item_package', 'quotation_id', string='Packages',
-                                                 track_visibility='onchange', copy=True)
-    quotation_item_atyp_ids = fields.One2many('o2net.quotation.item_atyp', 'quotation_id', string='Atypical items',
-                                              track_visibility='onchange', copy=True)
+    quotation_item_ids = fields.One2many('o2net.quotation.item', 'quotation_id', string='Items', track_visibility='onchange', copy=True)
+    quotation_item_package_ids = fields.One2many('o2net.quotation.item_package', 'quotation_id', string='Packages', track_visibility='onchange', copy=True)
+    quotation_item_atyp_ids = fields.One2many('o2net.quotation.item_atyp', 'quotation_id', string='Atypical items', track_visibility='onchange', copy=True)
 
     sap_export_content = fields.Text(string="Export for SAP", default='ABCDEFGH', copy=False)
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
@@ -637,21 +636,17 @@ class Quotation(models.Model):
         if not self.vendor_id:
             return result
 
-        _logger.info("Looking for supplier's valid pricelist " + self.vendor_id.name.encode('ascii','ignore'))
         cennik_ids = self.env['o2net.pricelist'].search([('vendor_id', '=', self.vendor_id.id),
                                                          ('valid_from', '<=', datetime.date.today()),
                                                          ('valid_to', '>', datetime.date.today())], limit=1)
 
-        for rec in cennik_ids:
-            _logger.debug(rec.name)
-
         if cennik_ids:
             self.price_list_id = cennik_ids[0]
-        else:
-            self.price_list_id = ''
 
         # by Vendor' change delete all pricelist's items
         self.quotation_item_ids = None;
+        self.quotation_item_atyp_ids = None;
+        self.quotation_item_package_ids = None;
 
         result = {'price_list_id': self.price_list_id}
         self.write(result)
@@ -675,7 +670,6 @@ class Quotation(models.Model):
             [('id', 'in', partner_ids), ('po_total_price_limit', '<=', self.total_price)],
             order="po_total_price_limit desc")
 
-        _logger.debug("Found managers: " + str(manager_ids.ids))
         for man in manager_ids:
             _logger.debug(man.name)
 

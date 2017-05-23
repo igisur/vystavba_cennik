@@ -27,8 +27,7 @@ class o2netQuotationItem(models.Model):
     total_price = fields.Float(compute=_compute_total_price, string='Total price', store=True, digits=(10, 2))
     quantity = fields.Float(string='Quantity', digits=(5, 2), required=True)
     quotation_id = fields.Many2one('o2net.quotation', string='Quotation', required=True, ondelete='cascade')
-    pricelist_item_id = fields.Many2one('o2net.pricelist.item', string='Price list item', required=True,
-                                        domain="[('price_list_id', '=', parent.price_list_id)]")
+    pricelist_item_id = fields.Many2one('o2net.pricelist.item', string='Price list item', required=True)
     item_unit_of_measure = fields.Selection(related='pricelist_item_id.unit_of_measure', string='Measure unit',
                                             stored=False)
     item_description = fields.Text(related='pricelist_item_id.description', string='Description', stored=False)

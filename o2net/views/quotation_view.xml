@@ -84,7 +84,7 @@
                             <page string="Items">
                                 <field name="quotation_item_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Price list items" editable="bottom">
-                                        <field name="pricelist_item_id" string="Items" options="{'no_create': True}" domain="[('item_id.is_package','!=','True')]"/>
+                                        <field name="pricelist_item_id" string="Items" options="{'no_create': True}" domain="[('price_list_id', '=', parent.price_list_id), ('item_id.is_package','!=','True')]"/>
                                         <field name="item_unit_of_measure" readonly="1" string="Measure unit"/>
                                         <field name="unit_price" string="Unit price"/>
                                         <field name="quantity"  string="Quantity"/>
@@ -95,7 +95,7 @@
                             <page string="Packages">
                                 <field name="quotation_item_package_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Packages" editable="bottom">
-                                        <field name="pricelist_item_id" string="Packages" options="{'no_create': True}" domain="[('item_id.is_package','=','True')]"/>
+                                        <field name="pricelist_item_id" string="Packages" options="{'no_create': True}" domain="[('price_list_id', '=', parent.price_list_id), ('item_id.is_package','=','True')]"/>
                                         <field name="item_unit_of_measure" readonly="1" string="Unit of measure"/>
                                         <field name="unit_price"/>
                                         <field name="quantity"  string="Quantity"/>
