@@ -184,8 +184,17 @@ class Quotation(models.Model):
 
     @api.model
     def partners_in_group_supplier(self):
-        group = self.sudo().env.ref(self.GROUP_SUPPLIER)
+
         partner_ids = []
+
+        if self.env.user.has_group(self.GROUP_SUPPLIER):
+            if self.env.user.is_company:
+                partner_ids.append(self.env.user.partner_id.id)
+            else:
+                partner_ids.append(self.env.user.partner_id.parent_id.id)
+            return [('id', 'in', partner_ids)]
+
+        group = self.sudo().env.ref(self.GROUP_SUPPLIER)
         for user in group.users:
             if user.is_company:
                 partner_ids.append(user.partner_id.id)
