@@ -860,9 +860,8 @@ class Quotation(models.Model):
             emails = []
             partners = []
             for partner in partner_ids:
-                if partner.email:
-                    emails.append(partner.email)
-                    partners.append(str(partner.id))
+                emails.append(partner.email)
+                partners.append(str(partner.id))
 
             templateObj.email_to = ",".join(emails)
             templateObj.partner_to = ",".join(partners)
