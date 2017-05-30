@@ -156,7 +156,7 @@ class Quotation(models.Model):
                                 and p.is_package = true
 
                         ) zdroj
-                     join
+                     left join
                         o2net_section s on zdroj.section_id = s.id
                     join
                         o2net_quotation q on zdroj.quotation_id = q.id
@@ -347,7 +347,7 @@ class Quotation(models.Model):
                     from o2net_quotation_item_package qip
                             join o2net_pricelist_item pi on qip.pricelist_item_id = pi.id
                             join o2net_product p on pi.item_id = p.id and p.is_package = true
-                            join o2net_section s on p.section_id = s.id
+                            left join o2net_section s on p.section_id = s.id
                         where qip.quotation_id = %s;"""
 
         self.env.cr.execute(query, ([quotation_id]))
@@ -502,7 +502,7 @@ class Quotation(models.Model):
                             from o2net_quotation_item_package qip
                             join o2net_pricelist_item pi on qip.pricelist_item_id = pi.id
                             join o2net_product p on pi.item_id = p.id and p.is_package = true
-                            join o2net_section s on p.section_id = s.id
+                            left join o2net_section s on p.section_id = s.id
                             where qip.quotation_id = %s
                             ) zdroj
                             join o2net_quotation q on zdroj.quotation_id = q.id order by typorder;"""
