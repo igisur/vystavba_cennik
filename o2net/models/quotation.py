@@ -196,8 +196,10 @@ class Quotation(models.Model):
 
         group = self.sudo().env.ref(self.GROUP_SUPPLIER)
         for user in group.users:
-            if user.is_company:
-                partner_ids.append(user.partner_id.id)
+            if user.partner_id.parent_id:
+                vendor_id = user.partner_id.parent_id.id
+                if not vendor_id in partner_ids:
+                    partner_ids.append(vendor_id)
         return [('id', 'in', partner_ids)]
 
     def partners_in_group_pc(self):
@@ -766,7 +768,7 @@ class Quotation(models.Model):
             manager_ids = self._find_managers()
             if manager_ids:
                 self.sudo().write({'state': self.TO_APPROVE, 'assigned_persons_ids': [(6, 0, manager_ids.ids)],
-                                   'manager_ids': [(6, 0, manager_ids.ids)], 'wf_dovod': ''})
+                                   'manager_ids': [(6, 0, manager_ids.ids)], 'workflow_reason': ''})
                 # Nemozem pouzit current-user, pretoze mail sa posiela cez konto Admina!!!
                 self.sudo().send_mail(manager_ids)
             else:
@@ -858,8 +860,9 @@ class Quotation(models.Model):
             emails = []
             partners = []
             for partner in partner_ids:
-                emails.append(partner.email)
-                partners.append(str(partner.id))
+                if partner.email:
+                    emails.append(partner.email)
+                    partners.append(str(partner.id))
 
             templateObj.email_to = ",".join(emails)
             templateObj.partner_to = ",".join(partners)
