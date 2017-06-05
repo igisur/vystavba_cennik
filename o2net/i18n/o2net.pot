@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-05 20:21+0000\n"
-"PO-Revision-Date: 2017-06-05 20:21+0000\n"
+"POT-Creation-Date: 2017-06-05 20:33+0000\n"
+"PO-Revision-Date: 2017-06-05 20:33+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -680,7 +680,7 @@ msgid "O2 Network"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:640
+#: code:addons/o2net/models/quotation.py:642
 #, python-format
 msgid "Only quotation in state 'DRAFT' can be unlink. In any other case use workflow action 'CANCEL'"
 msgstr ""
@@ -869,7 +869,7 @@ msgid "Quotation (PDF)"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:697
+#: code:addons/o2net/models/quotation.py:699
 #, python-format
 msgid "Quotation does not have vendor assigned"
 msgstr ""
@@ -880,7 +880,7 @@ msgid "Quotation draft"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:671
+#: code:addons/o2net/models/quotation.py:673
 #, python-format
 msgid "Quotation with the same name already exists. Please enter an unique name."
 msgstr ""
@@ -1066,7 +1066,7 @@ msgid "Workflow reason"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:708
+#: code:addons/o2net/models/quotation.py:710
 #, python-format
 msgid "You do not have permission for workflow action"
 msgstr ""
