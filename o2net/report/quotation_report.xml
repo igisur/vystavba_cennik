@@ -24,6 +24,10 @@
                             <strong>End date:</strong>
                             <p t-field="d.end_date" t-field-options='{"format": "dd.MM.yyyy"}'/>
                         </div>
+                        <div t-if="d.project_number" class="col-xs-3">
+                            <strong>Project number:</strong>
+                            <p t-field="d.project_number"/>
+                        </div>
                     </div>
 
                     <div class="row mt32 xs_32">
@@ -54,7 +58,7 @@
                     <!--<t t-set="rows" t-value="d._get_section(d.id)"/>-->
                     <t t-set="sections" t-value="d._get_section(d.id)"/>
                     <section>
-                        <h3>MONTAGE</h3>
+                        <h3>ITEMS</h3>
                         <t t-foreach="sections[0]" t-as="section">
                             <div>
                                 <table width="100%" style="margin-top:20px;margin-bottom:20px">
@@ -78,10 +82,10 @@
                                                             <t t-if="index==1">
                                                                 <thead style="border-bottom:1pt solid black;padding-bottom:40px;">
                                                                     <tr>
-                                                                        <th style="width:10%;text-align:left">Section</th>
-                                                                        <th style="width:10%;text-align:left">KSZ</th>
-                                                                        <th style="width:45%;text-align:left">Item</th>
-                                                                        <th style="width:5%;text-align:left">Unit of measure</th>
+                                                                        <th style="width:10%">Section</th>
+                                                                        <th style="width:10%">KSZ</th>
+                                                                        <th style="width:45%">Item</th>
+                                                                        <th style="width:5%">Unit of measure</th>
                                                                         <th style="width:15%;text-align:right">Unite price</th>
                                                                         <th style="width:15%;text-align:right">Totaly price</th>
                                                                     </tr>
@@ -89,10 +93,10 @@
                                                             </t>
                                                             <tbody>
                                                                 <tr>
-                                                                    <td style="width:10%;text-align:left"><span t-esc="rowtyp['section']"/></td>
-                                                                    <td style="width:10%;text-align:left"><span t-esc="rowtyp['ksz']"/></td>
-                                                                    <td style="width:45%;text-align:left"><span t-esc="rowtyp['item']"/></td>
-                                                                    <td style="width:5%;text-align:left"><span t-esc="rowtyp['uom']"/></td>
+                                                                    <td style="width:10%"><span t-esc="rowtyp['section']"/></td>
+                                                                    <td style="width:10%"><span t-esc="rowtyp['ksz']"/></td>
+                                                                    <td style="width:45%"><span t-esc="rowtyp['item']"/></td>
+                                                                    <td style="width:5%"><span t-esc="rowtyp['uom']"/></td>
                                                                     <td style="width:15%;text-align:right"><span t-esc="rowtyp['unit_price']"/></td>
                                                                     <td style="width:15%;text-align:right"><span t-esc="rowtyp['total_price']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                                                                 </tr>
@@ -132,9 +136,9 @@
                                                         </t>
                                                         <tbody>
                                                             <tr>
-                                                                <td style="width:20%;text-align:left"><span t-esc="rowatyp['section']"/></td>
-                                                                <td style="width:65%;text-align:left"><span t-esc="rowatyp['item']"/></td>
-                                                                <td style="width:20%;text-align:right"><span t-esc="rowatyp['total_price']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                                                <td style="width:20%"><span t-esc="rowatyp['section']"/></td>
+                                                                <td style="width:65%"><span t-esc="rowatyp['item']"/></td>
+                                                                <td style="width:15%;text-align:right"><span t-esc="rowatyp['total_price']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -156,12 +160,12 @@
                         <h3>PACKAGES</h3>
                         <table width="100%">
                             <t t-set="rowspackage" t-value="d._get_rows_section_package(d.id)"/>
-                            <t t-set="index" t-value="0" />
+                            <t t-set="indexpackage" t-value="0" />
                             <tr t-foreach="rowspackage[0]" t-as="rowpackage">
                                 <td>
-                                    <t t-set="index" t-value="index+1" />
+                                    <t t-set="indexpackage" t-value="indexpackage+1" />
                                     <table style="width:100%">
-                                        <tr t-if="index==1">
+                                        <t t-if="indexpackage==1">
                                             <thead style="border-bottom:1pt solid black;">
                                                 <tr>
                                                     <th style="width:10%">Code</th>
@@ -171,14 +175,14 @@
                                                     <th style="width:20%;text-align:right">Total price</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <td><span t-esc="rowpackage['code']"/></td>
-                                                <td><span t-esc="rowpackage['item']"/></td>
-                                                <td style="width:10%;text-align:right"><span t-esc="rowpackage['quantity']"/></td>
-                                                <td style="width:20%;text-align:right"><span t-esc="rowpackage['unit_price']"/></td>
-                                                <td style="width:20%;text-align:right"><span t-esc="rowpackage['total_price']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
-                                            </tbody>
-                                        </tr>
+                                        </t>
+                                        <tbody>
+                                            <td style="width:10%"><span t-esc="rowpackage['code']"/></td>
+                                            <td style="width:40%"><span t-esc="rowpackage['item']"/></td>
+                                            <td style="width:10%;text-align:right"><span t-esc="rowpackage['quantity']"/></td>
+                                            <td style="width:20%;text-align:right"><span t-esc="rowpackage['unit_price']"/></td>
+                                            <td style="width:20%;text-align:right"><span t-esc="rowpackage['total_price']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                        </tbody>
                                     </table>
                                 </td>
                             </tr>

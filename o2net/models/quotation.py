@@ -105,7 +105,7 @@ class Quotation(models.Model):
                         CHR(9),
                         'JV',
                         CHR(9),
-                        zdroj.project_number,
+                        to_char(zdroj.project_number,'9999999999990D00'),
                         CHR(9),
                         case
                             when zdroj.druh = '1T' then
