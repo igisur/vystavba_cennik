@@ -17,3 +17,4 @@ class o2netPricelistItem(models.Model):
     unit_of_measure = fields.Selection(related='item_id.unit_of_measure', string='Measure unit')
     description = fields.Text(related='item_id.description', string='Description')
     currency_id = fields.Many2one(related='price_list_id.currency_id', string='Currency')
+    price_list_code = fields.Char(related='price_list_id.name', string='Price list code')
