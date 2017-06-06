@@ -15,6 +15,25 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="view_tree_partner_supplier">
+            <field name="name">Partner</field>
+            <field name="model">res.partner</field>
+            <field name="priority" eval="5"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+
+                <tree string="Partner" edit="false" create="false" delete="false">
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="parent_name"/>
+                    <field name="code"/>
+                    <field name="po_total_price_limit"/>
+                    <field name="reminder_interval"/>
+                </tree>
+
+            </field>
+        </record>
+
         <record model="ir.actions.act_window" id="act_res_partner_o2net">
             <field name="name">Person</field>
             <field name="res_model">res.partner</field>
@@ -23,9 +42,7 @@
             <field name="view_type">form</field>
         </record>
 
-
-
-         <menuitem id="menu_partners"
+        <menuitem id="menu_partners"
                 name="Partners"
                 sequence="40"
                 parent="menu_root"
@@ -36,5 +53,6 @@
                   sequence="41"
                   parent="menu_partners"
                   action="act_res_partner_o2net"/>
+
     </data>
 </openerp>
