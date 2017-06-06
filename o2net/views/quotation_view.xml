@@ -64,11 +64,11 @@
                         </div>
                         <group>
                             <group>
-                                <field name="project_number" reuired="True"  attrs="{'readonly':[('state','not in',['draft', 'in_progress'])]}"/>
-                                <field name="financial_code"  attrs="{'readonly':[('state','not in',['draft','in_progress'])]}"/>
-                                <field name="shortname"  attrs="{'readonly':[('state','not in',['draft','in_progress'])]}"/>
-                                <field name="start_date" attrs="{'readonly':[('ro_datumoddo','=',True)], 'required':[('ro_datumoddo','!=',True)]}"/>
-                                <field name="end_date" attrs="{'readonly':[('ro_datumoddo','=',True)], 'required':[('ro_datumoddo','!=',True)]}"/>
+                                <field name="project_number" reuired="True"  attrs="{'readonly':[('state','not in',['draft', 'in_progress', 'to_approve'])]}"/>
+                                <field name="financial_code"  attrs="{'readonly':[('state','not in',['draft','in_progress', 'to_approve'])]}"/>
+                                <field name="shortname"  attrs="{'readonly':[('state','not in',['draft','in_progress', 'to_approve'])]}"/>
+                                <field name="start_date" attrs="{'readonly':[('ro_datumoddo','=',True),('state','not in',['draft','in_progress', 'to_approve'])], 'required':[('ro_datumoddo','!=',True)]}"/>
+                                <field name="end_date" widget="date" attrs="{'readonly':[('ro_datumoddo','=',True),('state','not in',['draft','in_progress', 'to_approve'])], 'required':[('ro_datumoddo','!=',True)]}"/>
                                 <field name="sap_export_file_binary" filename="sap_export_file_name" readonly="True" attrs="{'invisible':[('state','not in',['approved'])]}"/>
                                 <field name="active" attrs="{'invisible':[('state','!=','approved')]}" groups="o2net.group_admin" />
                             </group>
