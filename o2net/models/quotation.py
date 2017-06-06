@@ -545,11 +545,11 @@ class Quotation(models.Model):
     # FIELDS
     # computed fields
     ro_datumoddo = fields.Boolean(string="RO date From To", compute=_compute_ro_datumoddo, store=False, copy=False)
-    can_user_exec_wf = fields.Boolean(string="Can user execute workflow action", compute=_compute_can_user_exec_wf,
-                                      store=False, copy=False)
+    can_user_exec_wf = fields.Boolean(string="Can user execute workflow action", compute=_compute_can_user_exec_wf, store=False, copy=False)
     is_user_assigned = fields.Boolean(string="Is current user assigned", compute=_compute_is_user_assigned)
-    group = fields.Char(string="current assigned group", default=lambda self: self.GROUP_SUPPLIER)
 
+    group = fields.Char(string="current assigned group", default=lambda self: self.GROUP_SUPPLIER)
+    active = fields.Boolean(string="Active", default=True)
     name = fields.Char(required=True, string="Name", size=50, copy=True)
     project_number = fields.Char(string="Project number (PSID)", required=True, copy=True);
     financial_code = fields.Char(string="Financial code", size=10, required=True, copy=True)
@@ -805,7 +805,7 @@ class Quotation(models.Model):
                 _logger.debug("ALL managers approved")
                 self.sudo().write(
                     {'state': self.APPROVED,
-                     'assigned_persons_ids': [(5)],
+                     'assigned_persons_ids': [(6, 0, [self.pc_id.id])],
                      'group': '',
                      'workflow_reason': ''})
                 self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
@@ -851,13 +851,20 @@ class Quotation(models.Model):
             self.message_post(
                 body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
-        self.sudo().write({'state': self.CANCEL, 'assigned_persons_ids': [(5)], 'workflow_reason': ''})
+        self.sudo().write({'state': self.CANCEL, 'assigned_persons_ids': [(5, 0, 0)], 'workflow_reason': ''})
         self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_canceled')
         return True
 
     @api.one
-    def send_mail(self, partner_ids=None, template_name='mail_cp_assigned', context=None):
+    def wf_archive(self):
+        _logger.debug("workflow action to ARCHIVE")
+        self.sudo().write({'assigned_persons_ids': [(5, 0, 0)],
+                           'workflow_reason': '',
+                           'active' : 0})
+        return True
 
+    @api.one
+    def send_mail(self, partner_ids=None, template_name='mail_cp_assigned', context=None):
         _logger.debug("send mail to " + str(partner_ids))
 
         # Find the e-mail template (defined in views/mail_template.xml)

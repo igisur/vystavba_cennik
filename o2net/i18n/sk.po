@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-05 22:34+0200\n"
-"PO-Revision-Date: 2017-06-05 22:36+0200\n"
+"POT-Creation-Date: 2017-06-07 00:15+0200\n"
+"PO-Revision-Date: 2017-06-07 00:18+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.1\n"
 
 #. module: o2net
 #: model:mail.template,body_html:o2net.mail_cp_manager_approved
@@ -245,11 +245,21 @@ msgid "<strong>Vendor:</strong>"
 msgstr "Dodávateľ:"
 
 #. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_qout_archived
+msgid "Achived Quotations"
+msgstr "Archivované cenové ponuky"
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_needaction
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_message_needaction
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_needaction
 msgid "Action Needed"
 msgstr "Potrebná akcia"
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_active
+msgid "Active"
+msgstr "Aktívne"
 
 #. module: o2net
 #: model:res.groups,name:o2net.group_admin
@@ -271,6 +281,16 @@ msgstr "Schválené"
 #: model:ir.actions.act_window,name:o2net.action_window_qout_approved
 msgid "Approved Quotations"
 msgstr "Schválené cenové ponuky"
+
+#. module: o2net
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
+msgid "Archive"
+msgstr "Archivuj"
+
+#. module: o2net
+#: model:ir.ui.menu,name:o2net.menu_quotation_archived
+msgid "Archived"
+msgstr "Archivované"
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.view_form_quotation
@@ -541,6 +561,13 @@ msgstr ""
 "dodávateľ."
 
 #. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_qout_archived
+#, fuzzy
+#| msgid "Here you can find founded Quotations."
+msgid "Here you can find archived Quotations."
+msgstr "Tu nájdete založené cenové ponuky."
+
+#. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_qout_cancel
 msgid ""
 "Here you can find canceled Quotations, which are assigned to you or you are "
@@ -802,7 +829,7 @@ msgid "O2 Network"
 msgstr "O2 Network"
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:642
+#: code:addons/o2net/models/quotation.py:643
 #, python-format
 msgid ""
 "Only quotation in state 'DRAFT' can be unlink. In any other case use "
@@ -870,6 +897,7 @@ msgstr "Balíčky celkom"
 #. module: o2net
 #: model:ir.model,name:o2net.model_res_partner
 #: model:ir.ui.menu,name:o2net.menu_partner
+#: model:ir.ui.view,arch_db:o2net.view_tree_partner_supplier
 msgid "Partner"
 msgstr "Partner"
 
@@ -909,6 +937,8 @@ msgid "Price list"
 msgstr "Cenník"
 
 #. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_price_list_code
+#: model:ir.model.fields,help:o2net.field_o2net_pricelist_item_price_list_code
 #: model:ir.model.fields,help:o2net.field_o2net_pricelist_name
 msgid "Price list code"
 msgstr "Kód cenníka"
@@ -1006,7 +1036,7 @@ msgid "Quotation (PDF)"
 msgstr "Cenová ponuka (PDF)"
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:699
+#: code:addons/o2net/models/quotation.py:700
 #, python-format
 msgid "Quotation does not have vendor assigned"
 msgstr "Cenová ponuka nemá priradeného dodávateľa"
@@ -1017,7 +1047,7 @@ msgid "Quotation draft"
 msgstr "Návrh cenovej ponuky"
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:673
+#: code:addons/o2net/models/quotation.py:674
 #, python-format
 msgid ""
 "Quotation with the same name already exists. Please enter an unique name."
@@ -1206,15 +1236,40 @@ msgid "Workflow reason"
 msgstr "Dôvod pre workflow"
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:710
+#: code:addons/o2net/models/quotation.py:711
 #, python-format
 msgid "You do not have permission for workflow action"
 msgstr "Nemáte právo na túto workflow akciu"
 
 #. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_group
+msgid "current assigned group"
+msgstr "je aktuálny užívateľ prihlásený"
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_state_date
 msgid "date state"
 msgstr "Dátum stavu"
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation
+msgid "o2net - Quotation"
+msgstr "o2net - Cenová ponuka"
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item_atyp
+msgid "o2net - Quotation atypical"
+msgstr "o2net - Cenová ponuka - Atypická položka"
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item
+msgid "o2net - Quotation item"
+msgstr "o2net - Cenová ponuka - Položka"
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item_package
+msgid "o2net - Quotation package"
+msgstr "o2net - Cenová ponuka - Balíčky"
 
 #. module: o2net
 #: model:ir.model,name:o2net.model_o2net_product
@@ -1232,78 +1287,27 @@ msgid "o2net - price list item"
 msgstr "o2net - Položka cenníka"
 
 #. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation
-msgid "o2net - price offer"
-msgstr "o2net - Cenník"
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item_atyp
-msgid "o2net - price offer atypical"
-msgstr "o2net - Cenová ponuka - Atypická položka"
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item
-msgid "o2net - price offer item"
-msgstr "o2net - Položka cenníka"
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item_package
-msgid "o2net - price offer package"
-msgstr "o2net - Cenová ponuka - Balíček"
-
-#. module: o2net
 #: model:ir.model,name:o2net.model_o2net_section
 msgid "o2net - section"
 msgstr "o2net - Oddiel"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka_atyp
-msgid "vystavba - atyp polozka cenovej ponuky"
-msgstr ""
+#~ msgid "o2net - price offer"
+#~ msgstr "o2net - Cenník"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka_balicek
-msgid "vystavba - balicek cenovej ponuky"
-msgstr ""
+#~ msgid "o2net - price offer atypical"
+#~ msgstr "o2net - Cenová ponuka - Atypická položka"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cennik
-msgid "vystavba - cennik"
-msgstr ""
+#~ msgid "o2net - price offer item"
+#~ msgstr "o2net - Položka cenníka"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka
-msgid "vystavba - cenova ponuka"
-msgstr "sub page Cenova ponuka"
+#~ msgid "o2net - price offer package"
+#~ msgstr "o2net - Cenová ponuka - Balíček"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_oddiel
-msgid "vystavba - oddiel"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_polozka
-msgid "vystavba - polozka"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cennik_polozka
-msgid "vystavba - polozka cennika"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka
-msgid "vystavba - polozka cenovej ponuky"
-msgstr ""
+#~ msgid "vystavba - cenova ponuka"
+#~ msgstr "sub page Cenova ponuka"
 
 #~ msgid "MONTAGE"
 #~ msgstr "MONTÁŽ"
-
-#~ msgid "o2net - Quotation"
-#~ msgstr "o2net - Cenová ponuka"
-
-#~ msgid "o2net - Quotation item"
-#~ msgstr "o2net - Cenová ponuka - Položka"
 
 #~ msgid "sub page IDecko"
 #~ msgstr "sub page IDecko"

@@ -36,6 +36,10 @@
             <field name="priority" eval="5"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
+            <field name="active" invisible="True"/>
+            <field name="id" invisible="True"/>
+            <field name="ro_datumoddo" invisible="True"/>
+
                 <form>
                     <header>
                         <!-- use class="oe_highlight" to suggest WF action -->
@@ -45,6 +49,7 @@
                         <button name="approve" type="workflow" string="Approve" class="oe_highlight" states="to_approve" groups="o2net.group_pc,o2net.group_pm,o2net.group_manager,o2net.group_admin"/>
                         <button name="wf_not_complete" type="object" string="Return to correct" states="to_approve" groups="o2net.group_pc,o2net.group_pm,o2net.group_admin"/>
                         <button name="cancel" type="workflow" string="Cancel" states="to_approve" groups="o2net.group_pc,o2net.group_pm,o2net.group_manager,o2net.group_admin"/>
+                        <button name="wf_archive" type="object" string="Archive" groups="o2net.group_pc,o2net.group_admin" attrs="{'invisible':['|', ('active','=',False), ('state','!=','approved')]}"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,assigned,in_progress,to_approve,approved" readonly="1"/>
                     </header>
                     <sheet>
@@ -54,9 +59,7 @@
                         <div class="oe_title">
                             <h1>
                                 <label string="Quotation"/>
-                                <field name="id" invisible="True"/>
-                                <field name="name" attrs="{'readonly':[('state','in',['approved'])]}"/>
-                                <field name="ro_datumoddo" invisible="True"/>
+                                <field name="name" attrs="{'readonly':[('state','in',['approved'])]}" groups="o2net.group_admin" />
                             </h1>
                         </div>
                         <group>
@@ -67,6 +70,7 @@
                                 <field name="start_date" attrs="{'readonly':[('ro_datumoddo','=',True)], 'required':[('ro_datumoddo','!=',True)]}"/>
                                 <field name="end_date" attrs="{'readonly':[('ro_datumoddo','=',True)], 'required':[('ro_datumoddo','!=',True)]}"/>
                                 <field name="sap_export_file_binary" filename="sap_export_file_name" readonly="True" attrs="{'invisible':[('state','not in',['approved'])]}"/>
+                                <field name="active" attrs="{'invisible':[('state','!=','approved')]}" groups="o2net.group_admin" />
                             </group>
                             <group>
                                 <field name="vendor_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True, 'no_open': True}"/>
@@ -258,6 +262,18 @@
             </field>
         </record>
 
+        <record model="ir.actions.act_window" id="action_window_qout_archived">
+            <field name="name">Achived Quotations</field>
+            <field name="res_model">o2net.quotation</field>
+            <field name="view_id" ref="view_tree_quotation"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"> ['&amp;',('state','=','approved'), ('active', '=', False)]</field>
+            <field name="help" type="html">
+                <p>Here you can find archived Quotations.</p>
+            </field>
+        </record>
+
         <record model="ir.actions.act_window" id="action_window_qout_cancel">
             <field name="name">Canceled Quotations</field>
             <field name="res_model">o2net.quotation</field>
@@ -320,15 +336,21 @@
                   parent="menu_quotation"
                   action="action_window_qout_approved"/>
 
+        <menuitem id="menu_quotation_archived"
+                  name="Archived"
+                  sequence="16"
+                  parent="menu_quotation"
+                  action="action_window_qout_archived"/>
+
         <menuitem id="menu_quotation_cancel"
                   name="Canceled"
-                  sequence="16"
+                  sequence="17"
                   parent="menu_quotation"
                   action="action_window_qout_cancel"/>
 
         <menuitem id="menu_quotation_preview"
                   name="Overview"
-                  sequence="17"
+                  sequence="18"
                   parent="menu_quotation"
                   action="action_window_qout_preview"/>
     </data>

@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c\n"
+"Project-Id-Version: Odoo Server 9.0c-20161019\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-05 20:33+0000\n"
-"PO-Revision-Date: 2017-06-05 20:33+0000\n"
+"POT-Creation-Date: 2017-06-06 22:09+0000\n"
+"PO-Revision-Date: 2017-06-06 22:09+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -146,10 +146,20 @@ msgid "<strong>Vendor:</strong>"
 msgstr ""
 
 #. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_qout_archived
+msgid "Achived Quotations"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_needaction
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_message_needaction
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_needaction
 msgid "Action Needed"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_active
+msgid "Active"
 msgstr ""
 
 #. module: o2net
@@ -171,6 +181,16 @@ msgstr ""
 #. module: o2net
 #: model:ir.actions.act_window,name:o2net.action_window_qout_approved
 msgid "Approved Quotations"
+msgstr ""
+
+#. module: o2net
+#: model:ir.ui.view,arch_db:o2net.view_form_quotation
+msgid "Archive"
+msgstr ""
+
+#. module: o2net
+#: model:ir.ui.menu,name:o2net.menu_quotation_archived
+msgid "Archived"
 msgstr ""
 
 #. module: o2net
@@ -427,6 +447,11 @@ msgid "Here you can find approved Quotations, which are assigned to you or you a
 msgstr ""
 
 #. module: o2net
+#: model:ir.actions.act_window,help:o2net.action_window_qout_archived
+msgid "Here you can find archived Quotations."
+msgstr ""
+
+#. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_qout_cancel
 msgid "Here you can find canceled Quotations, which are assigned to you or you are thier vendor."
 msgstr ""
@@ -680,7 +705,7 @@ msgid "O2 Network"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:642
+#: code:addons/o2net/models/quotation.py:643
 #, python-format
 msgid "Only quotation in state 'DRAFT' can be unlink. In any other case use workflow action 'CANCEL'"
 msgstr ""
@@ -744,6 +769,7 @@ msgstr ""
 #. module: o2net
 #: model:ir.model,name:o2net.model_res_partner
 #: model:ir.ui.menu,name:o2net.menu_partner
+#: model:ir.ui.view,arch_db:o2net.view_tree_partner_supplier
 msgid "Partner"
 msgstr ""
 
@@ -783,6 +809,8 @@ msgid "Price list"
 msgstr ""
 
 #. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_price_list_code
+#: model:ir.model.fields,help:o2net.field_o2net_pricelist_item_price_list_code
 #: model:ir.model.fields,help:o2net.field_o2net_pricelist_name
 msgid "Price list code"
 msgstr ""
@@ -869,7 +897,7 @@ msgid "Quotation (PDF)"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:699
+#: code:addons/o2net/models/quotation.py:700
 #, python-format
 msgid "Quotation does not have vendor assigned"
 msgstr ""
@@ -880,7 +908,7 @@ msgid "Quotation draft"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:673
+#: code:addons/o2net/models/quotation.py:674
 #, python-format
 msgid "Quotation with the same name already exists. Please enter an unique name."
 msgstr ""
@@ -1066,14 +1094,39 @@ msgid "Workflow reason"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:710
+#: code:addons/o2net/models/quotation.py:711
 #, python-format
 msgid "You do not have permission for workflow action"
 msgstr ""
 
 #. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_group
+msgid "current assigned group"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_state_date
 msgid "date state"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation
+msgid "o2net - Quotation"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item_atyp
+msgid "o2net - Quotation atypical"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item
+msgid "o2net - Quotation item"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item_package
+msgid "o2net - Quotation package"
 msgstr ""
 
 #. module: o2net
@@ -1092,67 +1145,7 @@ msgid "o2net - price list item"
 msgstr ""
 
 #. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation
-msgid "o2net - price offer"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item_atyp
-msgid "o2net - price offer atypical"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item
-msgid "o2net - price offer item"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item_package
-msgid "o2net - price offer package"
-msgstr ""
-
-#. module: o2net
 #: model:ir.model,name:o2net.model_o2net_section
 msgid "o2net - section"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka_atyp
-msgid "vystavba - atyp polozka cenovej ponuky"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka_balicek
-msgid "vystavba - balicek cenovej ponuky"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cennik
-msgid "vystavba - cennik"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka
-msgid "vystavba - cenova ponuka"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_oddiel
-msgid "vystavba - oddiel"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_polozka
-msgid "vystavba - polozka"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cennik_polozka
-msgid "vystavba - polozka cennika"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka
-msgid "vystavba - polozka cenovej ponuky"
 msgstr ""
 
