@@ -249,7 +249,6 @@ class Quotation(models.Model):
 
     @api.depends('assigned_persons_ids')
     def _compute_can_user_exec_wf(self):
-        _logger.info('has group: ' + str(self.env.user.has_group(self.GROUP_ADMIN)))
         ret = self.is_user_assigned or self.env.user.id == SUPERUSER_ID or self.env.user.has_group(self.GROUP_ADMIN)
         return ret
 
@@ -722,7 +721,7 @@ class Quotation(models.Model):
                 body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
         self.sudo().write(
-            {'state': self.ASSIGNED, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])], 'workflow_reason': ''})
+            {'state': self.ASSIGNED, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])], 'workflow_reason': '', 'group': self.GROUP_SUPPLIER})
         self.sudo().send_mail([self.vendor_id])
         return True
 
@@ -752,7 +751,6 @@ class Quotation(models.Model):
 
         # Vendor sent quot to be approved by PC
         if self.group == self.GROUP_SUPPLIER:
-        #if self.vendor_id.id in self.assigned_persons_ids.ids:
             _logger.debug("Supplier sent to approve by PC")
             self.sudo().write(
                 {'state': self.TO_APPROVE,
@@ -763,7 +761,6 @@ class Quotation(models.Model):
 
         # PC sent quot to be approved by PM
         elif self.group == self.GROUP_PC:
-        # elif self.pc_id.id in self.assigned_persons_ids.ids:
             _logger.debug("PC sent to approve by PM")
             self.sudo().write(
                 {'state': self.TO_APPROVE,
@@ -774,7 +771,6 @@ class Quotation(models.Model):
 
         # PM sent quot to be approved by Manager
         elif self.group == self.GROUP_PM:
-        # elif self.pm_id.id in self.assigned_persons_ids.ids:
             _logger.debug("PM sent to approve by Manager")
             manager_ids = self._find_managers()
             if manager_ids:
@@ -792,7 +788,6 @@ class Quotation(models.Model):
 
         # Manager approved
         elif self.group == self.GROUP_MANAGER:
-        #elif self.env.user.partner_id.id in self.manager_ids.ids:
             if self.is_user_assigned:
                 _logger.debug("Manager '" + self.env.user.partner_id.display_name + "' approved")
                 self.sudo().write(
