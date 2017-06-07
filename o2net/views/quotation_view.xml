@@ -331,7 +331,7 @@
                   action="action_window_qout_to_approve"/>
 
         <menuitem id="menu_quotation_approved"
-                  name="Approve"
+                  name="Approved"
                   sequence="15"
                   parent="menu_quotation"
                   action="action_window_qout_approved"/>
