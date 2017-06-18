@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c-20161019\n"
+"Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-06 22:09+0000\n"
-"PO-Revision-Date: 2017-06-06 22:09+0000\n"
+"POT-Creation-Date: 2017-06-18 13:26+0000\n"
+"PO-Revision-Date: 2017-06-18 13:26+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -168,12 +168,12 @@ msgid "Administrator"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.menu,name:o2net.menu_quotation_approved
 #: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Approve"
 msgstr ""
 
 #. module: o2net
+#: model:ir.ui.menu,name:o2net.menu_quotation_approved
 #: selection:o2net.quotation,state:0
 msgid "Approved"
 msgstr ""
@@ -219,7 +219,6 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_quotation_item_atyp_ids
-#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 #: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Atypical items"
 msgstr ""
@@ -555,6 +554,11 @@ msgid "Items"
 msgstr ""
 
 #. module: o2net
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+msgid "Items total:"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_section_atypservice
 #: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 #: model:ir.ui.view,arch_db:o2net.view_form_section
@@ -705,7 +709,15 @@ msgid "O2 Network"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:643
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document_header
+msgid "O2 Slovakia, s.r.o. | Einsteinova 24 | 851 01 Bratislava | Slovakia<br/>\n"
+"                            E-mail: info@o2.sk | Website: http://www.o2.sk | IČO: 35848863 | DIČ: 2020216748 | IČ DPH: SK2020216748<br/>\n"
+"                            Zapísaná v OR SR: OS Bratislava I, odd: Sro, vložka číslo: 27882/B<br/>\n"
+"                            Bankové spojenie: UniCredit Bank Czech Republic and Slovakia, a.s.: IBAN SK4211110000001156173009 - SWIFT UNCRSKBX"
+msgstr ""
+
+#. module: o2net
+#: code:addons/o2net/models/quotation.py:681
 #, python-format
 msgid "Only quotation in state 'DRAFT' can be unlink. In any other case use workflow action 'CANCEL'"
 msgstr ""
@@ -767,6 +779,11 @@ msgid "Packages total"
 msgstr ""
 
 #. module: o2net
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+msgid "Packages total:"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model,name:o2net.model_res_partner
 #: model:ir.ui.menu,name:o2net.menu_partner
 #: model:ir.ui.view,arch_db:o2net.view_tree_partner_supplier
@@ -791,6 +808,7 @@ msgstr ""
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_price
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_price
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 #: model:ir.ui.view,arch_db:o2net.view_form_quotation
 #: model:ir.ui.view,arch_db:o2net.view_tree_quotation_preview
 msgid "Price"
@@ -897,7 +915,7 @@ msgid "Quotation (PDF)"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:700
+#: code:addons/o2net/models/quotation.py:738
 #, python-format
 msgid "Quotation does not have vendor assigned"
 msgstr ""
@@ -908,7 +926,7 @@ msgid "Quotation draft"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:674
+#: code:addons/o2net/models/quotation.py:712
 #, python-format
 msgid "Quotation with the same name already exists. Please enter an unique name."
 msgstr ""
@@ -991,37 +1009,26 @@ msgid "To progress"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
-msgid "Total atypical items"
-msgstr ""
-
-#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_total_price
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_total_price
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_total_price
-#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 #: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Total price"
 msgstr ""
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+msgid "Total price - atypical items"
+msgstr ""
+
+#. module: o2net
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
+msgid "Total price - items"
+msgstr ""
+
+#. module: o2net
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 msgid "Total price:"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
-msgid "Total typical items"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
-msgid "Totaly price"
-msgstr ""
-
-#. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
-msgid "Type item"
 msgstr ""
 
 #. module: o2net
@@ -1094,7 +1101,7 @@ msgid "Workflow reason"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:711
+#: code:addons/o2net/models/quotation.py:749
 #, python-format
 msgid "You do not have permission for workflow action"
 msgstr ""
@@ -1107,26 +1114,6 @@ msgstr ""
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_state_date
 msgid "date state"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation
-msgid "o2net - Quotation"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item_atyp
-msgid "o2net - Quotation atypical"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item
-msgid "o2net - Quotation item"
-msgstr ""
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item_package
-msgid "o2net - Quotation package"
 msgstr ""
 
 #. module: o2net
@@ -1145,7 +1132,67 @@ msgid "o2net - price list item"
 msgstr ""
 
 #. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation
+msgid "o2net - price offer"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item_atyp
+msgid "o2net - price offer atypical"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item
+msgid "o2net - price offer item"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item_package
+msgid "o2net - price offer package"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model,name:o2net.model_o2net_section
 msgid "o2net - section"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka_atyp
+msgid "vystavba - atyp polozka cenovej ponuky"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka_balicek
+msgid "vystavba - balicek cenovej ponuky"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_cennik
+msgid "vystavba - cennik"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_cenova_ponuka
+msgid "vystavba - cenova ponuka"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_oddiel
+msgid "vystavba - oddiel"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_polozka
+msgid "vystavba - polozka"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_cennik_polozka
+msgid "vystavba - polozka cennika"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka
+msgid "vystavba - polozka cenovej ponuky"
 msgstr ""
 

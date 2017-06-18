@@ -48,14 +48,14 @@
                         <h3>ITEMS</h3>
                         <t t-foreach="sections[0]" t-as="section">
                             <div>
-                                <table width="100%" style="margin-top:20px;margin-bottom:20px">
+                                <table width="100%" style="margin-top:15px;margin-bottom:15px">
                                     <tr>
                                         <td style="font-size:18px;width:50%;" t-esc="section['section']"/>
-                                        <td style="font-size:18px;width:50%;text-align:right;" t-esc="d._get_price_section(d.id, section['id'])[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/>
+                                        <!--<td style="font-size:18px;width:50%;text-align:right;" t-esc="d._get_price_section(d.id, section['id'])[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/>-->
                                     </tr>
                                 </table>
-                                <table>
-                                    <tr>
+                                <!--<table>-->
+                                    <!--<tr>-->
                                         <table width="100%">
                                             <t t-set="rowstyp" t-value="d._get_rows_section_typ(d.id,section['id'])"/>
                                             <t t-set="index" t-value="0"/>
@@ -66,10 +66,10 @@
                                                         <t t-if="index==1">
                                                             <thead style="border-bottom:1pt solid black;padding-bottom:40px;">
                                                                 <tr>
-                                                                    <th style="width:10%">Section</th>
-                                                                    <th style="width:15%;text-align:left">KSZ</th>
-                                                                    <th style="width:40%">Item</th>
-                                                                    <th style="width:5%">Unit of measure</th>
+                                                                    <th style="width:8%;text-align:left">Section</th>
+                                                                    <th style="width:8%;text-align:left">KSZ</th>
+                                                                    <th style="width:28%">Item</th>
+                                                                    <th style="width:10%">Unit of measure</th>
                                                                     <th style="width:10%;text-align:right">Quantity</th>
                                                                     <th style="width:10%;text-align:right">Unite price</th>
                                                                     <th style="width:10%;text-align:right">Price</th>
@@ -78,10 +78,10 @@
                                                         </t>
                                                         <tbody>
                                                             <tr>
-                                                                <td style="width:10%"><span t-esc="rowtyp['section']"/></td>
-                                                                <td style="width:15%;text-align:left"><span t-esc="rowtyp['ksz']"/></td>
-                                                                <td style="width:40%"><span t-esc="rowtyp['item']"/></td>
-                                                                <td style="width:5%"><span t-esc="rowtyp['uom']"/></td>
+                                                                <td style="width:8%;text-align:left"><span t-esc="rowtyp['section']"/></td>
+                                                                <td style="width:8%;text-align:left"><span t-esc="rowtyp['ksz']"/></td>
+                                                                <td style="width:28%"><span t-esc="rowtyp['item']"/></td>
+                                                                <td style="width:10%"><span t-esc="rowtyp['uom']"/></td>
                                                                 <td style="width:10%;text-align:right"><span t-esc="d._format_number(rowtyp['quantity'])[0]"/></td>
                                                                 <td style="width:10%;text-align:right"><span t-esc="d._format_number(rowtyp['unit_price'])[0]"/></td>
                                                                 <td style="width:10%;text-align:right"><span t-esc="d._format_number(rowtyp['total_price'])[0]"/></td>
@@ -97,8 +97,8 @@
                                                 <td width="25%" style="font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._format_number(d._get_price_section_atyp(d.id, section['id'], 0)[0],d.currency_id)[0]"/></td>
                                             </tr>
                                         </table>
-                                    </tr>
-                                </table>
+                                    <!--</tr>-->
+                                <!--</table>-->
                                 <table width="100%">
                                     <tr>
                                         <table width="100%">
@@ -107,9 +107,6 @@
                                             <tr t-foreach="rowsatyp[0]" t-as="rowatyp">
                                                 <td>
                                                     <t t-set="indexatyp" t-value="indexatyp+1" />
-                                                    <t t-if="indexatyp==1">
-                                                        <h5>Atypical items</h5>
-                                                    </t>
                                                     <table style="width:100%">
                                                         <t t-if="indexatyp==1">
                                                             <thead style="border-bottom:1pt solid black;padding-bottom:40px;">
