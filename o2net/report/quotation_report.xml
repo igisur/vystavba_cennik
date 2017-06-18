@@ -28,9 +28,6 @@
                             <strong>Project number:</strong>
                             <p t-field="d.project_number"/>
                         </div>
-                    </div>
-
-                    <div class="row mt32 xs_32">
                         <div t-if="d.vendor_id.name" class="col-xs-3">
                             <strong>Vendor:</strong>
                             <p t-field="d.vendor_id.name"/>
@@ -42,16 +39,6 @@
                         <div t-if="d.pm_id.display_name" class="col-xs-3">
                             <strong>PM:</strong>
                             <p t-field="d.pm_id.display_name"/>
-                        </div>
-                        <div t-if="d.total_price">
-                            <table width="100%">
-                                <tr>
-                                    <td style="font-size:20px;text-align:right;font-weight: bold;">Total price:</td>
-                                </tr>
-                                <tr>
-                                    <td style="font-size:20px;text-align:right;font-weight: bold;"><span t-esc="d.total_price" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
-                                </tr>
-                            </table>
                         </div>
                     </div>
 
@@ -75,40 +62,39 @@
                                             <tr t-foreach="rowstyp[0]" t-as="rowtyp">
                                                 <td>
                                                     <t t-set="index" t-value="index+1" />
+                                                    <table style="width:100%">
                                                         <t t-if="index==1">
-                                                            <h5>Type item</h5>
-                                                        </t>
-                                                        <table style="width:100%">
-                                                            <t t-if="index==1">
-                                                                <thead style="border-bottom:1pt solid black;padding-bottom:40px;">
-                                                                    <tr>
-                                                                        <th style="width:10%">Section</th>
-                                                                        <th style="width:10%">KSZ</th>
-                                                                        <th style="width:45%">Item</th>
-                                                                        <th style="width:5%">Unit of measure</th>
-                                                                        <th style="width:15%;text-align:right">Unite price</th>
-                                                                        <th style="width:15%;text-align:right">Totaly price</th>
-                                                                    </tr>
-                                                                </thead>
-                                                            </t>
-                                                            <tbody>
+                                                            <thead style="border-bottom:1pt solid black;padding-bottom:40px;">
                                                                 <tr>
-                                                                    <td style="width:10%"><span t-esc="rowtyp['section']"/></td>
-                                                                    <td style="width:10%"><span t-esc="rowtyp['ksz']"/></td>
-                                                                    <td style="width:45%"><span t-esc="rowtyp['item']"/></td>
-                                                                    <td style="width:5%"><span t-esc="rowtyp['uom']"/></td>
-                                                                    <td style="width:15%;text-align:right"><span t-esc="rowtyp['unit_price']"/></td>
-                                                                    <td style="width:15%;text-align:right"><span t-esc="rowtyp['total_price']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                                                    <th style="width:10%">Section</th>
+                                                                    <th style="width:15%;text-align:left">KSZ</th>
+                                                                    <th style="width:40%">Item</th>
+                                                                    <th style="width:5%">Unit of measure</th>
+                                                                    <th style="width:10%;text-align:right">Quantity</th>
+                                                                    <th style="width:10%;text-align:right">Unite price</th>
+                                                                    <th style="width:10%;text-align:right">Price</th>
                                                                 </tr>
-                                                            </tbody>
-                                                        </table>
+                                                            </thead>
+                                                        </t>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="width:10%"><span t-esc="rowtyp['section']"/></td>
+                                                                <td style="width:15%;text-align:left"><span t-esc="rowtyp['ksz']"/></td>
+                                                                <td style="width:40%"><span t-esc="rowtyp['item']"/></td>
+                                                                <td style="width:5%"><span t-esc="rowtyp['uom']"/></td>
+                                                                <td style="width:10%;text-align:right"><span t-esc="d._format_number(rowtyp['quantity'])[0]"/></td>
+                                                                <td style="width:10%;text-align:right"><span t-esc="d._format_number(rowtyp['unit_price'])[0]"/></td>
+                                                                <td style="width:10%;text-align:right"><span t-esc="d._format_number(rowtyp['total_price'])[0]"/></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </td>
                                             </tr>
                                         </table>
                                         <table width="100%" style="margin-top:10px" t-if="index>0">
                                             <tr>
-                                                <td width="75%" style="font-size:16px;text-align:right;font-weight:bold;">Total typical items</td>
-                                                <td width="25%" style="font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._get_price_section_atyp(d.id, section['id'], 0)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                                <td width="75%" style="font-size:16px;text-align:right;font-weight:bold;">Total price - items</td>
+                                                <td width="25%" style="font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._format_number(d._get_price_section_atyp(d.id, section['id'], 0)[0],d.currency_id)[0]"/></td>
                                             </tr>
                                         </table>
                                     </tr>
@@ -128,17 +114,17 @@
                                                         <t t-if="indexatyp==1">
                                                             <thead style="border-bottom:1pt solid black;padding-bottom:40px;">
                                                                 <tr>
-                                                                    <th style="width:20%;text-align:left">Section</th>
-                                                                    <th style="width:65%;text-align:left">Item</th>
-                                                                    <th style="width:15%;text-align:right">Total price</th>
+                                                                    <th style="width:10%">Section</th>
+                                                                    <th style="width:75%">Item</th>
+                                                                    <th style="width:15%;text-align:right">Price</th>
                                                                 </tr>
                                                             </thead>
                                                         </t>
                                                         <tbody>
                                                             <tr>
-                                                                <td style="width:20%"><span t-esc="rowatyp['section']"/></td>
-                                                                <td style="width:65%"><span t-esc="rowatyp['item']"/></td>
-                                                                <td style="width:15%;text-align:right"><span t-esc="rowatyp['total_price']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                                                <td style="width:10%"><span t-esc="rowatyp['section']"/></td>
+                                                                <td style="width:75%"><span t-esc="rowatyp['item']"/></td>
+                                                                <td style="width:15%;text-align:right"><span t-esc="d._format_number(rowatyp['total_price'])[0]"/></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -147,8 +133,8 @@
                                         </table>
                                         <table width="100%" style="margin-top:10px" t-if="indexatyp>0">
                                             <tr>
-                                                <td style="font-size:16px;width:75%;text-align:right;font-weight:bold;">Total atypical items</td>
-                                                <td style="font-size:16px;width:25%;text-align:right;font-weight:bold;"><span t-esc="d._get_price_section_atyp(d.id, section['id'], 1)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                                <td style="font-size:16px;width:75%;text-align:right;font-weight:bold;">Total price - atypical items</td>
+                                                <td style="font-size:16px;width:25%;text-align:right;font-weight:bold;"><span t-esc="d._format_number(d._get_price_section_atyp(d.id, section['id'], 1)[0],d.currency_id)[0]"/></td>
                                             </tr>
                                         </table>
                                     </tr>
@@ -159,55 +145,112 @@
                     <section>
                         <h3>PACKAGES</h3>
                         <table width="100%">
-                            <t t-set="rowspackage" t-value="d._get_rows_section_package(d.id)"/>
-                            <t t-set="indexpackage" t-value="0" />
-                            <tr t-foreach="rowspackage[0]" t-as="rowpackage">
-                                <td>
-                                    <t t-set="indexpackage" t-value="indexpackage+1" />
-                                    <table style="width:100%">
-                                        <t t-if="indexpackage==1">
-                                            <thead style="border-bottom:1pt solid black;">
-                                                <tr>
-                                                    <th style="width:10%">Code</th>
-                                                    <th style="width:40%">Item</th>
-                                                    <th style="width:10%;text-align:right">Quantity</th>
-                                                    <th style="width:20%;text-align:right">Unit price</th>
-                                                    <th style="width:20%;text-align:right">Total price</th>
-                                                </tr>
-                                            </thead>
-                                        </t>
-                                        <tbody>
-                                            <td style="width:10%"><span t-esc="rowpackage['code']"/></td>
-                                            <td style="width:40%"><span t-esc="rowpackage['item']"/></td>
-                                            <td style="width:10%;text-align:right"><span t-esc="rowpackage['quantity']"/></td>
-                                            <td style="width:20%;text-align:right"><span t-esc="rowpackage['unit_price']"/></td>
-                                            <td style="width:20%;text-align:right"><span t-esc="rowpackage['total_price']" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                        <table width="100%" style="margin-top:10px" t-if="index>0">
                             <tr>
-                                <td style="width:75%;font-size:16px;text-align:right;font-weight:bold;">Packages total</td>
-                                <td style="width:25%;font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._get_price_packages(d.id)[0]" t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'/></td>
+                                <table width="100%">
+                                    <t t-set="rowspackage" t-value="d._get_rows_section_package(d.id)"/>
+                                    <t t-set="indexpackage" t-value="0" />
+                                    <tr t-foreach="rowspackage[0]" t-as="rowpackage">
+                                        <td>
+                                            <t t-set="indexpackage" t-value="indexpackage+1" />
+                                            <table style="width:100%">
+                                                <t t-if="indexpackage==1">
+                                                    <thead style="border-bottom:1pt solid black;padding-bottom:40px;">
+                                                        <tr>
+                                                            <th style="width:10%">Code</th>
+                                                            <th style="width:50%">Item</th>
+                                                            <th style="width:10%;text-align:right">Quantity</th>
+                                                            <th style="width:10%;text-align:right">Unit price</th>
+                                                            <th style="width:10%;text-align:right">Price</th>
+                                                        </tr>
+                                                    </thead>
+                                                </t>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width:10%"><span t-esc="rowpackage['code']"/></td>
+                                                        <td style="width:50%"><span t-esc="rowpackage['item']"/></td>
+                                                        <td style="width:10%;text-align:right"><span t-esc="d._format_number(rowpackage['quantity'])[0]"/></td>
+                                                        <td style="width:10%;text-align:right"><span t-esc="d._format_number(rowpackage['unit_price'])[0]"/></td>
+                                                        <td style="width:10%;text-align:right"><span t-esc="d._format_number(rowpackage['total_price'])[0]"/></td> <!-- '{0:,2f}'.format(int(rowpackage['total_price'])) t-esc-options='{"widget": "monetary", "display_currency": "d.currency_id"}'-->
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table width="100%" style="margin-top:10px" t-if="indexpackage>0">
+                                    <tr>
+                                        <td style="width:75%;font-size:16px;text-align:right;font-weight:bold;">Packages total</td>
+                                        <td style="width:25%;font-size:16px;text-align:right;font-weight:bold;"><span t-esc="d._format_number(d._get_price_packages(d.id)[0],d.currency_id)[0]"/></td>
+                                    </tr>
+                                </table>
                             </tr>
                         </table>
                     </section>
+                    <section>
+                        <div t-if="d.total_price">
+                            <table width="100%" style="margin-top:55px">
+                                <tr>
+                                    <td style="font-size:16px;text-align:right;font-weight: bold;">Items total:</td>
+                                    <td style="font-size:16px;text-align:right;font-weight: bold;"><span t-esc="d._format_number(d._get_price_items(d.id)[0],d.currency_id)[0]"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size:16px;text-align:right;font-weight: bold;">Packages total:</td>
+                                    <td style="font-size:16px;text-align:right;font-weight: bold;"><span t-esc="d._format_number(d._get_price_packages(d.id)[0],d.currency_id)[0]"/></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align:right;">--------------------------------------------</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size:24px;text-align:right;font-weight: bold;">Total price:</td>
+                                    <td style="font-size:24px;text-align:right;font-weight: bold;"><span t-esc="d._format_number(d.total_price,d.currency_id)[0]" /></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </section>
                 </div>
-            </t>
+             </t>
+        </template>
+
+        <template id="report_quotation_pdf_document_header">
+            <!--<t t-call="report.internal_layout">-->
+                <div class="header">
+                    <div class="text-center" style="border-top: font-size:12px; padding-top: 2px">
+                        <t>
+                            O2 Slovakia, s.r.o. | Einsteinova 24 | 851 01 Bratislava | Slovakia<br/>
+                            E-mail: info@o2.sk | Website: http://www.o2.sk | IČO: 35848863 | DIČ: 2020216748 | IČ DPH: SK2020216748<br/>
+                            Zapísaná v OR SR: OS Bratislava I, odd: Sro, vložka číslo: 27882/B<br/>
+                            Bankové spojenie: UniCredit Bank Czech Republic and Slovakia, a.s.: IBAN SK4211110000001156173009 - SWIFT UNCRSKBX
+                        </t>
+                    </div>
+                </div>
+            <!--</t>-->
         </template>
 
         <template id="report_quotation_pdf_document_footer">
             <t t-call="report.internal_layout">
                 <div class="footer">
-                    <div class="row">Printed: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/></div>
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                Printed: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/>
+                            </td>
+                            <td style="text-align:right;">
+                                <span class="page"/> / <span class="topage"/>
+                            </td>
+                        </tr>
+                    <!--<div class="row">Printed: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/>-->
+                    <!--    <ul class="list-inline">-->
+                    <!--        <li><span class="page"/> / <span class="topage"/></li>-->
+                    <!--    </ul>-->
+                    <!--</div>-->
+                    </table>
                 </div>
             </t>
         </template>
 
         <template id="report_quotation_pdf">
             <t t-call="report.html_container">
+                <t t-call="o2net.report_quotation_pdf_document_header"/>
                 <t t-foreach="docs" t-as="doc">
                     <t t-call="o2net.report_quotation_pdf_document"/>
                 </t>

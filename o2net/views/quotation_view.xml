@@ -90,9 +90,9 @@
                                     <tree string="Price list items" editable="bottom">
                                         <field name="pricelist_item_id" string="Items" options="{'no_create': True}" domain="[('price_list_id', '=', parent.price_list_id), ('item_id.is_package','!=','True')]"/>
                                         <field name="item_unit_of_measure" readonly="1" string="Measure unit"/>
-                                        <field name="unit_price" string="Unit price"/>
-                                        <field name="quantity"  string="Quantity"/>
-                                        <field name="total_price" string="Total price"/>
+                                        <field name="unit_price" string="Unit price" style="text-align:right;"/>
+                                        <field name="quantity"  string="Quantity" style="text-align:right;"/>
+                                        <field name="total_price" string="Total price" style="text-align:right;"/>
                                     </tree>
                                 </field>
                             </page>

@@ -81,6 +81,15 @@ class Quotation(models.Model):
         self.message_post(
             body='<ul class ="o_mail_thread_message_tracking"><li>' + 'Subor "' + export_file_name + '" pre SAP bol vygenerovany' + "</li></ul>")
 
+    @api.one
+    def _format_number(self, number4formating, currency=[]):
+        formatNumber = 0;
+        formatNumber = "{0:,.2f}".format(number4formating).replace(',', ' ').replace('.',',');
+        if currency:
+            formatNumber = formatNumber + " " + self.currency_id.symbol;
+
+        return formatNumber;
+
     @api.multi
     def _get_sap_export_content(self):
         data = []
@@ -105,7 +114,7 @@ class Quotation(models.Model):
                         CHR(9),
                         'JV',
                         CHR(9),
-                        to_char(zdroj.project_number,'9999999999990D00'),
+                        select replace(to_char(zdroj.project_number,'9999999999990D00'), '.', ','),
                         CHR(9),
                         case
                             when zdroj.druh = '1T' then
@@ -302,7 +311,7 @@ class Quotation(models.Model):
                             p.intern_code as ksz,
                             p.name as item,
                             p.unit_of_measure as uom,
-                            qi.quantity as pocet,
+                            qi.quantity as quantity,
                             qi.unit_price as unit_price,
                             qi.total_price as total_price
                     from o2net_quotation_item qi
@@ -436,6 +445,35 @@ class Quotation(models.Model):
                     and p.is_package = true;"""
 
         self.env.cr.execute(query, ([quotation_id]))
+        price = self.env.cr.fetchone()[0]
+        return price
+
+    @api.one
+    def _get_price_items(self, quotation_id):
+    # ---------------------------------------------
+    # total price for items quotation (typical and non typical)
+    # ---------------------------------------------
+        price = 0
+        _logger.debug("_get_price_items id=" + str(quotation_id))
+
+        query = """select sum(zdroj.price)
+                    from (
+                            select sum(qia.price) as price
+                             from o2net_quotation q
+                             join o2net_quotation_item_atyp qia on q.id = qia.quotation_id
+                             left join o2net_section s on qia.section_id = s.id
+                             where q.id = %s
+                            union
+                            select sum(qi.total_price)
+                             from o2net_quotation q
+                             join o2net_quotation_item qi on q.id = qi.quotation_id
+                             join o2net_pricelist_item pi on qi.pricelist_item_id = pi.id
+                             join o2net_product p on pi.item_id = p.id
+                             where q.id = %s
+                                   and p.is_package = false
+                          ) zdroj;"""
+
+        self.env.cr.execute(query, (quotation_id, quotation_id))
         price = self.env.cr.fetchone()[0]
         return price
 
