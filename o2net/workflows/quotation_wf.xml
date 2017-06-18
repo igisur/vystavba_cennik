@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-
         <record id="quotation_workflow" model="workflow">
             <field name="name">quotation_workflow</field>
             <field name="osv">o2net.quotation</field>

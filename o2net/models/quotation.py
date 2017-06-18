@@ -772,9 +772,9 @@ class Quotation(models.Model):
             self.message_post(
                 body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
+        self.send_mail([self.vendor_id])
         self.sudo().write(
             {'state': self.ASSIGNED, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])], 'workflow_reason': '', 'group': self.GROUP_SUPPLIER})
-        self.sudo().send_mail([self.vendor_id])
         return True
 
     @api.one
@@ -785,15 +785,15 @@ class Quotation(models.Model):
             self.message_post(
                 body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
+        self.send_mail([self.pc_id], template_name='mail_cp_in_progress')
         self.sudo().write(
             {'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])], 'workflow_reason': ''})
-        self.sudo().send_mail([self.pc_id], template_name='mail_cp_in_progress')
         return True
 
     @api.one
     def wf_approve(self):
         self.ensure_one()
-        _logger.debug("workflow action to APPROVE")
+        _logger.info("workflow action to APPROVE")
 
         # put 'workflow_reason' to history (mail_thread)
         if self.workflow_reason:
@@ -803,64 +803,63 @@ class Quotation(models.Model):
 
         # Vendor sent quot to be approved by PC
         if self.group == self.GROUP_SUPPLIER:
-            _logger.debug("Supplier sent to approve by PC")
+            _logger.info("Supplier sent to approve by PC")
+            self.send_mail([self.pc_id])
             self.sudo().write(
                 {'state': self.TO_APPROVE,
                  'assigned_persons_ids': [(6, 0, [self.pc_id.id])],
                  'group': self.GROUP_PC,
                  'workflow_reason': ''})
-            self.sudo().send_mail([self.pc_id])
 
         # PC sent quot to be approved by PM
         elif self.group == self.GROUP_PC:
-            _logger.debug("PC sent to approve by PM")
+            _logger.info("PC sent to approve by PM")
+            self.send_mail([self.pm_id])
             self.sudo().write(
                 {'state': self.TO_APPROVE,
                  'assigned_persons_ids': [(6, 0, [self.pm_id.id])],
                  'group': self.GROUP_PM,
                  'workflow_reason': ''})
-            self.sudo().send_mail([self.pm_id])
 
         # PM sent quot to be approved by Manager
         elif self.group == self.GROUP_PM:
-            _logger.debug("PM sent to approve by Manager")
+            _logger.info("PM sent to approve by Manager")
             manager_ids = self._find_managers()
             if manager_ids:
+                self.send_mail(manager_ids)
                 self.sudo().write(
                     {'state': self.TO_APPROVE,
                      'assigned_persons_ids': [(6, 0, manager_ids.ids)],
                      'manager_ids': [(6, 0, manager_ids.ids)],
                      'group': self.GROUP_MANAGER,
                      'workflow_reason': ''})
-                # Nemozem pouzit current-user, pretoze mail sa posiela cez konto Admina!!!
-                self.sudo().send_mail(manager_ids)
             else:
-                _logger.debug("no managers found")
+                _logger.info("no managers found")
                 raise UserError('No manager(s) found to assign.')
 
         # Manager approved
         elif self.group == self.GROUP_MANAGER:
             if self.is_user_assigned:
                 _logger.debug("Manager '" + self.env.user.partner_id.display_name + "' approved")
+                # send email to PC to let him know that qout has been approved by manager
+                context = {'manager_name': self.env.user.partner_id.display_name}
+                self.send_mail([self.pc_id], template_name='mail_cp_manager_approved', context=context)
                 self.sudo().write(
                     {'assigned_persons_ids': [(3, self.env.user.partner_id.id)],
                      'workflow_reason': ''})
 
-                # send email to PC to let him know that qout has been approved by manager
-                context = {'manager_name': self.env.user.partner_id.display_name}
-                self.sudo().send_mail([self.pc_id], template_name='mail_cp_manager_approved', context=context)
 
         # logged user is assigned manager ?
         if self.env.user.partner_id.id in self.manager_ids.ids:
             # all managers already approved ?
             if not self.assigned_persons_ids.ids:
                 _logger.debug("ALL managers approved")
+                self.send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
                 self.sudo().write(
                     {'state': self.APPROVED,
                      'assigned_persons_ids': [(6, 0, [self.pc_id.id])],
                      'group': '',
                      'workflow_reason': ''})
-                self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
                 self.sudo().action_exportSAP()
 
         return True
@@ -879,18 +878,22 @@ class Quotation(models.Model):
         # PC signals 'not complete' - CP should be 'in_progress' and assigned to Supplier
         if self.pc_id.id in self.assigned_persons_ids.ids:
             _logger.debug("workflow action to IN_PROGRESS")
-            self.sudo().write({'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])],
-                               'workflow_reason': ''})
-            self.sudo().send_mail([self.vendor_id])
+            self.send_mail([self.vendor_id])
+            self.sudo().write({'state': self.IN_PROGRESS,
+                               'assigned_persons_ids': [(6, 0, [self.vendor_id.id])],
+                               'workflow_reason': '',
+                               'group': self.GROUP_SUPPLIER})
             self.sudo().signal_workflow('not_complete')
             # call WF: signal "not complete"
 
         # PM signals 'not complete' - CP should be 'to_approve' and assigned to PC
         elif self.pm_id.id in self.assigned_persons_ids.ids:
             _logger.debug("workflow action to TO_APPROVE")
-            self.sudo().write(
-                {'state': self.TO_APPROVE, 'assigned_persons_ids': [(6, 0, [self.pc_id.id])], 'workflow_reason': ''})
-            self.sudo().send_mail([self.pc_id])
+            self.send_mail([self.pc_id])
+            self.sudo().write({'state': self.TO_APPROVE,
+                               'assigned_persons_ids': [(6, 0, [self.pc_id.id])],
+                               'workflow_reason': '',
+                               'group': self.GROUP_PC})
 
         return True
 
@@ -903,8 +906,8 @@ class Quotation(models.Model):
             self.message_post(
                 body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
-        self.sudo().write({'state': self.CANCEL, 'assigned_persons_ids': [(5, 0, 0)], 'workflow_reason': ''})
-        self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_canceled')
+        self.send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_canceled')
+        self.sudo().write({'state': self.CANCEL, 'assigned_persons_ids': [(5, 0, 0)], 'workflow_reason': '', 'group': ''})
         return True
 
     @api.one
