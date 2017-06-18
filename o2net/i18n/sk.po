@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-18 15:29+0200\n"
-"PO-Revision-Date: 2017-06-18 15:32+0200\n"
+"POT-Creation-Date: 2017-06-18 23:51+0200\n"
+"PO-Revision-Date: 2017-06-18 23:52+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -245,11 +245,6 @@ msgid "<strong>Vendor:</strong>"
 msgstr "Dodávateľ:"
 
 #. module: o2net
-#: model:ir.actions.act_window,name:o2net.action_window_qout_archived
-msgid "Achived Quotations"
-msgstr "Archivované cenové ponuky"
-
-#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_needaction
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_message_needaction
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_needaction
@@ -291,6 +286,11 @@ msgstr "Archivuj"
 #: model:ir.ui.menu,name:o2net.menu_quotation_archived
 msgid "Archived"
 msgstr "Archivované"
+
+#. module: o2net
+#: model:ir.actions.act_window,name:o2net.action_window_qout_archived
+msgid "Archived Quotations"
+msgstr "Archivované cenové ponuky"
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.view_form_quotation
@@ -772,6 +772,11 @@ msgid "Meter"
 msgstr "Meter"
 
 #. module: o2net
+#: model:ir.ui.view,arch_db:o2net.view_quotation_search_form
+msgid "My Quotations"
+msgstr "Moje cenové ponuky"
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_name
@@ -843,7 +848,7 @@ msgid ""
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:681
+#: code:addons/o2net/models/quotation.py:695
 #, python-format
 msgid ""
 "Only quotation in state 'DRAFT' can be unlink. In any other case use "
@@ -1056,7 +1061,7 @@ msgid "Quotation (PDF)"
 msgstr "Cenová ponuka (PDF)"
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:738
+#: code:addons/o2net/models/quotation.py:752
 #, python-format
 msgid "Quotation does not have vendor assigned"
 msgstr "Cenová ponuka nemá priradeného dodávateľa"
@@ -1067,13 +1072,18 @@ msgid "Quotation draft"
 msgstr "Návrh cenovej ponuky"
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:712
+#: code:addons/o2net/models/quotation.py:726
 #, python-format
 msgid ""
 "Quotation with the same name already exists. Please enter an unique name."
 msgstr ""
 "Cenová ponuka s rovnakým názvom už existuje. Prosím zvoľte iný názov, ktorý "
 "bude unikátny."
+
+#. module: o2net
+#: model:ir.ui.view,arch_db:o2net.view_quotation_search_form
+msgid "Quotations"
+msgstr "Cenové ponuky"
 
 #. module: o2net
 #: model:ir.actions.act_window,name:o2net.action_window_qout_in_progress
@@ -1245,7 +1255,7 @@ msgid "Workflow reason"
 msgstr "Dôvod pre workflow"
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:749
+#: code:addons/o2net/models/quotation.py:763
 #, python-format
 msgid "You do not have permission for workflow action"
 msgstr "Nemáte právo na túto workflow akciu"
