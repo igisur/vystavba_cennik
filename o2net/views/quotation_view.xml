@@ -59,7 +59,7 @@
                         <div class="oe_title">
                             <h1>
                                 <label string="Quotation"/>
-                                <field name="name" attrs="{'readonly':[('state','in',['approved'])]}" groups="o2net.group_admin" />
+                                <field name="name" attrs="{'readonly':[('state','in',['approved'])]}"/>
                             </h1>
                         </div>
                         <group>
@@ -90,9 +90,9 @@
                                     <tree string="Price list items" editable="bottom">
                                         <field name="pricelist_item_id" string="Items" options="{'no_create': True}" domain="[('price_list_id', '=', parent.price_list_id), ('item_id.is_package','!=','True')]"/>
                                         <field name="item_unit_of_measure" readonly="1" string="Measure unit"/>
-                                        <field name="unit_price" string="Unit price" style="text-align:right;"/>
-                                        <field name="quantity"  string="Quantity" style="text-align:right;"/>
-                                        <field name="total_price" string="Total price" style="text-align:right;"/>
+                                        <field name="unit_price" string="Unit price"/>
+                                        <field name="quantity"  string="Quantity"/>
+                                        <field name="total_price" string="Total price"/>
                                     </tree>
                                 </field>
                             </page>
@@ -200,6 +200,17 @@
             </field>
         </record>
 
+        <!-- SEARCH -->
+        <record model="ir.ui.view" id="view_quotation_search_form">
+            <field name="name">quotation.search</field>
+            <field name="model">o2net.quotation</field>
+            <field name="arch" type="xml">
+                <search string="Quotations">
+                    <filter name="my_quotations" string="My Quotations" domain="[('is_user_assigned','=','True')]"/>
+                </search>
+            </field>
+        </record>
+
         <!-- ACTIONS -->
         <record model="ir.actions.act_window" id="action_window_qout_draft">
             <field name="name">Quotation draft</field>
@@ -208,6 +219,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('state','=','draft')]</field>
+            <field name="context" eval="{'search_default_my_quotations': 1}"/>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">Click here for establishment of new Quotation header.</p>
                 <p>Here you can find founded Quotations.</p>
@@ -221,6 +233,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','assigned')]</field>
+            <field name="context" eval="{'search_default_my_quotations': 1}"/>
             <field name="help" type="html">
                 <p>Here you can find Quotations assigned to vendor.</p>
             </field>
@@ -233,6 +246,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','in_progress')]</field>
+            <field name="context" eval="{'search_default_my_quotations': 1}"/>
             <field name="help" type="html">
                 <p>Here you can find Quotations in progress, where you are the vendor.</p>
             </field>
@@ -242,9 +256,9 @@
             <field name="name">Quotations waiting for approval</field>
             <field name="res_model">o2net.quotation</field>
             <field name="view_id" ref="view_tree_quotation"/>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','to_approve')]</field>
+            <field name="context" eval="{'search_default_my_quotations': 1}"/>
             <field name="help" type="html">
                 <p>Here you can find Quotations waiting for approval, which are assigned to you or you are thier vendor.</p>
             </field>
@@ -257,13 +271,14 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="domain"> [('state','=','approved')]</field>
+            <field name="context" eval="{'search_default_my_quotations': 1}"/>
             <field name="help" type="html">
                 <p>Here you can find approved Quotations, which are assigned to you or you are thier vendor.</p>
             </field>
         </record>
 
         <record model="ir.actions.act_window" id="action_window_qout_archived">
-            <field name="name">Achived Quotations</field>
+            <field name="name">Archived Quotations</field>
             <field name="res_model">o2net.quotation</field>
             <field name="view_id" ref="view_tree_quotation"/>
             <field name="view_type">form</field>
@@ -292,6 +307,7 @@
             <field name="view_id" ref="view_tree_quotation_preview"/>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+            <field name="context" eval="{'search_default_my_quotations': 1}"/>
             <field name="help" type="html">
                 <p>Here you can find all Quotations, which are assigned to you or you are thier vendor.</p>
             </field>

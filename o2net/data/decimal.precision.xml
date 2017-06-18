@@ -1,0 +1,12 @@
+<openerp>
+    <data>
+        <record forcecreate="True" id="decimal_account" model="decimal.precision">
+             <field name="name">o2net Pricelist Item Price</field>
+             <field name="digits">2</field>
+        </record>
+        <record forcecreate="True" id="decimal_account" model="decimal.precision">
+            <field name="name">o2net Item Amount</field>
+            <field name="digits">2</field>
+        </record>
+    </data>
+</openerp>

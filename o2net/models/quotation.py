@@ -245,7 +245,7 @@ class Quotation(models.Model):
         if self.assigned_persons_ids:
             self.ro_datumoddo = not self.vendor_id.id in self.assigned_persons_ids.ids
 
-    @api.depends('is_user_assigned', 'assigned_persons_ids')
+    @api.depends('assigned_persons_ids')
     def _compute_is_user_assigned(self):
         # check if logged user is VENDOR EMPLOYEE
         if self.env.user.partner_id.parent_id:
@@ -255,6 +255,20 @@ class Quotation(models.Model):
 
         self.is_user_assigned = ret
         return ret
+
+    def _search_user_assigned(self, operator, value):
+        _logger.debug('_search_user_assigned ' + str(operator) + '\'' + str(value) + '\'')
+
+        if self.env.user.partner_id.parent_id:
+            partner_id = self.env.user.partner_id.parent_id.id
+        else:
+            partner_id = self.env.user.partner_id.id
+
+        if value == "True" and operator == '=':
+            _logger.debug('partner_id:' + str(partner_id))
+            return [('assigned_persons_ids', 'in', [partner_id])]
+        else:
+            return []
 
     @api.depends('assigned_persons_ids')
     def _compute_can_user_exec_wf(self):
@@ -584,7 +598,7 @@ class Quotation(models.Model):
     # computed fields
     ro_datumoddo = fields.Boolean(string="RO date From To", compute=_compute_ro_datumoddo, store=False, copy=False)
     can_user_exec_wf = fields.Boolean(string="Can user execute workflow action", compute=_compute_can_user_exec_wf, store=False, copy=False)
-    is_user_assigned = fields.Boolean(string="Is current user assigned", compute=_compute_is_user_assigned)
+    is_user_assigned = fields.Boolean(string="Is current user assigned", compute=_compute_is_user_assigned, search=_search_user_assigned)
 
     group = fields.Char(string="current assigned group", default=lambda self: self.GROUP_SUPPLIER)
     active = fields.Boolean(string="Active", default=True)
