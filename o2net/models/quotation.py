@@ -84,9 +84,12 @@ class Quotation(models.Model):
     @api.one
     def _format_number(self, number4formating, currency=[]):
         formatNumber = 0;
-        formatNumber = "{0:,.2f}".format(number4formating).replace(',', ' ').replace('.',',');
-        if currency:
-            formatNumber = formatNumber + " " + self.currency_id.symbol;
+
+        if number4formating:
+            formatNumber = "{0:,.2f}".format(number4formating).replace(',', ' ').replace('.',',');
+
+            if currency:
+                formatNumber = formatNumber + " " + self.currency_id.symbol;
 
         return formatNumber;
 
