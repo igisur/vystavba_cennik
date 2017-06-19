@@ -12,14 +12,14 @@ class o2netQuotationItem(models.Model):
 
     @api.depends('unit_price', 'quantity')
     def _compute_total_price(self):
-        _logger.info("_compute_total_price: {0}".format(str(len(self))))
+        _logger.debug("_compute_total_price: {0}".format(str(len(self))))
         for line in self:
             if line.quantity:
                 line.total_price = line.unit_price * line.quantity
 
     @api.depends('pricelist_item_id')
     def _compute_unit_price(self):
-        _logger.info("_compute_unit_price: " + str(len(self)))
+        _logger.debug("_compute_unit_price: " + str(len(self)))
         for line in self:
             line.unit_price = line.pricelist_item_id.price
 

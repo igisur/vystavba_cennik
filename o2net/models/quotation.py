@@ -186,10 +186,10 @@ class Quotation(models.Model):
     @api.model
     def _partners_in_group(self, group_name):
         group = self.sudo().env.ref(group_name)
-        _logger.info('Group: ' + group.name.encode('ascii','ignore'))
+        _logger.debug('Group: ' + group.name.encode('ascii','ignore'))
         partner_ids = []
         for user in group.users:
-            _logger.info('user: ' + user.name.encode('ascii', 'ignore'))
+            _logger.debug('user: ' + user.name.encode('ascii', 'ignore'))
             partner_ids.append(user.partner_id.id)
 
         return partner_ids
@@ -256,7 +256,6 @@ class Quotation(models.Model):
         else:
             ret = self.env.user.partner_id.id in self.assigned_persons_ids.ids
 
-        _logger.debug('_compute_is_user_assigned: ' + str(ret))
         self.is_user_assigned = ret
         return ret
 
@@ -801,7 +800,7 @@ class Quotation(models.Model):
     @api.one
     def wf_approve(self):
         self.ensure_one()
-        _logger.info("workflow action to APPROVE")
+        _logger.debug("workflow action to APPROVE")
 
         # put 'workflow_reason' to history (mail_thread)
         if self.workflow_reason:
@@ -811,7 +810,7 @@ class Quotation(models.Model):
 
         # Vendor sent quot to be approved by PC
         if self.group == self.GROUP_SUPPLIER:
-            _logger.info("Supplier sent to approve by PC")
+            _logger.debug("Supplier sent to approve by PC")
             self.send_mail([self.pc_id])
             self.write(
                 {'state': self.TO_APPROVE,
@@ -821,7 +820,7 @@ class Quotation(models.Model):
 
         # PC sent quot to be approved by PM
         elif self.group == self.GROUP_PC:
-            _logger.info("PC sent to approve by PM")
+            _logger.debug("PC sent to approve by PM")
             self.send_mail([self.pm_id])
             self.write(
                 {'state': self.TO_APPROVE,
@@ -831,7 +830,7 @@ class Quotation(models.Model):
 
         # PM sent quot to be approved by Manager
         elif self.group == self.GROUP_PM:
-            _logger.info("PM sent to approve by Manager")
+            _logger.debug("PM sent to approve by Manager")
             manager_ids = self._find_managers()
             if manager_ids:
                 self.send_mail(manager_ids)
@@ -842,7 +841,7 @@ class Quotation(models.Model):
                      'workflow_reason': '',
                      'assigned_persons_ids': [(6, 0, manager_ids.ids)]})
             else:
-                _logger.info("no managers found")
+                _logger.debug("no managers found")
                 raise UserError('No manager(s) found to assign.')
 
         # Manager approved
