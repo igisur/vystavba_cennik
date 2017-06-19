@@ -210,7 +210,24 @@
 
         <template id="report_quotation_pdf_document_header">
             <!--<t t-call="report.internal_layout">-->
-                <div class="header">
+            <div class="header">
+                <!--<head>
+                    <style type="text/css">
+                        * { font-family: 'Liberation Sans', sans-serif; }
+                    </style>
+                </head>-->
+                <div class="row">
+                    <div class="col-xs-12 text-right">
+                            <img t-att-src="'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPgAAADmCAYAAAD4DUjgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAEFkb2JlIEltYWdlUmVhZHlxyWU8AAADJGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4zLWMwMTEgNjYuMTQ1NjYxLCAyMDEyLzAyLzA2LTE0OjU2OjI3ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo4MDgzMjk2QUQ3MTYxMUU1QkUyRjg5NzkxMEZFRTUyQSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo4MDgzMjk2OUQ3MTYxMUU1QkUyRjg5NzkxMEZFRTUyQSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5kaWQ6MDM4MDExNzQwNzIwNjgxMTgyMkE5QkM1NTI1RDRBMjAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDM4MDExNzQwNzIwNjgxMTgyMkE5QkM1NTI1RDRBMjAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4g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'" style="max-height: 82px;"/>
+                    </div>
+                </div>
+            </div>
+            <!--</t>-->
+        </template>
+
+        <template id="report_quotation_pdf_document_footer">
+            <t t-call="report.internal_layout">
+                <div class="footer">
                     <div class="text-center" style="border-top: font-size:12px; padding-top: 2px">
                         <t>
                             O2 Slovakia, s.r.o. | Einsteinova 24 | 851 01 Bratislava | Slovakia<br/>
@@ -220,12 +237,8 @@
                         </t>
                     </div>
                 </div>
-            <!--</t>-->
-        </template>
 
-        <template id="report_quotation_pdf_document_footer">
-            <t t-call="report.internal_layout">
-                <div class="footer">
+                <!--<div class="footer">
                     <table width="100%">
                         <tr>
                             <td>
@@ -234,14 +247,14 @@
                             <td style="text-align:right;">
                                 <span class="page"/> / <span class="topage"/>
                             </td>
-                        </tr>
+                        </tr>-->
                     <!--<div class="row">Printed: <span t-field="user.name"/> - <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/>-->
                     <!--    <ul class="list-inline">-->
                     <!--        <li><span class="page"/> / <span class="topage"/></li>-->
                     <!--    </ul>-->
                     <!--</div>-->
-                    </table>
-                </div>
+                    <!--</table>-->
+                <!--</div>-->
             </t>
         </template>
 
