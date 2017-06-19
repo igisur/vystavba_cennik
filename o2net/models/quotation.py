@@ -74,7 +74,7 @@ class Quotation(models.Model):
 
     @api.one
     def action_exportSAP(self):
-        export_file_name = 'sap_export_' + self.project_number + '_' + str(datetime.date.today()) + '.txt'
+        export_file_name = self.shortname + '_' + self.project_number + '_' + str(datetime.date.today()) + '.txt'
         self.sap_export_file_name = export_file_name
         self.sap_export_content = self._get_sap_export_content()
         self.sap_export_file_binary = base64.encodestring(self.sap_export_content)
