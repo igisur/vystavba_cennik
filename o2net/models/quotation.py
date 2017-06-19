@@ -253,6 +253,7 @@ class Quotation(models.Model):
         else:
             ret = self.env.user.partner_id.id in self.assigned_persons_ids.ids
 
+        _logger.debug('_compute_is_user_assigned: ' + str(ret))
         self.is_user_assigned = ret
         return ret
 
@@ -644,6 +645,8 @@ class Quotation(models.Model):
     @api.multi
     def write(self, vals):
         self.ensure_one()
+        _logger.debug("quotation write")
+        _logger.debug("vals: " + str(vals))
 
         # log changes in Quotation's items
         if 'quotation_item_ids' in vals:
@@ -670,7 +673,7 @@ class Quotation(models.Model):
         if not vals.get('state') == None:
             return res
 
-        # change to 'IN_PROGRESS' if logged user is aasigned to Quot and this is in state 'ASSIGNED'
+        # change to 'IN_PROGRESS' if logged user is assigned to Quot and this is in state 'ASSIGNED'
         if self.vendor_id.id in self.assigned_persons_ids.ids:
             _logger.debug("CP je priradena dodavatelovy")
             if self.state == self.ASSIGNED:
@@ -773,8 +776,7 @@ class Quotation(models.Model):
                 body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
         self.send_mail([self.vendor_id])
-        self.sudo().write(
-            {'state': self.ASSIGNED, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])], 'workflow_reason': '', 'group': self.GROUP_SUPPLIER})
+        self.write({'workflow_reason': '', 'group': self.GROUP_SUPPLIER, 'state': self.ASSIGNED, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])]})
         return True
 
     @api.one
@@ -786,8 +788,11 @@ class Quotation(models.Model):
                 body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
         self.send_mail([self.pc_id], template_name='mail_cp_in_progress')
-        self.sudo().write(
-            {'state': self.IN_PROGRESS, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])], 'workflow_reason': ''})
+        self.write({'state': self.IN_PROGRESS,
+                    'workflow_reason': '',
+                    'group': self.GROUP_SUPPLIER,
+                    'assigned_persons_ids': [(6, 0, [self.vendor_id.id])]})
+
         return True
 
     @api.one
@@ -805,21 +810,21 @@ class Quotation(models.Model):
         if self.group == self.GROUP_SUPPLIER:
             _logger.info("Supplier sent to approve by PC")
             self.send_mail([self.pc_id])
-            self.sudo().write(
+            self.write(
                 {'state': self.TO_APPROVE,
-                 'assigned_persons_ids': [(6, 0, [self.pc_id.id])],
                  'group': self.GROUP_PC,
                  'workflow_reason': ''})
+            self.write({'assigned_persons_ids': [(6, 0, [self.pc_id.id])]})
 
         # PC sent quot to be approved by PM
         elif self.group == self.GROUP_PC:
             _logger.info("PC sent to approve by PM")
             self.send_mail([self.pm_id])
-            self.sudo().write(
+            self.write(
                 {'state': self.TO_APPROVE,
-                 'assigned_persons_ids': [(6, 0, [self.pm_id.id])],
                  'group': self.GROUP_PM,
-                 'workflow_reason': ''})
+                 'workflow_reason': '',
+                 'assigned_persons_ids': [(6, 0, [self.pm_id.id])]})
 
         # PM sent quot to be approved by Manager
         elif self.group == self.GROUP_PM:
@@ -827,12 +832,12 @@ class Quotation(models.Model):
             manager_ids = self._find_managers()
             if manager_ids:
                 self.send_mail(manager_ids)
-                self.sudo().write(
+                self.write(
                     {'state': self.TO_APPROVE,
-                     'assigned_persons_ids': [(6, 0, manager_ids.ids)],
                      'manager_ids': [(6, 0, manager_ids.ids)],
                      'group': self.GROUP_MANAGER,
-                     'workflow_reason': ''})
+                     'workflow_reason': '',
+                     'assigned_persons_ids': [(6, 0, manager_ids.ids)]})
             else:
                 _logger.info("no managers found")
                 raise UserError('No manager(s) found to assign.')
@@ -844,23 +849,22 @@ class Quotation(models.Model):
                 # send email to PC to let him know that qout has been approved by manager
                 context = {'manager_name': self.env.user.partner_id.display_name}
                 self.send_mail([self.pc_id], template_name='mail_cp_manager_approved', context=context)
-                self.sudo().write(
-                    {'assigned_persons_ids': [(3, self.env.user.partner_id.id)],
-                     'workflow_reason': ''})
+                self.write(
+                    {'workflow_reason': '',
+                     'assigned_persons_ids': [(3, self.env.user.partner_id.id)]})
 
-
-        # logged user is assigned manager ?
-        if self.env.user.partner_id.id in self.manager_ids.ids:
-            # all managers already approved ?
-            if not self.assigned_persons_ids.ids:
-                _logger.debug("ALL managers approved")
-                self.send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
-                self.sudo().write(
-                    {'state': self.APPROVED,
-                     'assigned_persons_ids': [(6, 0, [self.pc_id.id])],
-                     'group': '',
-                     'workflow_reason': ''})
-                self.sudo().action_exportSAP()
+            # logged user is assigned manager ?
+            if self.env.user.partner_id.id in self.manager_ids.ids:
+                # all managers already approved ?
+                if not self.assigned_persons_ids.ids:
+                    _logger.debug("ALL managers approved")
+                    self.send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
+                    self.write(
+                        {'state': self.APPROVED,
+                         'group': '',
+                         'workflow_reason': '',
+                         'assigned_persons_ids': [(6, 0, [self.pc_id.id])]})
+                    self.sudo().action_exportSAP()
 
         return True
 
@@ -879,21 +883,17 @@ class Quotation(models.Model):
         if self.pc_id.id in self.assigned_persons_ids.ids:
             _logger.debug("workflow action to IN_PROGRESS")
             self.send_mail([self.vendor_id])
-            self.sudo().write({'state': self.IN_PROGRESS,
-                               'assigned_persons_ids': [(6, 0, [self.vendor_id.id])],
-                               'workflow_reason': '',
-                               'group': self.GROUP_SUPPLIER})
-            self.sudo().signal_workflow('not_complete')
-            # call WF: signal "not complete"
+            self.signal_workflow('not_complete')
+            # code flow continues in method self.wf_in_progress()
 
         # PM signals 'not complete' - CP should be 'to_approve' and assigned to PC
         elif self.pm_id.id in self.assigned_persons_ids.ids:
             _logger.debug("workflow action to TO_APPROVE")
             self.send_mail([self.pc_id])
-            self.sudo().write({'state': self.TO_APPROVE,
-                               'assigned_persons_ids': [(6, 0, [self.pc_id.id])],
-                               'workflow_reason': '',
-                               'group': self.GROUP_PC})
+            self.write({'state': self.TO_APPROVE,
+                        'workflow_reason': '',
+                        'group': self.GROUP_PC,
+                        'assigned_persons_ids': [(6, 0, [self.pc_id.id])]})
 
         return True
 
@@ -907,15 +907,15 @@ class Quotation(models.Model):
                 body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
         self.send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_canceled')
-        self.sudo().write({'state': self.CANCEL, 'assigned_persons_ids': [(5, 0, 0)], 'workflow_reason': '', 'group': ''})
+        self.write({'state': self.CANCEL, 'workflow_reason': '', 'group': '', 'assigned_persons_ids': [(5, 0, 0)]})
         return True
 
     @api.one
     def wf_archive(self):
         _logger.debug("workflow action to ARCHIVE")
-        self.sudo().write({'assigned_persons_ids': [(5, 0, 0)],
-                           'workflow_reason': '',
-                           'active' : 0})
+        self.write({'workflow_reason': '',
+                    'active' : 0,
+                    'assigned_persons_ids': [(5, 0, 0)]})
         return True
 
     @api.one
@@ -952,3 +952,5 @@ class Quotation(models.Model):
         else:
             _logger.debug('send mail using context: ' + str(context))
             mail_id = templateObj.with_context(context).send_mail(self.id, force_send=True, raise_exception=False)
+
+        return mail_id
