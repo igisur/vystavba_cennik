@@ -1,3 +1,17 @@
+.openerp .oe_list_content th.oe_sortable div:after {
+    border: none;
+    margin: 0;
+    /*
+    margin-right: 6px;
+    content: "";
+    margin-top: 7px;
+    border-width: 0 4px 4px;
+    border-style: solid;
+    border-color: #000 transparent;
+    visibility: hidden;
+    */
+}
+
 .tree_quotation_items th[data-id='unit_price'] {
     color: Black;
     text-align: right;

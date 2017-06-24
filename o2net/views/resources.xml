@@ -2,7 +2,7 @@
     <data>
 	<!-- Adds all assets in Odoo -->
         <template id="assets_backend" name="o2net assets" inherit_id="web.assets_backend">
-            <xpath expr="." position="inside">
+            <xpath expr="link[last()]" position="after">
 		        <!--These links will be called when loading your Odoo -->
                 <link rel="stylesheet" href="/o2net/static/src/css/o2net.css"/>
             </xpath>
