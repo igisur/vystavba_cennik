@@ -1,0 +1,14 @@
+.tree_quotation_items th[data-id='unit_price'] {
+    color: Black;
+    text-aling: right;
+}
+
+.tree_quotation_items th[data-id='quantity'] {
+    color: Pink;
+    text-aling: right;
+}
+
+.tree_quotation_items th[data-id='total_price'] {
+    color: Fuchsia;
+    text-aling: right;
+}

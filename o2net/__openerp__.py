@@ -7,9 +7,9 @@
     'website': "http://www.o2.sk",
     'category': 'o2net',
     'version': '1.0',
-
     # any module necessary for this one to work correctly
     'depends': ['base', 'mail'],
+    'css': ['static/src/css/o2net.css'],
 
     # always loaded
     'data': [
@@ -26,7 +26,8 @@
         'views/mail_template.xml',
         'workflows/quotation_wf.xml',
         'report/quotation_report.xml',
-        'views/quotation_cron.xml'
+        'views/quotation_cron.xml',
+        'views/resources.xml'
     ],
     'installable': True,
     'auto_install': False,

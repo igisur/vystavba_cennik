@@ -87,7 +87,7 @@
                         <notebook>
                             <page string="Items">
                                 <field name="quotation_item_ids" attrs="{'readonly':[('state','in',['approved'])]}">
-                                    <tree string="Price list items" editable="bottom">
+                                    <tree string="Price list items" editable="bottom" class="tree_quotation_items">
                                         <field name="pricelist_item_id" string="Items" options="{'no_create': True}" domain="[('price_list_id', '=', parent.price_list_id), ('item_id.is_package','!=','True')]"/>
                                         <field name="item_unit_of_measure" readonly="1" string="Measure unit"/>
                                         <field name="unit_price" string="Unit price"/>
@@ -98,7 +98,7 @@
                             </page>
                             <page string="Packages">
                                 <field name="quotation_item_package_ids" attrs="{'readonly':[('state','in',['approved'])]}">
-                                    <tree string="Packages" editable="bottom">
+                                    <tree string="Packages" editable="bottom" class="tree_quotation_items">
                                         <field name="pricelist_item_id" string="Packages" options="{'no_create': True}" domain="[('price_list_id', '=', parent.price_list_id), ('item_id.is_package','=','True')]"/>
                                         <field name="item_unit_of_measure" readonly="1" string="Unit of measure"/>
                                         <field name="unit_price"/>
@@ -109,7 +109,7 @@
                             </page>
                             <page string="Atypical items" attrs="{'readonly':[('state','in',['approved'])]}">
                                 <field name="quotation_item_atyp_ids">
-                                    <tree string="Atypical items" editable="bottom">
+                                    <tree string="Atypical items" editable="bottom" class="tree_quotation_items">
                                         <field name="section_id" string="Section" options="{'no_create': True}"/>
                                         <field name="name"  string="Item"/>
                                         <field name="price" string="Price"/>
