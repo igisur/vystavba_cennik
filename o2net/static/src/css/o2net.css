@@ -1,8 +1,8 @@
+/* remove place for sort indicator to move column header text more to the right border */
 .openerp .oe_list_content th.oe_sortable div:after {
     border: none;
-    margin: 0;
-    /*
     margin-right: 6px;
+    /*
     content: "";
     margin-top: 7px;
     border-width: 0 4px 4px;
@@ -12,17 +12,17 @@
     */
 }
 
+/* align all float fields to the right */
+.oe_list_header_float {
+    text-align: right !important;
+    color: Fuchsia;
+}
+
 .tree_quotation_items th[data-id='unit_price'] {
-    color: Black;
-    text-align: right;
 }
 
 .tree_quotation_items th[data-id='quantity'] {
-    color: Pink;
-    text-align: right;
 }
 
 .tree_quotation_items th[data-id='total_price'] {
-    color: Fuchsia;
-    text-align: right;
 }
