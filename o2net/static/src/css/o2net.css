@@ -13,7 +13,7 @@
 }
 
 /* align all float fields to the right */
-.oe_list_header_float {
+.oe_list_header_float, .oe_list_header_monetary {
     text-align: right !important;
     color: Fuchsia;
 }
