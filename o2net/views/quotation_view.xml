@@ -88,7 +88,7 @@
                             <page string="Items">
                                 <field name="quotation_item_ids" attrs="{'readonly':[('state','in',['approved'])]}">
                                     <tree string="Price list items" editable="bottom" class="tree_quotation_items">
-                                        <field name="pricelist_item_id" string="Items" options="{'no_create': True}" domain="[('price_list_id', '=', parent.price_list_id), ('item_id.is_package','!=','True')]"/>
+                                        <field style="width:30%" name="pricelist_item_id" string="Items" options="{'no_create': True}" domain="[('price_list_id', '=', parent.price_list_id), ('item_id.is_package','!=','True')]"/>
                                         <field name="item_unit_of_measure" readonly="1" string="Measure unit"/>
                                         <field name="unit_price" string="Unit price"/>
                                         <field name="quantity"  string="Quantity"/>

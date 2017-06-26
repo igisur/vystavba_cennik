@@ -1,7 +1,7 @@
 /* remove place for sort indicator to move column header text more to the right border */
-.openerp .oe_list_content th.oe_sortable div:after {
-    border: none;
-    margin-right: 6px;
+/*.openerp .oe_list_content th.oe_sortable div:after {*/
+    /*border: none;
+    margin-right: 6px;*/
     /*
     content: "";
     margin-top: 7px;
@@ -10,19 +10,10 @@
     border-color: #000 transparent;
     visibility: hidden;
     */
-}
+/*}*/
 
 /* align all float fields to the right */
 .oe_list_header_float, .oe_list_header_monetary {
     text-align: right !important;
-    color: Fuchsia;
-}
-
-.tree_quotation_items th[data-id='unit_price'] {
-}
-
-.tree_quotation_items th[data-id='quantity'] {
-}
-
-.tree_quotation_items th[data-id='total_price'] {
+    margin: 0px;
 }
