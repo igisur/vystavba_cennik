@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-18 23:51+0200\n"
-"PO-Revision-Date: 2017-06-18 23:52+0200\n"
+"POT-Creation-Date: 2017-07-06 02:58+0200\n"
+"PO-Revision-Date: 2017-07-06 03:00+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.1\n"
 
 #. module: o2net
 #: model:mail.template,body_html:o2net.mail_cp_manager_approved
@@ -245,6 +245,35 @@ msgid "<strong>Vendor:</strong>"
 msgstr "Dodávateľ:"
 
 #. module: o2net
+#: code:addons/o2net/models/quotation.py:808
+#: code:addons/o2net/models/quotation.py:894
+#: code:addons/o2net/models/quotation.py:921
+#, python-format
+msgid ""
+"<ul class =o_mail_thread_message_tracking><li>Workflow reason: %s </li></ul>"
+msgstr ""
+"<ul class =o_mail_thread_message_tracking><li>Dôvod pre wrokflow: %s </li></"
+"ul>"
+
+#. module: o2net
+#: code:addons/o2net/models/quotation.py:824
+#: code:addons/o2net/models/quotation.py:837
+#: code:addons/o2net/models/quotation.py:862
+#, python-format
+msgid "<ul class=o_mail_thread_message_tracking><li>: %s approved.</li></ul>"
+msgstr "<ul class=o_mail_thread_message_tracking><li>: %s schválil.</li></ul>"
+
+#. module: o2net
+#: code:addons/o2net/models/quotation.py:931
+#, python-format
+msgid ""
+"<ul class=o_mail_thread_message_tracking><li>: %s archived quotation.</li></"
+"ul>"
+msgstr ""
+"<ul class=o_mail_thread_message_tracking><li>: %s archivoval cenovú ponuku.</"
+"li></ul>"
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_needaction
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_message_needaction
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_needaction
@@ -426,7 +455,7 @@ msgstr "Mena"
 #: model:ir.model.fields,help:o2net.field_o2net_product_message_last_post
 #: model:ir.model.fields,help:o2net.field_o2net_quotation_message_last_post
 msgid "Date of the last message posted on the record."
-msgstr ""
+msgstr "Date of the last message posted on the record."
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_description
@@ -610,14 +639,14 @@ msgstr "POLOŽKY"
 #: model:ir.model.fields,help:o2net.field_o2net_product_message_unread
 #: model:ir.model.fields,help:o2net.field_o2net_quotation_message_unread
 msgid "If checked new messages require your attention."
-msgstr ""
+msgstr "If checked new messages require your attention."
 
 #. module: o2net
 #: model:ir.model.fields,help:o2net.field_o2net_pricelist_message_needaction
 #: model:ir.model.fields,help:o2net.field_o2net_product_message_needaction
 #: model:ir.model.fields,help:o2net.field_o2net_quotation_message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "If checked, new messages require your attention."
 
 #. module: o2net
 #: model:ir.model.fields,help:o2net.field_res_partner_po_total_price_limit
@@ -625,6 +654,8 @@ msgid ""
 "In case the price limit is exceeded, Quotation must be approved by a given "
 "person"
 msgstr ""
+"In case the price limit is exceeded, Quotation must be approved by a given "
+"person"
 
 #. module: o2net
 #: model:ir.ui.menu,name:o2net.menu_quotation_in_progress
@@ -836,19 +867,26 @@ msgid "O2 Network"
 msgstr "O2 Network"
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document_header
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document_footer
 msgid ""
 "O2 Slovakia, s.r.o. | Einsteinova 24 | 851 01 Bratislava | Slovakia<br/>\n"
-"                            E-mail: info@o2.sk | Website: http://www.o2.sk | "
+"                        E-mail: info@o2.sk | Website: http://www.o2.sk | "
 "IČO: 35848863 | DIČ: 2020216748 | IČ DPH: SK2020216748<br/>\n"
-"                            Zapísaná v OR SR: OS Bratislava I, odd: Sro, "
-"vložka číslo: 27882/B<br/>\n"
-"                            Bankové spojenie: UniCredit Bank Czech Republic "
-"and Slovakia, a.s.: IBAN SK4211110000001156173009 - SWIFT UNCRSKBX"
+"                        Zapísaná v OR SR: OS Bratislava I, odd: Sro, vložka "
+"číslo: 27882/B<br/>\n"
+"                        Bankové spojenie: UniCredit Bank Czech Republic and "
+"Slovakia, a.s.: IBAN SK4211110000001156173009 - SWIFT UNCRSKBX"
 msgstr ""
+"O2 Slovakia, s.r.o. | Einsteinova 24 | 851 01 Bratislava | Slovakia<br/>\n"
+"                        E-mail: info@o2.sk | Website: http://www.o2.sk | "
+"IČO: 35848863 | DIČ: 2020216748 | IČ DPH: SK2020216748<br/>\n"
+"                        Zapísaná v OR SR: OS Bratislava I, odd: Sro, vložka "
+"číslo: 27882/B<br/>\n"
+"                        Bankové spojenie: UniCredit Bank Czech Republic and "
+"Slovakia, a.s.: IBAN SK4211110000001156173009 - SWIFT UNCRSKBX"
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:695
+#: code:addons/o2net/models/quotation.py:700
 #, python-format
 msgid ""
 "Only quotation in state 'DRAFT' can be unlink. In any other case use "
@@ -996,11 +1034,6 @@ msgid "Pricelist"
 msgstr "Cenník"
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document_footer
-msgid "Printed:"
-msgstr "Vytlačil:"
-
-#. module: o2net
 #: model:res.groups,name:o2net.group_pc
 msgid "Project coordinator (PC)"
 msgstr "Projektový koordinátor (PC)"
@@ -1061,7 +1094,7 @@ msgid "Quotation (PDF)"
 msgstr "Cenová ponuka (PDF)"
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:752
+#: code:addons/o2net/models/quotation.py:757
 #, python-format
 msgid "Quotation does not have vendor assigned"
 msgstr "Cenová ponuka nemá priradeného dodávateľa"
@@ -1072,7 +1105,7 @@ msgid "Quotation draft"
 msgstr "Návrh cenovej ponuky"
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:726
+#: code:addons/o2net/models/quotation.py:731
 #, python-format
 msgid ""
 "Quotation with the same name already exists. Please enter an unique name."
@@ -1223,7 +1256,7 @@ msgstr "Počet neprečítaných správ"
 #. module: o2net
 #: selection:o2net.product,unit_of_measure:0
 msgid "VL"
-msgstr ""
+msgstr "VL"
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_valid_from
@@ -1255,7 +1288,7 @@ msgid "Workflow reason"
 msgstr "Dôvod pre workflow"
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:763
+#: code:addons/o2net/models/quotation.py:768
 #, python-format
 msgid "You do not have permission for workflow action"
 msgstr "Nemáte právo na túto workflow akciu"
@@ -1269,6 +1302,26 @@ msgstr "je aktuálny užívateľ prihlásený"
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_state_date
 msgid "date state"
 msgstr "Dátum stavu"
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation
+msgid "o2net - Quotation"
+msgstr "o2net - Cenová ponuka"
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item_atyp
+msgid "o2net - Quotation atypical"
+msgstr "o2net - Cenová ponuka - Atypická položka"
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item
+msgid "o2net - Quotation item"
+msgstr "o2net - Cenová ponuka - Položka"
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_item_package
+msgid "o2net - Quotation package"
+msgstr "o2net - Cenová ponuka - Balíčky"
 
 #. module: o2net
 #: model:ir.model,name:o2net.model_o2net_product
@@ -1286,87 +1339,51 @@ msgid "o2net - price list item"
 msgstr "o2net - Položka cenníka"
 
 #. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation
-msgid "o2net - price offer"
-msgstr "o2net - Cenník"
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item_atyp
-msgid "o2net - price offer atypical"
-msgstr "o2net - Cenová ponuka - Atypická položka"
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item
-msgid "o2net - price offer item"
-msgstr "o2net - Položka cenníka"
-
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_quotation_item_package
-msgid "o2net - price offer package"
-msgstr "o2net - Cenová ponuka - Balíček"
-
-#. module: o2net
 #: model:ir.model,name:o2net.model_o2net_section
 msgid "o2net - section"
 msgstr "o2net - Oddiel"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka_atyp
-msgid "vystavba - atyp polozka cenovej ponuky"
-msgstr "sub page Cenova ponuka"
+#~ msgid "Printed:"
+#~ msgstr "Vytlačil:"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka_balicek
-msgid "vystavba - balicek cenovej ponuky"
-msgstr "sub page Cenova ponuka"
+#~ msgid "o2net - price offer"
+#~ msgstr "o2net - Cenník"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cennik
-msgid "vystavba - cennik"
-msgstr "sub page Cenova ponuka"
+#~ msgid "o2net - price offer atypical"
+#~ msgstr "o2net - Cenová ponuka - Atypická položka"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka
-msgid "vystavba - cenova ponuka"
-msgstr "sub page Cenova ponuka"
+#~ msgid "o2net - price offer item"
+#~ msgstr "o2net - Položka cenníka"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_oddiel
-msgid "vystavba - oddiel"
-msgstr ""
+#~ msgid "o2net - price offer package"
+#~ msgstr "o2net - Cenová ponuka - Balíček"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_polozka
-msgid "vystavba - polozka"
-msgstr "sub page Cenova ponuka"
+#~ msgid "vystavba - atyp polozka cenovej ponuky"
+#~ msgstr "sub page Cenova ponuka"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cennik_polozka
-msgid "vystavba - polozka cennika"
-msgstr "sub page Cenova ponuka"
+#~ msgid "vystavba - balicek cenovej ponuky"
+#~ msgstr "sub page Cenova ponuka"
 
-#. module: o2net
-#: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka
-msgid "vystavba - polozka cenovej ponuky"
-msgstr "sub page Cenova ponuka"
+#~ msgid "vystavba - cennik"
+#~ msgstr "sub page Cenova ponuka"
+
+#~ msgid "vystavba - cenova ponuka"
+#~ msgstr "sub page Cenova ponuka"
+
+#~ msgid "vystavba - polozka"
+#~ msgstr "sub page Cenova ponuka"
+
+#~ msgid "vystavba - polozka cennika"
+#~ msgstr "sub page Cenova ponuka"
+
+#~ msgid "vystavba - polozka cenovej ponuky"
+#~ msgstr "sub page Cenova ponuka"
 
 #~ msgid "Totaly price"
 #~ msgstr "Celková cena"
 
 #~ msgid "Type item"
 #~ msgstr "Kód položky"
-
-#~ msgid "o2net - Quotation"
-#~ msgstr "o2net - Cenová ponuka"
-
-#~ msgid "o2net - Quotation atypical"
-#~ msgstr "o2net - Cenová ponuka - Atypická položka"
-
-#~ msgid "o2net - Quotation item"
-#~ msgstr "o2net - Cenová ponuka - Položka"
-
-#~ msgid "o2net - Quotation package"
-#~ msgstr "o2net - Cenová ponuka - Balíčky"
 
 #~ msgid "MONTAGE"
 #~ msgstr "MONTÁŽ"

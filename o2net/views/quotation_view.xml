@@ -76,8 +76,10 @@
                                 <field name="vendor_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True, 'no_open': True}"/>
                                 <field name="pc_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True, 'no_open': True}" />
                                 <field name="pm_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True, 'no_open': True}"/>
-                                <field name="manager_ids" readonly="True" options="{'no_create': True, 'no_open': True}" widget="many2many_tags"/>
-                                <field name="assigned_persons_ids" readonly="True" options="{'no_create_edit': True, 'no_open': True}" widget="many2many_tags"/>
+                                <field name="manager_ids" readonly="True" options="{'no_create': True, 'no_open': True}" widget="many2many_tags" groups="o2net.group_vendor,o2net.group_pc,o2net.group_pm,o2net.group_manager"/>
+                                <field name="assigned_persons_ids" readonly="True" options="{'no_create_edit': True, 'no_open': True}" widget="many2many_tags" groups="o2net.group_vendor,o2net.group_pc,o2net.group_pm,o2net.group_manager"/>
+                                <field name="manager_ids" options="{'no_create': True, 'no_open': True}" widget="many2many_tags" groups="o2net.group_admin"/>
+                                <field name="assigned_persons_ids" options="{'no_create_edit': True, 'no_open': True}" widget="many2many_tags" groups="o2net.group_admin"/>
                                 <field name="price_list_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True, 'no_open': True}" class="oe_read_only"/>
                                 <field name="currency_id" invisible="1" class="oe_read_only"/>
                             </group>

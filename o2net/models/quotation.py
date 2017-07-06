@@ -775,7 +775,8 @@ class Quotation(models.Model):
         self.ensure_one()
         if self.workflow_reason:
             self.message_post(
-                body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
+                body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: %s </li></ul>" % self.workflow_reason,message_type="notification")
+
 
         self.send_mail([self.vendor_id])
         self.write({'workflow_reason': '', 'group': self.GROUP_SUPPLIER, 'state': self.ASSIGNED, 'assigned_persons_ids': [(6, 0, [self.vendor_id.id])]})
@@ -786,8 +787,7 @@ class Quotation(models.Model):
         _logger.debug("workflow action to IN_PROGRESS")
         self.ensure_one()
         if self.workflow_reason:
-            self.message_post(
-                body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
+            self.message_post(body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
 
         self.send_mail([self.pc_id], template_name='mail_cp_in_progress')
         self.write({'state': self.IN_PROGRESS,
@@ -805,8 +805,7 @@ class Quotation(models.Model):
         # put 'workflow_reason' to history (mail_thread)
         if self.workflow_reason:
             # add to tracking values
-            self.message_post(
-                body='<ul class="o_mail_thread_message_tracking"><li>Workflow reason: ' + self.workflow_reason + '</li></ul>')
+            self.message_post(body=_("<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: %s </li></ul>") % self.workflow_reason,message_type="notification")
 
         # Vendor sent quot to be approved by PC
         if self.group == self.GROUP_SUPPLIER:
@@ -821,6 +820,9 @@ class Quotation(models.Model):
         # PC sent quot to be approved by PM
         elif self.group == self.GROUP_PC:
             _logger.debug("PC sent to approve by PM")
+            self.message_post(
+                body=_("<ul class=""o_mail_thread_message_tracking""><li>: %s approved.</li></ul>") % self.pc_id.display_name.encode('ascii', 'ignore'),
+                message_type="notification")
             self.send_mail([self.pm_id])
             self.write(
                 {'state': self.TO_APPROVE,
@@ -831,6 +833,9 @@ class Quotation(models.Model):
         # PM sent quot to be approved by Manager
         elif self.group == self.GROUP_PM:
             _logger.debug("PM sent to approve by Manager")
+            self.message_post(
+                body=_("<ul class=""o_mail_thread_message_tracking""><li>: %s approved.</li></ul>") % self.pm_id.display_name.encode('ascii', 'ignore'),
+                message_type="notification")
             manager_ids = self._find_managers()
             if manager_ids:
                 self.send_mail(manager_ids)
@@ -846,27 +851,34 @@ class Quotation(models.Model):
 
         # Manager approved
         elif self.group == self.GROUP_MANAGER:
-            if self.is_user_assigned:
-                _logger.debug("Manager '" + self.env.user.partner_id.display_name + "' approved")
-                # send email to PC to let him know that qout has been approved by manager
-                context = {'manager_name': self.env.user.partner_id.display_name}
-                self.send_mail([self.pc_id], template_name='mail_cp_manager_approved', context=context)
-                self.write(
-                    {'workflow_reason': '',
-                     'assigned_persons_ids': [(3, self.env.user.partner_id.id)]})
+            _logger.debug("Manager approved")
+            manager = self.env.user.partner_id
+            if not self.is_user_assigned:
+                if len(self.assigned_persons_ids.ids) == 1:
+                    manager = self.assigned_persons_ids[0]
 
-            # logged user is assigned manager ?
-            if self.env.user.partner_id.id in self.manager_ids.ids:
-                # all managers already approved ?
-                if not self.assigned_persons_ids.ids:
-                    _logger.debug("ALL managers approved")
-                    self.send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
-                    self.write(
-                        {'state': self.APPROVED,
-                         'group': '',
-                         'workflow_reason': '',
-                         'assigned_persons_ids': [(6, 0, [self.pc_id.id])]})
-                    self.sudo().action_exportSAP()
+            _logger.debug("Manager is '" + manager.display_name.encode('ascii', 'ignore'))
+            self.sudo().message_post(
+                body=_("<ul class=""o_mail_thread_message_tracking""><li>: %s approved.</li></ul>") % manager.display_name.encode('ascii', 'ignore'),
+                message_type="notification")
+            # send email to PC to let him know that qoutation has been approved by manager
+            context = {'manager_name': manager.display_name}
+            self.send_mail([self.pc_id], template_name='mail_cp_manager_approved', context=context)
+            self.write(
+                {'workflow_reason': '',
+                 'assigned_persons_ids': [(3, manager.id)]})
+
+            # all managers already approved ?
+            if not self.assigned_persons_ids.ids:
+                _logger.debug("ALL managers approved")
+                self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
+                self.sudo().write(
+                    {'state': self.APPROVED,
+                     'group': '',
+                     'workflow_reason': '',
+                     'assigned_persons_ids': [(6, 0, [self.pc_id.id])]})
+                self.sudo().action_exportSAP()
+                # send mail to SAP import person. use exported TXT file as attachement
 
         return True
 
@@ -879,7 +891,7 @@ class Quotation(models.Model):
 
         if self.workflow_reason:
             self.message_post(
-                body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
+                body=_("<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: %s </li></ul>") % self.workflow_reason.encode('ascii', 'ignore'))
 
         # PC signals 'not complete' - CP should be 'in_progress' and assigned to Supplier
         if self.pc_id.id in self.assigned_persons_ids.ids:
@@ -906,7 +918,7 @@ class Quotation(models.Model):
 
         if self.workflow_reason:
             self.message_post(
-                body="<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: " + self.workflow_reason + "</li></ul>")
+                body=_("<ul class =""o_mail_thread_message_tracking""><li>Workflow reason: %s </li></ul>") % self.workflow_reason.encode('ascii', 'ignore'))
 
         self.send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_canceled')
         self.write({'state': self.CANCEL, 'workflow_reason': '', 'group': '', 'assigned_persons_ids': [(5, 0, 0)]})
@@ -915,6 +927,9 @@ class Quotation(models.Model):
     @api.one
     def wf_archive(self):
         _logger.debug("workflow action to ARCHIVE")
+        self.message_post(
+            body=_("<ul class=""o_mail_thread_message_tracking""><li>: %s archived quotation.</li></ul>") % self.env.user.partner_id.display_name.encode('ascii', 'ignore'),
+            message_type="notification")
         self.write({'workflow_reason': '',
                     'active' : 0,
                     'assigned_persons_ids': [(5, 0, 0)]})
