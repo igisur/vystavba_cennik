@@ -597,6 +597,12 @@ class Quotation(models.Model):
 
         return ret
 
+
+    def _compute_duplicate_quots(self):
+        _logger.debug('_compute_duplicate_quots')
+        ret = []
+        return ret
+
     # FIELDS
     # computed fields
     ro_datumoddo = fields.Boolean(string="RO date From To", compute=_compute_ro_datumoddo, store=False, copy=False)
@@ -643,6 +649,9 @@ class Quotation(models.Model):
     sap_export_file_binary = fields.Binary(string='Export file', copy=False)
 
     base_url = fields.Char(compute=_compute_record_url, string="Link", store=False, copy=False, )
+
+    duplicate_quots = fields.One2many('o2net.quotation', compute=_compute_duplicate_quots, compute_sudo=True, string="Duplicities", copy=False, store=False)
+
 
     @api.multi
     def write(self, vals):
