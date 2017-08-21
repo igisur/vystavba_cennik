@@ -49,5 +49,5 @@
             parent="menu_pricelist_root"
             sequence="50"
             action="action_window_section"/>
-        </data>
+    </data>
 </openerp>

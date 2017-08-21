@@ -95,6 +95,39 @@ class Quotation(models.Model):
         return formatNumber;
 
     @api.multi
+    def return_confirmation(self):
+
+        tree_view = self.env.ref('o2net.confirm_wizard_form')
+        _logger.debug('o2net.confirm_wizard_forms:' + str(tree_view.id))
+
+        return {
+            'name': 'Are you sure?',
+            'type': 'ir.actions.act_window',
+            'res_model': 'o2net.confirm_wizard',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'views': [(tree_view, 'form')],
+            'view_id': tree_view,
+            'target': 'new'
+        }
+
+    @api.one
+    def action_test(self):
+        ret = ''
+        _logger.debug('action test')
+
+        if (self.return_confirmation()):
+            _logger.debug('yes')
+            ret = 'yes'
+        else:
+            _logger.debug('no')
+            ret = 'no'
+
+        _logger.debug(str(ret))
+
+        # self.wf_approve();
+
+    @api.multi
     def _get_sap_export_content(self):
         data = []
         if self.project_number:
@@ -779,12 +812,14 @@ class Quotation(models.Model):
 
     @api.multi
     def wf_draft(self):  # should be create but is set in field definition
+        _logger.debug("wf_draft")
         self.ensure_one()
         self.write({'state': self.DRAFT})
         return True
 
     @api.multi
     def wf_assign_check(self):
+        _logger.debug("wf_assign_check")
         self.ensure_one()
         if self.vendor_id is False:
             raise AccessError(_("Quotation does not have vendor assigned"))
@@ -927,7 +962,7 @@ class Quotation(models.Model):
         return False
 
     def wf_approved(self):
-        _logger.debug("all managers approved")
+        _logger.debug("workflow action to APPROVED")
 
         self.sudo().write(
             {'state': self.APPROVED,
@@ -1058,3 +1093,18 @@ class Quotation(models.Model):
         templateObj.lang = self.env.user.partner_id.lang
 
         return templateObj
+
+
+class wizard(models.TransientModel):
+    _name = 'wizard'
+
+    yes_no = fields.Char(default='Do you want to proceed?')
+
+    @api.multi
+    def yes(self):
+        pass
+       # sure continue!
+
+    @api.multi
+    def no(self):
+        pass # don't do anything stupid
