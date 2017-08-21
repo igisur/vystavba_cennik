@@ -20,6 +20,7 @@ class Quotation(models.Model):
     ASSIGNED = 'assigned'
     IN_PROGRESS = 'in_progress'
     TO_APPROVE = 'to_approve'
+    APPROVE = 'approve'
     APPROVED = 'approved'
     CANCEL = 'cancel'
 
@@ -829,6 +830,21 @@ class Quotation(models.Model):
 
         return True
 
+
+    @api.multi
+    def wf_confirm_to_approve(self):
+        for rec in self:
+            rec.signal_workflow(rec.TO_APPROVE);
+        return True
+
+
+    @api.multi
+    def wf_confirm_approve(self):
+        for rec in self:
+            rec.signal_workflow(rec.APPROVE);
+        return True
+
+
     @api.one
     def wf_approve(self):
         self.ensure_one()
@@ -893,7 +909,7 @@ class Quotation(models.Model):
             self.message_post(
                 body=_("<ul class=""o_mail_thread_message_tracking""><li>: %s approved.</li></ul>") % manager.display_name.encode('ascii', 'ignore'),
                 message_type="notification")
-            # send email to PC to let him know that qoutation has been approved by manager
+            # send email to PC to let him know that quotation has been approved by manager
             context = {'manager_name': manager.display_name}
             self.send_mail([self.pc_id], template_name='mail_cp_manager_approved', context=context)
             self.write(
@@ -904,7 +920,11 @@ class Quotation(models.Model):
 
     def wf_all_managers_approved(self):
         _logger.debug("check if all managers approved")
-        return not self.assigned_persons_ids.ids
+
+        if self.group == self.GROUP_MANAGER:
+            return not self.assigned_persons_ids.ids
+
+        return False
 
     def wf_approved(self):
         _logger.debug("all managers approved")
