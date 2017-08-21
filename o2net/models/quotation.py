@@ -597,11 +597,35 @@ class Quotation(models.Model):
 
         return ret
 
-
+    @api.multi
     def _compute_duplicate_quots(self):
         _logger.debug('_compute_duplicate_quots')
-        ret = []
-        return ret
+
+        quots = self.env['o2net.quotation']
+        for rec in self:
+            _logger.debug("ID: %s, financial_code: %s" % (rec.id, rec.financial_code))
+            if rec.financial_code:
+                rec.duplicate_quots = quots.search_count([('financial_code', '=', rec.financial_code),('id', '<>', rec.id)])
+
+    @api.multi
+    def action_duplicates(self):
+        _logger.debug('action_duplicates')
+
+        if not self.duplicate_quots:
+            return False
+
+        tree_view = self.env.ref('o2net.view_tree_quotation_duplicates')
+        _logger.debug('o2net.view_tree_quotation_duplicates:' + str(tree_view.id))
+
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Duplicate quotations",
+            "res_model": "o2net.quotation",
+            "views": [[tree_view.id, "tree"]],
+            "domain": [["financial_code", "=", self.financial_code], ["id", "<>", self.id]],
+            "target": "new"
+        }
+
 
     # FIELDS
     # computed fields
@@ -650,8 +674,7 @@ class Quotation(models.Model):
 
     base_url = fields.Char(compute=_compute_record_url, string="Link", store=False, copy=False, )
 
-    duplicate_quots = fields.One2many('o2net.quotation', compute=_compute_duplicate_quots, compute_sudo=True, string="Duplicities", copy=False, store=False)
-
+    duplicate_quots = fields.Integer(string="Duplicities", compute=_compute_duplicate_quots, compute_sudo=True, copy=False, store=False)
 
     @api.multi
     def write(self, vals):
