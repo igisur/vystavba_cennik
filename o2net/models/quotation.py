@@ -570,6 +570,11 @@ class Quotation(models.Model):
         return data
 
     @api.model
+    def _get_default_vendor(self):
+        _logger.debug('_get_default_vendor')
+        ret = None
+
+    @api.model
     def _get_default_pc(self):
         _logger.debug('_get_default_pc')
         partners = self._partners_in_group(self.GROUP_PC)
@@ -648,7 +653,7 @@ class Quotation(models.Model):
     total_price = fields.Float(compute=_compute_amount_all, string='Total price', store=True, digits=(10, 2),
                                track_visibility='onchange', copy=False)
     vendor_id = fields.Many2one('res.partner', required=True, string='Vendor', track_visibility='onchange',
-                                domain=partners_in_group_supplier, copy=True)
+                                domain=partners_in_group_supplier, default=lambda self: self._get_default_vendor(), copy=True)
     pc_id = fields.Many2one('res.partner', string='PC', track_visibility='onchange', domain=partners_in_group_pc,
                             copy=True, default=lambda self: self._get_default_pc())
     pm_id = fields.Many2one('res.partner', string='PM', track_visibility='onchange', domain=partners_in_group_pm,
@@ -833,19 +838,39 @@ class Quotation(models.Model):
 
     @api.multi
     def wf_confirm_to_approve(self):
-        for rec in self:
-            rec.signal_workflow(rec.TO_APPROVE);
-        return True
+        self.ensure_one()
+        _logger.debug("workflow action wf_confirm_to_approve")
 
+        wizard_view = self.env.ref('o2net.view_wizard_wf_confirm')
+        _logger.debug('o2net.view_wizard_wf_confirm:' + str(wizard_view.id))
+
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Confirm quotation approval",
+            "res_model": "o2net.wf_confirm",
+            "views": [[wizard_view.id, "form"]],
+            "context": {"signal": self.TO_APPROVE, "id": self.id},
+            "target": "new"
+        }
 
     @api.multi
     def wf_confirm_approve(self):
-        for rec in self:
-            rec.signal_workflow(rec.APPROVE);
-        return True
+        self.ensure_one()
+        _logger.debug("workflow action wf_confirm_approve")
 
+        wizard_view = self.env.ref('o2net.view_wizard_wf_confirm')
+        _logger.debug('o2net.view_wizard_wf_confirm:' + str(wizard_view.id))
 
-    @api.one
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Confirm quotation approval",
+            "res_model": "o2net.wf_confirm",
+            "views": [[wizard_view.id, "form"]],
+            "context": {"signal": self.APPROVE, "id": self.id},
+            "target": "new"
+        }
+
+    @api.multi
     def wf_approve(self):
         self.ensure_one()
         _logger.debug("workflow action to APPROVE")

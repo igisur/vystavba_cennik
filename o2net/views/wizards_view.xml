@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_wizard_wf_confirm">
+            <field name="name">confirm workflow action</field>
+            <field name="model">o2net.wf_confirm</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <label string="Are you sure?"/>
+                        </group>
+                        <footer>
+                            <button name="confirm" type="object" string="Approve" class="oe_highlight"/>
+                            <button special="cancel" string="Cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_wf_confirm">
+            <field name="name">Confirm</field>
+            <field name="src_model">o2net.quotation</field>
+            <field name="res_model">o2net.wf_confirm</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_wizard_wf_confirm"/>
+            <field name="target">new</field>
+        </record>
+
+
+    </data>
+</openerp>

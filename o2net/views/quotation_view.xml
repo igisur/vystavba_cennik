@@ -41,7 +41,6 @@
 
                 <form>
                     <header>
-                        <!-- use class="oe_highlight" to suggest WF action -->
                         <button name="assign" type="workflow" string="Assign" class="oe_highlight" states="draft" groups="o2net.group_vendor,o2net.group_pc,o2net.group_admin"/>
                         <button name="in_progress" type="workflow" string="To progress" class="oe_highlight" states="assigned" groups="o2net.group_vendor,o2net.group_admin"/>
                         <button name="wf_confirm_to_approve" type="object" string="Send to approve" class="oe_highlight" states="in_progress" groups="o2net.group_vendor,o2net.group_admin"/>
@@ -56,15 +55,6 @@
                             <button name="action_duplicates" type="object" class="oe_stat_button" icon="fa-files-o">
                                 <field name="duplicate_quots" attrs="{'readonly': True}" widget="statinfo"/>
                             </button>
-
-<!--
-                    <button class="oe_stat_button" type="action" name="%(sale.act_res_partner_2_sale_order)d"
-                        attrs="{'invisible': [('customer', '=', False)]}"
-                        icon="fa-usd">
-                        <field string="Sales" name="sale_order_count" widget="statinfo"/>
-                    </button>
--->
-
                             <button name="action_exportSAP" type="object" string="Export to SAP" groups="o2net.group_admin" class="oe_stat_button" icon="fa-file-text-o" />
                         </div>
                         <div class="oe_title">

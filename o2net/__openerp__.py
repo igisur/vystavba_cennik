@@ -20,6 +20,7 @@
         'views/pricelist_view.xml',
         'views/product_view.xml',
         'views/partner_view.xml',
+        'views/wizards_view.xml',
         'views/quotation_view.xml',
         'views/section_view.xml',
         'views/mail_template.xml',
@@ -27,7 +28,7 @@
         'report/quotation_report.xml',
         'views/quotation_cron.xml',
         'views/resources.xml',
-        'views/res_config_view.xml'
+        #'views/res_config_view.xml',
     ],
     'installable': True,
     'auto_install': False,
