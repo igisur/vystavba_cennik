@@ -41,8 +41,8 @@
             <field name="wkf_id" ref="quotation_workflow"/>
             <field name="flow_stop">True</field>
             <field name="name">approved</field>
-            <field name="kind">dummy</field>
-            <field name="action"></field>
+            <field name="kind">function</field>
+            <field name="action">wf_approved()</field>
         </record>
 
         <record id="cancel" model="workflow.activity">
@@ -52,7 +52,6 @@
             <field name="kind">function</field>
             <field name="action">wf_cancel()</field>
         </record>
-
 
         <!-- Transitions -->
         <record model="workflow.transition" id="quot_draft_to_assigned">
@@ -89,8 +88,8 @@
         <record model="workflow.transition" id="quot_to_approve_to_approved">
             <field name="act_from" ref="to_approve"/>
             <field name="act_to" ref="approved"/>
-            <field name="signal">approved</field>
-            <field name="condition">wf_can_user_workflow()</field>
+            <field name="signal"></field>
+            <field name="condition">wf_all_managers_approved()</field>
         </record>
 
         <record model="workflow.transition" id="quot_to_approve_to_cancel">

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_quotation_config_settings" model="ir.ui.view">
+            <field name="name">Quotation settings</field>
+            <field name="model">o2net.quotation.config.settings</field>
+            <field name="arch" type="xml">
+                <form string="Configure" class="oe_form_configuration">
+                    <header>
+                        <button string="Apply" type="object" name="execute" class="oe_highlight"/>
+                        <button string="Cancel" type="object" name="cancel" class="oe_link"/>
+                    </header>
+
+                    <group string="Emailing">
+                        <field name="sap_export_mail" placeholder="e.g. sap_export@o2.sk"/>
+                    </group>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="action_quot_config" model="ir.actions.act_window">
+            <field name="name">Configure Quotation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">o2net.quotation.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+
+        <menuitem id="menu_config_root"
+                name="Configuration"
+                parent="menu_root"
+                sequence="60"
+                groups="o2net.group_admin"/>
+
+        <menuitem id="menu_quot_settings"
+                  name="Settings"
+                  parent="menu_config_root"
+                  sequence="0"
+                  action="action_quot_config"
+                  groups="o2net.group_admin"/>
+    </data>
+</openerp>

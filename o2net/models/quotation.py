@@ -867,7 +867,7 @@ class Quotation(models.Model):
                     manager = self.assigned_persons_ids[0]
 
             _logger.debug("Manager is '" + manager.display_name.encode('ascii', 'ignore'))
-            self.sudo().message_post(
+            self.message_post(
                 body=_("<ul class=""o_mail_thread_message_tracking""><li>: %s approved.</li></ul>") % manager.display_name.encode('ascii', 'ignore'),
                 message_type="notification")
             # send email to PC to let him know that qoutation has been approved by manager
@@ -877,19 +877,43 @@ class Quotation(models.Model):
                 {'workflow_reason': '',
                  'assigned_persons_ids': [(3, manager.id)]})
 
-            # all managers already approved ?
-            if not self.assigned_persons_ids.ids:
-                _logger.debug("ALL managers approved")
-                self.sudo().send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
-                self.sudo().write(
-                    {'state': self.APPROVED,
-                     'group': '',
-                     'workflow_reason': '',
-                     'assigned_persons_ids': [(6, 0, [self.pc_id.id])]})
-                self.sudo().action_exportSAP()
-                # send mail to SAP import person. use exported TXT file as attachement
-
         return True
+
+    def wf_all_managers_approved(self):
+        _logger.debug("check if all managers approved")
+        return not self.assigned_persons_ids.ids
+
+    def wf_approved(self):
+        _logger.debug("all managers approved")
+
+        self.sudo().write(
+            {'state': self.APPROVED,
+             'group': '',
+             'workflow_reason': '',
+             'assigned_persons_ids': [(6, 0, [self.pc_id.id])]})
+
+        self.action_exportSAP()
+        self.send_mail([self.vendor_id, self.pc_id], template_name='mail_cp_approved')
+
+        # send mail to SAP import person. use exported TXT file as attachement
+        Attachment = self.env['ir.attachment']
+        attachment_data = {
+            'name': self.sap_export_file_name.encode('ascii', 'ignore'),
+            'datas_fname': self.sap_export_file_name.encode('ascii', 'ignore'),
+            'datas': self.sap_export_file_binary,
+            'res_model': 'o2net.quotation',
+            'res_id': self.id,
+        }
+
+        attachment_ids = []
+        attachment_ids.append(Attachment.create(attachment_data).id)
+
+
+        templateObj = self.get_mail_template("mail_cp_approved_sap_export")
+        templateObj.attachment_ids = [(6, 0, attachment_ids)]
+        mail_id = templateObj.send_mail(self.id, force_send=True, raise_exception=False)
+
+        return mail_id
 
     @api.one
     def wf_not_complete(self):
@@ -949,17 +973,7 @@ class Quotation(models.Model):
         _logger.debug("send mail to " + str(partner_ids))
 
         # Find the e-mail template (defined in views/mail_template.xml)
-        template = self.env.ref('o2net.' + template_name)
-        if not template:
-            _logger.debug("unable send mail. template not found. template_name: " + str(template_name))
-            return
-
-        templateObj = self.env['mail.template'].browse(template.id)
-
-        admin = self.env['res.users'].browse(SUPERUSER_ID)
-        if admin:
-            _logger.debug("admin mail: " + admin.partner_id.email)
-            templateObj.email_from = admin.partner_id.email
+        templateObj = self.get_mail_template(template_name)
 
         if partner_ids:
             emails = []
@@ -980,3 +994,24 @@ class Quotation(models.Model):
             mail_id = templateObj.with_context(context).send_mail(self.id, force_send=True, raise_exception=False)
 
         return mail_id
+
+
+    def get_mail_template(self, template_name='mail_cp_assigned'):
+        _logger.debug("get mail template " + str(template_name))
+
+        # Find the e-mail template (defined in views/mail_template.xml)
+        template = self.env.ref('o2net.' + template_name)
+        if not template:
+            _logger.debug("unable get mail template: " + str(template_name))
+            return
+
+        templateObj = self.env['mail.template'].browse(template.id)
+
+        admin = self.env['res.users'].browse(SUPERUSER_ID)
+        if admin:
+            _logger.debug("admin mail: " + admin.partner_id.email)
+            templateObj.email_from = admin.partner_id.email
+
+        templateObj.lang = self.env.user.partner_id.lang
+
+        return templateObj
