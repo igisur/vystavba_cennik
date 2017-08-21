@@ -95,37 +95,19 @@ class Quotation(models.Model):
         return formatNumber;
 
     @api.multi
-    def return_confirmation(self):
-
+    def action_test(self):
+        ret = ''
+        _logger.debug('action test')
         tree_view = self.env.ref('o2net.confirm_wizard_form')
         _logger.debug('o2net.confirm_wizard_forms:' + str(tree_view.id))
 
         return {
-            'name': 'Are you sure?',
+            'name': 'Are you sure',
             'type': 'ir.actions.act_window',
             'res_model': 'o2net.confirm_wizard',
-            'view_mode': 'form',
-            'view_type': 'form',
-            'views': [(tree_view, 'form')],
-            'view_id': tree_view,
+            'views': [[tree_view.id, 'form']],
             'target': 'new'
         }
-
-    @api.one
-    def action_test(self):
-        ret = ''
-        _logger.debug('action test')
-
-        if (self.return_confirmation()):
-            _logger.debug('yes')
-            ret = 'yes'
-        else:
-            _logger.debug('no')
-            ret = 'no'
-
-        _logger.debug(str(ret))
-
-        # self.wf_approve();
 
     @api.multi
     def _get_sap_export_content(self):
@@ -1118,18 +1100,3 @@ class Quotation(models.Model):
         templateObj.lang = self.env.user.partner_id.lang
 
         return templateObj
-
-
-class wizard(models.TransientModel):
-    _name = 'wizard'
-
-    yes_no = fields.Char(default='Do you want to proceed?')
-
-    @api.multi
-    def yes(self):
-        pass
-       # sure continue!
-
-    @api.multi
-    def no(self):
-        pass # don't do anything stupid
