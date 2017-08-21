@@ -55,6 +55,9 @@
                             <button name="action_duplicates" type="object" class="oe_stat_button" icon="fa-files-o">
                                 <field name="duplicate_quots" attrs="{'readonly': True}" widget="statinfo"/>
                             </button>
+
+                            <button name="action_test" type="object" string="TEST" class="oe_stat_button" icon="fa-file-text-o" />
+
                             <button name="action_exportSAP" type="object" string="Export to SAP" groups="o2net.group_admin" class="oe_stat_button" icon="fa-file-text-o" />
                         </div>
                         <div class="oe_title">

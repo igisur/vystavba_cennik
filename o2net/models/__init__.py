@@ -11,3 +11,4 @@ import quotation_item_atyp
 import quotation_item_package
 import res_config
 import wizards
+import confirm_wizard
