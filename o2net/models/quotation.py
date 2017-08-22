@@ -855,11 +855,14 @@ class Quotation(models.Model):
 
     @api.multi
     def wf_confirm_to_approve(self):
-        self.wf_confirm_approval(self.TO_APPROVE)
+        return self.wf_confirm_approval(self.TO_APPROVE)
 
     @api.multi
     def wf_confirm_approve(self):
-        self.wf_confirm_approval(self.APPROVE)
+        if self.group == self.GROUP_PC:
+            return self.wf_confirm_approval(self.APPROVE)
+        else:
+            self.signal_workflow(self.APPROVE);
 
     @api.multi
     def wf_confirm_approval(self, signal=None):
@@ -870,20 +873,22 @@ class Quotation(models.Model):
             return {}
 
         if self.duplicate_quots:
-            wizard_view = self.env.ref('o2net.view_wizard_wf_confirm')
-            _logger.debug('o2net.view_wizard_wf_confirm:' + str(wizard_view.id))
-
-            return {
-                "type": "ir.actions.act_window",
-                "name": "Confirm quotation approval",
-                "res_model": "o2net.wf_confirm",
-                "views": [[wizard_view.id, "form"]],
-                "context": {"signal": signal, "id": self.id},
-                "target": "new"
-            }
-        else:
+            _logger.debug("duplicities: " + str(self.duplicate_quots))
             if self.wf_can_user_workflow():
-                self.signal_workflow(signal);
+                _logger.debug("user can workflow")
+                wizard_view = self.env.ref('o2net.view_wizard_wf_confirm')
+                _logger.debug('o2net.view_wizard_wf_confirm:' + str(wizard_view.id))
+
+                return {
+                    "type": "ir.actions.act_window",
+                    "name": "Confirm quotation approval",
+                    "res_model": "o2net.wf_confirm",
+                    "views": [[wizard_view.id, "form"]],
+                    "context": {"signal": signal, "id": self.id},
+                    "target": "new"
+                }
+        else:
+            self.signal_workflow(signal);
             return {}
 
     @api.multi
