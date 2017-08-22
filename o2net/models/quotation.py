@@ -96,18 +96,7 @@ class Quotation(models.Model):
 
     @api.multi
     def action_test(self):
-        ret = ''
-        _logger.debug('action test')
-        tree_view = self.env.ref('o2net.confirm_wizard_form')
-        _logger.debug('o2net.confirm_wizard_forms:' + str(tree_view.id))
-
-        return {
-            'name': 'Are you sure',
-            'type': 'ir.actions.act_window',
-            'res_model': 'o2net.confirm_wizard',
-            'views': [[tree_view.id, 'form']],
-            'target': 'new'
-        }
+        self.wf_approve()
 
     @api.multi
     def _get_sap_export_content(self):
@@ -626,7 +615,7 @@ class Quotation(models.Model):
         for rec in self:
             _logger.debug("ID: %s, financial_code: %s" % (rec.id, rec.financial_code))
             if rec.financial_code:
-                rec.duplicate_quots = quots.search_count([('financial_code', '=', rec.financial_code),('id', '!=', rec.id),('state', '!=', self.CANCEL), '|',('active','=',False),('active','=',True)])
+                rec.duplicate_quots = quots.search_count([('financial_code', '=', rec.financial_code),('id', '!=', rec.id), ('vendor_id','=', rec.vendor_id.id), ('state', '!=', self.CANCEL), '|',('active','=',False),('active','=',True)])
 
     @api.multi
     def action_duplicates(self):
@@ -643,7 +632,7 @@ class Quotation(models.Model):
             "name": "Duplicate quotations",
             "res_model": "o2net.quotation",
             "views": [[tree_view.id, "tree"]],
-            "domain": [("financial_code", "=", self.financial_code), ("id", "<>", self.id), ('state', '!=', self.CANCEL) , '|',('active','=',False),('active','=',True)],
+            "domain": [("financial_code", "=", self.financial_code), ("id", "<>", self.id), ("vendor_id", "=", self.vendor_id.id), ('state', '!=', self.CANCEL) , '|',('active','=',False),('active','=',True)],
             "target": "new"
         }
 
