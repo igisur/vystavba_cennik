@@ -212,7 +212,6 @@ class Quotation(models.Model):
 
     @api.model
     def partners_in_group_supplier(self):
-
         partner_ids = []
 
         if self.env.user.has_group(self.GROUP_SUPPLIER):
