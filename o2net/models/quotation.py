@@ -855,37 +855,36 @@ class Quotation(models.Model):
 
     @api.multi
     def wf_confirm_to_approve(self):
-        self.ensure_one()
-        _logger.debug("workflow action wf_confirm_to_approve")
-
-        wizard_view = self.env.ref('o2net.view_wizard_wf_confirm')
-        _logger.debug('o2net.view_wizard_wf_confirm:' + str(wizard_view.id))
-
-        return {
-            "type": "ir.actions.act_window",
-            "name": "Confirm quotation approval",
-            "res_model": "o2net.wf_confirm",
-            "views": [[wizard_view.id, "form"]],
-            "context": {"signal": self.TO_APPROVE, "id": self.id},
-            "target": "new"
-        }
+        self.wf_confirm_approval(self.TO_APPROVE)
 
     @api.multi
     def wf_confirm_approve(self):
+        self.wf_confirm_approval(self.APPROVE)
+
+    @api.multi
+    def wf_confirm_approval(self, signal=None):
         self.ensure_one()
-        _logger.debug("workflow action wf_confirm_approve")
+        _logger.debug("wf_confirm_approval - signal: " + str(signal))
 
-        wizard_view = self.env.ref('o2net.view_wizard_wf_confirm')
-        _logger.debug('o2net.view_wizard_wf_confirm:' + str(wizard_view.id))
+        if not signal:
+            return {}
 
-        return {
-            "type": "ir.actions.act_window",
-            "name": "Confirm quotation approval",
-            "res_model": "o2net.wf_confirm",
-            "views": [[wizard_view.id, "form"]],
-            "context": {"signal": self.APPROVE, "id": self.id},
-            "target": "new"
-        }
+        if self.duplicate_quots:
+            wizard_view = self.env.ref('o2net.view_wizard_wf_confirm')
+            _logger.debug('o2net.view_wizard_wf_confirm:' + str(wizard_view.id))
+
+            return {
+                "type": "ir.actions.act_window",
+                "name": "Confirm quotation approval",
+                "res_model": "o2net.wf_confirm",
+                "views": [[wizard_view.id, "form"]],
+                "context": {"signal": signal, "id": self.id},
+                "target": "new"
+            }
+        else:
+            if self.wf_can_user_workflow():
+                self.signal_workflow(signal);
+            return {}
 
     @api.multi
     def wf_approve(self):

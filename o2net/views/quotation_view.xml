@@ -44,7 +44,8 @@
                         <button name="assign" type="workflow" string="Assign" class="oe_highlight" states="draft" groups="o2net.group_vendor,o2net.group_pc,o2net.group_admin"/>
                         <button name="in_progress" type="workflow" string="To progress" class="oe_highlight" states="assigned" groups="o2net.group_vendor,o2net.group_admin"/>
                         <button name="wf_confirm_to_approve" type="object" string="Send to approve" class="oe_highlight" states="in_progress" groups="o2net.group_vendor,o2net.group_admin"/>
-                        <button name="wf_confirm_approve" type="object" string="Approve" class="oe_highlight" states="to_approve" groups="o2net.group_pc,o2net.group_pm,o2net.group_manager,o2net.group_admin"/>
+                        <button name="wf_confirm_approve" type="object" string="Approve" class="oe_highlight" states="to_approve" groups="o2net.group_pc"/>
+                        <button name="approve" type="workflow" string="Approve" class="oe_highlight" states="to_approve" groups="o2net.group_pm,o2net.group_manager,o2net.group_admin"/>
                         <button name="wf_not_complete" type="object" string="Return to correct" states="to_approve" groups="o2net.group_pc,o2net.group_pm,o2net.group_admin"/>
                         <button name="cancel" type="workflow" string="Cancel" states="to_approve" groups="o2net.group_pc,o2net.group_pm,o2net.group_manager,o2net.group_admin"/>
                         <button name="wf_archive" type="object" string="Archive" groups="o2net.group_pc,o2net.group_admin" attrs="{'invisible':['|', ('active','=',False), ('state','!=','approved')]}"/>

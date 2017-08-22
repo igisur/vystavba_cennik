@@ -10,7 +10,7 @@
                 <form>
                     <sheet>
                         <group>
-                            <label string="Are you sure?"/>
+                            <label string="Pozor, v minulosti sa už schvaľovala cenova ponuka pre tento finančný kód"/>
                         </group>
                         <footer>
                             <button name="confirm" type="object" string="Approve" class="oe_highlight"/>
