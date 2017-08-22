@@ -626,7 +626,7 @@ class Quotation(models.Model):
         for rec in self:
             _logger.debug("ID: %s, financial_code: %s" % (rec.id, rec.financial_code))
             if rec.financial_code:
-                rec.duplicate_quots = quots.search_count([('financial_code', '=', rec.financial_code),('id', '<>', rec.id)])
+                rec.duplicate_quots = quots.search_count([('financial_code', '=', rec.financial_code),('id', '!=', rec.id),('state', '!=', self.CANCEL), '|',('active','=',False),('active','=',True)])
 
     @api.multi
     def action_duplicates(self):
@@ -643,7 +643,7 @@ class Quotation(models.Model):
             "name": "Duplicate quotations",
             "res_model": "o2net.quotation",
             "views": [[tree_view.id, "tree"]],
-            "domain": [["financial_code", "=", self.financial_code], ["id", "<>", self.id]],
+            "domain": [("financial_code", "=", self.financial_code), ("id", "<>", self.id), ('state', '!=', self.CANCEL) , '|',('active','=',False),('active','=',True)],
             "target": "new"
         }
 

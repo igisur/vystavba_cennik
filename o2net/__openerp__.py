@@ -28,7 +28,6 @@
         'report/quotation_report.xml',
         'views/quotation_cron.xml',
         'views/resources.xml',
-        'views/confirm_wizard_form.xml'
     ],
     'installable': True,
     'auto_install': False,
