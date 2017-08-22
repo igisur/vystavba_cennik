@@ -27,7 +27,7 @@
         'workflows/quotation_wf.xml',
         'report/quotation_report.xml',
         'views/quotation_cron.xml',
-        'views/resources.xml',
+        'views/resources.xml'
     ],
     'installable': True,
     'auto_install': False,
