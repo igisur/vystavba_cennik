@@ -614,7 +614,11 @@ class Quotation(models.Model):
         for rec in self:
             _logger.debug("ID: %s, financial_code: %s" % (rec.id, rec.financial_code))
             if rec.financial_code:
-                rec.duplicate_quots = quots.search_count([('financial_code', '=', rec.financial_code),('id', '!=', rec.id), ('vendor_id','=', rec.vendor_id.id), ('state', '!=', self.CANCEL), '|',('active','=',False),('active','=',True)])
+                domain = [('financial_code', '=', rec.financial_code),('id', '!=', rec.id), ('vendor_id','=', rec.vendor_id.id), ('state', '!=', self.CANCEL), '|',('active','=',False),('active','=',True)]
+                if self.env.user.has_group(self.GROUP_PC):
+                    domain.insert(0, ('pc_id.id', '=', rec.pc_id.id))
+                _logger.debug('domain: ' + str(domain))
+                rec.duplicate_quots = quots.search_count(domain)
 
     @api.multi
     def action_duplicates(self):
@@ -626,12 +630,18 @@ class Quotation(models.Model):
         tree_view = self.env.ref('o2net.view_tree_quotation_duplicates')
         _logger.debug('o2net.view_tree_quotation_duplicates:' + str(tree_view.id))
 
+        domain = [('financial_code', '=', self.financial_code), ('id', '!=', self.id),
+                 ('vendor_id', '=', self.vendor_id.id), ('state', '!=', self.CANCEL), '|', ('active', '=', False),
+                 ('active', '=', True)]
+        if self.env.user.has_group(self.GROUP_PC):
+            domain.insert(0, ('pc_id.id', '=', self.pc_id.id))
+
         return {
             "type": "ir.actions.act_window",
             "name": "Duplicate quotations",
             "res_model": "o2net.quotation",
             "views": [[tree_view.id, "tree"]],
-            "domain": [("financial_code", "=", self.financial_code), ("id", "<>", self.id), ("vendor_id", "=", self.vendor_id.id), ('state', '!=', self.CANCEL) , '|',('active','=',False),('active','=',True)],
+            "domain": domain,
             "target": "new"
         }
 
