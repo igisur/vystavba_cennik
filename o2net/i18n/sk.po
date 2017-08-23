@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-23 20:12+0000\n"
-"PO-Revision-Date: 2017-08-23 22:14+0200\n"
+"POT-Creation-Date: 2017-08-23 21:20+0000\n"
+"PO-Revision-Date: 2017-08-23 23:23+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: sk\n"
@@ -427,6 +427,12 @@ msgid "Confirm"
 msgstr "Potvrdenie"
 
 #. module: o2net
+#: code:addons/o2net/models/quotation.py:882
+#, python-format
+msgid "Confirm quotation approval"
+msgstr "Potvrdenie schválenia cenovej ponuky"
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_create_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_create_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_create_uid
@@ -506,6 +512,12 @@ msgstr "Názov zobrazenia"
 #: selection:o2net.quotation,state:0
 msgid "Draft"
 msgstr "Návrh"
+
+#. module: o2net
+#: code:addons/o2net/models/quotation.py:641
+#, python-format
+msgid "Duplicate quotations"
+msgstr "Duplicitné cenové ponuky"
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_duplicate_quots
@@ -1457,9 +1469,6 @@ msgstr "wizard"
 
 #~ msgid "o2net - Quotation"
 #~ msgstr "o2net - Cenová ponuka"
-
-#~ msgid "o2net - Quotation atypical"
-#~ msgstr "o2net - Cenová ponuka - Atypická položka"
 
 #~ msgid "o2net - Quotation item"
 #~ msgstr "o2net - Cenová ponuka - Položka"
