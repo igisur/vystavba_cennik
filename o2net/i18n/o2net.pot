@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-18 21:50+0000\n"
-"PO-Revision-Date: 2017-06-18 21:50+0000\n"
+"POT-Creation-Date: 2017-08-23 20:12+0000\n"
+"PO-Revision-Date: 2017-08-23 20:12+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -47,6 +47,7 @@ msgstr ""
 
 #. module: o2net
 #: model:mail.template,body_html:o2net.mail_cp_approved
+#: model:mail.template,body_html:o2net.mail_cp_approved_sap_export
 msgid "\n"
 "            \n"
 "            <p>\n"
@@ -146,6 +147,28 @@ msgid "<strong>Vendor:</strong>"
 msgstr ""
 
 #. module: o2net
+#: code:addons/o2net/models/quotation.py:900
+#: code:addons/o2net/models/quotation.py:1014
+#: code:addons/o2net/models/quotation.py:1041
+#, python-format
+msgid "<ul class =o_mail_thread_message_tracking><li>Workflow reason: %s </li></ul>"
+msgstr ""
+
+#. module: o2net
+#: code:addons/o2net/models/quotation.py:916
+#: code:addons/o2net/models/quotation.py:929
+#: code:addons/o2net/models/quotation.py:954
+#, python-format
+msgid "<ul class=o_mail_thread_message_tracking><li>: %s approved.</li></ul>"
+msgstr ""
+
+#. module: o2net
+#: code:addons/o2net/models/quotation.py:1051
+#, python-format
+msgid "<ul class=o_mail_thread_message_tracking><li>: %s archived quotation.</li></ul>"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_message_needaction
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_message_needaction
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_message_needaction
@@ -164,6 +187,7 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.view_form_quotation
+#: model:ir.ui.view,arch_db:o2net.view_wizard_wf_confirm
 msgid "Approve"
 msgstr ""
 
@@ -218,6 +242,11 @@ msgid "Assigned persons"
 msgstr ""
 
 #. module: o2net
+#: model:ir.ui.view,arch_db:o2net.view_wizard_wf_confirm
+msgid "Attention, quotation for this financial code has already been approved !"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_quotation_item_atyp_ids
 #: model:ir.ui.view,arch_db:o2net.view_form_quotation
 msgid "Atypical items"
@@ -235,6 +264,7 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.ui.view,arch_db:o2net.view_form_quotation
+#: model:ir.ui.view,arch_db:o2net.view_wizard_wf_confirm
 #: selection:o2net.quotation,state:0
 msgid "Cancel"
 msgstr ""
@@ -284,14 +314,21 @@ msgid "Code item"
 msgstr ""
 
 #. module: o2net
+#: model:ir.actions.act_window,name:o2net.act_wf_confirm
+msgid "Confirm"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_create_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_create_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_create_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_config_settings_create_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_create_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_create_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_create_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_create_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_section_create_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_wf_confirm_create_uid
 msgid "Created by"
 msgstr ""
 
@@ -299,11 +336,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_create_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_create_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_create_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_config_settings_create_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_create_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_create_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_create_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_create_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_section_create_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_wf_confirm_create_date
 msgid "Created on"
 msgstr ""
 
@@ -344,11 +383,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_display_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_display_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_display_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_config_settings_display_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_display_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_display_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_display_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_display_name
 #: model:ir.model.fields,field_description:o2net.field_o2net_section_display_name
+#: model:ir.model.fields,field_description:o2net.field_o2net_wf_confirm_display_name
 msgid "Display Name"
 msgstr ""
 
@@ -359,7 +400,18 @@ msgid "Draft"
 msgstr ""
 
 #. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_duplicate_quots
+msgid "Duplicities"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_config_settings_sap_export_mail
+msgid "Email for SAP export"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_end_date
+#: model:ir.ui.view,arch_db:o2net.view_tree_quotation_duplicates
 #: model:ir.ui.view,arch_db:o2net.view_tree_quotation_preview
 msgid "End date"
 msgstr ""
@@ -437,7 +489,7 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.actions.act_window,help:o2net.action_window_qout_preview
-msgid "Here you can find all Quotations, which are assigned to you or you are thier vendor."
+msgid "Here you can find all Quotations, which are assigned to you or you are their vendor."
 msgstr ""
 
 #. module: o2net
@@ -474,11 +526,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_config_settings_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_id
 #: model:ir.model.fields,field_description:o2net.field_o2net_section_id
+#: model:ir.model.fields,field_description:o2net.field_o2net_wf_confirm_id
 msgid "ID"
 msgstr ""
 
@@ -499,6 +553,11 @@ msgstr ""
 #: model:ir.model.fields,help:o2net.field_o2net_product_message_needaction
 #: model:ir.model.fields,help:o2net.field_o2net_quotation_message_needaction
 msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: o2net
+#: model:ir.model.fields,help:o2net.field_o2net_quotation_config_settings_sap_export_mail
+msgid "If quotation is approved, email with SAP export file will be send"
 msgstr ""
 
 #. module: o2net
@@ -587,10 +646,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item___last_update
 #: model:ir.model.fields,field_description:o2net.field_o2net_product___last_update
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation___last_update
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_config_settings___last_update
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item___last_update
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp___last_update
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package___last_update
 #: model:ir.model.fields,field_description:o2net.field_o2net_section___last_update
+#: model:ir.model.fields,field_description:o2net.field_o2net_wf_confirm___last_update
 msgid "Last Modified on"
 msgstr ""
 
@@ -598,11 +659,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_write_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_write_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_write_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_config_settings_write_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_write_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_write_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_write_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_write_uid
 #: model:ir.model.fields,field_description:o2net.field_o2net_section_write_uid
+#: model:ir.model.fields,field_description:o2net.field_o2net_wf_confirm_write_uid
 msgid "Last Updated by"
 msgstr ""
 
@@ -610,11 +673,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_item_write_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_pricelist_write_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_product_write_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_quotation_config_settings_write_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_write_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_package_write_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_write_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_write_date
 #: model:ir.model.fields,field_description:o2net.field_o2net_section_write_date
+#: model:ir.model.fields,field_description:o2net.field_o2net_wf_confirm_write_date
 msgid "Last Updated on"
 msgstr ""
 
@@ -714,15 +779,15 @@ msgid "O2 Network"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document_header
+#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document_footer
 msgid "O2 Slovakia, s.r.o. | Einsteinova 24 | 851 01 Bratislava | Slovakia<br/>\n"
-"                            E-mail: info@o2.sk | Website: http://www.o2.sk | IČO: 35848863 | DIČ: 2020216748 | IČ DPH: SK2020216748<br/>\n"
-"                            Zapísaná v OR SR: OS Bratislava I, odd: Sro, vložka číslo: 27882/B<br/>\n"
-"                            Bankové spojenie: UniCredit Bank Czech Republic and Slovakia, a.s.: IBAN SK4211110000001156173009 - SWIFT UNCRSKBX"
+"                        E-mail: info@o2.sk | Website: http://www.o2.sk | IČO: 35848863 | DIČ: 2020216748 | IČ DPH: SK2020216748<br/>\n"
+"                        Zapísaná v OR SR: OS Bratislava I, odd: Sro, vložka číslo: 27882/B<br/>\n"
+"                        Bankové spojenie: UniCredit Bank Czech Republic and Slovakia, a.s.: IBAN SK4211110000001156173009 - SWIFT UNCRSKBX"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:695
+#: code:addons/o2net/models/quotation.py:751
 #, python-format
 msgid "Only quotation in state 'DRAFT' can be unlink. In any other case use workflow action 'CANCEL'"
 msgstr ""
@@ -754,6 +819,7 @@ msgstr ""
 
 #. module: o2net
 #: model:mail.template,report_name:o2net.mail_cp_approved
+#: model:mail.template,report_name:o2net.mail_cp_approved_sap_export
 #: model:mail.template,report_name:o2net.mail_cp_assigned
 #: model:mail.template,report_name:o2net.mail_cp_canceled
 #: model:mail.template,report_name:o2net.mail_cp_in_progress
@@ -815,6 +881,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_item_atyp_price
 #: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document
 #: model:ir.ui.view,arch_db:o2net.view_form_quotation
+#: model:ir.ui.view,arch_db:o2net.view_tree_quotation_duplicates
 #: model:ir.ui.view,arch_db:o2net.view_tree_quotation_preview
 msgid "Price"
 msgstr ""
@@ -863,11 +930,6 @@ msgid "Pricelist"
 msgstr ""
 
 #. module: o2net
-#: model:ir.ui.view,arch_db:o2net.report_quotation_pdf_document_footer
-msgid "Printed:"
-msgstr ""
-
-#. module: o2net
 #: model:res.groups,name:o2net.group_pc
 msgid "Project coordinator (PC)"
 msgstr ""
@@ -902,6 +964,7 @@ msgstr ""
 
 #. module: o2net
 #: model:mail.template,subject:o2net.mail_cp_approved
+#: model:mail.template,subject:o2net.mail_cp_approved_sap_export
 #: model:mail.template,subject:o2net.mail_cp_assigned
 #: model:mail.template,subject:o2net.mail_cp_canceled
 #: model:mail.template,subject:o2net.mail_cp_in_progress
@@ -920,7 +983,7 @@ msgid "Quotation (PDF)"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:752
+#: code:addons/o2net/models/quotation.py:810
 #, python-format
 msgid "Quotation does not have vendor assigned"
 msgstr ""
@@ -931,7 +994,7 @@ msgid "Quotation draft"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:726
+#: code:addons/o2net/models/quotation.py:782
 #, python-format
 msgid "Quotation with the same name already exists. Please enter an unique name."
 msgstr ""
@@ -998,6 +1061,7 @@ msgstr ""
 
 #. module: o2net
 #: model:ir.model.fields,field_description:o2net.field_o2net_quotation_start_date
+#: model:ir.ui.view,arch_db:o2net.view_tree_quotation_duplicates
 #: model:ir.ui.view,arch_db:o2net.view_tree_quotation_preview
 msgid "Start date"
 msgstr ""
@@ -1111,7 +1175,7 @@ msgid "Workflow reason"
 msgstr ""
 
 #. module: o2net
-#: code:addons/o2net/models/quotation.py:763
+#: code:addons/o2net/models/quotation.py:821
 #, python-format
 msgid "You do not have permission for workflow action"
 msgstr ""
@@ -1167,6 +1231,21 @@ msgid "o2net - section"
 msgstr ""
 
 #. module: o2net
+#: model:ir.model,name:o2net.model_o2net_confirm_wizard
+msgid "o2net.confirm_wizard"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_quotation_config_settings
+msgid "o2net.quotation.config.settings"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_o2net_wf_confirm
+msgid "o2net.wf_confirm"
+msgstr ""
+
+#. module: o2net
 #: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka_atyp
 msgid "vystavba - atyp polozka cenovej ponuky"
 msgstr ""
@@ -1204,5 +1283,10 @@ msgstr ""
 #. module: o2net
 #: model:ir.model,name:o2net.model_o2net_cenova_ponuka_polozka
 msgid "vystavba - polozka cenovej ponuky"
+msgstr ""
+
+#. module: o2net
+#: model:ir.model,name:o2net.model_wizard
+msgid "wizard"
 msgstr ""
 

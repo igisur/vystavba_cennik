@@ -14,4 +14,4 @@ class o2netQuotationConfigSettings(models.TransientModel):
     _name = 'o2net.quotation.config.settings'
     _inherit = 'res.config.settings'
 
-    sap_export_mail = fields.Char(size=128, string='Email for SAP export', help='Email to sent approved quotation and SAP export file')
+    sap_export_mail = fields.Char(size=128, string='Email for SAP export', help='If quotation is approved, email with SAP export file will be send')
