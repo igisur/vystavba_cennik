@@ -638,7 +638,7 @@ class Quotation(models.Model):
 
         return {
             "type": "ir.actions.act_window",
-            "name": "Duplicate quotations",
+            "name": _("Duplicate quotations"),
             "res_model": "o2net.quotation",
             "views": [[tree_view.id, "tree"]],
             "domain": domain,
@@ -879,7 +879,7 @@ class Quotation(models.Model):
 
                 return {
                     "type": "ir.actions.act_window",
-                    "name": "Confirm quotation approval",
+                    "name": _("Confirm quotation approval"),
                     "res_model": "o2net.wf_confirm",
                     "views": [[wizard_view.id, "form"]],
                     "context": {"signal": signal, "id": self.id},

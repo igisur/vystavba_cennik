@@ -8,15 +8,13 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form>
-                    <sheet>
-                        <group>
-                            <label string="Attention, quotation for this financial code has already been approved !"/>
-                        </group>
-                        <footer>
-                            <button name="confirm" type="object" string="Approve" class="oe_highlight"/>
-                            <button special="cancel" string="Cancel"/>
-                        </footer>
-                    </sheet>
+                    <group>
+                        <label string="Attention, quotation for this financial code has already been approved !"/>
+                    </group>
+                    <footer>
+                        <button name="confirm" type="object" string="Approve" class="oe_highlight"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
                 </form>
             </field>
         </record>
