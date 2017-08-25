@@ -103,7 +103,7 @@
 
         <record id="mail_cp_approved_sap_export" model="mail.template">
             <field name="name">Quotation approved</field>
-            <field name="email_to">novysedlakova@o2.vystavba.sk</field>
+            <field name="email_to">marianna.novysedlakova@o2.sk</field>
             <field name="email_from">odoo.mailer-daemon@o2network.sk</field>
             <field name="partner_to"></field>
             <field name="lang"></field>
