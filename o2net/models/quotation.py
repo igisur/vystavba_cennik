@@ -653,7 +653,7 @@ class Quotation(models.Model):
     is_user_assigned = fields.Boolean(string="Is current user assigned", compute=_compute_is_user_assigned, search=_search_user_assigned)
 
     group = fields.Char(string="current assigned group", default=lambda self: self.GROUP_SUPPLIER)
-    active = fields.Boolean(string="Active", default=True)
+    active = fields.Boolean(string="Active", default=True, copy=False)
     name = fields.Char(required=True, string="Name", size=50, copy=True)
     project_number = fields.Char(string="Project number (PSID)", required=True, copy=True);
     financial_code = fields.Char(string="Financial code", size=10, required=True, copy=True)
@@ -738,7 +738,7 @@ class Quotation(models.Model):
     @api.multi
     def copy(self, default=None):
 
-        # Qout name has to be unique, therefore add prefix [KOPIA]
+        # Quot name has to be unique, therefore add prefix [KOPIA]
         default = {'name': self.name + " [KOPIA]"}
         _logger.debug("copy (duplicate): " + str(default))
         new_cp = super(Quotation, self).copy(default=default)
