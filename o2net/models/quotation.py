@@ -282,6 +282,11 @@ class Quotation(models.Model):
         ret = self.is_user_assigned or self.env.user.id == SUPERUSER_ID or self.env.user.has_group(self.GROUP_ADMIN)
         return ret
 
+    def is_admin(self):
+        self.ensure_one()
+        ret = self.env.user.id == SUPERUSER_ID or self.env.user.has_group(self.GROUP_ADMIN)
+        return ret
+
     @api.one
     def _compute_record_url(self):
         base = self.env['ir.config_parameter'].get_param('web.base.url')
@@ -747,8 +752,11 @@ class Quotation(models.Model):
 
     @api.multi
     def unlink(self):
-        if not self.state == self.DRAFT:
-            raise AccessError(_("Only quotation in state 'DRAFT' can be unlink. In any other case use workflow action 'CANCEL'"))
+        if not self.is_admin:
+            if not self.state == self.DRAFT:
+                raise AccessError(_("Only quotation in state 'DRAFT' can be unlink. In any other case use workflow action 'CANCEL'"))
+
+        return super(Quotation, self).unlink()
 
     @api.onchange('vendor_id')
     def _find_pricelist(self):
