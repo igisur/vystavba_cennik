@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="0">
+        <record model="ir.sequence" id="site_template_sequence">
+            <field name="name">Site Sequence</field>
+            <field name="code">site.template.sequence</field>
+            <field name="active">TRUE</field>
+            <field name="prefix">CSA</field>
+            <field name="padding">9</field>
+            <field name="implementation">standard</field>
+        </record>
+    </data>
+</openerp>

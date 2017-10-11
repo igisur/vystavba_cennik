@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="o2net.ntr_form">
+            <field name="name">o2net.ntr form view</field>
+            <field name="model">o2net.tech.proposal</field>
+            <field name="arch" type="xml">
+
+                <form string="site">
+                    <sheet>
+                        <h1>
+                            <field name="name" placeholder="abc" required="True"/>
+                        </h1>
+
+                        <group>
+                            <group>
+                                <field name="proposal_id" readonly="True"/>
+                                <field name="site"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Photo">
+                            </page>
+                            <page string="Documents">
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_net_site_tree" >
+            <field name="name">o2net.ntr.tree</field>
+            <field name="model">o2net.tech.proposal</field>
+            <field name="type">tree</field>
+            <field name="field_parent">child_ids</field>
+            <field name="arch" type="xml">
+                <tree toolbar="1">
+                    <field name="name"/>
+                    <field name="proposal_id"/>
+                    <field name="site"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_net_ntr">
+            <field name="name">Ntr</field>
+            <field name="res_model">o2net.tech.proposal</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- MENU -->
+        <menuitem name="Ntr" id="menu_ntr"
+                  sequence="40"
+                  parent="menu_root"
+                  action="action_net_ntr"/>
+
+    </data>
+</openerp>
