@@ -44,15 +44,10 @@
 
         <menuitem id="menu_partners"
                 name="Partners"
-                sequence="40"
+                sequence="100"
                 parent="menu_root"
+                action="act_res_partner_o2net"
                 groups="o2net.group_pc,o2net.group_pm,o2net.group_admin"/>
-
-        <menuitem id="menu_partner"
-                  name="Partner"
-                  sequence="41"
-                  parent="menu_partners"
-                  action="act_res_partner_o2net"/>
 
     </data>
 </openerp>
