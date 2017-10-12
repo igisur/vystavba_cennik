@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data noupdate="0">
-        <record model="ir.sequence" id="site_template_sequence">
-            <field name="name">Site Sequence</field>
-            <field name="code">site.template.sequence</field>
+        <record model="ir.sequence" id="o2net_site_sequence">
+            <field name="name">O2Net Site Sequence</field>
+            <field name="code">o2net.site.sequence</field>
             <field name="active">TRUE</field>
             <field name="prefix">CSA</field>
             <field name="padding">9</field>
             <field name="implementation">standard</field>
         </record>
+
+        <record model="ir.sequence" id="o2net_ntr_sequence">
+            <field name="name">O2Net Ntr Sequence</field>
+            <field name="code">o2net.ntr.sequence</field>
+            <field name="active">TRUE</field>
+            <field name="prefix"></field>
+            <field name="padding">1</field>
+            <field name="implementation">standard</field>
+        </record>
+
     </data>
 </openerp>

@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 class Site(models.Model):
     _name = 'o2net.site'
     _description = "o2net - Site"
-    #_inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     HEADQUARTERS = 'headquarters'
     BRANCHOFFICE = 'branch office'
@@ -58,5 +58,5 @@ class Site(models.Model):
             vals = {}
         if context is None:
             context = {}
-        vals['site_id'] = self.pool.get('ir.sequence').get(cr, uid, 'site.template.sequence')
+        vals['site_id'] = self.pool.get('ir.sequence').get(cr, uid, 'o2net.site.sequence')
         return super(Site, self).create(cr, uid, vals, context=context)
