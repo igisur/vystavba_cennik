@@ -183,7 +183,7 @@ class Quotation(models.Model):
         fetchrows = self.env.cr.dictfetchall()
 
         for row in fetchrows:
-            data.append(row.get('vystup').decode('utf8'))
+            data.append(str(row.get('vystup')).replace(u'\xa0', ' ').decode('utf8'))
         ret = '\r\n'.join(data)
         return ret
 
