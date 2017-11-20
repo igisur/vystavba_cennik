@@ -2,17 +2,19 @@
 <openerp>
     <data>
 
-        <record model="ir.ui.view" id="o2net.site">
+        <record model="ir.ui.view" id="view_net_site_form">
             <field name="name">o2net.site form view</field>
             <field name="model">o2net.site</field>
+            <field name="type">form</field>
             <field name="arch" type="xml">
 
                 <form string="site" version="7.0">
                     <sheet>
-                        <h1>
-                            <field name="name" placeholder="Site" required="True"/>
-                        </h1>
-
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" required="True"/>
+                            </h1>
+                        </div>
                         <group>
                             <group>
                                 <field name="site_id" readonly="True"/>
@@ -50,19 +52,19 @@
                         </group>
 
                         <notebook>
-                            <page string="Internal comment">
-                                <field name="comment"/>
-                            </page>
-                            <page string="Service Components">
-                                <!--<field name="scomponents"/>-->
-                            </page>
-                            <page string="Circuits site A">
-                                <!--<field name="circuit_a"/>-->
-
-                            </page>
-                            <page string="Circuit site B">
-                                <!--<field name="circuit_b"/>-->
-
+                            <page string="Technologies">
+                                <field name="technology_ids">
+                                    <tree string="Technologies" editable="bottom" class="tree_technology_items">
+                                         <!-- options="{'no_create': True}" -->
+                                        <field name="type" string="Type"/>
+                                        <field name="name" string="Name"/>
+                                        <field name="vendor_id" string="Supplier" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="job_type" options="{'no_create': True}"/>
+                                        <field name="project_number" string="PSID"/>
+                                        <field name="financial_code" string="Fin.kod"/>
+                                        <field name="state" readonly="1" string="State"/>
+                                    </tree>
+                                </field>
                             </page>
                         </notebook>
 
@@ -79,60 +81,36 @@
             <field name="name">o2net.site.tree</field>
             <field name="model">o2net.site</field>
             <field name="type">tree</field>
-            <field name="field_parent">child_ids</field>
             <field name="arch" type="xml">
                 <tree toolbar="1">
                     <field name="name"/>
                     <field name="site_id"/>
+                    <field name="site_type"/>
                     <field name="customer"/>
-                    <field name="street"/>
-                    <field name="city"/>
-                    <field name="country"/>
+                    <field name="address"/>
+                    <field name="lon"/>
+                    <field name="lat"/>
                 </tree>
             </field>
         </record>
-
-
-        <record model="ir.actions.act_window" id="action_partner_net_sites">
-            <field name="name">partner.sites.tree</field>
-            <field name="domain">[('customer.id', '=', d_cust_id)]</field>
-            <field name="context">{}</field>
-            <field name="res_model">o2net.site</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="usage"></field>
-            <field name="target"></field>
-        </record>
-
-        <record model="ir.actions.act_window" id="net_site_view_customer_tree">
-            <field name="name">Sites</field>
-            <field name="res_model">o2net.site</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="domain">[('customer', '=', active_id)]</field>
-            <field name="arch" type="xml">
-                <tree string="Sites">
-                    <field name="customer"/>
-                    <field name="name"/>
-                    <field name="site_id"/>
-                    <field name="street"/>
-                    <field name="city"/>
-                    <field name="country"/>
-                </tree>
-            </field>
-        </record>
-
 
         <record model="ir.actions.act_window" id="action_net_site">
             <field name="name">Site</field>
             <field name="res_model">o2net.site</field>
             <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_net_site_tree"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
         </record>
 
         <!-- MENU -->
-        <menuitem name="Site" id="menu_net_site"
+        <menuitem name="Site" id="menu_net_site_root"
                   sequence="30"
-                  parent="menu_root"
+                  parent="menu_root"/>
+
+        <menuitem name="Sites" id="menu_net_site_list"
+                  sequence="31"
+                  parent="menu_net_site_root"
                   action="action_net_site"/>
 
     </data>

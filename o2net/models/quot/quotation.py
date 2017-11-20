@@ -682,7 +682,7 @@ class Quotation(models.Model):
                                             string='Assigned persons', copy=False,
                                             default=lambda self: self._get_default_assigned())
 
-    state = fields.Selection(State, string='State', readonly=True, default='draft', track_visibility='onchange',
+    state = fields.Selection(State, string='State', readonly=True, default=DRAFT, track_visibility='onchange',
                              copy=False)
     state_date = fields.Date(string="date state", default=datetime.date.today(), copy=False);
     price_list_id = fields.Many2one('o2net.pricelist', string='Price list', copy=True)

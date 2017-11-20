@@ -4,9 +4,10 @@ import base64
 import datetime
 import logging
 
-from openerp import models, fields, api, _, SUPERUSER_ID
+from openerp import models, fields, api, SUPERUSER_ID
 from openerp.exceptions import UserError, AccessError, ValidationError
 from openerp.tools.misc import DEFAULT_SERVER_DATE_FORMAT
+from openerp.tools.translate import _
 
 _logger = logging.getLogger(__name__)
 
@@ -25,8 +26,18 @@ class Site(models.Model):
         (POP, 'POP')
     )
 
+
+    @api.depends('street','street_no','city','zipcode')
+    def _compute_address(self):
+        for rec in self:
+            ret = ("%s %s, %s %s") %(rec.street, rec.street_no, rec.zipcode, rec.city)
+            _logger.debug("_compute_address: " + str(ret))
+            rec.address = ret
+
+    address = fields.Char(string="Address", size=100, copy=False, compute=_compute_address)
+
     name = fields.Char(string='Name')
-    site_id = fields.Char(string='Site Id')
+    site_id = fields.Char(string='Id')
     customer = fields.Many2one('res.partner', string='Customer', ondelete='no action', required=True)
     site_type = fields.Selection(SiteType, string='Site Type', default=HEADQUARTERS)
     street = fields.Char(string='Street')
@@ -47,11 +58,11 @@ class Site(models.Model):
     site_operations_email = fields.Char(string='Site operations email')
     contract_term_end_date = fields.Date(string='Contract term end date')
     comment = fields.Text(string='Internal comment')
-    # scomponents = fields.One2many('csr.service_component','site_id')
-    #circuit_a = fields.One2many('o2.circuit', 'site_a')
-    #circuit_b = fields.One2many('o2.circuit', 'site_b')
     cost_center = fields.Boolean(string='Cost Center')
-    _sql_constraints = [('site_id_unique', 'unique(site_id)', 'site_id already exists!')]
+    _sql_constraints = [('site_id_unique', 'unique(site_id)', 'site_id already exists!'), ('site_name_unique', 'unique(name)', 'Site already exists!')]
+
+    technology_ids = fields.One2many('o2net.technology', 'site_id', string='Technology', track_visibility='onchange', copy=False)
+
 
     def create(self, cr, uid, vals, context=None):
         if not vals:

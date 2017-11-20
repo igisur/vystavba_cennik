@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        <record model="ir.ui.view" id="o2net.technology_form">
+            <field name="name">o2net.technology form view</field>
+            <field name="model">o2net.technology</field>
+            <field name="arch" type="xml">
+
+                <form string="techmology">
+                    <field name="active" invisible="True"/>
+                    <field name="id" invisible="True"/>
+
+                    <header>
+                        <button name="assign" type="workflow" string="Assign" class="oe_highlight" states="draft"/>
+                        <button name="send_to_approve" type="workflow" string="Send to approve" class="oe_highlight" states="in_progress"/>
+                        <button name="to_approve" type="workflow" string="Approve" class="oe_highlight" states="await_to_approve"/>
+                        <button name="implemented" type="workflow" string="Implemented" class="oe_highlight" states="approved"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,assigned,in_progress,await_to_approve,approved,implemented" readonly="1"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="type" class="oe_read_only" nolabel="True"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                                <field name="type" required="True" class="oe_edit_only"/>
+                                <field name="name"/>
+                                <field name="site_id"/>
+                                <field name="job_type" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="vendor_id" options="{'no_create': True}"/>
+                                <field name="project_number"/>
+                                <field name="financial_code"/>
+                        </group>
+
+                        <group>
+                            <group>
+                                <field name="akv_inz_company_id"/>
+                                <field name="install_company_id"/>
+                            </group>
+                            <group>
+                                <field name="akv"/>
+                                <field name="ran_planner"/>
+                                <field name="mw_planner"/>
+                                <field name="trans_spec"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="job_sent_vendor_date"/>
+                            <field name="pre_acq_report_sent_date"/>
+                            <field name="site_survey_date"/>
+                            <field name="ntr_sent_date"/>
+                            <field name="ntr_approved_date"/>
+                            <field name="acq_report_sent_date"/>
+                            <field name="nz_close_date"/>
+                            <field name="annual_rent"/>
+                            <field name="doss_addressed_date"/>
+                        </group>
+
+                        <separator/>
+
+                        <notebook>
+                            <page string="Site">
+                                <group>
+                                    <field name="nr_traffic_ranking"/>
+                                    <field name="address"/>
+                                    <field name="location_type"/>
+                                    <field name="location_a_pole"/>
+                                </group>
+                            </page>
+                            <page string="Photos">
+                                <img src='/module_name/static/image/myimage.png'/>
+<!--@api.model -->
+<!--def create(self, vals):-->
+    <!--tools.image_resize_images(vals) -->
+    <!--return super(Test, self).create(vals)-->
+<!--<field name="image" widget='image' class="oe_avatar" options='{"preview_image":"image_medium"}'/>-->
+<!--<field name="image" type="base64" file="base/static/img/res_partner_address_7-image.png"/>-->
+
+                            </page>
+                            <page string="SU">
+                                <group>
+                                    <field name="su_application_sent_date"/>
+                                    <field name="su_permission_issued_date"/>
+                                </group>
+                            </page>
+                            <page string="Order">
+                                <group>
+                                    <field name="order_vendor_date"/>
+                                    <field name="order_akv_date"/>
+                                    <field name="order_inz_date"/>
+                                    <field name="order_install_date"/>
+                                </group>
+                            </page>
+                            <page string="Documents">
+                                <group>
+                                    <field name="bbu_eltek"/>
+                                    <field name="specification_date"/>
+                                    <field name="date_3g"/>
+                                    <field name="date_2g4g"/>
+                                    <field name="hw_in_stock"/>
+                                    <field name="install_finish_date"/>
+                                    <field name="mw_install_date"/>
+                                    <field name="estimated_integration_date"/>
+                                    <field name="integration_date"/>
+                                    <field name="onair_date"/>
+                                    <field name="flm_ran_acceptance_date"/>
+                                    <field name="acceptance_issues_fixed_date"/>
+                                    <field name="stock_date"/>
+                                    <field name="acceptance_date"/>
+                                    <field name="full_reception"/>
+                                    <field name="rfs_setup_date"/>
+                                </group>
+                            </page>
+                        </notebook>
+
+                        <div class="oe_clear"/>
+
+                        <label for="note"/>
+                        <field name="note"/>
+
+                    </sheet>
+                    <!--<div class="oe_chatter">-->
+                        <!--<field name="message_ids" widget="mail_thread"/>-->
+                    <!--</div>-->
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_net_site_tech_tree" >
+            <field name="name">o2net.technology.tree</field>
+            <field name="model">o2net.technology</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree toolbar="1">
+                    <field name="site_id"/>
+                    <field name="type"/>
+                    <field name="state"/>
+                    <field name="job_type"/>
+                    <field name="vendor_id"/>
+                    <field name="project_number"/>
+                    <field name="financial_code"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--
+            group by: state, type, site, vendor,
+        -->
+
+
+
+
+        <record model="ir.ui.view" id="view_net_site_tech_kanban" >
+            <field name="name">o2net.technology.tree</field>
+            <field name="model">o2net.technology</field>
+            <field name="type">kanban</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" quick_create="false">
+                    <field name="site_id"/>
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="state"/>
+                    <field name="job_type"/>
+                    <field name="vendor_id"/>
+                    <field name="project_number"/>
+                    <field name="financial_code"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <strong><span><t t-esc="record.site_id.value"/></span></strong>
+                                    </div>
+                                    <div class="col-xs-6 pull-right text-right">
+                                        <strong><field name="type"/></strong>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <span><t t-esc="record.name.value"/> <t t-esc="record.state.value"/></span>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <span><t t-esc="record.vendor_id.value"/> <t t-esc="record.job_type.value"/></span>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <span><t t-esc="record.project_number.value"/> <t t-esc="record.financial_code.value"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_tree_technology">
+            <field name="name">o2net.technology.tree</field>
+            <field name="model">o2net.technology</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree colors="blue:state == 'draft';green:state == 'assigned';orange:state == 'in_progress';red:state == 'to_approve';gray:state == 'cancel'"
+                        edit="false" create="false" delete="false">
+                    <field name="site_id"/>
+                    <field name="type"/>
+                    <field name="state"/>
+                    <field name="job_type"/>
+                    <field name="vendor_id"/>
+                    <field name="project_number"/>
+                    <field name="financial_code"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="act_w_technology_draft">
+            <field name="name">Technology draft</field>
+            <field name="res_model">o2net.technology</field>
+            <field name="view_id" ref="view_tree_technology"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','draft')]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Click here for establishment of new technology.</p>
+                <p>Here you can find founded Technologies.</p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_w_technology_assigned">
+            <field name="name">Technology assigned</field>
+            <field name="res_model">o2net.technology</field>
+            <field name="view_id" ref="view_tree_technology"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','assigned')]</field>
+            <field name="help" type="html">
+                <p>Here you can find Technologies.</p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_w_technology_in_progress">
+            <field name="name">Technology in progress</field>
+            <field name="res_model">o2net.technology</field>
+            <field name="view_id" ref="view_tree_technology"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','in_progress')]</field>
+            <field name="help" type="html">
+                <p>Here you can find Technologies.</p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_w_technology_await_to_approve">
+            <field name="name">Technology await to approve</field>
+            <field name="res_model">o2net.technology</field>
+            <field name="view_id" ref="view_tree_technology"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','await_to_approve')]</field>
+            <field name="help" type="html">
+                <p>Here you can find Technologies.</p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_w_technology_approved">
+            <field name="name">Technology approved</field>
+            <field name="res_model">o2net.technology</field>
+            <field name="view_id" ref="view_tree_technology"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','approved')]</field>
+            <field name="help" type="html">
+                <p>Here you can find Technologies.</p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_w_technology_implemented">
+            <field name="name">Technology implemented</field>
+            <field name="res_model">o2net.technology</field>
+            <field name="view_id" ref="view_tree_technology"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','implemented')]</field>
+            <field name="help" type="html">
+                <p>Here you can find Technologies.</p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_w_technology">
+            <field name="name">Technology</field>
+            <field name="res_model">o2net.technology</field>
+            <field name="view_id" ref="view_net_site_tech_tree"/>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,kanban</field>
+        </record>
+
+        <!-- MENU: Technology -->
+        <menuitem name="Technology" id="menu_technology"
+                  sequence="40"
+                  parent="menu_net_site_root"
+                  action="act_w_technology"/>
+
+        <menuitem id="menu_technology_draft"
+          name="Draft"
+          sequence="51"
+          parent="menu_technology"
+          action="act_w_technology_draft"/>
+
+        <menuitem id="menu_technology_assigned"
+          name="Assigned"
+          sequence="52"
+          parent="menu_technology"
+          action="act_w_technology_assigned"/>
+
+        <menuitem id="menu_technology_In progress"
+          name="In progress"
+          sequence="53"
+          parent="menu_technology"
+          action="act_w_technology_in_progress"/>
+
+        <menuitem id="menu_technology_await_to_approve"
+          name="Await to approve"
+          sequence="54"
+          parent="menu_technology"
+          action="act_w_technology_await_to_approve"/>
+
+        <menuitem id="menu_technology_approved"
+          name="Approved"
+          sequence="55"
+          parent="menu_technology"
+          action="act_w_technology_approved"/>
+
+        <menuitem id="menu_technology_implemented"
+          name="Implemented"
+          sequence="55"
+          parent="menu_technology"
+          action="act_w_technology_implemented"/>
+
+    </data>
+</openerp>

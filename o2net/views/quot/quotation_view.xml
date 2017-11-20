@@ -35,6 +35,7 @@
             <field name="priority" eval="5"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
+
             <field name="active" invisible="True"/>
             <field name="id" invisible="True"/>
             <field name="ro_datumoddo" invisible="True"/>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record  model="workflow" id="technology_workflow">
+            <field name="name">technology_workflow</field>
+            <field name="osv">o2net.technology</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <!-- Activities -->
+        <record model="workflow.activity" id="tech_wf_draft">
+            <field name="wkf_id" ref="technology_workflow"/>
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">write({'state': 'draft'})</field>
+        </record>
+
+        <record  model="workflow.activity" id="tech_wf_assigned">
+            <field name="wkf_id" ref="technology_workflow"/>
+            <field name="name">assigned</field>
+            <field name="kind">function</field>
+            <field name="action">write({'state': 'assigned'})</field>
+        </record>
+
+        <record model="workflow.activity" id="tech_wf_in_progress">
+            <field name="wkf_id" ref="technology_workflow"/>
+            <field name="name">in_progress</field>
+            <field name="kind">function</field>
+            <field name="action">write({'state': 'in_progress'})</field>
+        </record>
+
+        <record model="workflow.activity" id="tech_wf_await_to_approve" >
+            <field name="wkf_id" ref="technology_workflow"/>
+            <field name="name">await_to_approve</field>
+            <field name="kind">function</field>
+            <field name="action">write({'state': 'await_to_approve'})</field>
+        </record>
+
+        <record model="workflow.activity" id="tech_wf_approved">
+            <field name="wkf_id" ref="technology_workflow"/>
+            <field name="name">approved</field>
+            <field name="kind">function</field>
+            <field name="action">write({'state': 'approved'})</field>
+        </record>
+
+        <record model="workflow.activity" id="tech_wf_implemented" >
+            <field name="wkf_id" ref="technology_workflow"/>
+            <field name="flow_stop">True</field>
+            <field name="name">implemented</field>
+            <field name="kind">function</field>
+            <field name="action">write({'state': 'implemented'})</field>
+        </record>
+
+        <record model="workflow.activity" id="tech_wf_cancel" >
+            <field name="wkf_id" ref="technology_workflow"/>
+            <field name="flow_stop">True</field>
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">write({'state': 'cancel'})</field>
+        </record>
+
+        <!-- Transitions -->
+        <record model="workflow.transition" id="technology_draft_to_assigned">
+            <field name="act_from" ref="tech_wf_draft"/>
+            <field name="act_to" ref="tech_wf_assigned"/>
+            <field name="signal">assign</field>
+            <field name="condition">wf_can_user_workflow()</field>
+        </record>
+
+        <record model="workflow.transition" id="technology_assigned_in_progress">
+            <field name="act_from" ref="tech_wf_assigned"/>
+            <field name="act_to" ref="tech_wf_in_progress"/>
+            <field name="signal">in_progress</field>
+            <field name="condition">wf_can_user_workflow()</field>
+        </record>
+
+        <record model="workflow.transition" id="technology_in_progress_to_await_to_approve">
+            <field name="act_from" ref="tech_wf_in_progress"/>
+            <field name="act_to" ref="tech_wf_await_to_approve"/>
+            <field name="signal">send_to_approve</field>
+            <field name="condition">wf_can_user_workflow()</field>
+        </record>
+
+        <record model="workflow.transition" id="technology_await_to_approve_to_approved">
+            <field name="act_from" ref="tech_wf_await_to_approve"/>
+            <field name="act_to" ref="tech_wf_approved"/>
+            <field name="signal">to_approve</field>
+            <field name="condition">wf_can_user_workflow()</field>
+        </record>
+
+        <record model="workflow.transition" id="technology_approved_to_implemented">
+            <field name="act_from" ref="tech_wf_approved"/>
+            <field name="act_to" ref="tech_wf_implemented"/>
+            <field name="signal">implemented</field>
+            <field name="condition">wf_can_user_workflow()</field>
+        </record>
+
+    </data>
+</openerp>
