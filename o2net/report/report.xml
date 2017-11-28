@@ -1,0 +1,12 @@
+<openerp>
+<data>
+    <!-- report's id is used in mail_template.xml -->
+    <report
+            id="report_quotation"
+            model = "o2net.quotation"
+            string="Quotation (PDF)"
+            name="o2net.report_quotation_pdf"
+            file="report_quotation"
+            report_type="qweb-pdf" />
+    </data>
+</openerp>

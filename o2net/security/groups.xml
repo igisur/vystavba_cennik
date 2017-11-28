@@ -40,5 +40,11 @@
             <field name="category_id" ref="module_category_o2net"/>
         </record>
 
+        <record id="group_auditor" model="res.groups">
+            <field name="name">Auditor</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_category_o2net"/>
+        </record>
+
     </data>
 </openerp>
