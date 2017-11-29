@@ -77,7 +77,8 @@ class Quotation(models.Model):
     def action_exportSAP(self):
         export_file_name = self.shortname + '_' + self.project_number + '_' + str(datetime.date.today()) + '.txt'
         self.sap_export_file_name = export_file_name
-        export_content = self._get_sap_export_content().encode('utf8')
+        export_content = self._get_sap_export_content()
+        export_content = export_content.replace(u'\xa0', u' ').encode('utf8')
         self.sap_export_file_binary = base64.encodestring(export_content)
         self.message_post(
             body='<ul class ="o_mail_thread_message_tracking"><li>' + 'Subor "' + export_file_name + '" pre SAP bol vygenerovany' + "</li></ul>")
