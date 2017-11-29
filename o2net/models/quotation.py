@@ -77,22 +77,22 @@ class Quotation(models.Model):
     def action_exportSAP(self):
         export_file_name = self.shortname + '_' + self.project_number + '_' + str(datetime.date.today()) + '.txt'
         self.sap_export_file_name = export_file_name
-        self.sap_export_content = self._get_sap_export_content()
-        self.sap_export_file_binary = base64.encodestring(self.sap_export_content)
+        export_content = self._get_sap_export_content().encode('utf8')
+        self.sap_export_file_binary = base64.encodestring(export_content)
         self.message_post(
             body='<ul class ="o_mail_thread_message_tracking"><li>' + 'Subor "' + export_file_name + '" pre SAP bol vygenerovany' + "</li></ul>")
 
     @api.one
     def _format_number(self, number4formating, currency=[]):
-        formatNumber = 0;
+        formatNumber = 0
 
         if number4formating:
-            formatNumber = "{0:,.2f}".format(number4formating).replace(',', ' ').replace('.',',');
+            formatNumber = "{0:,.2f}".format(number4formating).replace(',', ' ').replace('.',',')
 
             if currency:
-                formatNumber = formatNumber + " " + self.currency_id.symbol;
+                formatNumber = formatNumber + " " + self.currency_id.symbol
 
-        return formatNumber;
+        return formatNumber
 
     @api.multi
     def action_test(self):
@@ -183,8 +183,8 @@ class Quotation(models.Model):
         fetchrows = self.env.cr.dictfetchall()
 
         for row in fetchrows:
-            data.append(str(row.get('vystup')).replace(u'\xa0', ' ').decode('utf8'))
-        ret = '\r\n'.join(data)
+            data.append(row.get('vystup'))
+        ret = u'\r\n'.join(data)
         return ret
 
     # limit partners to specific group
@@ -692,7 +692,6 @@ class Quotation(models.Model):
     quotation_item_package_ids = fields.One2many('o2net.quotation.item_package', 'quotation_id', string='Packages', track_visibility='onchange', copy=True)
     quotation_item_atyp_ids = fields.One2many('o2net.quotation.item_atyp', 'quotation_id', string='Atypical items', track_visibility='onchange', copy=True)
 
-    sap_export_content = fields.Text(string="Export for SAP", default='ABCDEFGH', copy=False)
     sap_export_file_name = fields.Char(string="Export file name", copy=False)
     sap_export_file_binary = fields.Binary(string='Export file', copy=False)
 

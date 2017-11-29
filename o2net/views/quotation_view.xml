@@ -370,7 +370,7 @@
                   sequence="14"
                   parent="menu_quotation"
                   action="action_window_qout_to_approve"
-                  groups="o2net.group_vendor,o2net.group_pc,o2net.group_pm,o2net.group_admin"/>
+                  groups="o2net.group_vendor,o2net.group_pc,o2net.group_pm,o2net.group_manager,o2net.group_admin"/>
 
         <menuitem id="menu_quotation_approved"
                   name="Approved"
